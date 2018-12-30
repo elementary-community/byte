@@ -1,0 +1,36 @@
+@define-color colorPrimary #FE639E;
+@define-color textColorPrimary #fafafa;
+
+.titlebar {
+    padding: 6px 6px;
+}
+
+.repeat-button {
+    border-bottom: none;
+    padding: 0 8px;
+    border-radius: 0;
+    border: none;
+    box-shadow: none;
+    background: transparent;
+}
+
+.actionbar {
+    background-image:
+        linear-gradient(
+            to bottom,
+            shade (
+            #FE639E,
+                1.1
+            ),
+            #FE639E
+        );
+    border-top: 0.5px solid shade (#FE639E, 1);
+}
+
+.actionbar image {
+    color: #FAFAFA;
+}
+
+.byte-seekbar highlight {
+    background-color: #FE639E;
+}
