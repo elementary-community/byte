@@ -34,3 +34,10 @@
 .byte-seekbar highlight {
     background-color: #FE639E;
 }
+
+.track-row:selected {
+    background-color: #FE639E;
+    text-shadow: none;
+    -gtk-icon-shadow: none;
+    color: @color_text;
+}

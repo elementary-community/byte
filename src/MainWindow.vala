@@ -13,9 +13,9 @@ public class MainWindow : Gtk.Window {
             application: application,
             app: application,
             icon_name: "com.github.alainm23.byte",
-            title: _("Byte"),
-            height_request: 750,
-            width_request: 575
+            title: _("Byte")
+            //height_request: 750,
+            //width_request: 575
         );
     }
 
@@ -44,27 +44,24 @@ public class MainWindow : Gtk.Window {
 
         add (main_box);
 
+        Timeout.add (200, () => {
+            if (Application.settings.get_string ("library-location") == "") {
+                main_stack.visible_child_name = "welcome_view";
+            } else {
+                main_stack.visible_child_name = "main_view";
+            }
+            return false;
+        });
+
         welcome_view.selected.connect ((index) => {
             if (index == 0) {
-                main_stack.visible_child_name = "main_view";
-            } else {
-                var file = new Gtk.FileChooserDialog ("Seleccionar una musica en formato MP3", null, Gtk.FileChooserAction.OPEN);
-		        file.add_button (Gtk.Stock.CLOSE, Gtk.ResponseType.CLOSE);
-		        file.add_button (Gtk.Stock.OK, Gtk.ResponseType.ACCEPT);
-
-                if (file.run () == Gtk.ResponseType.ACCEPT) {
-			        File archi = file.get_file (); //obtiene el archivo en un puntero 'archi'
-			        //info_view.pat.set_text (archi.get_uri ()); //obtiene la ruta del archivo y la guarda en PAT
-                    //info = info_view.discover.discover_uri(archi.get_uri ());
-
-                    Application.stream_player.ready_file (archi.get_uri ());
-
-                    Application.signals.ready_file ();
+                string folder = Application.utils.choose_folder (this);
+                if (folder != null) {
+                    Application.settings.set_string ("library-location", folder);
+                    Application.utils.scan_local_files (folder);
 
                     main_stack.visible_child_name = "main_view";
-		        }
-
-                file.destroy ();
+                }
             }
         });
     }

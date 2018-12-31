@@ -9,6 +9,9 @@
 #include <string.h>
 #include <gio/gio.h>
 #include <glib/gstdio.h>
+#include <stdio.h>
+#include <gtk/gtk.h>
+#include <glib/gi18n-lib.h>
 
 
 #define TYPE_UTILS (utils_get_type ())
@@ -41,6 +44,41 @@ typedef struct _StreamTimeInfo StreamTimeInfo;
 
 typedef struct _ServicesStreamPlayer ServicesStreamPlayer;
 typedef struct _ServicesStreamPlayerClass ServicesStreamPlayerClass;
+typedef struct _Block1Data Block1Data;
+#define _g_regex_unref0(var) ((var == NULL) ? NULL : (var = (g_regex_unref (var), NULL)))
+#define _g_error_free0(var) ((var == NULL) ? NULL : (var = (g_error_free (var), NULL)))
+#define _g_thread_unref0(var) ((var == NULL) ? NULL : (var = (g_thread_unref (var), NULL)))
+typedef struct _Block2Data Block2Data;
+
+#define SERVICES_TYPE_DATABASE (services_database_get_type ())
+#define SERVICES_DATABASE(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), SERVICES_TYPE_DATABASE, ServicesDatabase))
+#define SERVICES_DATABASE_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), SERVICES_TYPE_DATABASE, ServicesDatabaseClass))
+#define SERVICES_IS_DATABASE(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SERVICES_TYPE_DATABASE))
+#define SERVICES_IS_DATABASE_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), SERVICES_TYPE_DATABASE))
+#define SERVICES_DATABASE_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), SERVICES_TYPE_DATABASE, ServicesDatabaseClass))
+
+typedef struct _ServicesDatabase ServicesDatabase;
+typedef struct _ServicesDatabaseClass ServicesDatabaseClass;
+
+#define SERVICES_TYPE_TAG_MANAGER (services_tag_manager_get_type ())
+#define SERVICES_TAG_MANAGER(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), SERVICES_TYPE_TAG_MANAGER, ServicesTagManager))
+#define SERVICES_TAG_MANAGER_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), SERVICES_TYPE_TAG_MANAGER, ServicesTagManagerClass))
+#define SERVICES_IS_TAG_MANAGER(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SERVICES_TYPE_TAG_MANAGER))
+#define SERVICES_IS_TAG_MANAGER_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), SERVICES_TYPE_TAG_MANAGER))
+#define SERVICES_TAG_MANAGER_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), SERVICES_TYPE_TAG_MANAGER, ServicesTagManagerClass))
+
+typedef struct _ServicesTagManager ServicesTagManager;
+typedef struct _ServicesTagManagerClass ServicesTagManagerClass;
+
+#define TYPE_MAIN_WINDOW (main_window_get_type ())
+#define MAIN_WINDOW(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), TYPE_MAIN_WINDOW, MainWindow))
+#define MAIN_WINDOW_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), TYPE_MAIN_WINDOW, MainWindowClass))
+#define IS_MAIN_WINDOW(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), TYPE_MAIN_WINDOW))
+#define IS_MAIN_WINDOW_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), TYPE_MAIN_WINDOW))
+#define MAIN_WINDOW_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), TYPE_MAIN_WINDOW, MainWindowClass))
+
+typedef struct _MainWindow MainWindow;
+typedef struct _MainWindowClass MainWindowClass;
 
 #define TYPE_STREAM_METADATA (stream_metadata_get_type ())
 typedef struct _StreamMetadata StreamMetadata;
@@ -59,6 +97,18 @@ struct _StreamTimeInfo {
 	gchar* minutes;
 };
 
+struct _Block1Data {
+	int _ref_count_;
+	Utils* self;
+	gchar* uri;
+};
+
+struct _Block2Data {
+	int _ref_count_;
+	Utils* self;
+	gchar* path;
+};
+
 struct _StreamMetadata {
 	gchar* title;
 	gchar* album;
@@ -68,6 +118,8 @@ struct _StreamMetadata {
 
 static gpointer utils_parent_class = NULL;
 extern ServicesStreamPlayer* application_stream_player;
+extern ServicesDatabase* application_database;
+extern ServicesTagManager* application_tg_manager;
 
 GType utils_get_type (void) G_GNUC_CONST;
 void utils_create_dir_with_parents (Utils* self,
@@ -87,6 +139,28 @@ gulong services_stream_player_get_position (ServicesStreamPlayer* self);
 void utils_get_duration_str (Utils* self,
                              StreamTimeInfo* result);
 gulong services_stream_player_get_duration (ServicesStreamPlayer* self);
+gboolean utils_is_audio_file (const gchar* mime_type);
+void utils_scan_local_files (Utils* self,
+                             const gchar* uri);
+static Block1Data* block1_data_ref (Block1Data* _data1_);
+static void block1_data_unref (void * _userdata_);
+static void* __lambda14_ (Block1Data* _data1_);
+void utils_found_music_file (Utils* self,
+                             const gchar* path);
+static gpointer ___lambda14__gthread_func (gpointer self);
+static Block2Data* block2_data_ref (Block2Data* _data2_);
+static void block2_data_unref (void * _userdata_);
+static void* __lambda15_ (Block2Data* _data2_);
+GType services_database_get_type (void) G_GNUC_CONST;
+gboolean services_database_music_file_exists (ServicesDatabase* self,
+                                              const gchar* uri);
+GType services_tag_manager_get_type (void) G_GNUC_CONST;
+void services_tag_manager_add_discover_uri (ServicesTagManager* self,
+                                            const gchar* uri);
+static gpointer ___lambda15__gthread_func (gpointer self);
+GType main_window_get_type (void) G_GNUC_CONST;
+gchar* utils_choose_folder (Utils* self,
+                            MainWindow* window);
 Utils* utils_new (void);
 Utils* utils_construct (GType object_type);
 GType stream_metadata_get_type (void) G_GNUC_CONST;
@@ -128,19 +202,19 @@ utils_create_dir_with_parents (Utils* self,
 	_tmp4_ = tmp;
 #line 5 "/home/alain/Proyectos/byte/src/Utils.vala"
 	if (g_file_query_file_type (_tmp4_, 0, NULL) != G_FILE_TYPE_DIRECTORY) {
-#line 132 "Utils.c"
+#line 206 "Utils.c"
 		const gchar* _tmp5_;
 #line 6 "/home/alain/Proyectos/byte/src/Utils.vala"
 		_tmp5_ = path;
 #line 6 "/home/alain/Proyectos/byte/src/Utils.vala"
 		g_mkdir_with_parents (_tmp5_, 0775);
-#line 138 "Utils.c"
+#line 212 "Utils.c"
 	}
 #line 2 "/home/alain/Proyectos/byte/src/Utils.vala"
 	_g_object_unref0 (tmp);
 #line 2 "/home/alain/Proyectos/byte/src/Utils.vala"
 	_g_free0 (path);
-#line 144 "Utils.c"
+#line 218 "Utils.c"
 }
 
 
@@ -183,7 +257,7 @@ utils_get_ns_to_min_string (Utils* self,
 	_tmp3_ = minutes;
 #line 15 "/home/alain/Proyectos/byte/src/Utils.vala"
 	if (_tmp3_ < 10) {
-#line 187 "Utils.c"
+#line 261 "Utils.c"
 		gint _tmp4_;
 		gchar* _tmp5_;
 		gchar* _tmp6_;
@@ -202,7 +276,7 @@ utils_get_ns_to_min_string (Utils* self,
 		_tmp2_ = _tmp7_;
 #line 15 "/home/alain/Proyectos/byte/src/Utils.vala"
 		_g_free0 (_tmp6_);
-#line 206 "Utils.c"
+#line 280 "Utils.c"
 	} else {
 		gint _tmp8_;
 		gchar* _tmp9_;
@@ -214,7 +288,7 @@ utils_get_ns_to_min_string (Utils* self,
 		_g_free0 (_tmp2_);
 #line 15 "/home/alain/Proyectos/byte/src/Utils.vala"
 		_tmp2_ = _tmp9_;
-#line 218 "Utils.c"
+#line 292 "Utils.c"
 	}
 #line 15 "/home/alain/Proyectos/byte/src/Utils.vala"
 	_tmp10_ = g_strdup (_tmp2_);
@@ -224,7 +298,7 @@ utils_get_ns_to_min_string (Utils* self,
 	_tmp12_ = seconds;
 #line 16 "/home/alain/Proyectos/byte/src/Utils.vala"
 	if (_tmp12_ < 10) {
-#line 228 "Utils.c"
+#line 302 "Utils.c"
 		gint _tmp13_;
 		gchar* _tmp14_;
 		gchar* _tmp15_;
@@ -243,7 +317,7 @@ utils_get_ns_to_min_string (Utils* self,
 		_tmp11_ = _tmp16_;
 #line 16 "/home/alain/Proyectos/byte/src/Utils.vala"
 		_g_free0 (_tmp15_);
-#line 247 "Utils.c"
+#line 321 "Utils.c"
 	} else {
 		gint _tmp17_;
 		gchar* _tmp18_;
@@ -255,7 +329,7 @@ utils_get_ns_to_min_string (Utils* self,
 		_g_free0 (_tmp11_);
 #line 16 "/home/alain/Proyectos/byte/src/Utils.vala"
 		_tmp11_ = _tmp18_;
-#line 259 "Utils.c"
+#line 333 "Utils.c"
 	}
 #line 16 "/home/alain/Proyectos/byte/src/Utils.vala"
 	_tmp19_ = g_strdup (_tmp11_);
@@ -285,7 +359,7 @@ utils_get_ns_to_min_string (Utils* self,
 	_g_free0 (_tmp2_);
 #line 18 "/home/alain/Proyectos/byte/src/Utils.vala"
 	return result;
-#line 289 "Utils.c"
+#line 363 "Utils.c"
 }
 
 
@@ -315,7 +389,7 @@ utils_get_position_str (Utils* self,
 	*result = _tmp2_;
 #line 24 "/home/alain/Proyectos/byte/src/Utils.vala"
 	return;
-#line 319 "Utils.c"
+#line 393 "Utils.c"
 }
 
 
@@ -345,7 +419,883 @@ utils_get_duration_str (Utils* self,
 	*result = _tmp2_;
 #line 30 "/home/alain/Proyectos/byte/src/Utils.vala"
 	return;
-#line 349 "Utils.c"
+#line 423 "Utils.c"
+}
+
+
+static gboolean
+string_contains (const gchar* self,
+                 const gchar* needle)
+{
+	gboolean result = FALSE;
+	gchar* _tmp0_;
+#line 1473 "/usr/share/vala-0.40/vapi/glib-2.0.vapi"
+	g_return_val_if_fail (self != NULL, FALSE);
+#line 1473 "/usr/share/vala-0.40/vapi/glib-2.0.vapi"
+	g_return_val_if_fail (needle != NULL, FALSE);
+#line 1474 "/usr/share/vala-0.40/vapi/glib-2.0.vapi"
+	_tmp0_ = strstr ((gchar*) self, (gchar*) needle);
+#line 1474 "/usr/share/vala-0.40/vapi/glib-2.0.vapi"
+	result = _tmp0_ != NULL;
+#line 1474 "/usr/share/vala-0.40/vapi/glib-2.0.vapi"
+	return result;
+#line 443 "Utils.c"
+}
+
+
+gboolean
+utils_is_audio_file (const gchar* mime_type)
+{
+	gboolean result = FALSE;
+	gboolean _tmp0_ = FALSE;
+	gboolean _tmp1_ = FALSE;
+#line 33 "/home/alain/Proyectos/byte/src/Utils.vala"
+	g_return_val_if_fail (mime_type != NULL, FALSE);
+#line 34 "/home/alain/Proyectos/byte/src/Utils.vala"
+	if (g_str_has_prefix (mime_type, "audio/")) {
+#line 34 "/home/alain/Proyectos/byte/src/Utils.vala"
+		_tmp1_ = !string_contains (mime_type, "x-mpegurl");
+#line 459 "Utils.c"
+	} else {
+#line 34 "/home/alain/Proyectos/byte/src/Utils.vala"
+		_tmp1_ = FALSE;
+#line 463 "Utils.c"
+	}
+#line 34 "/home/alain/Proyectos/byte/src/Utils.vala"
+	if (_tmp1_) {
+#line 34 "/home/alain/Proyectos/byte/src/Utils.vala"
+		_tmp0_ = !string_contains (mime_type, "x-scpls");
+#line 469 "Utils.c"
+	} else {
+#line 34 "/home/alain/Proyectos/byte/src/Utils.vala"
+		_tmp0_ = FALSE;
+#line 473 "Utils.c"
+	}
+#line 34 "/home/alain/Proyectos/byte/src/Utils.vala"
+	result = _tmp0_;
+#line 34 "/home/alain/Proyectos/byte/src/Utils.vala"
+	return result;
+#line 479 "Utils.c"
+}
+
+
+static Block1Data*
+block1_data_ref (Block1Data* _data1_)
+{
+#line 37 "/home/alain/Proyectos/byte/src/Utils.vala"
+	g_atomic_int_inc (&_data1_->_ref_count_);
+#line 37 "/home/alain/Proyectos/byte/src/Utils.vala"
+	return _data1_;
+#line 490 "Utils.c"
+}
+
+
+static void
+block1_data_unref (void * _userdata_)
+{
+	Block1Data* _data1_;
+	_data1_ = (Block1Data*) _userdata_;
+#line 37 "/home/alain/Proyectos/byte/src/Utils.vala"
+	if (g_atomic_int_dec_and_test (&_data1_->_ref_count_)) {
+#line 501 "Utils.c"
+		Utils* self;
+#line 37 "/home/alain/Proyectos/byte/src/Utils.vala"
+		self = _data1_->self;
+#line 37 "/home/alain/Proyectos/byte/src/Utils.vala"
+		_g_free0 (_data1_->uri);
+#line 37 "/home/alain/Proyectos/byte/src/Utils.vala"
+		_g_object_unref0 (self);
+#line 37 "/home/alain/Proyectos/byte/src/Utils.vala"
+		g_slice_free (Block1Data, _data1_);
+#line 511 "Utils.c"
+	}
+}
+
+
+static gchar*
+string_replace (const gchar* self,
+                const gchar* old,
+                const gchar* replacement)
+{
+	gchar* result = NULL;
+	gboolean _tmp0_ = FALSE;
+	gboolean _tmp1_ = FALSE;
+	GError * _inner_error_ = NULL;
+#line 1477 "/usr/share/vala-0.40/vapi/glib-2.0.vapi"
+	g_return_val_if_fail (self != NULL, NULL);
+#line 1477 "/usr/share/vala-0.40/vapi/glib-2.0.vapi"
+	g_return_val_if_fail (old != NULL, NULL);
+#line 1477 "/usr/share/vala-0.40/vapi/glib-2.0.vapi"
+	g_return_val_if_fail (replacement != NULL, NULL);
+#line 1478 "/usr/share/vala-0.40/vapi/glib-2.0.vapi"
+	if ((*((gchar*) self)) == '\0') {
+#line 1478 "/usr/share/vala-0.40/vapi/glib-2.0.vapi"
+		_tmp1_ = TRUE;
+#line 535 "Utils.c"
+	} else {
+#line 1478 "/usr/share/vala-0.40/vapi/glib-2.0.vapi"
+		_tmp1_ = (*((gchar*) old)) == '\0';
+#line 539 "Utils.c"
+	}
+#line 1478 "/usr/share/vala-0.40/vapi/glib-2.0.vapi"
+	if (_tmp1_) {
+#line 1478 "/usr/share/vala-0.40/vapi/glib-2.0.vapi"
+		_tmp0_ = TRUE;
+#line 545 "Utils.c"
+	} else {
+#line 1478 "/usr/share/vala-0.40/vapi/glib-2.0.vapi"
+		_tmp0_ = g_strcmp0 (old, replacement) == 0;
+#line 549 "Utils.c"
+	}
+#line 1478 "/usr/share/vala-0.40/vapi/glib-2.0.vapi"
+	if (_tmp0_) {
+#line 553 "Utils.c"
+		gchar* _tmp2_;
+#line 1479 "/usr/share/vala-0.40/vapi/glib-2.0.vapi"
+		_tmp2_ = g_strdup (self);
+#line 1479 "/usr/share/vala-0.40/vapi/glib-2.0.vapi"
+		result = _tmp2_;
+#line 1479 "/usr/share/vala-0.40/vapi/glib-2.0.vapi"
+		return result;
+#line 561 "Utils.c"
+	}
+	{
+		GRegex* regex = NULL;
+		gchar* _tmp3_;
+		gchar* _tmp4_;
+		GRegex* _tmp5_;
+		GRegex* _tmp6_;
+		gchar* _tmp7_ = NULL;
+		GRegex* _tmp8_;
+		gchar* _tmp9_;
+		gchar* _tmp10_;
+#line 1482 "/usr/share/vala-0.40/vapi/glib-2.0.vapi"
+		_tmp3_ = g_regex_escape_string (old, -1);
+#line 1482 "/usr/share/vala-0.40/vapi/glib-2.0.vapi"
+		_tmp4_ = _tmp3_;
+#line 1482 "/usr/share/vala-0.40/vapi/glib-2.0.vapi"
+		_tmp5_ = g_regex_new (_tmp4_, 0, 0, &_inner_error_);
+#line 1482 "/usr/share/vala-0.40/vapi/glib-2.0.vapi"
+		_tmp6_ = _tmp5_;
+#line 1482 "/usr/share/vala-0.40/vapi/glib-2.0.vapi"
+		_g_free0 (_tmp4_);
+#line 1482 "/usr/share/vala-0.40/vapi/glib-2.0.vapi"
+		regex = _tmp6_;
+#line 1482 "/usr/share/vala-0.40/vapi/glib-2.0.vapi"
+		if (G_UNLIKELY (_inner_error_ != NULL)) {
+#line 1482 "/usr/share/vala-0.40/vapi/glib-2.0.vapi"
+			if (_inner_error_->domain == G_REGEX_ERROR) {
+#line 589 "Utils.c"
+				goto __catch0_g_regex_error;
+			}
+#line 1482 "/usr/share/vala-0.40/vapi/glib-2.0.vapi"
+			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
+#line 1482 "/usr/share/vala-0.40/vapi/glib-2.0.vapi"
+			g_clear_error (&_inner_error_);
+#line 1482 "/usr/share/vala-0.40/vapi/glib-2.0.vapi"
+			return NULL;
+#line 598 "Utils.c"
+		}
+#line 1483 "/usr/share/vala-0.40/vapi/glib-2.0.vapi"
+		_tmp8_ = regex;
+#line 1483 "/usr/share/vala-0.40/vapi/glib-2.0.vapi"
+		_tmp9_ = g_regex_replace_literal (_tmp8_, self, (gssize) -1, 0, replacement, 0, &_inner_error_);
+#line 1483 "/usr/share/vala-0.40/vapi/glib-2.0.vapi"
+		_tmp7_ = _tmp9_;
+#line 1483 "/usr/share/vala-0.40/vapi/glib-2.0.vapi"
+		if (G_UNLIKELY (_inner_error_ != NULL)) {
+#line 1483 "/usr/share/vala-0.40/vapi/glib-2.0.vapi"
+			_g_regex_unref0 (regex);
+#line 1483 "/usr/share/vala-0.40/vapi/glib-2.0.vapi"
+			if (_inner_error_->domain == G_REGEX_ERROR) {
+#line 612 "Utils.c"
+				goto __catch0_g_regex_error;
+			}
+#line 1483 "/usr/share/vala-0.40/vapi/glib-2.0.vapi"
+			_g_regex_unref0 (regex);
+#line 1483 "/usr/share/vala-0.40/vapi/glib-2.0.vapi"
+			g_critical ("file %s: line %d: unexpected error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
+#line 1483 "/usr/share/vala-0.40/vapi/glib-2.0.vapi"
+			g_clear_error (&_inner_error_);
+#line 1483 "/usr/share/vala-0.40/vapi/glib-2.0.vapi"
+			return NULL;
+#line 623 "Utils.c"
+		}
+#line 1483 "/usr/share/vala-0.40/vapi/glib-2.0.vapi"
+		_tmp10_ = _tmp7_;
+#line 1483 "/usr/share/vala-0.40/vapi/glib-2.0.vapi"
+		_tmp7_ = NULL;
+#line 1483 "/usr/share/vala-0.40/vapi/glib-2.0.vapi"
+		result = _tmp10_;
+#line 1483 "/usr/share/vala-0.40/vapi/glib-2.0.vapi"
+		_g_free0 (_tmp7_);
+#line 1483 "/usr/share/vala-0.40/vapi/glib-2.0.vapi"
+		_g_regex_unref0 (regex);
+#line 1483 "/usr/share/vala-0.40/vapi/glib-2.0.vapi"
+		return result;
+#line 637 "Utils.c"
+	}
+	goto __finally0;
+	__catch0_g_regex_error:
+	{
+		GError* e = NULL;
+#line 1481 "/usr/share/vala-0.40/vapi/glib-2.0.vapi"
+		e = _inner_error_;
+#line 1481 "/usr/share/vala-0.40/vapi/glib-2.0.vapi"
+		_inner_error_ = NULL;
+#line 1485 "/usr/share/vala-0.40/vapi/glib-2.0.vapi"
+		g_assert_not_reached ();
+#line 1481 "/usr/share/vala-0.40/vapi/glib-2.0.vapi"
+		_g_error_free0 (e);
+#line 651 "Utils.c"
+	}
+	__finally0:
+#line 1481 "/usr/share/vala-0.40/vapi/glib-2.0.vapi"
+	if (G_UNLIKELY (_inner_error_ != NULL)) {
+#line 1481 "/usr/share/vala-0.40/vapi/glib-2.0.vapi"
+		g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
+#line 1481 "/usr/share/vala-0.40/vapi/glib-2.0.vapi"
+		g_clear_error (&_inner_error_);
+#line 1481 "/usr/share/vala-0.40/vapi/glib-2.0.vapi"
+		return NULL;
+#line 662 "Utils.c"
+	}
+}
+
+
+static void*
+__lambda14_ (Block1Data* _data1_)
+{
+	Utils* self;
+	void* result = NULL;
+	GFile* directory = NULL;
+	gchar* _tmp0_;
+	gchar* _tmp1_;
+	GFile* _tmp2_;
+	GFile* _tmp3_;
+	FILE* _tmp4_;
+	GFile* _tmp5_;
+	gchar* _tmp6_;
+	gchar* _tmp7_;
+	GFile* _tmp58_;
+	GError * _inner_error_ = NULL;
+#line 38 "/home/alain/Proyectos/byte/src/Utils.vala"
+	self = _data1_->self;
+#line 39 "/home/alain/Proyectos/byte/src/Utils.vala"
+	_tmp0_ = string_replace (_data1_->uri, "#", "%23");
+#line 39 "/home/alain/Proyectos/byte/src/Utils.vala"
+	_tmp1_ = _tmp0_;
+#line 39 "/home/alain/Proyectos/byte/src/Utils.vala"
+	_tmp2_ = g_file_new_for_uri (_tmp1_);
+#line 39 "/home/alain/Proyectos/byte/src/Utils.vala"
+	_tmp3_ = _tmp2_;
+#line 39 "/home/alain/Proyectos/byte/src/Utils.vala"
+	_g_free0 (_tmp1_);
+#line 39 "/home/alain/Proyectos/byte/src/Utils.vala"
+	directory = _tmp3_;
+#line 40 "/home/alain/Proyectos/byte/src/Utils.vala"
+	_tmp4_ = stdout;
+#line 40 "/home/alain/Proyectos/byte/src/Utils.vala"
+	_tmp5_ = directory;
+#line 40 "/home/alain/Proyectos/byte/src/Utils.vala"
+	_tmp6_ = g_file_get_uri (_tmp5_);
+#line 40 "/home/alain/Proyectos/byte/src/Utils.vala"
+	_tmp7_ = _tmp6_;
+#line 40 "/home/alain/Proyectos/byte/src/Utils.vala"
+	fprintf (_tmp4_, "%s\n", _tmp7_);
+#line 40 "/home/alain/Proyectos/byte/src/Utils.vala"
+	_g_free0 (_tmp7_);
+#line 709 "Utils.c"
+	{
+		GFileEnumerator* children = NULL;
+		GFile* _tmp8_;
+		GFileEnumerator* _tmp9_;
+		GFileInfo* file_info = NULL;
+		GFileEnumerator* _tmp54_;
+		GFileEnumerator* _tmp55_;
+#line 42 "/home/alain/Proyectos/byte/src/Utils.vala"
+		_tmp8_ = directory;
+#line 42 "/home/alain/Proyectos/byte/src/Utils.vala"
+		_tmp9_ = g_file_enumerate_children (_tmp8_, "standard::*," G_FILE_ATTRIBUTE_STANDARD_CONTENT_TYPE "," G_FILE_ATTRIBUTE_STANDARD_IS_HIDDEN "," G_FILE_ATTRIBUTE_STANDARD_IS_SYMLINK "," G_FILE_ATTRIBUTE_STANDARD_SYMLINK_TARGET, G_FILE_QUERY_INFO_NONE, NULL, &_inner_error_);
+#line 42 "/home/alain/Proyectos/byte/src/Utils.vala"
+		children = _tmp9_;
+#line 42 "/home/alain/Proyectos/byte/src/Utils.vala"
+		if (G_UNLIKELY (_inner_error_ != NULL)) {
+#line 725 "Utils.c"
+			goto __catch1_g_error;
+		}
+#line 43 "/home/alain/Proyectos/byte/src/Utils.vala"
+		file_info = NULL;
+#line 45 "/home/alain/Proyectos/byte/src/Utils.vala"
+		while (TRUE) {
+#line 732 "Utils.c"
+			GFileInfo* _tmp10_ = NULL;
+			GFileEnumerator* _tmp11_;
+			GFileInfo* _tmp12_;
+			GFileInfo* _tmp13_;
+			GFileInfo* _tmp14_;
+			GFileInfo* _tmp15_;
+			GFileInfo* _tmp16_;
+#line 45 "/home/alain/Proyectos/byte/src/Utils.vala"
+			_tmp11_ = children;
+#line 45 "/home/alain/Proyectos/byte/src/Utils.vala"
+			_tmp12_ = g_file_enumerator_next_file (_tmp11_, NULL, &_inner_error_);
+#line 45 "/home/alain/Proyectos/byte/src/Utils.vala"
+			_tmp10_ = _tmp12_;
+#line 45 "/home/alain/Proyectos/byte/src/Utils.vala"
+			if (G_UNLIKELY (_inner_error_ != NULL)) {
+#line 45 "/home/alain/Proyectos/byte/src/Utils.vala"
+				_g_object_unref0 (file_info);
+#line 45 "/home/alain/Proyectos/byte/src/Utils.vala"
+				_g_object_unref0 (children);
+#line 752 "Utils.c"
+				goto __catch1_g_error;
+			}
+#line 45 "/home/alain/Proyectos/byte/src/Utils.vala"
+			_tmp13_ = _tmp10_;
+#line 45 "/home/alain/Proyectos/byte/src/Utils.vala"
+			_tmp10_ = NULL;
+#line 45 "/home/alain/Proyectos/byte/src/Utils.vala"
+			_g_object_unref0 (file_info);
+#line 45 "/home/alain/Proyectos/byte/src/Utils.vala"
+			file_info = _tmp13_;
+#line 45 "/home/alain/Proyectos/byte/src/Utils.vala"
+			_tmp14_ = file_info;
+#line 45 "/home/alain/Proyectos/byte/src/Utils.vala"
+			if (!(_tmp14_ != NULL)) {
+#line 45 "/home/alain/Proyectos/byte/src/Utils.vala"
+				_g_object_unref0 (_tmp10_);
+#line 45 "/home/alain/Proyectos/byte/src/Utils.vala"
+				break;
+#line 771 "Utils.c"
+			}
+#line 46 "/home/alain/Proyectos/byte/src/Utils.vala"
+			_tmp15_ = file_info;
+#line 46 "/home/alain/Proyectos/byte/src/Utils.vala"
+			if (g_file_info_get_is_hidden (_tmp15_)) {
+#line 47 "/home/alain/Proyectos/byte/src/Utils.vala"
+				_g_object_unref0 (_tmp10_);
+#line 47 "/home/alain/Proyectos/byte/src/Utils.vala"
+				continue;
+#line 781 "Utils.c"
+			}
+#line 50 "/home/alain/Proyectos/byte/src/Utils.vala"
+			_tmp16_ = file_info;
+#line 50 "/home/alain/Proyectos/byte/src/Utils.vala"
+			if (g_file_info_get_is_symlink (_tmp16_)) {
+#line 787 "Utils.c"
+				gchar* target = NULL;
+				GFileInfo* _tmp17_;
+				const gchar* _tmp18_;
+				gchar* _tmp19_;
+				GFile* symlink = NULL;
+				const gchar* _tmp20_;
+				GFile* _tmp21_;
+				GFileType file_type = 0;
+				GFile* _tmp22_;
+				GFileType _tmp23_;
+#line 51 "/home/alain/Proyectos/byte/src/Utils.vala"
+				_tmp17_ = file_info;
+#line 51 "/home/alain/Proyectos/byte/src/Utils.vala"
+				_tmp18_ = g_file_info_get_symlink_target (_tmp17_);
+#line 51 "/home/alain/Proyectos/byte/src/Utils.vala"
+				_tmp19_ = g_strdup (_tmp18_);
+#line 51 "/home/alain/Proyectos/byte/src/Utils.vala"
+				target = _tmp19_;
+#line 52 "/home/alain/Proyectos/byte/src/Utils.vala"
+				_tmp20_ = target;
+#line 52 "/home/alain/Proyectos/byte/src/Utils.vala"
+				_tmp21_ = g_file_new_for_path (_tmp20_);
+#line 52 "/home/alain/Proyectos/byte/src/Utils.vala"
+				symlink = _tmp21_;
+#line 53 "/home/alain/Proyectos/byte/src/Utils.vala"
+				_tmp22_ = symlink;
+#line 53 "/home/alain/Proyectos/byte/src/Utils.vala"
+				file_type = g_file_query_file_type (_tmp22_, 0, NULL);
+#line 54 "/home/alain/Proyectos/byte/src/Utils.vala"
+				_tmp23_ = file_type;
+#line 54 "/home/alain/Proyectos/byte/src/Utils.vala"
+				if (_tmp23_ == G_FILE_TYPE_DIRECTORY) {
+#line 820 "Utils.c"
+					const gchar* _tmp24_;
+#line 55 "/home/alain/Proyectos/byte/src/Utils.vala"
+					_tmp24_ = target;
+#line 55 "/home/alain/Proyectos/byte/src/Utils.vala"
+					utils_scan_local_files (self, _tmp24_);
+#line 826 "Utils.c"
+				}
+#line 50 "/home/alain/Proyectos/byte/src/Utils.vala"
+				_g_object_unref0 (symlink);
+#line 50 "/home/alain/Proyectos/byte/src/Utils.vala"
+				_g_free0 (target);
+#line 832 "Utils.c"
+			} else {
+				GFileInfo* _tmp25_;
+#line 57 "/home/alain/Proyectos/byte/src/Utils.vala"
+				_tmp25_ = file_info;
+#line 57 "/home/alain/Proyectos/byte/src/Utils.vala"
+				if (g_file_info_get_file_type (_tmp25_) == G_FILE_TYPE_DIRECTORY) {
+#line 839 "Utils.c"
+					GFile* _tmp26_;
+					gchar* _tmp27_;
+					gchar* _tmp28_;
+					gboolean _tmp29_;
+					GFile* _tmp30_;
+					gchar* _tmp31_;
+					gchar* _tmp32_;
+					gchar* _tmp33_;
+					gchar* _tmp34_;
+					GFileInfo* _tmp35_;
+					const gchar* _tmp36_;
+					gchar* _tmp37_;
+					gchar* _tmp38_;
+#line 59 "/home/alain/Proyectos/byte/src/Utils.vala"
+					_tmp26_ = directory;
+#line 59 "/home/alain/Proyectos/byte/src/Utils.vala"
+					_tmp27_ = g_file_get_uri (_tmp26_);
+#line 59 "/home/alain/Proyectos/byte/src/Utils.vala"
+					_tmp28_ = _tmp27_;
+#line 59 "/home/alain/Proyectos/byte/src/Utils.vala"
+					_tmp29_ = !g_str_has_prefix (_tmp28_, "file://");
+#line 59 "/home/alain/Proyectos/byte/src/Utils.vala"
+					_g_free0 (_tmp28_);
+#line 59 "/home/alain/Proyectos/byte/src/Utils.vala"
+					if (_tmp29_) {
+#line 60 "/home/alain/Proyectos/byte/src/Utils.vala"
+						g_usleep ((gulong) 1000000);
+#line 867 "Utils.c"
+					}
+#line 62 "/home/alain/Proyectos/byte/src/Utils.vala"
+					_tmp30_ = directory;
+#line 62 "/home/alain/Proyectos/byte/src/Utils.vala"
+					_tmp31_ = g_file_get_uri (_tmp30_);
+#line 62 "/home/alain/Proyectos/byte/src/Utils.vala"
+					_tmp32_ = _tmp31_;
+#line 62 "/home/alain/Proyectos/byte/src/Utils.vala"
+					_tmp33_ = g_strconcat (_tmp32_, "/", NULL);
+#line 62 "/home/alain/Proyectos/byte/src/Utils.vala"
+					_tmp34_ = _tmp33_;
+#line 62 "/home/alain/Proyectos/byte/src/Utils.vala"
+					_tmp35_ = file_info;
+#line 62 "/home/alain/Proyectos/byte/src/Utils.vala"
+					_tmp36_ = g_file_info_get_name (_tmp35_);
+#line 62 "/home/alain/Proyectos/byte/src/Utils.vala"
+					_tmp37_ = g_strconcat (_tmp34_, _tmp36_, NULL);
+#line 62 "/home/alain/Proyectos/byte/src/Utils.vala"
+					_tmp38_ = _tmp37_;
+#line 62 "/home/alain/Proyectos/byte/src/Utils.vala"
+					utils_scan_local_files (self, _tmp38_);
+#line 62 "/home/alain/Proyectos/byte/src/Utils.vala"
+					_g_free0 (_tmp38_);
+#line 62 "/home/alain/Proyectos/byte/src/Utils.vala"
+					_g_free0 (_tmp34_);
+#line 62 "/home/alain/Proyectos/byte/src/Utils.vala"
+					_g_free0 (_tmp32_);
+#line 895 "Utils.c"
+				} else {
+					gchar* mime_type = NULL;
+					GFileInfo* _tmp39_;
+					const gchar* _tmp40_;
+					gchar* _tmp41_;
+					const gchar* _tmp42_;
+#line 64 "/home/alain/Proyectos/byte/src/Utils.vala"
+					_tmp39_ = file_info;
+#line 64 "/home/alain/Proyectos/byte/src/Utils.vala"
+					_tmp40_ = g_file_info_get_content_type (_tmp39_);
+#line 64 "/home/alain/Proyectos/byte/src/Utils.vala"
+					_tmp41_ = g_strdup (_tmp40_);
+#line 64 "/home/alain/Proyectos/byte/src/Utils.vala"
+					mime_type = _tmp41_;
+#line 65 "/home/alain/Proyectos/byte/src/Utils.vala"
+					_tmp42_ = mime_type;
+#line 65 "/home/alain/Proyectos/byte/src/Utils.vala"
+					if (utils_is_audio_file (_tmp42_)) {
+#line 914 "Utils.c"
+						GFile* _tmp43_;
+						gchar* _tmp44_;
+						gchar* _tmp45_;
+						gchar* _tmp46_;
+						gchar* _tmp47_;
+						GFileInfo* _tmp48_;
+						const gchar* _tmp49_;
+						gchar* _tmp50_;
+						gchar* _tmp51_;
+						gchar* _tmp52_;
+						gchar* _tmp53_;
+#line 66 "/home/alain/Proyectos/byte/src/Utils.vala"
+						_tmp43_ = directory;
+#line 66 "/home/alain/Proyectos/byte/src/Utils.vala"
+						_tmp44_ = g_file_get_uri (_tmp43_);
+#line 66 "/home/alain/Proyectos/byte/src/Utils.vala"
+						_tmp45_ = _tmp44_;
+#line 66 "/home/alain/Proyectos/byte/src/Utils.vala"
+						_tmp46_ = g_strconcat (_tmp45_, "/", NULL);
+#line 66 "/home/alain/Proyectos/byte/src/Utils.vala"
+						_tmp47_ = _tmp46_;
+#line 66 "/home/alain/Proyectos/byte/src/Utils.vala"
+						_tmp48_ = file_info;
+#line 66 "/home/alain/Proyectos/byte/src/Utils.vala"
+						_tmp49_ = g_file_info_get_name (_tmp48_);
+#line 66 "/home/alain/Proyectos/byte/src/Utils.vala"
+						_tmp50_ = string_replace (_tmp49_, "#", "%23");
+#line 66 "/home/alain/Proyectos/byte/src/Utils.vala"
+						_tmp51_ = _tmp50_;
+#line 66 "/home/alain/Proyectos/byte/src/Utils.vala"
+						_tmp52_ = g_strconcat (_tmp47_, _tmp51_, NULL);
+#line 66 "/home/alain/Proyectos/byte/src/Utils.vala"
+						_tmp53_ = _tmp52_;
+#line 66 "/home/alain/Proyectos/byte/src/Utils.vala"
+						utils_found_music_file (self, _tmp53_);
+#line 66 "/home/alain/Proyectos/byte/src/Utils.vala"
+						_g_free0 (_tmp53_);
+#line 66 "/home/alain/Proyectos/byte/src/Utils.vala"
+						_g_free0 (_tmp51_);
+#line 66 "/home/alain/Proyectos/byte/src/Utils.vala"
+						_g_free0 (_tmp47_);
+#line 66 "/home/alain/Proyectos/byte/src/Utils.vala"
+						_g_free0 (_tmp45_);
+#line 958 "Utils.c"
+					}
+#line 57 "/home/alain/Proyectos/byte/src/Utils.vala"
+					_g_free0 (mime_type);
+#line 962 "Utils.c"
+				}
+			}
+#line 45 "/home/alain/Proyectos/byte/src/Utils.vala"
+			_g_object_unref0 (_tmp10_);
+#line 967 "Utils.c"
+		}
+#line 71 "/home/alain/Proyectos/byte/src/Utils.vala"
+		_tmp54_ = children;
+#line 71 "/home/alain/Proyectos/byte/src/Utils.vala"
+		g_file_enumerator_close (_tmp54_, NULL, &_inner_error_);
+#line 71 "/home/alain/Proyectos/byte/src/Utils.vala"
+		if (G_UNLIKELY (_inner_error_ != NULL)) {
+#line 71 "/home/alain/Proyectos/byte/src/Utils.vala"
+			_g_object_unref0 (file_info);
+#line 71 "/home/alain/Proyectos/byte/src/Utils.vala"
+			_g_object_unref0 (children);
+#line 979 "Utils.c"
+			goto __catch1_g_error;
+		}
+#line 72 "/home/alain/Proyectos/byte/src/Utils.vala"
+		_tmp55_ = children;
+#line 72 "/home/alain/Proyectos/byte/src/Utils.vala"
+		g_object_run_dispose ((GObject*) _tmp55_);
+#line 41 "/home/alain/Proyectos/byte/src/Utils.vala"
+		_g_object_unref0 (file_info);
+#line 41 "/home/alain/Proyectos/byte/src/Utils.vala"
+		_g_object_unref0 (children);
+#line 990 "Utils.c"
+	}
+	goto __finally1;
+	__catch1_g_error:
+	{
+		GError* err = NULL;
+		GError* _tmp56_;
+		const gchar* _tmp57_;
+#line 41 "/home/alain/Proyectos/byte/src/Utils.vala"
+		err = _inner_error_;
+#line 41 "/home/alain/Proyectos/byte/src/Utils.vala"
+		_inner_error_ = NULL;
+#line 74 "/home/alain/Proyectos/byte/src/Utils.vala"
+		_tmp56_ = err;
+#line 74 "/home/alain/Proyectos/byte/src/Utils.vala"
+		_tmp57_ = _tmp56_->message;
+#line 74 "/home/alain/Proyectos/byte/src/Utils.vala"
+		g_warning ("Utils.vala:74: %s\n%s", _tmp57_, _data1_->uri);
+#line 41 "/home/alain/Proyectos/byte/src/Utils.vala"
+		_g_error_free0 (err);
+#line 1010 "Utils.c"
+	}
+	__finally1:
+#line 41 "/home/alain/Proyectos/byte/src/Utils.vala"
+	if (G_UNLIKELY (_inner_error_ != NULL)) {
+#line 41 "/home/alain/Proyectos/byte/src/Utils.vala"
+		_g_object_unref0 (directory);
+#line 41 "/home/alain/Proyectos/byte/src/Utils.vala"
+		g_critical ("file %s: line %d: uncaught error: %s (%s, %d)", __FILE__, __LINE__, _inner_error_->message, g_quark_to_string (_inner_error_->domain), _inner_error_->code);
+#line 41 "/home/alain/Proyectos/byte/src/Utils.vala"
+		g_clear_error (&_inner_error_);
+#line 41 "/home/alain/Proyectos/byte/src/Utils.vala"
+		return NULL;
+#line 1023 "Utils.c"
+	}
+#line 77 "/home/alain/Proyectos/byte/src/Utils.vala"
+	_tmp58_ = directory;
+#line 77 "/home/alain/Proyectos/byte/src/Utils.vala"
+	g_object_run_dispose ((GObject*) _tmp58_);
+#line 78 "/home/alain/Proyectos/byte/src/Utils.vala"
+	result = NULL;
+#line 78 "/home/alain/Proyectos/byte/src/Utils.vala"
+	_g_object_unref0 (directory);
+#line 78 "/home/alain/Proyectos/byte/src/Utils.vala"
+	return result;
+#line 1035 "Utils.c"
+}
+
+
+static gpointer
+___lambda14__gthread_func (gpointer self)
+{
+	gpointer result;
+	result = __lambda14_ (self);
+#line 38 "/home/alain/Proyectos/byte/src/Utils.vala"
+	block1_data_unref (self);
+#line 38 "/home/alain/Proyectos/byte/src/Utils.vala"
+	return result;
+#line 1048 "Utils.c"
+}
+
+
+void
+utils_scan_local_files (Utils* self,
+                        const gchar* uri)
+{
+	Block1Data* _data1_;
+	gchar* _tmp0_;
+	GThread* _tmp1_;
+	GThread* _tmp2_;
+#line 37 "/home/alain/Proyectos/byte/src/Utils.vala"
+	g_return_if_fail (self != NULL);
+#line 37 "/home/alain/Proyectos/byte/src/Utils.vala"
+	g_return_if_fail (uri != NULL);
+#line 37 "/home/alain/Proyectos/byte/src/Utils.vala"
+	_data1_ = g_slice_new0 (Block1Data);
+#line 37 "/home/alain/Proyectos/byte/src/Utils.vala"
+	_data1_->_ref_count_ = 1;
+#line 37 "/home/alain/Proyectos/byte/src/Utils.vala"
+	_data1_->self = g_object_ref (self);
+#line 37 "/home/alain/Proyectos/byte/src/Utils.vala"
+	_tmp0_ = g_strdup (uri);
+#line 37 "/home/alain/Proyectos/byte/src/Utils.vala"
+	_g_free0 (_data1_->uri);
+#line 37 "/home/alain/Proyectos/byte/src/Utils.vala"
+	_data1_->uri = _tmp0_;
+#line 38 "/home/alain/Proyectos/byte/src/Utils.vala"
+	_tmp1_ = g_thread_new ("scan_local_files", ___lambda14__gthread_func, block1_data_ref (_data1_));
+#line 38 "/home/alain/Proyectos/byte/src/Utils.vala"
+	_tmp2_ = _tmp1_;
+#line 38 "/home/alain/Proyectos/byte/src/Utils.vala"
+	_g_thread_unref0 (_tmp2_);
+#line 37 "/home/alain/Proyectos/byte/src/Utils.vala"
+	block1_data_unref (_data1_);
+#line 37 "/home/alain/Proyectos/byte/src/Utils.vala"
+	_data1_ = NULL;
+#line 1086 "Utils.c"
+}
+
+
+static Block2Data*
+block2_data_ref (Block2Data* _data2_)
+{
+#line 82 "/home/alain/Proyectos/byte/src/Utils.vala"
+	g_atomic_int_inc (&_data2_->_ref_count_);
+#line 82 "/home/alain/Proyectos/byte/src/Utils.vala"
+	return _data2_;
+#line 1097 "Utils.c"
+}
+
+
+static void
+block2_data_unref (void * _userdata_)
+{
+	Block2Data* _data2_;
+	_data2_ = (Block2Data*) _userdata_;
+#line 82 "/home/alain/Proyectos/byte/src/Utils.vala"
+	if (g_atomic_int_dec_and_test (&_data2_->_ref_count_)) {
+#line 1108 "Utils.c"
+		Utils* self;
+#line 82 "/home/alain/Proyectos/byte/src/Utils.vala"
+		self = _data2_->self;
+#line 82 "/home/alain/Proyectos/byte/src/Utils.vala"
+		_g_free0 (_data2_->path);
+#line 82 "/home/alain/Proyectos/byte/src/Utils.vala"
+		_g_object_unref0 (self);
+#line 82 "/home/alain/Proyectos/byte/src/Utils.vala"
+		g_slice_free (Block2Data, _data2_);
+#line 1118 "Utils.c"
+	}
+}
+
+
+static void*
+__lambda15_ (Block2Data* _data2_)
+{
+	Utils* self;
+	void* result = NULL;
+	ServicesDatabase* _tmp0_;
+#line 83 "/home/alain/Proyectos/byte/src/Utils.vala"
+	self = _data2_->self;
+#line 84 "/home/alain/Proyectos/byte/src/Utils.vala"
+	_tmp0_ = application_database;
+#line 84 "/home/alain/Proyectos/byte/src/Utils.vala"
+	if (services_database_music_file_exists (_tmp0_, _data2_->path) == FALSE) {
+#line 1135 "Utils.c"
+		ServicesTagManager* _tmp1_;
+#line 85 "/home/alain/Proyectos/byte/src/Utils.vala"
+		_tmp1_ = application_tg_manager;
+#line 85 "/home/alain/Proyectos/byte/src/Utils.vala"
+		services_tag_manager_add_discover_uri (_tmp1_, _data2_->path);
+#line 1141 "Utils.c"
+	}
+#line 88 "/home/alain/Proyectos/byte/src/Utils.vala"
+	result = NULL;
+#line 88 "/home/alain/Proyectos/byte/src/Utils.vala"
+	return result;
+#line 1147 "Utils.c"
+}
+
+
+static gpointer
+___lambda15__gthread_func (gpointer self)
+{
+	gpointer result;
+	result = __lambda15_ (self);
+#line 83 "/home/alain/Proyectos/byte/src/Utils.vala"
+	block2_data_unref (self);
+#line 83 "/home/alain/Proyectos/byte/src/Utils.vala"
+	return result;
+#line 1160 "Utils.c"
+}
+
+
+void
+utils_found_music_file (Utils* self,
+                        const gchar* path)
+{
+	Block2Data* _data2_;
+	gchar* _tmp0_;
+	GThread* _tmp1_;
+	GThread* _tmp2_;
+#line 82 "/home/alain/Proyectos/byte/src/Utils.vala"
+	g_return_if_fail (self != NULL);
+#line 82 "/home/alain/Proyectos/byte/src/Utils.vala"
+	g_return_if_fail (path != NULL);
+#line 82 "/home/alain/Proyectos/byte/src/Utils.vala"
+	_data2_ = g_slice_new0 (Block2Data);
+#line 82 "/home/alain/Proyectos/byte/src/Utils.vala"
+	_data2_->_ref_count_ = 1;
+#line 82 "/home/alain/Proyectos/byte/src/Utils.vala"
+	_data2_->self = g_object_ref (self);
+#line 82 "/home/alain/Proyectos/byte/src/Utils.vala"
+	_tmp0_ = g_strdup (path);
+#line 82 "/home/alain/Proyectos/byte/src/Utils.vala"
+	_g_free0 (_data2_->path);
+#line 82 "/home/alain/Proyectos/byte/src/Utils.vala"
+	_data2_->path = _tmp0_;
+#line 83 "/home/alain/Proyectos/byte/src/Utils.vala"
+	_tmp1_ = g_thread_new ("found_local_music_file", ___lambda15__gthread_func, block2_data_ref (_data2_));
+#line 83 "/home/alain/Proyectos/byte/src/Utils.vala"
+	_tmp2_ = _tmp1_;
+#line 83 "/home/alain/Proyectos/byte/src/Utils.vala"
+	_g_thread_unref0 (_tmp2_);
+#line 82 "/home/alain/Proyectos/byte/src/Utils.vala"
+	block2_data_unref (_data2_);
+#line 82 "/home/alain/Proyectos/byte/src/Utils.vala"
+	_data2_ = NULL;
+#line 1198 "Utils.c"
+}
+
+
+static gpointer
+_g_object_ref0 (gpointer self)
+{
+#line 104 "/home/alain/Proyectos/byte/src/Utils.vala"
+	return self ? g_object_ref (self) : NULL;
+#line 1207 "Utils.c"
+}
+
+
+gchar*
+utils_choose_folder (Utils* self,
+                     MainWindow* window)
+{
+	gchar* result = NULL;
+	gchar* return_value = NULL;
+	GtkFileChooserDialog* chooser = NULL;
+	GtkFileChooserDialog* _tmp0_;
+	GtkFileFilter* filter = NULL;
+	GtkFileFilter* _tmp1_;
+	GtkFileFilter* _tmp2_;
+	GtkFileFilter* _tmp3_;
+	GtkFileChooserDialog* _tmp4_;
+	GtkFileFilter* _tmp5_;
+	GtkFileFilter* _tmp6_;
+	GtkFileChooserDialog* _tmp7_;
+	GtkFileChooserDialog* _tmp12_;
+#line 92 "/home/alain/Proyectos/byte/src/Utils.vala"
+	g_return_val_if_fail (self != NULL, NULL);
+#line 92 "/home/alain/Proyectos/byte/src/Utils.vala"
+	g_return_val_if_fail (window != NULL, NULL);
+#line 93 "/home/alain/Proyectos/byte/src/Utils.vala"
+	return_value = NULL;
+#line 95 "/home/alain/Proyectos/byte/src/Utils.vala"
+	_tmp0_ = (GtkFileChooserDialog*) gtk_file_chooser_dialog_new (_ ("Select a folder."), (GtkWindow*) window, GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER, _ ("_Cancel"), GTK_RESPONSE_CANCEL, _ ("_Open"), GTK_RESPONSE_ACCEPT, NULL);
+#line 95 "/home/alain/Proyectos/byte/src/Utils.vala"
+	g_object_ref_sink (_tmp0_);
+#line 95 "/home/alain/Proyectos/byte/src/Utils.vala"
+	chooser = _tmp0_;
+#line 100 "/home/alain/Proyectos/byte/src/Utils.vala"
+	_tmp1_ = gtk_file_filter_new ();
+#line 100 "/home/alain/Proyectos/byte/src/Utils.vala"
+	g_object_ref_sink (_tmp1_);
+#line 100 "/home/alain/Proyectos/byte/src/Utils.vala"
+	filter = _tmp1_;
+#line 101 "/home/alain/Proyectos/byte/src/Utils.vala"
+	_tmp2_ = filter;
+#line 101 "/home/alain/Proyectos/byte/src/Utils.vala"
+	gtk_file_filter_set_name (_tmp2_, _ ("Folder"));
+#line 102 "/home/alain/Proyectos/byte/src/Utils.vala"
+	_tmp3_ = filter;
+#line 102 "/home/alain/Proyectos/byte/src/Utils.vala"
+	gtk_file_filter_add_mime_type (_tmp3_, "inode/directory");
+#line 104 "/home/alain/Proyectos/byte/src/Utils.vala"
+	_tmp4_ = chooser;
+#line 104 "/home/alain/Proyectos/byte/src/Utils.vala"
+	_tmp5_ = filter;
+#line 104 "/home/alain/Proyectos/byte/src/Utils.vala"
+	_tmp6_ = _g_object_ref0 (_tmp5_);
+#line 104 "/home/alain/Proyectos/byte/src/Utils.vala"
+	gtk_file_chooser_add_filter ((GtkFileChooser*) _tmp4_, _tmp6_);
+#line 106 "/home/alain/Proyectos/byte/src/Utils.vala"
+	_tmp7_ = chooser;
+#line 106 "/home/alain/Proyectos/byte/src/Utils.vala"
+	if (gtk_dialog_run ((GtkDialog*) _tmp7_) == ((gint) GTK_RESPONSE_ACCEPT)) {
+#line 1266 "Utils.c"
+		GtkFileChooserDialog* _tmp8_;
+		GFile* _tmp9_;
+		GFile* _tmp10_;
+		gchar* _tmp11_;
+#line 107 "/home/alain/Proyectos/byte/src/Utils.vala"
+		_tmp8_ = chooser;
+#line 107 "/home/alain/Proyectos/byte/src/Utils.vala"
+		_tmp9_ = gtk_file_chooser_get_file ((GtkFileChooser*) _tmp8_);
+#line 107 "/home/alain/Proyectos/byte/src/Utils.vala"
+		_tmp10_ = _tmp9_;
+#line 107 "/home/alain/Proyectos/byte/src/Utils.vala"
+		_tmp11_ = g_file_get_uri (_tmp10_);
+#line 107 "/home/alain/Proyectos/byte/src/Utils.vala"
+		_g_free0 (return_value);
+#line 107 "/home/alain/Proyectos/byte/src/Utils.vala"
+		return_value = _tmp11_;
+#line 107 "/home/alain/Proyectos/byte/src/Utils.vala"
+		_g_object_unref0 (_tmp10_);
+#line 1285 "Utils.c"
+	}
+#line 110 "/home/alain/Proyectos/byte/src/Utils.vala"
+	_tmp12_ = chooser;
+#line 110 "/home/alain/Proyectos/byte/src/Utils.vala"
+	gtk_widget_destroy ((GtkWidget*) _tmp12_);
+#line 111 "/home/alain/Proyectos/byte/src/Utils.vala"
+	result = return_value;
+#line 111 "/home/alain/Proyectos/byte/src/Utils.vala"
+	_g_object_unref0 (filter);
+#line 111 "/home/alain/Proyectos/byte/src/Utils.vala"
+	_g_object_unref0 (chooser);
+#line 111 "/home/alain/Proyectos/byte/src/Utils.vala"
+	return result;
+#line 1299 "Utils.c"
 }
 
 
@@ -357,7 +1307,7 @@ utils_construct (GType object_type)
 	self = (Utils*) g_object_new (object_type, NULL);
 #line 1 "/home/alain/Proyectos/byte/src/Utils.vala"
 	return self;
-#line 361 "Utils.c"
+#line 1311 "Utils.c"
 }
 
 
@@ -366,7 +1316,7 @@ utils_new (void)
 {
 #line 1 "/home/alain/Proyectos/byte/src/Utils.vala"
 	return utils_construct (TYPE_UTILS);
-#line 370 "Utils.c"
+#line 1320 "Utils.c"
 }
 
 
@@ -375,7 +1325,7 @@ utils_class_init (UtilsClass * klass)
 {
 #line 1 "/home/alain/Proyectos/byte/src/Utils.vala"
 	utils_parent_class = g_type_class_peek_parent (klass);
-#line 379 "Utils.c"
+#line 1329 "Utils.c"
 }
 
 
@@ -409,44 +1359,44 @@ stream_metadata_copy (const StreamMetadata* self,
 	gchar* _tmp3_;
 	const gchar* _tmp4_;
 	gchar* _tmp5_;
-#line 34 "/home/alain/Proyectos/byte/src/Utils.vala"
+#line 115 "/home/alain/Proyectos/byte/src/Utils.vala"
 	_tmp0_ = (*self).title;
-#line 34 "/home/alain/Proyectos/byte/src/Utils.vala"
+#line 115 "/home/alain/Proyectos/byte/src/Utils.vala"
 	_tmp1_ = g_strdup (_tmp0_);
-#line 34 "/home/alain/Proyectos/byte/src/Utils.vala"
+#line 115 "/home/alain/Proyectos/byte/src/Utils.vala"
 	_g_free0 ((*dest).title);
-#line 34 "/home/alain/Proyectos/byte/src/Utils.vala"
+#line 115 "/home/alain/Proyectos/byte/src/Utils.vala"
 	(*dest).title = _tmp1_;
-#line 34 "/home/alain/Proyectos/byte/src/Utils.vala"
+#line 115 "/home/alain/Proyectos/byte/src/Utils.vala"
 	_tmp2_ = (*self).album;
-#line 34 "/home/alain/Proyectos/byte/src/Utils.vala"
+#line 115 "/home/alain/Proyectos/byte/src/Utils.vala"
 	_tmp3_ = g_strdup (_tmp2_);
-#line 34 "/home/alain/Proyectos/byte/src/Utils.vala"
+#line 115 "/home/alain/Proyectos/byte/src/Utils.vala"
 	_g_free0 ((*dest).album);
-#line 34 "/home/alain/Proyectos/byte/src/Utils.vala"
+#line 115 "/home/alain/Proyectos/byte/src/Utils.vala"
 	(*dest).album = _tmp3_;
-#line 34 "/home/alain/Proyectos/byte/src/Utils.vala"
+#line 115 "/home/alain/Proyectos/byte/src/Utils.vala"
 	_tmp4_ = (*self).artist;
-#line 34 "/home/alain/Proyectos/byte/src/Utils.vala"
+#line 115 "/home/alain/Proyectos/byte/src/Utils.vala"
 	_tmp5_ = g_strdup (_tmp4_);
-#line 34 "/home/alain/Proyectos/byte/src/Utils.vala"
+#line 115 "/home/alain/Proyectos/byte/src/Utils.vala"
 	_g_free0 ((*dest).artist);
-#line 34 "/home/alain/Proyectos/byte/src/Utils.vala"
+#line 115 "/home/alain/Proyectos/byte/src/Utils.vala"
 	(*dest).artist = _tmp5_;
-#line 437 "Utils.c"
+#line 1387 "Utils.c"
 }
 
 
 void
 stream_metadata_destroy (StreamMetadata* self)
 {
-#line 35 "/home/alain/Proyectos/byte/src/Utils.vala"
+#line 116 "/home/alain/Proyectos/byte/src/Utils.vala"
 	_g_free0 ((*self).title);
-#line 36 "/home/alain/Proyectos/byte/src/Utils.vala"
+#line 117 "/home/alain/Proyectos/byte/src/Utils.vala"
 	_g_free0 ((*self).album);
-#line 37 "/home/alain/Proyectos/byte/src/Utils.vala"
+#line 118 "/home/alain/Proyectos/byte/src/Utils.vala"
 	_g_free0 ((*self).artist);
-#line 450 "Utils.c"
+#line 1400 "Utils.c"
 }
 
 
@@ -454,24 +1404,24 @@ StreamMetadata*
 stream_metadata_dup (const StreamMetadata* self)
 {
 	StreamMetadata* dup;
-#line 34 "/home/alain/Proyectos/byte/src/Utils.vala"
+#line 115 "/home/alain/Proyectos/byte/src/Utils.vala"
 	dup = g_new0 (StreamMetadata, 1);
-#line 34 "/home/alain/Proyectos/byte/src/Utils.vala"
+#line 115 "/home/alain/Proyectos/byte/src/Utils.vala"
 	stream_metadata_copy (self, dup);
-#line 34 "/home/alain/Proyectos/byte/src/Utils.vala"
+#line 115 "/home/alain/Proyectos/byte/src/Utils.vala"
 	return dup;
-#line 464 "Utils.c"
+#line 1414 "Utils.c"
 }
 
 
 void
 stream_metadata_free (StreamMetadata* self)
 {
-#line 34 "/home/alain/Proyectos/byte/src/Utils.vala"
+#line 115 "/home/alain/Proyectos/byte/src/Utils.vala"
 	stream_metadata_destroy (self);
-#line 34 "/home/alain/Proyectos/byte/src/Utils.vala"
+#line 115 "/home/alain/Proyectos/byte/src/Utils.vala"
 	g_free (self);
-#line 475 "Utils.c"
+#line 1425 "Utils.c"
 }
 
 
@@ -495,28 +1445,28 @@ stream_time_info_copy (const StreamTimeInfo* self,
 	gulong _tmp0_;
 	const gchar* _tmp1_;
 	gchar* _tmp2_;
-#line 40 "/home/alain/Proyectos/byte/src/Utils.vala"
+#line 121 "/home/alain/Proyectos/byte/src/Utils.vala"
 	_tmp0_ = (*self).nanoseconds;
-#line 40 "/home/alain/Proyectos/byte/src/Utils.vala"
+#line 121 "/home/alain/Proyectos/byte/src/Utils.vala"
 	(*dest).nanoseconds = _tmp0_;
-#line 40 "/home/alain/Proyectos/byte/src/Utils.vala"
+#line 121 "/home/alain/Proyectos/byte/src/Utils.vala"
 	_tmp1_ = (*self).minutes;
-#line 40 "/home/alain/Proyectos/byte/src/Utils.vala"
+#line 121 "/home/alain/Proyectos/byte/src/Utils.vala"
 	_tmp2_ = g_strdup (_tmp1_);
-#line 40 "/home/alain/Proyectos/byte/src/Utils.vala"
+#line 121 "/home/alain/Proyectos/byte/src/Utils.vala"
 	_g_free0 ((*dest).minutes);
-#line 40 "/home/alain/Proyectos/byte/src/Utils.vala"
+#line 121 "/home/alain/Proyectos/byte/src/Utils.vala"
 	(*dest).minutes = _tmp2_;
-#line 511 "Utils.c"
+#line 1461 "Utils.c"
 }
 
 
 void
 stream_time_info_destroy (StreamTimeInfo* self)
 {
-#line 42 "/home/alain/Proyectos/byte/src/Utils.vala"
+#line 123 "/home/alain/Proyectos/byte/src/Utils.vala"
 	_g_free0 ((*self).minutes);
-#line 520 "Utils.c"
+#line 1470 "Utils.c"
 }
 
 
@@ -524,24 +1474,24 @@ StreamTimeInfo*
 stream_time_info_dup (const StreamTimeInfo* self)
 {
 	StreamTimeInfo* dup;
-#line 40 "/home/alain/Proyectos/byte/src/Utils.vala"
+#line 121 "/home/alain/Proyectos/byte/src/Utils.vala"
 	dup = g_new0 (StreamTimeInfo, 1);
-#line 40 "/home/alain/Proyectos/byte/src/Utils.vala"
+#line 121 "/home/alain/Proyectos/byte/src/Utils.vala"
 	stream_time_info_copy (self, dup);
-#line 40 "/home/alain/Proyectos/byte/src/Utils.vala"
+#line 121 "/home/alain/Proyectos/byte/src/Utils.vala"
 	return dup;
-#line 534 "Utils.c"
+#line 1484 "Utils.c"
 }
 
 
 void
 stream_time_info_free (StreamTimeInfo* self)
 {
-#line 40 "/home/alain/Proyectos/byte/src/Utils.vala"
+#line 121 "/home/alain/Proyectos/byte/src/Utils.vala"
 	stream_time_info_destroy (self);
-#line 40 "/home/alain/Proyectos/byte/src/Utils.vala"
+#line 121 "/home/alain/Proyectos/byte/src/Utils.vala"
 	g_free (self);
-#line 545 "Utils.c"
+#line 1495 "Utils.c"
 }
 
 

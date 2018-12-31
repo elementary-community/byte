@@ -1,9 +1,11 @@
 public class Application : Gtk.Application {
     public MainWindow main_window;
 
+    public static Services.Database database;
     public static GLib.Settings settings;
     public static Services.StreamPlayer stream_player;
     public static Services.Signals signals;
+    public static Services.TagManager tg_manager;
     public static Utils utils;
 
     public string[] argsv;
@@ -13,11 +15,16 @@ public class Application : Gtk.Application {
             application_id: "com.github.alainm23.byte",
             flags: ApplicationFlags.HANDLES_OPEN
         );
+        // Dir to Database
+        utils = new Utils ();
+        utils.create_dir_with_parents ("/.cache/com.github.alainm23.byte");
+        utils.create_dir_with_parents ("/.cache/com.github.alainm23.byte/covers");
 
         settings = new Settings ("com.github.alainm23.byte");
         stream_player = new Services.StreamPlayer (args, "MAIN");
+        database = new Services.Database ();
         signals = new Services.Signals ();
-        utils = new Utils ();
+        tg_manager = new Services.TagManager ();
     }
 
     protected override void activate () {

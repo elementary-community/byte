@@ -27,7 +27,7 @@ enum  {
 	WIDGETS_HEADER_BAR_NUM_PROPERTIES
 };
 static GParamSpec* widgets_header_bar_properties[WIDGETS_HEADER_BAR_NUM_PROPERTIES];
-typedef struct _Block1Data Block1Data;
+typedef struct _Block4Data Block4Data;
 #define _g_object_unref0(var) ((var == NULL) ? NULL : (var = (g_object_unref (var), NULL)))
 
 #define SERVICES_TYPE_SIGNALS (services_signals_get_type ())
@@ -54,7 +54,7 @@ struct _WidgetsHeaderBarPrivate {
 	GtkWindow* _window;
 };
 
-struct _Block1Data {
+struct _Block4Data {
 	int _ref_count_;
 	WidgetsHeaderBar* self;
 	GtkToggleButton* shuffle_button;
@@ -79,16 +79,16 @@ static void widgets_header_bar_set_window (WidgetsHeaderBar* self,
 static GObject * widgets_header_bar_constructor (GType type,
                                           guint n_construct_properties,
                                           GObjectConstructParam * construct_properties);
-static Block1Data* block1_data_ref (Block1Data* _data1_);
-static void block1_data_unref (void * _userdata_);
-static void _widgets_header_bar___lambda4_ (Block1Data* _data1_);
+static Block4Data* block4_data_ref (Block4Data* _data4_);
+static void block4_data_unref (void * _userdata_);
+static void _widgets_header_bar___lambda4_ (Block4Data* _data4_);
 static void __widgets_header_bar___lambda4__gtk_toggle_button_toggled (GtkToggleButton* _sender,
                                                                 gpointer self);
-static void _widgets_header_bar___lambda5_ (Block1Data* _data1_);
+static void _widgets_header_bar___lambda5_ (Block4Data* _data4_);
 GType services_signals_get_type (void) G_GNUC_CONST;
 static void __widgets_header_bar___lambda5__gtk_toggle_button_toggled (GtkToggleButton* _sender,
                                                                 gpointer self);
-static void _widgets_header_bar___lambda6_ (Block1Data* _data1_);
+static void _widgets_header_bar___lambda6_ (Block4Data* _data4_);
 static void __widgets_header_bar___lambda6__gtk_button_clicked (GtkButton* _sender,
                                                          gpointer self);
 static void widgets_header_bar_finalize (GObject * obj);
@@ -160,58 +160,58 @@ widgets_header_bar_set_window (WidgetsHeaderBar* self,
 }
 
 
-static Block1Data*
-block1_data_ref (Block1Data* _data1_)
+static Block4Data*
+block4_data_ref (Block4Data* _data4_)
 {
 #line 12 "/home/alain/Proyectos/byte/src/Widgets/HeaderBar.vala"
-	g_atomic_int_inc (&_data1_->_ref_count_);
+	g_atomic_int_inc (&_data4_->_ref_count_);
 #line 12 "/home/alain/Proyectos/byte/src/Widgets/HeaderBar.vala"
-	return _data1_;
+	return _data4_;
 #line 171 "HeaderBar.c"
 }
 
 
 static void
-block1_data_unref (void * _userdata_)
+block4_data_unref (void * _userdata_)
 {
-	Block1Data* _data1_;
-	_data1_ = (Block1Data*) _userdata_;
+	Block4Data* _data4_;
+	_data4_ = (Block4Data*) _userdata_;
 #line 12 "/home/alain/Proyectos/byte/src/Widgets/HeaderBar.vala"
-	if (g_atomic_int_dec_and_test (&_data1_->_ref_count_)) {
+	if (g_atomic_int_dec_and_test (&_data4_->_ref_count_)) {
 #line 182 "HeaderBar.c"
 		WidgetsHeaderBar* self;
 #line 12 "/home/alain/Proyectos/byte/src/Widgets/HeaderBar.vala"
-		self = _data1_->self;
+		self = _data4_->self;
 #line 12 "/home/alain/Proyectos/byte/src/Widgets/HeaderBar.vala"
-		_g_object_unref0 (_data1_->repeat_button);
+		_g_object_unref0 (_data4_->repeat_button);
 #line 12 "/home/alain/Proyectos/byte/src/Widgets/HeaderBar.vala"
-		_g_object_unref0 (_data1_->playback_icon);
+		_g_object_unref0 (_data4_->playback_icon);
 #line 12 "/home/alain/Proyectos/byte/src/Widgets/HeaderBar.vala"
-		_g_object_unref0 (_data1_->playback_button);
+		_g_object_unref0 (_data4_->playback_button);
 #line 12 "/home/alain/Proyectos/byte/src/Widgets/HeaderBar.vala"
-		_g_object_unref0 (_data1_->shuffle_icon);
+		_g_object_unref0 (_data4_->shuffle_icon);
 #line 12 "/home/alain/Proyectos/byte/src/Widgets/HeaderBar.vala"
-		_g_object_unref0 (_data1_->shuffle_button);
+		_g_object_unref0 (_data4_->shuffle_button);
 #line 12 "/home/alain/Proyectos/byte/src/Widgets/HeaderBar.vala"
 		_g_object_unref0 (self);
 #line 12 "/home/alain/Proyectos/byte/src/Widgets/HeaderBar.vala"
-		g_slice_free (Block1Data, _data1_);
+		g_slice_free (Block4Data, _data4_);
 #line 200 "HeaderBar.c"
 	}
 }
 
 
 static void
-_widgets_header_bar___lambda4_ (Block1Data* _data1_)
+_widgets_header_bar___lambda4_ (Block4Data* _data4_)
 {
 	WidgetsHeaderBar* self;
 	GtkToggleButton* _tmp0_;
 	gboolean _tmp1_;
 	gboolean _tmp2_;
 #line 68 "/home/alain/Proyectos/byte/src/Widgets/HeaderBar.vala"
-	self = _data1_->self;
+	self = _data4_->self;
 #line 69 "/home/alain/Proyectos/byte/src/Widgets/HeaderBar.vala"
-	_tmp0_ = _data1_->shuffle_button;
+	_tmp0_ = _data4_->shuffle_button;
 #line 69 "/home/alain/Proyectos/byte/src/Widgets/HeaderBar.vala"
 	_tmp1_ = gtk_toggle_button_get_active (_tmp0_);
 #line 69 "/home/alain/Proyectos/byte/src/Widgets/HeaderBar.vala"
@@ -221,14 +221,14 @@ _widgets_header_bar___lambda4_ (Block1Data* _data1_)
 #line 222 "HeaderBar.c"
 		GtkImage* _tmp3_;
 #line 70 "/home/alain/Proyectos/byte/src/Widgets/HeaderBar.vala"
-		_tmp3_ = _data1_->shuffle_icon;
+		_tmp3_ = _data4_->shuffle_icon;
 #line 70 "/home/alain/Proyectos/byte/src/Widgets/HeaderBar.vala"
 		g_object_set (_tmp3_, "icon-name", "media-playlist-shuffle-symbolic", NULL);
 #line 228 "HeaderBar.c"
 	} else {
 		GtkImage* _tmp4_;
 #line 72 "/home/alain/Proyectos/byte/src/Widgets/HeaderBar.vala"
-		_tmp4_ = _data1_->shuffle_icon;
+		_tmp4_ = _data4_->shuffle_icon;
 #line 72 "/home/alain/Proyectos/byte/src/Widgets/HeaderBar.vala"
 		g_object_set (_tmp4_, "icon-name", "media-playlist-consecutive-symbolic", NULL);
 #line 235 "HeaderBar.c"
@@ -247,16 +247,16 @@ __widgets_header_bar___lambda4__gtk_toggle_button_toggled (GtkToggleButton* _sen
 
 
 static void
-_widgets_header_bar___lambda5_ (Block1Data* _data1_)
+_widgets_header_bar___lambda5_ (Block4Data* _data4_)
 {
 	WidgetsHeaderBar* self;
 	GtkToggleButton* _tmp0_;
 	gboolean _tmp1_;
 	gboolean _tmp2_;
 #line 76 "/home/alain/Proyectos/byte/src/Widgets/HeaderBar.vala"
-	self = _data1_->self;
+	self = _data4_->self;
 #line 77 "/home/alain/Proyectos/byte/src/Widgets/HeaderBar.vala"
-	_tmp0_ = _data1_->playback_button;
+	_tmp0_ = _data4_->playback_button;
 #line 77 "/home/alain/Proyectos/byte/src/Widgets/HeaderBar.vala"
 	_tmp1_ = gtk_toggle_button_get_active (_tmp0_);
 #line 77 "/home/alain/Proyectos/byte/src/Widgets/HeaderBar.vala"
@@ -267,7 +267,7 @@ _widgets_header_bar___lambda5_ (Block1Data* _data1_)
 		GtkImage* _tmp3_;
 		ServicesSignals* _tmp4_;
 #line 78 "/home/alain/Proyectos/byte/src/Widgets/HeaderBar.vala"
-		_tmp3_ = _data1_->playback_icon;
+		_tmp3_ = _data4_->playback_icon;
 #line 78 "/home/alain/Proyectos/byte/src/Widgets/HeaderBar.vala"
 		g_object_set (_tmp3_, "icon-name", "media-playback-pause-symbolic", NULL);
 #line 80 "/home/alain/Proyectos/byte/src/Widgets/HeaderBar.vala"
@@ -279,7 +279,7 @@ _widgets_header_bar___lambda5_ (Block1Data* _data1_)
 		GtkImage* _tmp5_;
 		ServicesSignals* _tmp6_;
 #line 82 "/home/alain/Proyectos/byte/src/Widgets/HeaderBar.vala"
-		_tmp5_ = _data1_->playback_icon;
+		_tmp5_ = _data4_->playback_icon;
 #line 82 "/home/alain/Proyectos/byte/src/Widgets/HeaderBar.vala"
 		g_object_set (_tmp5_, "icon-name", "media-playback-start-symbolic", NULL);
 #line 84 "/home/alain/Proyectos/byte/src/Widgets/HeaderBar.vala"
@@ -302,14 +302,14 @@ __widgets_header_bar___lambda5__gtk_toggle_button_toggled (GtkToggleButton* _sen
 
 
 static void
-_widgets_header_bar___lambda6_ (Block1Data* _data1_)
+_widgets_header_bar___lambda6_ (Block4Data* _data4_)
 {
 	WidgetsHeaderBar* self;
 	gint _tmp0_;
 	gint _tmp1_;
 	gint _tmp2_;
 #line 88 "/home/alain/Proyectos/byte/src/Widgets/HeaderBar.vala"
-	self = _data1_->self;
+	self = _data4_->self;
 #line 89 "/home/alain/Proyectos/byte/src/Widgets/HeaderBar.vala"
 	_tmp0_ = self->repeat_index;
 #line 89 "/home/alain/Proyectos/byte/src/Widgets/HeaderBar.vala"
@@ -332,7 +332,7 @@ _widgets_header_bar___lambda6_ (Block1Data* _data1_)
 		GtkImage* _tmp5_;
 		GtkButton* _tmp6_;
 #line 96 "/home/alain/Proyectos/byte/src/Widgets/HeaderBar.vala"
-		_tmp3_ = _data1_->repeat_button;
+		_tmp3_ = _data4_->repeat_button;
 #line 96 "/home/alain/Proyectos/byte/src/Widgets/HeaderBar.vala"
 		_tmp4_ = (GtkImage*) gtk_image_new_from_icon_name ("media-playlist-repeat-symbolic", (GtkIconSize) GTK_ICON_SIZE_MENU);
 #line 96 "/home/alain/Proyectos/byte/src/Widgets/HeaderBar.vala"
@@ -344,7 +344,7 @@ _widgets_header_bar___lambda6_ (Block1Data* _data1_)
 #line 96 "/home/alain/Proyectos/byte/src/Widgets/HeaderBar.vala"
 		_g_object_unref0 (_tmp5_);
 #line 97 "/home/alain/Proyectos/byte/src/Widgets/HeaderBar.vala"
-		_tmp6_ = _data1_->repeat_button;
+		_tmp6_ = _data4_->repeat_button;
 #line 97 "/home/alain/Proyectos/byte/src/Widgets/HeaderBar.vala"
 		gtk_widget_set_opacity ((GtkWidget*) _tmp6_, 0.7);
 #line 351 "HeaderBar.c"
@@ -360,7 +360,7 @@ _widgets_header_bar___lambda6_ (Block1Data* _data1_)
 			GtkImage* _tmp10_;
 			GtkButton* _tmp11_;
 #line 99 "/home/alain/Proyectos/byte/src/Widgets/HeaderBar.vala"
-			_tmp8_ = _data1_->repeat_button;
+			_tmp8_ = _data4_->repeat_button;
 #line 99 "/home/alain/Proyectos/byte/src/Widgets/HeaderBar.vala"
 			_tmp9_ = (GtkImage*) gtk_image_new_from_icon_name ("media-playlist-repeat-symbolic", (GtkIconSize) GTK_ICON_SIZE_MENU);
 #line 99 "/home/alain/Proyectos/byte/src/Widgets/HeaderBar.vala"
@@ -372,7 +372,7 @@ _widgets_header_bar___lambda6_ (Block1Data* _data1_)
 #line 99 "/home/alain/Proyectos/byte/src/Widgets/HeaderBar.vala"
 			_g_object_unref0 (_tmp10_);
 #line 100 "/home/alain/Proyectos/byte/src/Widgets/HeaderBar.vala"
-			_tmp11_ = _data1_->repeat_button;
+			_tmp11_ = _data4_->repeat_button;
 #line 100 "/home/alain/Proyectos/byte/src/Widgets/HeaderBar.vala"
 			gtk_widget_set_opacity ((GtkWidget*) _tmp11_, (gdouble) 1);
 #line 379 "HeaderBar.c"
@@ -382,7 +382,7 @@ _widgets_header_bar___lambda6_ (Block1Data* _data1_)
 			GtkImage* _tmp14_;
 			GtkButton* _tmp15_;
 #line 102 "/home/alain/Proyectos/byte/src/Widgets/HeaderBar.vala"
-			_tmp12_ = _data1_->repeat_button;
+			_tmp12_ = _data4_->repeat_button;
 #line 102 "/home/alain/Proyectos/byte/src/Widgets/HeaderBar.vala"
 			_tmp13_ = (GtkImage*) gtk_image_new_from_icon_name ("media-playlist-repeat-song-symbolic", (GtkIconSize) GTK_ICON_SIZE_MENU);
 #line 102 "/home/alain/Proyectos/byte/src/Widgets/HeaderBar.vala"
@@ -394,7 +394,7 @@ _widgets_header_bar___lambda6_ (Block1Data* _data1_)
 #line 102 "/home/alain/Proyectos/byte/src/Widgets/HeaderBar.vala"
 			_g_object_unref0 (_tmp14_);
 #line 103 "/home/alain/Proyectos/byte/src/Widgets/HeaderBar.vala"
-			_tmp15_ = _data1_->repeat_button;
+			_tmp15_ = _data4_->repeat_button;
 #line 103 "/home/alain/Proyectos/byte/src/Widgets/HeaderBar.vala"
 			gtk_widget_set_opacity ((GtkWidget*) _tmp15_, (gdouble) 1);
 #line 401 "HeaderBar.c"
@@ -421,7 +421,7 @@ widgets_header_bar_constructor (GType type,
 	GObject * obj;
 	GObjectClass * parent_class;
 	WidgetsHeaderBar * self;
-	Block1Data* _data1_;
+	Block4Data* _data4_;
 	GtkStyleContext* _tmp0_;
 	GtkToggleButton* _tmp1_;
 	GtkToggleButton* _tmp2_;
@@ -495,11 +495,11 @@ widgets_header_bar_constructor (GType type,
 #line 12 "/home/alain/Proyectos/byte/src/Widgets/HeaderBar.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (obj, WIDGETS_TYPE_HEADER_BAR, WidgetsHeaderBar);
 #line 12 "/home/alain/Proyectos/byte/src/Widgets/HeaderBar.vala"
-	_data1_ = g_slice_new0 (Block1Data);
+	_data4_ = g_slice_new0 (Block4Data);
 #line 12 "/home/alain/Proyectos/byte/src/Widgets/HeaderBar.vala"
-	_data1_->_ref_count_ = 1;
+	_data4_->_ref_count_ = 1;
 #line 12 "/home/alain/Proyectos/byte/src/Widgets/HeaderBar.vala"
-	_data1_->self = g_object_ref (self);
+	_data4_->self = g_object_ref (self);
 #line 13 "/home/alain/Proyectos/byte/src/Widgets/HeaderBar.vala"
 	_tmp0_ = gtk_widget_get_style_context ((GtkWidget*) self);
 #line 13 "/home/alain/Proyectos/byte/src/Widgets/HeaderBar.vala"
@@ -511,31 +511,31 @@ widgets_header_bar_constructor (GType type,
 #line 16 "/home/alain/Proyectos/byte/src/Widgets/HeaderBar.vala"
 	g_object_ref_sink (_tmp1_);
 #line 16 "/home/alain/Proyectos/byte/src/Widgets/HeaderBar.vala"
-	_data1_->shuffle_button = _tmp1_;
+	_data4_->shuffle_button = _tmp1_;
 #line 17 "/home/alain/Proyectos/byte/src/Widgets/HeaderBar.vala"
-	_tmp2_ = _data1_->shuffle_button;
+	_tmp2_ = _data4_->shuffle_button;
 #line 17 "/home/alain/Proyectos/byte/src/Widgets/HeaderBar.vala"
 	_tmp3_ = gtk_widget_get_style_context ((GtkWidget*) _tmp2_);
 #line 17 "/home/alain/Proyectos/byte/src/Widgets/HeaderBar.vala"
 	gtk_style_context_add_class (_tmp3_, "repeat-button");
 #line 18 "/home/alain/Proyectos/byte/src/Widgets/HeaderBar.vala"
-	_tmp4_ = _data1_->shuffle_button;
+	_tmp4_ = _data4_->shuffle_button;
 #line 18 "/home/alain/Proyectos/byte/src/Widgets/HeaderBar.vala"
 	_tmp5_ = gtk_widget_get_style_context ((GtkWidget*) _tmp4_);
 #line 18 "/home/alain/Proyectos/byte/src/Widgets/HeaderBar.vala"
 	gtk_style_context_remove_class (_tmp5_, "button");
 #line 19 "/home/alain/Proyectos/byte/src/Widgets/HeaderBar.vala"
-	_tmp6_ = _data1_->shuffle_button;
+	_tmp6_ = _data4_->shuffle_button;
 #line 19 "/home/alain/Proyectos/byte/src/Widgets/HeaderBar.vala"
 	_tmp7_ = gtk_widget_get_style_context ((GtkWidget*) _tmp6_);
 #line 19 "/home/alain/Proyectos/byte/src/Widgets/HeaderBar.vala"
 	gtk_style_context_add_class (_tmp7_, GTK_STYLE_CLASS_FLAT);
 #line 20 "/home/alain/Proyectos/byte/src/Widgets/HeaderBar.vala"
-	_tmp8_ = _data1_->shuffle_button;
+	_tmp8_ = _data4_->shuffle_button;
 #line 20 "/home/alain/Proyectos/byte/src/Widgets/HeaderBar.vala"
 	gtk_widget_set_valign ((GtkWidget*) _tmp8_, GTK_ALIGN_CENTER);
 #line 21 "/home/alain/Proyectos/byte/src/Widgets/HeaderBar.vala"
-	_tmp9_ = _data1_->shuffle_button;
+	_tmp9_ = _data4_->shuffle_button;
 #line 21 "/home/alain/Proyectos/byte/src/Widgets/HeaderBar.vala"
 	gtk_widget_set_can_focus ((GtkWidget*) _tmp9_, FALSE);
 #line 23 "/home/alain/Proyectos/byte/src/Widgets/HeaderBar.vala"
@@ -543,9 +543,9 @@ widgets_header_bar_constructor (GType type,
 #line 23 "/home/alain/Proyectos/byte/src/Widgets/HeaderBar.vala"
 	g_object_ref_sink (_tmp10_);
 #line 23 "/home/alain/Proyectos/byte/src/Widgets/HeaderBar.vala"
-	_data1_->shuffle_icon = _tmp10_;
+	_data4_->shuffle_icon = _tmp10_;
 #line 24 "/home/alain/Proyectos/byte/src/Widgets/HeaderBar.vala"
-	_tmp11_ = _data1_->shuffle_icon;
+	_tmp11_ = _data4_->shuffle_icon;
 #line 24 "/home/alain/Proyectos/byte/src/Widgets/HeaderBar.vala"
 	_tmp12_ = (GThemedIcon*) g_themed_icon_new ("media-playlist-consecutive-symbolic");
 #line 24 "/home/alain/Proyectos/byte/src/Widgets/HeaderBar.vala"
@@ -555,13 +555,13 @@ widgets_header_bar_constructor (GType type,
 #line 24 "/home/alain/Proyectos/byte/src/Widgets/HeaderBar.vala"
 	_g_object_unref0 (_tmp13_);
 #line 25 "/home/alain/Proyectos/byte/src/Widgets/HeaderBar.vala"
-	_tmp14_ = _data1_->shuffle_icon;
+	_tmp14_ = _data4_->shuffle_icon;
 #line 25 "/home/alain/Proyectos/byte/src/Widgets/HeaderBar.vala"
 	gtk_image_set_pixel_size (_tmp14_, 16);
 #line 27 "/home/alain/Proyectos/byte/src/Widgets/HeaderBar.vala"
-	_tmp15_ = _data1_->shuffle_button;
+	_tmp15_ = _data4_->shuffle_button;
 #line 27 "/home/alain/Proyectos/byte/src/Widgets/HeaderBar.vala"
-	_tmp16_ = _data1_->shuffle_icon;
+	_tmp16_ = _data4_->shuffle_icon;
 #line 27 "/home/alain/Proyectos/byte/src/Widgets/HeaderBar.vala"
 	gtk_container_add ((GtkContainer*) _tmp15_, (GtkWidget*) _tmp16_);
 #line 29 "/home/alain/Proyectos/byte/src/Widgets/HeaderBar.vala"
@@ -579,31 +579,31 @@ widgets_header_bar_constructor (GType type,
 #line 32 "/home/alain/Proyectos/byte/src/Widgets/HeaderBar.vala"
 	g_object_ref_sink (_tmp19_);
 #line 32 "/home/alain/Proyectos/byte/src/Widgets/HeaderBar.vala"
-	_data1_->playback_button = _tmp19_;
+	_data4_->playback_button = _tmp19_;
 #line 33 "/home/alain/Proyectos/byte/src/Widgets/HeaderBar.vala"
-	_tmp20_ = _data1_->playback_button;
+	_tmp20_ = _data4_->playback_button;
 #line 33 "/home/alain/Proyectos/byte/src/Widgets/HeaderBar.vala"
 	_tmp21_ = gtk_widget_get_style_context ((GtkWidget*) _tmp20_);
 #line 33 "/home/alain/Proyectos/byte/src/Widgets/HeaderBar.vala"
 	gtk_style_context_add_class (_tmp21_, "repeat-button");
 #line 34 "/home/alain/Proyectos/byte/src/Widgets/HeaderBar.vala"
-	_tmp22_ = _data1_->playback_button;
+	_tmp22_ = _data4_->playback_button;
 #line 34 "/home/alain/Proyectos/byte/src/Widgets/HeaderBar.vala"
 	_tmp23_ = gtk_widget_get_style_context ((GtkWidget*) _tmp22_);
 #line 34 "/home/alain/Proyectos/byte/src/Widgets/HeaderBar.vala"
 	gtk_style_context_remove_class (_tmp23_, "button");
 #line 35 "/home/alain/Proyectos/byte/src/Widgets/HeaderBar.vala"
-	_tmp24_ = _data1_->playback_button;
+	_tmp24_ = _data4_->playback_button;
 #line 35 "/home/alain/Proyectos/byte/src/Widgets/HeaderBar.vala"
 	_tmp25_ = gtk_widget_get_style_context ((GtkWidget*) _tmp24_);
 #line 35 "/home/alain/Proyectos/byte/src/Widgets/HeaderBar.vala"
 	gtk_style_context_add_class (_tmp25_, GTK_STYLE_CLASS_FLAT);
 #line 36 "/home/alain/Proyectos/byte/src/Widgets/HeaderBar.vala"
-	_tmp26_ = _data1_->playback_button;
+	_tmp26_ = _data4_->playback_button;
 #line 36 "/home/alain/Proyectos/byte/src/Widgets/HeaderBar.vala"
 	gtk_widget_set_valign ((GtkWidget*) _tmp26_, GTK_ALIGN_CENTER);
 #line 37 "/home/alain/Proyectos/byte/src/Widgets/HeaderBar.vala"
-	_tmp27_ = _data1_->playback_button;
+	_tmp27_ = _data4_->playback_button;
 #line 37 "/home/alain/Proyectos/byte/src/Widgets/HeaderBar.vala"
 	gtk_widget_set_can_focus ((GtkWidget*) _tmp27_, FALSE);
 #line 39 "/home/alain/Proyectos/byte/src/Widgets/HeaderBar.vala"
@@ -611,9 +611,9 @@ widgets_header_bar_constructor (GType type,
 #line 39 "/home/alain/Proyectos/byte/src/Widgets/HeaderBar.vala"
 	g_object_ref_sink (_tmp28_);
 #line 39 "/home/alain/Proyectos/byte/src/Widgets/HeaderBar.vala"
-	_data1_->playback_icon = _tmp28_;
+	_data4_->playback_icon = _tmp28_;
 #line 40 "/home/alain/Proyectos/byte/src/Widgets/HeaderBar.vala"
-	_tmp29_ = _data1_->playback_icon;
+	_tmp29_ = _data4_->playback_icon;
 #line 40 "/home/alain/Proyectos/byte/src/Widgets/HeaderBar.vala"
 	_tmp30_ = (GThemedIcon*) g_themed_icon_new ("media-playback-start-symbolic");
 #line 40 "/home/alain/Proyectos/byte/src/Widgets/HeaderBar.vala"
@@ -623,13 +623,13 @@ widgets_header_bar_constructor (GType type,
 #line 40 "/home/alain/Proyectos/byte/src/Widgets/HeaderBar.vala"
 	_g_object_unref0 (_tmp31_);
 #line 41 "/home/alain/Proyectos/byte/src/Widgets/HeaderBar.vala"
-	_tmp32_ = _data1_->playback_icon;
+	_tmp32_ = _data4_->playback_icon;
 #line 41 "/home/alain/Proyectos/byte/src/Widgets/HeaderBar.vala"
 	gtk_image_set_pixel_size (_tmp32_, 24);
 #line 43 "/home/alain/Proyectos/byte/src/Widgets/HeaderBar.vala"
-	_tmp33_ = _data1_->playback_button;
+	_tmp33_ = _data4_->playback_button;
 #line 43 "/home/alain/Proyectos/byte/src/Widgets/HeaderBar.vala"
-	_tmp34_ = _data1_->playback_icon;
+	_tmp34_ = _data4_->playback_icon;
 #line 43 "/home/alain/Proyectos/byte/src/Widgets/HeaderBar.vala"
 	gtk_container_add ((GtkContainer*) _tmp33_, (GtkWidget*) _tmp34_);
 #line 45 "/home/alain/Proyectos/byte/src/Widgets/HeaderBar.vala"
@@ -647,23 +647,23 @@ widgets_header_bar_constructor (GType type,
 #line 48 "/home/alain/Proyectos/byte/src/Widgets/HeaderBar.vala"
 	g_object_ref_sink (_tmp37_);
 #line 48 "/home/alain/Proyectos/byte/src/Widgets/HeaderBar.vala"
-	_data1_->repeat_button = _tmp37_;
+	_data4_->repeat_button = _tmp37_;
 #line 49 "/home/alain/Proyectos/byte/src/Widgets/HeaderBar.vala"
-	_tmp38_ = _data1_->repeat_button;
+	_tmp38_ = _data4_->repeat_button;
 #line 49 "/home/alain/Proyectos/byte/src/Widgets/HeaderBar.vala"
 	gtk_widget_set_opacity ((GtkWidget*) _tmp38_, 0.7);
 #line 50 "/home/alain/Proyectos/byte/src/Widgets/HeaderBar.vala"
-	_tmp39_ = _data1_->repeat_button;
+	_tmp39_ = _data4_->repeat_button;
 #line 50 "/home/alain/Proyectos/byte/src/Widgets/HeaderBar.vala"
 	gtk_widget_set_valign ((GtkWidget*) _tmp39_, GTK_ALIGN_CENTER);
 #line 51 "/home/alain/Proyectos/byte/src/Widgets/HeaderBar.vala"
-	_tmp40_ = _data1_->repeat_button;
+	_tmp40_ = _data4_->repeat_button;
 #line 51 "/home/alain/Proyectos/byte/src/Widgets/HeaderBar.vala"
 	_tmp41_ = gtk_widget_get_style_context ((GtkWidget*) _tmp40_);
 #line 51 "/home/alain/Proyectos/byte/src/Widgets/HeaderBar.vala"
 	gtk_style_context_add_class (_tmp41_, GTK_STYLE_CLASS_FLAT);
 #line 52 "/home/alain/Proyectos/byte/src/Widgets/HeaderBar.vala"
-	_tmp42_ = _data1_->repeat_button;
+	_tmp42_ = _data4_->repeat_button;
 #line 52 "/home/alain/Proyectos/byte/src/Widgets/HeaderBar.vala"
 	gtk_widget_set_can_focus ((GtkWidget*) _tmp42_, FALSE);
 #line 54 "/home/alain/Proyectos/byte/src/Widgets/HeaderBar.vala"
@@ -689,7 +689,7 @@ widgets_header_bar_constructor (GType type,
 #line 59 "/home/alain/Proyectos/byte/src/Widgets/HeaderBar.vala"
 	_tmp47_ = main_box;
 #line 59 "/home/alain/Proyectos/byte/src/Widgets/HeaderBar.vala"
-	_tmp48_ = _data1_->shuffle_button;
+	_tmp48_ = _data4_->shuffle_button;
 #line 59 "/home/alain/Proyectos/byte/src/Widgets/HeaderBar.vala"
 	gtk_box_pack_start (_tmp47_, (GtkWidget*) _tmp48_, FALSE, FALSE, (guint) 24);
 #line 60 "/home/alain/Proyectos/byte/src/Widgets/HeaderBar.vala"
@@ -701,7 +701,7 @@ widgets_header_bar_constructor (GType type,
 #line 61 "/home/alain/Proyectos/byte/src/Widgets/HeaderBar.vala"
 	_tmp51_ = main_box;
 #line 61 "/home/alain/Proyectos/byte/src/Widgets/HeaderBar.vala"
-	_tmp52_ = _data1_->playback_button;
+	_tmp52_ = _data4_->playback_button;
 #line 61 "/home/alain/Proyectos/byte/src/Widgets/HeaderBar.vala"
 	gtk_box_pack_start (_tmp51_, (GtkWidget*) _tmp52_, FALSE, FALSE, (guint) 0);
 #line 62 "/home/alain/Proyectos/byte/src/Widgets/HeaderBar.vala"
@@ -713,7 +713,7 @@ widgets_header_bar_constructor (GType type,
 #line 63 "/home/alain/Proyectos/byte/src/Widgets/HeaderBar.vala"
 	_tmp55_ = main_box;
 #line 63 "/home/alain/Proyectos/byte/src/Widgets/HeaderBar.vala"
-	_tmp56_ = _data1_->repeat_button;
+	_tmp56_ = _data4_->repeat_button;
 #line 63 "/home/alain/Proyectos/byte/src/Widgets/HeaderBar.vala"
 	gtk_box_pack_start (_tmp55_, (GtkWidget*) _tmp56_, FALSE, FALSE, (guint) 24);
 #line 65 "/home/alain/Proyectos/byte/src/Widgets/HeaderBar.vala"
@@ -725,17 +725,17 @@ widgets_header_bar_constructor (GType type,
 #line 66 "/home/alain/Proyectos/byte/src/Widgets/HeaderBar.vala"
 	gtk_header_bar_pack_end ((GtkHeaderBar*) self, (GtkWidget*) _tmp58_);
 #line 68 "/home/alain/Proyectos/byte/src/Widgets/HeaderBar.vala"
-	_tmp59_ = _data1_->shuffle_button;
+	_tmp59_ = _data4_->shuffle_button;
 #line 68 "/home/alain/Proyectos/byte/src/Widgets/HeaderBar.vala"
-	g_signal_connect_data (_tmp59_, "toggled", (GCallback) __widgets_header_bar___lambda4__gtk_toggle_button_toggled, block1_data_ref (_data1_), (GClosureNotify) block1_data_unref, 0);
+	g_signal_connect_data (_tmp59_, "toggled", (GCallback) __widgets_header_bar___lambda4__gtk_toggle_button_toggled, block4_data_ref (_data4_), (GClosureNotify) block4_data_unref, 0);
 #line 76 "/home/alain/Proyectos/byte/src/Widgets/HeaderBar.vala"
-	_tmp60_ = _data1_->playback_button;
+	_tmp60_ = _data4_->playback_button;
 #line 76 "/home/alain/Proyectos/byte/src/Widgets/HeaderBar.vala"
-	g_signal_connect_data (_tmp60_, "toggled", (GCallback) __widgets_header_bar___lambda5__gtk_toggle_button_toggled, block1_data_ref (_data1_), (GClosureNotify) block1_data_unref, 0);
+	g_signal_connect_data (_tmp60_, "toggled", (GCallback) __widgets_header_bar___lambda5__gtk_toggle_button_toggled, block4_data_ref (_data4_), (GClosureNotify) block4_data_unref, 0);
 #line 88 "/home/alain/Proyectos/byte/src/Widgets/HeaderBar.vala"
-	_tmp61_ = _data1_->repeat_button;
+	_tmp61_ = _data4_->repeat_button;
 #line 88 "/home/alain/Proyectos/byte/src/Widgets/HeaderBar.vala"
-	g_signal_connect_data (_tmp61_, "clicked", (GCallback) __widgets_header_bar___lambda6__gtk_button_clicked, block1_data_ref (_data1_), (GClosureNotify) block1_data_unref, 0);
+	g_signal_connect_data (_tmp61_, "clicked", (GCallback) __widgets_header_bar___lambda6__gtk_button_clicked, block4_data_ref (_data4_), (GClosureNotify) block4_data_unref, 0);
 #line 12 "/home/alain/Proyectos/byte/src/Widgets/HeaderBar.vala"
 	_g_object_unref0 (main_box);
 #line 12 "/home/alain/Proyectos/byte/src/Widgets/HeaderBar.vala"
@@ -745,9 +745,9 @@ widgets_header_bar_constructor (GType type,
 #line 12 "/home/alain/Proyectos/byte/src/Widgets/HeaderBar.vala"
 	_g_object_unref0 (backward_button);
 #line 12 "/home/alain/Proyectos/byte/src/Widgets/HeaderBar.vala"
-	block1_data_unref (_data1_);
+	block4_data_unref (_data4_);
 #line 12 "/home/alain/Proyectos/byte/src/Widgets/HeaderBar.vala"
-	_data1_ = NULL;
+	_data4_ = NULL;
 #line 12 "/home/alain/Proyectos/byte/src/Widgets/HeaderBar.vala"
 	return obj;
 #line 754 "HeaderBar.c"

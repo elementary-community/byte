@@ -22,10 +22,23 @@ enum  {
 	SERVICES_SIGNALS_NUM_PROPERTIES
 };
 static GParamSpec* services_signals_properties[SERVICES_SIGNALS_NUM_PROPERTIES];
+
+#define OBJECTS_TYPE_TRACK (objects_track_get_type ())
+#define OBJECTS_TRACK(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), OBJECTS_TYPE_TRACK, ObjectsTrack))
+#define OBJECTS_TRACK_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), OBJECTS_TYPE_TRACK, ObjectsTrackClass))
+#define OBJECTS_IS_TRACK(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), OBJECTS_TYPE_TRACK))
+#define OBJECTS_IS_TRACK_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), OBJECTS_TYPE_TRACK))
+#define OBJECTS_TRACK_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), OBJECTS_TYPE_TRACK, ObjectsTrackClass))
+
+typedef struct _ObjectsTrack ObjectsTrack;
+typedef struct _ObjectsTrackClass ObjectsTrackClass;
 enum  {
 	SERVICES_SIGNALS_PLAY_TRACK_SIGNAL,
 	SERVICES_SIGNALS_PAUSE_TRACK_SIGNAL,
 	SERVICES_SIGNALS_READY_FILE_SIGNAL,
+	SERVICES_SIGNALS_DISCOVERED_NEW_ITEM_SIGNAL,
+	SERVICES_SIGNALS_DISCOVER_STARTED_SIGNAL,
+	SERVICES_SIGNALS_DISCOVER_FINISHED_SIGNAL,
 	SERVICES_SIGNALS_NUM_SIGNALS
 };
 static guint services_signals_signals[SERVICES_SIGNALS_NUM_SIGNALS] = {0};
@@ -45,26 +58,83 @@ static gpointer services_signals_parent_class = NULL;
 GType services_signals_get_type (void) G_GNUC_CONST;
 ServicesSignals* services_signals_new (void);
 ServicesSignals* services_signals_construct (GType object_type);
+gpointer objects_track_ref (gpointer instance);
+void objects_track_unref (gpointer instance);
+GParamSpec* objects_param_spec_track (const gchar* name,
+                                      const gchar* nick,
+                                      const gchar* blurb,
+                                      GType object_type,
+                                      GParamFlags flags);
+void objects_value_set_track (GValue* value,
+                              gpointer v_object);
+void objects_value_take_track (GValue* value,
+                               gpointer v_object);
+gpointer objects_value_get_track (const GValue* value);
+GType objects_track_get_type (void) G_GNUC_CONST;
+static void g_cclosure_user_marshal_VOID__OBJECTS_TRACK (GClosure * closure,
+                                                  GValue * return_value,
+                                                  guint n_param_values,
+                                                  const GValue * param_values,
+                                                  gpointer invocation_hint,
+                                                  gpointer marshal_data);
 
 
 ServicesSignals*
 services_signals_construct (GType object_type)
 {
 	ServicesSignals * self = NULL;
-#line 7 "/home/alain/Proyectos/byte/src/Services/Signals.vala"
+#line 11 "/home/alain/Proyectos/byte/src/Services/Signals.vala"
 	self = (ServicesSignals*) g_object_new (object_type, NULL);
-#line 7 "/home/alain/Proyectos/byte/src/Services/Signals.vala"
+#line 11 "/home/alain/Proyectos/byte/src/Services/Signals.vala"
 	return self;
-#line 59 "Signals.c"
+#line 91 "Signals.c"
 }
 
 
 ServicesSignals*
 services_signals_new (void)
 {
-#line 7 "/home/alain/Proyectos/byte/src/Services/Signals.vala"
+#line 11 "/home/alain/Proyectos/byte/src/Services/Signals.vala"
 	return services_signals_construct (SERVICES_TYPE_SIGNALS);
-#line 68 "Signals.c"
+#line 100 "Signals.c"
+}
+
+
+static void
+g_cclosure_user_marshal_VOID__OBJECTS_TRACK (GClosure * closure,
+                                             GValue * return_value,
+                                             guint n_param_values,
+                                             const GValue * param_values,
+                                             gpointer invocation_hint,
+                                             gpointer marshal_data)
+{
+	typedef void (*GMarshalFunc_VOID__OBJECTS_TRACK) (gpointer data1, gpointer arg_1, gpointer data2);
+	register GMarshalFunc_VOID__OBJECTS_TRACK callback;
+	register GCClosure * cc;
+	register gpointer data1;
+	register gpointer data2;
+	cc = (GCClosure *) closure;
+#line 1 "/home/alain/Proyectos/byte/src/Services/Signals.vala"
+	g_return_if_fail (n_param_values == 2);
+#line 1 "/home/alain/Proyectos/byte/src/Services/Signals.vala"
+	if (G_CCLOSURE_SWAP_DATA (closure)) {
+#line 1 "/home/alain/Proyectos/byte/src/Services/Signals.vala"
+		data1 = closure->data;
+#line 1 "/home/alain/Proyectos/byte/src/Services/Signals.vala"
+		data2 = param_values->data[0].v_pointer;
+#line 126 "Signals.c"
+	} else {
+#line 1 "/home/alain/Proyectos/byte/src/Services/Signals.vala"
+		data1 = param_values->data[0].v_pointer;
+#line 1 "/home/alain/Proyectos/byte/src/Services/Signals.vala"
+		data2 = closure->data;
+#line 132 "Signals.c"
+	}
+#line 1 "/home/alain/Proyectos/byte/src/Services/Signals.vala"
+	callback = (GMarshalFunc_VOID__OBJECTS_TRACK) (marshal_data ? marshal_data : cc->callback);
+#line 1 "/home/alain/Proyectos/byte/src/Services/Signals.vala"
+	callback (data1, objects_value_get_track (param_values + 1), data2);
+#line 138 "Signals.c"
 }
 
 
@@ -79,7 +149,13 @@ services_signals_class_init (ServicesSignalsClass * klass)
 	services_signals_signals[SERVICES_SIGNALS_PAUSE_TRACK_SIGNAL] = g_signal_new ("pause-track", SERVICES_TYPE_SIGNALS, G_SIGNAL_RUN_LAST, 0, NULL, NULL, g_cclosure_marshal_VOID__VOID, G_TYPE_NONE, 0);
 #line 1 "/home/alain/Proyectos/byte/src/Services/Signals.vala"
 	services_signals_signals[SERVICES_SIGNALS_READY_FILE_SIGNAL] = g_signal_new ("ready-file", SERVICES_TYPE_SIGNALS, G_SIGNAL_RUN_LAST, 0, NULL, NULL, g_cclosure_marshal_VOID__VOID, G_TYPE_NONE, 0);
-#line 83 "Signals.c"
+#line 1 "/home/alain/Proyectos/byte/src/Services/Signals.vala"
+	services_signals_signals[SERVICES_SIGNALS_DISCOVERED_NEW_ITEM_SIGNAL] = g_signal_new ("discovered-new-item", SERVICES_TYPE_SIGNALS, G_SIGNAL_RUN_LAST, 0, NULL, NULL, g_cclosure_user_marshal_VOID__OBJECTS_TRACK, G_TYPE_NONE, 1, OBJECTS_TYPE_TRACK);
+#line 1 "/home/alain/Proyectos/byte/src/Services/Signals.vala"
+	services_signals_signals[SERVICES_SIGNALS_DISCOVER_STARTED_SIGNAL] = g_signal_new ("discover-started", SERVICES_TYPE_SIGNALS, G_SIGNAL_RUN_LAST, 0, NULL, NULL, g_cclosure_marshal_VOID__VOID, G_TYPE_NONE, 0);
+#line 1 "/home/alain/Proyectos/byte/src/Services/Signals.vala"
+	services_signals_signals[SERVICES_SIGNALS_DISCOVER_FINISHED_SIGNAL] = g_signal_new ("discover-finished", SERVICES_TYPE_SIGNALS, G_SIGNAL_RUN_LAST, 0, NULL, NULL, g_cclosure_marshal_VOID__VOID, G_TYPE_NONE, 0);
+#line 159 "Signals.c"
 }
 
 

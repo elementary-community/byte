@@ -1,5 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <schemalist>
+    <enum id="com.github.alainm23.byte.repeat-mode">
+		<value nick="off" value="0" />
+		<value nick="all" value="1" />
+		<value nick="one" value="2" />
+	</enum>
     <schema path="/com/github/alainm23/byte/" id="com.github.alainm23.byte" gettext-domain="com.github.alainm23.byte">
+        <key name="library-location" type="s">
+		    <default>""</default>
+			<summary>Default library location.</summary>
+			<description>Default library location.</description>
+		</key>
+
+        <key name="repeat-mode" enum="com.github.alainm23.byte.repeat-mode">
+			<default>"off"</default>
+			<summary>Repeat mode.</summary>
+			<description>Repeat mode.</description>
+		</key>
+
+        <key name="shuffle-mode" type="b">
+			<default>false</default>
+			<summary>Shuffle mode.</summary>
+			<description>Shuffle mode.</description>
+		</key>
     </schema>
 </schemalist>

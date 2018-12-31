@@ -32,12 +32,17 @@ executable(
 
     'src/Services/StreamPlayer.vala',
     'src/Services/Signals.vala',
+    'src/Services/Database.vala',
+    'src/Services/TagManager.vala',
 
     'src/Widgets/HeaderBar.vala',
     'src/Widgets/ActionBar.vala',
+    'src/Widgets/TrackRow.vala',
 
     'src/Views/Welcome.vala',
     'src/Views/Main.vala',
+
+    'src/Objects/Track.vala',
     dependencies: [
         dependency('gee-0.8'),
         dependency('gobject-2.0'),

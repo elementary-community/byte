@@ -79,27 +79,17 @@ enum  {
 };
 static GParamSpec* main_window_properties[MAIN_WINDOW_NUM_PROPERTIES];
 #define _g_object_unref0(var) ((var == NULL) ? NULL : (var = (g_object_unref (var), NULL)))
-
-#define SERVICES_TYPE_STREAM_PLAYER (services_stream_player_get_type ())
-#define SERVICES_STREAM_PLAYER(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), SERVICES_TYPE_STREAM_PLAYER, ServicesStreamPlayer))
-#define SERVICES_STREAM_PLAYER_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), SERVICES_TYPE_STREAM_PLAYER, ServicesStreamPlayerClass))
-#define SERVICES_IS_STREAM_PLAYER(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SERVICES_TYPE_STREAM_PLAYER))
-#define SERVICES_IS_STREAM_PLAYER_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), SERVICES_TYPE_STREAM_PLAYER))
-#define SERVICES_STREAM_PLAYER_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), SERVICES_TYPE_STREAM_PLAYER, ServicesStreamPlayerClass))
-
-typedef struct _ServicesStreamPlayer ServicesStreamPlayer;
-typedef struct _ServicesStreamPlayerClass ServicesStreamPlayerClass;
 #define _g_free0(var) (var = (g_free (var), NULL))
 
-#define SERVICES_TYPE_SIGNALS (services_signals_get_type ())
-#define SERVICES_SIGNALS(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), SERVICES_TYPE_SIGNALS, ServicesSignals))
-#define SERVICES_SIGNALS_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), SERVICES_TYPE_SIGNALS, ServicesSignalsClass))
-#define SERVICES_IS_SIGNALS(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SERVICES_TYPE_SIGNALS))
-#define SERVICES_IS_SIGNALS_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), SERVICES_TYPE_SIGNALS))
-#define SERVICES_SIGNALS_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), SERVICES_TYPE_SIGNALS, ServicesSignalsClass))
+#define TYPE_UTILS (utils_get_type ())
+#define UTILS(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), TYPE_UTILS, Utils))
+#define UTILS_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), TYPE_UTILS, UtilsClass))
+#define IS_UTILS(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), TYPE_UTILS))
+#define IS_UTILS_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), TYPE_UTILS))
+#define UTILS_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), TYPE_UTILS, UtilsClass))
 
-typedef struct _ServicesSignals ServicesSignals;
-typedef struct _ServicesSignalsClass ServicesSignalsClass;
+typedef struct _Utils Utils;
+typedef struct _UtilsClass UtilsClass;
 
 struct _MainWindow {
 	GtkWindow parent_instance;
@@ -121,8 +111,8 @@ struct _MainWindowPrivate {
 
 
 static gpointer main_window_parent_class = NULL;
-extern ServicesStreamPlayer* application_stream_player;
-extern ServicesSignals* application_signals;
+extern GSettings* application_settings;
+extern Utils* application_utils;
 
 GType main_window_get_type (void) G_GNUC_CONST;
 GType application_get_type (void) G_GNUC_CONST;
@@ -149,13 +139,16 @@ ViewsMain* views_main_new (void);
 ViewsMain* views_main_construct (GType object_type);
 WidgetsActionBar* widgets_action_bar_new (void);
 WidgetsActionBar* widgets_action_bar_construct (GType object_type);
-static void _main_window___lambda14_ (MainWindow* self,
+static gboolean _main_window___lambda18_ (MainWindow* self);
+static gboolean __main_window___lambda18__gsource_func (gpointer self);
+static void _main_window___lambda19_ (MainWindow* self,
                                gint index);
-GType services_stream_player_get_type (void) G_GNUC_CONST;
-void services_stream_player_ready_file (ServicesStreamPlayer* self,
-                                        const gchar* stream);
-GType services_signals_get_type (void) G_GNUC_CONST;
-static void __main_window___lambda14__views_welcome_selected (ViewsWelcome* _sender,
+GType utils_get_type (void) G_GNUC_CONST;
+gchar* utils_choose_folder (Utils* self,
+                            MainWindow* window);
+void utils_scan_local_files (Utils* self,
+                             const gchar* uri);
+static void __main_window___lambda19__views_welcome_selected (ViewsWelcome* _sender,
                                                        gint index,
                                                        gpointer self);
 static void main_window_finalize (GObject * obj);
@@ -177,10 +170,10 @@ main_window_construct (GType object_type,
 #line 11 "/home/alain/Proyectos/byte/src/MainWindow.vala"
 	g_return_val_if_fail (application != NULL, NULL);
 #line 12 "/home/alain/Proyectos/byte/src/MainWindow.vala"
-	self = (MainWindow*) g_object_new (object_type, "application", application, "app", application, "icon-name", "com.github.alainm23.byte", "title", _ ("Byte"), "height-request", 750, "width-request", 575, NULL);
+	self = (MainWindow*) g_object_new (object_type, "application", application, "app", application, "icon-name", "com.github.alainm23.byte", "title", _ ("Byte"), NULL);
 #line 11 "/home/alain/Proyectos/byte/src/MainWindow.vala"
 	return self;
-#line 184 "MainWindow.c"
+#line 177 "MainWindow.c"
 }
 
 
@@ -189,7 +182,7 @@ main_window_new (Application* application)
 {
 #line 11 "/home/alain/Proyectos/byte/src/MainWindow.vala"
 	return main_window_construct (TYPE_MAIN_WINDOW, application);
-#line 193 "MainWindow.c"
+#line 186 "MainWindow.c"
 }
 
 
@@ -206,7 +199,7 @@ main_window_get_app (MainWindow* self)
 	result = _tmp0_;
 #line 2 "/home/alain/Proyectos/byte/src/MainWindow.vala"
 	return result;
-#line 210 "MainWindow.c"
+#line 203 "MainWindow.c"
 }
 
 
@@ -222,108 +215,125 @@ main_window_set_app (MainWindow* self,
 		self->priv->_app = value;
 #line 2 "/home/alain/Proyectos/byte/src/MainWindow.vala"
 		g_object_notify_by_pspec ((GObject *) self, main_window_properties[MAIN_WINDOW_APP_PROPERTY]);
-#line 226 "MainWindow.c"
+#line 219 "MainWindow.c"
 	}
 }
 
 
+static gboolean
+_main_window___lambda18_ (MainWindow* self)
+{
+	gboolean result = FALSE;
+	GSettings* _tmp0_;
+	gchar* _tmp1_;
+	gchar* _tmp2_;
+	gboolean _tmp3_;
+#line 48 "/home/alain/Proyectos/byte/src/MainWindow.vala"
+	_tmp0_ = application_settings;
+#line 48 "/home/alain/Proyectos/byte/src/MainWindow.vala"
+	_tmp1_ = g_settings_get_string (_tmp0_, "library-location");
+#line 48 "/home/alain/Proyectos/byte/src/MainWindow.vala"
+	_tmp2_ = _tmp1_;
+#line 48 "/home/alain/Proyectos/byte/src/MainWindow.vala"
+	_tmp3_ = g_strcmp0 (_tmp2_, "") == 0;
+#line 48 "/home/alain/Proyectos/byte/src/MainWindow.vala"
+	_g_free0 (_tmp2_);
+#line 48 "/home/alain/Proyectos/byte/src/MainWindow.vala"
+	if (_tmp3_) {
+#line 244 "MainWindow.c"
+		GtkStack* _tmp4_;
+#line 49 "/home/alain/Proyectos/byte/src/MainWindow.vala"
+		_tmp4_ = self->priv->main_stack;
+#line 49 "/home/alain/Proyectos/byte/src/MainWindow.vala"
+		gtk_stack_set_visible_child_name (_tmp4_, "welcome_view");
+#line 250 "MainWindow.c"
+	} else {
+		GtkStack* _tmp5_;
+#line 51 "/home/alain/Proyectos/byte/src/MainWindow.vala"
+		_tmp5_ = self->priv->main_stack;
+#line 51 "/home/alain/Proyectos/byte/src/MainWindow.vala"
+		gtk_stack_set_visible_child_name (_tmp5_, "main_view");
+#line 257 "MainWindow.c"
+	}
+#line 53 "/home/alain/Proyectos/byte/src/MainWindow.vala"
+	result = FALSE;
+#line 53 "/home/alain/Proyectos/byte/src/MainWindow.vala"
+	return result;
+#line 263 "MainWindow.c"
+}
+
+
+static gboolean
+__main_window___lambda18__gsource_func (gpointer self)
+{
+	gboolean result;
+	result = _main_window___lambda18_ ((MainWindow*) self);
+#line 47 "/home/alain/Proyectos/byte/src/MainWindow.vala"
+	return result;
+#line 274 "MainWindow.c"
+}
+
+
 static void
-_main_window___lambda14_ (MainWindow* self,
+_main_window___lambda19_ (MainWindow* self,
                           gint index)
 {
-#line 48 "/home/alain/Proyectos/byte/src/MainWindow.vala"
+#line 57 "/home/alain/Proyectos/byte/src/MainWindow.vala"
 	if (index == 0) {
-#line 237 "MainWindow.c"
-		GtkStack* _tmp0_;
-#line 49 "/home/alain/Proyectos/byte/src/MainWindow.vala"
-		_tmp0_ = self->priv->main_stack;
-#line 49 "/home/alain/Proyectos/byte/src/MainWindow.vala"
-		gtk_stack_set_visible_child_name (_tmp0_, "main_view");
-#line 243 "MainWindow.c"
-	} else {
-		GtkFileChooserDialog* file = NULL;
-		GtkFileChooserDialog* _tmp1_;
-		GtkFileChooserDialog* _tmp2_;
-		GtkFileChooserDialog* _tmp3_;
-		GtkFileChooserDialog* _tmp4_;
-		GtkFileChooserDialog* _tmp13_;
-#line 51 "/home/alain/Proyectos/byte/src/MainWindow.vala"
-		_tmp1_ = (GtkFileChooserDialog*) gtk_file_chooser_dialog_new ("Seleccionar una musica en formato MP3", NULL, GTK_FILE_CHOOSER_ACTION_OPEN, NULL);
-#line 51 "/home/alain/Proyectos/byte/src/MainWindow.vala"
-		g_object_ref_sink (_tmp1_);
-#line 51 "/home/alain/Proyectos/byte/src/MainWindow.vala"
-		file = _tmp1_;
-#line 52 "/home/alain/Proyectos/byte/src/MainWindow.vala"
-		_tmp2_ = file;
-#line 52 "/home/alain/Proyectos/byte/src/MainWindow.vala"
-		gtk_dialog_add_button ((GtkDialog*) _tmp2_, GTK_STOCK_CLOSE, (gint) GTK_RESPONSE_CLOSE);
-#line 53 "/home/alain/Proyectos/byte/src/MainWindow.vala"
-		_tmp3_ = file;
-#line 53 "/home/alain/Proyectos/byte/src/MainWindow.vala"
-		gtk_dialog_add_button ((GtkDialog*) _tmp3_, GTK_STOCK_OK, (gint) GTK_RESPONSE_ACCEPT);
-#line 55 "/home/alain/Proyectos/byte/src/MainWindow.vala"
-		_tmp4_ = file;
-#line 55 "/home/alain/Proyectos/byte/src/MainWindow.vala"
-		if (gtk_dialog_run ((GtkDialog*) _tmp4_) == ((gint) GTK_RESPONSE_ACCEPT)) {
-#line 269 "MainWindow.c"
-			GFile* archi = NULL;
-			GtkFileChooserDialog* _tmp5_;
-			GFile* _tmp6_;
-			ServicesStreamPlayer* _tmp7_;
-			GFile* _tmp8_;
-			gchar* _tmp9_;
-			gchar* _tmp10_;
-			ServicesSignals* _tmp11_;
-			GtkStack* _tmp12_;
-#line 56 "/home/alain/Proyectos/byte/src/MainWindow.vala"
-			_tmp5_ = file;
-#line 56 "/home/alain/Proyectos/byte/src/MainWindow.vala"
-			_tmp6_ = gtk_file_chooser_get_file ((GtkFileChooser*) _tmp5_);
-#line 56 "/home/alain/Proyectos/byte/src/MainWindow.vala"
-			archi = _tmp6_;
+#line 284 "MainWindow.c"
+		gchar* folder = NULL;
+		Utils* _tmp0_;
+		gchar* _tmp1_;
+		const gchar* _tmp2_;
+#line 58 "/home/alain/Proyectos/byte/src/MainWindow.vala"
+		_tmp0_ = application_utils;
+#line 58 "/home/alain/Proyectos/byte/src/MainWindow.vala"
+		_tmp1_ = utils_choose_folder (_tmp0_, self);
+#line 58 "/home/alain/Proyectos/byte/src/MainWindow.vala"
+		folder = _tmp1_;
+#line 59 "/home/alain/Proyectos/byte/src/MainWindow.vala"
+		_tmp2_ = folder;
+#line 59 "/home/alain/Proyectos/byte/src/MainWindow.vala"
+		if (_tmp2_ != NULL) {
+#line 299 "MainWindow.c"
+			GSettings* _tmp3_;
+			const gchar* _tmp4_;
+			Utils* _tmp5_;
+			const gchar* _tmp6_;
+			GtkStack* _tmp7_;
 #line 60 "/home/alain/Proyectos/byte/src/MainWindow.vala"
-			_tmp7_ = application_stream_player;
+			_tmp3_ = application_settings;
 #line 60 "/home/alain/Proyectos/byte/src/MainWindow.vala"
-			_tmp8_ = archi;
+			_tmp4_ = folder;
 #line 60 "/home/alain/Proyectos/byte/src/MainWindow.vala"
-			_tmp9_ = g_file_get_uri (_tmp8_);
-#line 60 "/home/alain/Proyectos/byte/src/MainWindow.vala"
-			_tmp10_ = _tmp9_;
-#line 60 "/home/alain/Proyectos/byte/src/MainWindow.vala"
-			services_stream_player_ready_file (_tmp7_, _tmp10_);
-#line 60 "/home/alain/Proyectos/byte/src/MainWindow.vala"
-			_g_free0 (_tmp10_);
-#line 62 "/home/alain/Proyectos/byte/src/MainWindow.vala"
-			_tmp11_ = application_signals;
-#line 62 "/home/alain/Proyectos/byte/src/MainWindow.vala"
-			g_signal_emit_by_name (_tmp11_, "ready-file");
-#line 64 "/home/alain/Proyectos/byte/src/MainWindow.vala"
-			_tmp12_ = self->priv->main_stack;
-#line 64 "/home/alain/Proyectos/byte/src/MainWindow.vala"
-			gtk_stack_set_visible_child_name (_tmp12_, "main_view");
-#line 55 "/home/alain/Proyectos/byte/src/MainWindow.vala"
-			_g_object_unref0 (archi);
-#line 307 "MainWindow.c"
+			g_settings_set_string (_tmp3_, "library-location", _tmp4_);
+#line 61 "/home/alain/Proyectos/byte/src/MainWindow.vala"
+			_tmp5_ = application_utils;
+#line 61 "/home/alain/Proyectos/byte/src/MainWindow.vala"
+			_tmp6_ = folder;
+#line 61 "/home/alain/Proyectos/byte/src/MainWindow.vala"
+			utils_scan_local_files (_tmp5_, _tmp6_);
+#line 63 "/home/alain/Proyectos/byte/src/MainWindow.vala"
+			_tmp7_ = self->priv->main_stack;
+#line 63 "/home/alain/Proyectos/byte/src/MainWindow.vala"
+			gtk_stack_set_visible_child_name (_tmp7_, "main_view");
+#line 321 "MainWindow.c"
 		}
-#line 67 "/home/alain/Proyectos/byte/src/MainWindow.vala"
-		_tmp13_ = file;
-#line 67 "/home/alain/Proyectos/byte/src/MainWindow.vala"
-		gtk_widget_destroy ((GtkWidget*) _tmp13_);
-#line 48 "/home/alain/Proyectos/byte/src/MainWindow.vala"
-		_g_object_unref0 (file);
-#line 315 "MainWindow.c"
+#line 57 "/home/alain/Proyectos/byte/src/MainWindow.vala"
+		_g_free0 (folder);
+#line 325 "MainWindow.c"
 	}
 }
 
 
 static void
-__main_window___lambda14__views_welcome_selected (ViewsWelcome* _sender,
+__main_window___lambda19__views_welcome_selected (ViewsWelcome* _sender,
                                                   gint index,
                                                   gpointer self)
 {
-#line 47 "/home/alain/Proyectos/byte/src/MainWindow.vala"
-	_main_window___lambda14_ ((MainWindow*) self, index);
-#line 327 "MainWindow.c"
+#line 56 "/home/alain/Proyectos/byte/src/MainWindow.vala"
+	_main_window___lambda19_ ((MainWindow*) self, index);
+#line 337 "MainWindow.c"
 }
 
 
@@ -458,14 +468,16 @@ main_window_constructor (GType type,
 #line 45 "/home/alain/Proyectos/byte/src/MainWindow.vala"
 	gtk_container_add ((GtkContainer*) self, (GtkWidget*) _tmp19_);
 #line 47 "/home/alain/Proyectos/byte/src/MainWindow.vala"
+	g_timeout_add_full (G_PRIORITY_DEFAULT, (guint) 200, __main_window___lambda18__gsource_func, g_object_ref (self), g_object_unref);
+#line 56 "/home/alain/Proyectos/byte/src/MainWindow.vala"
 	_tmp20_ = self->priv->welcome_view;
-#line 47 "/home/alain/Proyectos/byte/src/MainWindow.vala"
-	g_signal_connect_object (_tmp20_, "selected", (GCallback) __main_window___lambda14__views_welcome_selected, self, 0);
+#line 56 "/home/alain/Proyectos/byte/src/MainWindow.vala"
+	g_signal_connect_object (_tmp20_, "selected", (GCallback) __main_window___lambda19__views_welcome_selected, self, 0);
 #line 22 "/home/alain/Proyectos/byte/src/MainWindow.vala"
 	_g_object_unref0 (main_box);
 #line 22 "/home/alain/Proyectos/byte/src/MainWindow.vala"
 	return obj;
-#line 469 "MainWindow.c"
+#line 481 "MainWindow.c"
 }
 
 
@@ -486,7 +498,7 @@ main_window_class_init (MainWindowClass * klass)
 	G_OBJECT_CLASS (klass)->finalize = main_window_finalize;
 #line 1 "/home/alain/Proyectos/byte/src/MainWindow.vala"
 	g_object_class_install_property (G_OBJECT_CLASS (klass), MAIN_WINDOW_APP_PROPERTY, main_window_properties[MAIN_WINDOW_APP_PROPERTY] = g_param_spec_object ("app", "app", "app", TYPE_APPLICATION, G_PARAM_STATIC_STRINGS | G_PARAM_READABLE | G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY));
-#line 490 "MainWindow.c"
+#line 502 "MainWindow.c"
 }
 
 
@@ -495,7 +507,7 @@ main_window_instance_init (MainWindow * self)
 {
 #line 1 "/home/alain/Proyectos/byte/src/MainWindow.vala"
 	self->priv = MAIN_WINDOW_GET_PRIVATE (self);
-#line 499 "MainWindow.c"
+#line 511 "MainWindow.c"
 }
 
 
@@ -517,7 +529,7 @@ main_window_finalize (GObject * obj)
 	_g_object_unref0 (self->priv->main_stack);
 #line 1 "/home/alain/Proyectos/byte/src/MainWindow.vala"
 	G_OBJECT_CLASS (main_window_parent_class)->finalize (obj);
-#line 521 "MainWindow.c"
+#line 533 "MainWindow.c"
 }
 
 
@@ -551,13 +563,13 @@ _vala_main_window_get_property (GObject * object,
 		g_value_set_object (value, main_window_get_app (self));
 #line 1 "/home/alain/Proyectos/byte/src/MainWindow.vala"
 		break;
-#line 555 "MainWindow.c"
+#line 567 "MainWindow.c"
 		default:
 #line 1 "/home/alain/Proyectos/byte/src/MainWindow.vala"
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
 #line 1 "/home/alain/Proyectos/byte/src/MainWindow.vala"
 		break;
-#line 561 "MainWindow.c"
+#line 573 "MainWindow.c"
 	}
 }
 
@@ -578,13 +590,13 @@ _vala_main_window_set_property (GObject * object,
 		main_window_set_app (self, g_value_get_object (value));
 #line 1 "/home/alain/Proyectos/byte/src/MainWindow.vala"
 		break;
-#line 582 "MainWindow.c"
+#line 594 "MainWindow.c"
 		default:
 #line 1 "/home/alain/Proyectos/byte/src/MainWindow.vala"
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
 #line 1 "/home/alain/Proyectos/byte/src/MainWindow.vala"
 		break;
-#line 588 "MainWindow.c"
+#line 600 "MainWindow.c"
 	}
 }
 

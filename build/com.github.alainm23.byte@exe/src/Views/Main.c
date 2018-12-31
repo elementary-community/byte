@@ -7,6 +7,7 @@
 #include <glib-object.h>
 #include <gtk/gtk.h>
 #include <granite.h>
+#include <gee.h>
 #include <float.h>
 #include <math.h>
 #include <stdlib.h>
@@ -30,7 +31,38 @@ enum  {
 };
 static GParamSpec* views_main_properties[VIEWS_MAIN_NUM_PROPERTIES];
 #define _g_object_unref0(var) ((var == NULL) ? NULL : (var = (g_object_unref (var), NULL)))
-typedef struct _Block2Data Block2Data;
+
+#define OBJECTS_TYPE_TRACK (objects_track_get_type ())
+#define OBJECTS_TRACK(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), OBJECTS_TYPE_TRACK, ObjectsTrack))
+#define OBJECTS_TRACK_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), OBJECTS_TYPE_TRACK, ObjectsTrackClass))
+#define OBJECTS_IS_TRACK(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), OBJECTS_TYPE_TRACK))
+#define OBJECTS_IS_TRACK_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), OBJECTS_TYPE_TRACK))
+#define OBJECTS_TRACK_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), OBJECTS_TYPE_TRACK, ObjectsTrackClass))
+
+typedef struct _ObjectsTrack ObjectsTrack;
+typedef struct _ObjectsTrackClass ObjectsTrackClass;
+
+#define SERVICES_TYPE_DATABASE (services_database_get_type ())
+#define SERVICES_DATABASE(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), SERVICES_TYPE_DATABASE, ServicesDatabase))
+#define SERVICES_DATABASE_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), SERVICES_TYPE_DATABASE, ServicesDatabaseClass))
+#define SERVICES_IS_DATABASE(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SERVICES_TYPE_DATABASE))
+#define SERVICES_IS_DATABASE_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), SERVICES_TYPE_DATABASE))
+#define SERVICES_DATABASE_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), SERVICES_TYPE_DATABASE, ServicesDatabaseClass))
+
+typedef struct _ServicesDatabase ServicesDatabase;
+typedef struct _ServicesDatabaseClass ServicesDatabaseClass;
+
+#define WIDGETS_TYPE_TRACK_ROW (widgets_track_row_get_type ())
+#define WIDGETS_TRACK_ROW(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), WIDGETS_TYPE_TRACK_ROW, WidgetsTrackRow))
+#define WIDGETS_TRACK_ROW_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), WIDGETS_TYPE_TRACK_ROW, WidgetsTrackRowClass))
+#define WIDGETS_IS_TRACK_ROW(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), WIDGETS_TYPE_TRACK_ROW))
+#define WIDGETS_IS_TRACK_ROW_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), WIDGETS_TYPE_TRACK_ROW))
+#define WIDGETS_TRACK_ROW_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), WIDGETS_TYPE_TRACK_ROW, WidgetsTrackRowClass))
+
+typedef struct _WidgetsTrackRow WidgetsTrackRow;
+typedef struct _WidgetsTrackRowClass WidgetsTrackRowClass;
+#define _objects_track_unref0(var) ((var == NULL) ? NULL : (var = (objects_track_unref (var), NULL)))
+typedef struct _Block5Data Block5Data;
 
 #define SERVICES_TYPE_SIGNALS (services_signals_get_type ())
 #define SERVICES_SIGNALS(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), SERVICES_TYPE_SIGNALS, ServicesSignals))
@@ -69,6 +101,7 @@ typedef struct _StreamTimeInfo StreamTimeInfo;
 
 typedef struct _Utils Utils;
 typedef struct _UtilsClass UtilsClass;
+typedef struct _ObjectsTrackPrivate ObjectsTrackPrivate;
 
 struct _ViewsMain {
 	GtkEventBox parent_instance;
@@ -81,9 +114,10 @@ struct _ViewsMainClass {
 
 struct _ViewsMainPrivate {
 	GraniteSeekBar* seekbar;
+	GtkListBox* listbox;
 };
 
-struct _Block2Data {
+struct _Block5Data {
 	int _ref_count_;
 	ViewsMain* self;
 	GtkLabel* title_label;
@@ -115,8 +149,27 @@ struct _StreamTimeInfo {
 	gchar* minutes;
 };
 
+struct _ObjectsTrack {
+	GTypeInstance parent_instance;
+	volatile int ref_count;
+	ObjectsTrackPrivate * priv;
+	gint id;
+	gchar* path;
+	gchar* title;
+	gchar* artist;
+	gchar* genre;
+	gchar* album;
+	guint64 duration;
+};
+
+struct _ObjectsTrackClass {
+	GTypeClass parent_class;
+	void (*finalize) (ObjectsTrack *self);
+};
+
 
 static gpointer views_main_parent_class = NULL;
+extern ServicesDatabase* application_database;
 extern ServicesSignals* application_signals;
 extern ServicesStreamPlayer* application_stream_player;
 extern Utils* application_utils;
@@ -125,13 +178,33 @@ GType views_main_get_type (void) G_GNUC_CONST;
 #define VIEWS_MAIN_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), VIEWS_TYPE_MAIN, ViewsMainPrivate))
 ViewsMain* views_main_new (void);
 ViewsMain* views_main_construct (GType object_type);
+void views_main_update_project_list (ViewsMain* self);
+gpointer objects_track_ref (gpointer instance);
+void objects_track_unref (gpointer instance);
+GParamSpec* objects_param_spec_track (const gchar* name,
+                                      const gchar* nick,
+                                      const gchar* blurb,
+                                      GType object_type,
+                                      GParamFlags flags);
+void objects_value_set_track (GValue* value,
+                              gpointer v_object);
+void objects_value_take_track (GValue* value,
+                               gpointer v_object);
+gpointer objects_value_get_track (const GValue* value);
+GType objects_track_get_type (void) G_GNUC_CONST;
+GType services_database_get_type (void) G_GNUC_CONST;
+GeeArrayList* services_database_get_all_tracks (ServicesDatabase* self);
+GType widgets_track_row_get_type (void) G_GNUC_CONST;
+WidgetsTrackRow* widgets_track_row_new (ObjectsTrack* _track);
+WidgetsTrackRow* widgets_track_row_construct (GType object_type,
+                                              ObjectsTrack* _track);
 static GObject * views_main_constructor (GType type,
                                   guint n_construct_properties,
                                   GObjectConstructParam * construct_properties);
-static Block2Data* block2_data_ref (Block2Data* _data2_);
-static void block2_data_unref (void * _userdata_);
+static Block5Data* block5_data_ref (Block5Data* _data5_);
+static void block5_data_unref (void * _userdata_);
 GType services_signals_get_type (void) G_GNUC_CONST;
-static void _views_main___lambda9_ (Block2Data* _data2_);
+static void _views_main___lambda9_ (Block5Data* _data5_);
 GType services_stream_player_get_type (void) G_GNUC_CONST;
 void services_stream_player_play_file (ServicesStreamPlayer* self);
 GType stream_metadata_get_type (void) G_GNUC_CONST;
@@ -173,6 +246,14 @@ void utils_get_position_str (Utils* self,
 void utils_get_duration_str (Utils* self,
                              StreamTimeInfo* result);
 static gboolean __views_main___lambda13__gsource_func (gpointer self);
+static void _views_main___lambda17_ (Block5Data* _data5_,
+                              GtkListBoxRow* row);
+void services_stream_player_ready_file (ServicesStreamPlayer* self,
+                                        const gchar* stream);
+ObjectsTrack* widgets_track_row_get_track (WidgetsTrackRow* self);
+static void __views_main___lambda17__gtk_list_box_row_activated (GtkListBox* _sender,
+                                                          GtkListBoxRow* row,
+                                                          gpointer self);
 static void views_main_finalize (GObject * obj);
 
 
@@ -184,7 +265,7 @@ views_main_construct (GType object_type)
 	self = (ViewsMain*) g_object_new (object_type, NULL);
 #line 5 "/home/alain/Proyectos/byte/src/Views/Main.vala"
 	return self;
-#line 188 "Main.c"
+#line 269 "Main.c"
 }
 
 
@@ -193,47 +274,175 @@ views_main_new (void)
 {
 #line 5 "/home/alain/Proyectos/byte/src/Views/Main.vala"
 	return views_main_construct (VIEWS_TYPE_MAIN);
-#line 197 "Main.c"
+#line 278 "Main.c"
 }
 
 
-static Block2Data*
-block2_data_ref (Block2Data* _data2_)
+static gpointer
+_g_object_ref0 (gpointer self)
+{
+#line 109 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+	return self ? g_object_ref (self) : NULL;
+#line 287 "Main.c"
+}
+
+
+void
+views_main_update_project_list (ViewsMain* self)
+{
+	GeeArrayList* all_tracks = NULL;
+	GeeArrayList* _tmp0_;
+	ServicesDatabase* _tmp1_;
+	GeeArrayList* _tmp2_;
+	GtkListBox* _tmp18_;
+#line 105 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+	g_return_if_fail (self != NULL);
+#line 106 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+	_tmp0_ = gee_array_list_new (OBJECTS_TYPE_TRACK, (GBoxedCopyFunc) objects_track_ref, (GDestroyNotify) objects_track_unref, NULL, NULL, NULL);
+#line 106 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+	all_tracks = _tmp0_;
+#line 107 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+	_tmp1_ = application_database;
+#line 107 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+	_tmp2_ = services_database_get_all_tracks (_tmp1_);
+#line 107 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+	_g_object_unref0 (all_tracks);
+#line 107 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+	all_tracks = _tmp2_;
+#line 313 "Main.c"
+	{
+		GeeArrayList* _track_list = NULL;
+		GeeArrayList* _tmp3_;
+		GeeArrayList* _tmp4_;
+		gint _track_size = 0;
+		GeeArrayList* _tmp5_;
+		gint _tmp6_;
+		gint _tmp7_;
+		gint _track_index = 0;
+#line 109 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+		_tmp3_ = all_tracks;
+#line 109 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+		_tmp4_ = _g_object_ref0 (_tmp3_);
+#line 109 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+		_track_list = _tmp4_;
+#line 109 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+		_tmp5_ = _track_list;
+#line 109 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+		_tmp6_ = gee_abstract_collection_get_size ((GeeAbstractCollection*) _tmp5_);
+#line 109 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+		_tmp7_ = _tmp6_;
+#line 109 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+		_track_size = _tmp7_;
+#line 109 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+		_track_index = -1;
+#line 109 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+		while (TRUE) {
+#line 341 "Main.c"
+			gint _tmp8_;
+			gint _tmp9_;
+			gint _tmp10_;
+			ObjectsTrack* track = NULL;
+			GeeArrayList* _tmp11_;
+			gint _tmp12_;
+			gpointer _tmp13_;
+			WidgetsTrackRow* row = NULL;
+			ObjectsTrack* _tmp14_;
+			WidgetsTrackRow* _tmp15_;
+			GtkListBox* _tmp16_;
+			WidgetsTrackRow* _tmp17_;
+#line 109 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+			_tmp8_ = _track_index;
+#line 109 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+			_track_index = _tmp8_ + 1;
+#line 109 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+			_tmp9_ = _track_index;
+#line 109 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+			_tmp10_ = _track_size;
+#line 109 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+			if (!(_tmp9_ < _tmp10_)) {
+#line 109 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+				break;
+#line 366 "Main.c"
+			}
+#line 109 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+			_tmp11_ = _track_list;
+#line 109 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+			_tmp12_ = _track_index;
+#line 109 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+			_tmp13_ = gee_abstract_list_get ((GeeAbstractList*) _tmp11_, _tmp12_);
+#line 109 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+			track = (ObjectsTrack*) _tmp13_;
+#line 110 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+			_tmp14_ = track;
+#line 110 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+			_tmp15_ = widgets_track_row_new (_tmp14_);
+#line 110 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+			g_object_ref_sink (_tmp15_);
+#line 110 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+			row = _tmp15_;
+#line 111 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+			_tmp16_ = self->priv->listbox;
+#line 111 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+			_tmp17_ = row;
+#line 111 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+			gtk_container_add ((GtkContainer*) _tmp16_, (GtkWidget*) _tmp17_);
+#line 109 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+			_g_object_unref0 (row);
+#line 109 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+			_objects_track_unref0 (track);
+#line 394 "Main.c"
+		}
+#line 109 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+		_g_object_unref0 (_track_list);
+#line 398 "Main.c"
+	}
+#line 114 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+	_tmp18_ = self->priv->listbox;
+#line 114 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+	gtk_widget_show_all ((GtkWidget*) _tmp18_);
+#line 105 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+	_g_object_unref0 (all_tracks);
+#line 406 "Main.c"
+}
+
+
+static Block5Data*
+block5_data_ref (Block5Data* _data5_)
 {
 #line 11 "/home/alain/Proyectos/byte/src/Views/Main.vala"
-	g_atomic_int_inc (&_data2_->_ref_count_);
+	g_atomic_int_inc (&_data5_->_ref_count_);
 #line 11 "/home/alain/Proyectos/byte/src/Views/Main.vala"
-	return _data2_;
-#line 208 "Main.c"
+	return _data5_;
+#line 417 "Main.c"
 }
 
 
 static void
-block2_data_unref (void * _userdata_)
+block5_data_unref (void * _userdata_)
 {
-	Block2Data* _data2_;
-	_data2_ = (Block2Data*) _userdata_;
+	Block5Data* _data5_;
+	_data5_ = (Block5Data*) _userdata_;
 #line 11 "/home/alain/Proyectos/byte/src/Views/Main.vala"
-	if (g_atomic_int_dec_and_test (&_data2_->_ref_count_)) {
-#line 219 "Main.c"
+	if (g_atomic_int_dec_and_test (&_data5_->_ref_count_)) {
+#line 428 "Main.c"
 		ViewsMain* self;
 #line 11 "/home/alain/Proyectos/byte/src/Views/Main.vala"
-		self = _data2_->self;
+		self = _data5_->self;
 #line 11 "/home/alain/Proyectos/byte/src/Views/Main.vala"
-		_g_object_unref0 (_data2_->artist_album_label);
+		_g_object_unref0 (_data5_->artist_album_label);
 #line 11 "/home/alain/Proyectos/byte/src/Views/Main.vala"
-		_g_object_unref0 (_data2_->title_label);
+		_g_object_unref0 (_data5_->title_label);
 #line 11 "/home/alain/Proyectos/byte/src/Views/Main.vala"
 		_g_object_unref0 (self);
 #line 11 "/home/alain/Proyectos/byte/src/Views/Main.vala"
-		g_slice_free (Block2Data, _data2_);
-#line 231 "Main.c"
+		g_slice_free (Block5Data, _data5_);
+#line 440 "Main.c"
 	}
 }
 
 
 static void
-_views_main___lambda9_ (Block2Data* _data2_)
+_views_main___lambda9_ (Block5Data* _data5_)
 {
 	ViewsMain* self;
 	ServicesStreamPlayer* _tmp0_;
@@ -252,51 +461,51 @@ _views_main___lambda9_ (Block2Data* _data2_)
 	const gchar* _tmp13_;
 	gchar* _tmp14_;
 	gchar* _tmp15_;
-#line 48 "/home/alain/Proyectos/byte/src/Views/Main.vala"
-	self = _data2_->self;
-#line 49 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+#line 63 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+	self = _data5_->self;
+#line 64 "/home/alain/Proyectos/byte/src/Views/Main.vala"
 	_tmp0_ = application_stream_player;
-#line 49 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+#line 64 "/home/alain/Proyectos/byte/src/Views/Main.vala"
 	services_stream_player_play_file (_tmp0_);
-#line 51 "/home/alain/Proyectos/byte/src/Views/Main.vala"
-	_tmp1_ = _data2_->title_label;
-#line 51 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+#line 66 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+	_tmp1_ = _data5_->title_label;
+#line 66 "/home/alain/Proyectos/byte/src/Views/Main.vala"
 	_tmp2_ = application_stream_player;
-#line 51 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+#line 66 "/home/alain/Proyectos/byte/src/Views/Main.vala"
 	_tmp3_ = _tmp2_->metadata;
-#line 51 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+#line 66 "/home/alain/Proyectos/byte/src/Views/Main.vala"
 	_tmp4_ = (*_tmp3_).title;
-#line 51 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+#line 66 "/home/alain/Proyectos/byte/src/Views/Main.vala"
 	_tmp5_ = g_strdup_printf ("<b>%s</b>", _tmp4_);
-#line 51 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+#line 66 "/home/alain/Proyectos/byte/src/Views/Main.vala"
 	_tmp6_ = _tmp5_;
-#line 51 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+#line 66 "/home/alain/Proyectos/byte/src/Views/Main.vala"
 	gtk_label_set_label (_tmp1_, _tmp6_);
-#line 51 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+#line 66 "/home/alain/Proyectos/byte/src/Views/Main.vala"
 	_g_free0 (_tmp6_);
-#line 52 "/home/alain/Proyectos/byte/src/Views/Main.vala"
-	_tmp7_ = _data2_->artist_album_label;
-#line 52 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+#line 67 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+	_tmp7_ = _data5_->artist_album_label;
+#line 67 "/home/alain/Proyectos/byte/src/Views/Main.vala"
 	_tmp8_ = application_stream_player;
-#line 52 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+#line 67 "/home/alain/Proyectos/byte/src/Views/Main.vala"
 	_tmp9_ = _tmp8_->metadata;
-#line 52 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+#line 67 "/home/alain/Proyectos/byte/src/Views/Main.vala"
 	_tmp10_ = (*_tmp9_).artist;
-#line 52 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+#line 67 "/home/alain/Proyectos/byte/src/Views/Main.vala"
 	_tmp11_ = application_stream_player;
-#line 52 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+#line 67 "/home/alain/Proyectos/byte/src/Views/Main.vala"
 	_tmp12_ = _tmp11_->metadata;
-#line 52 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+#line 67 "/home/alain/Proyectos/byte/src/Views/Main.vala"
 	_tmp13_ = (*_tmp12_).album;
-#line 52 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+#line 67 "/home/alain/Proyectos/byte/src/Views/Main.vala"
 	_tmp14_ = g_strdup_printf ("%s - %s", _tmp10_, _tmp13_);
-#line 52 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+#line 67 "/home/alain/Proyectos/byte/src/Views/Main.vala"
 	_tmp15_ = _tmp14_;
-#line 52 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+#line 67 "/home/alain/Proyectos/byte/src/Views/Main.vala"
 	gtk_label_set_label (_tmp7_, _tmp15_);
-#line 52 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+#line 67 "/home/alain/Proyectos/byte/src/Views/Main.vala"
 	_g_free0 (_tmp15_);
-#line 300 "Main.c"
+#line 509 "Main.c"
 }
 
 
@@ -304,9 +513,9 @@ static void
 __views_main___lambda9__services_signals_play_track (ServicesSignals* _sender,
                                                      gpointer self)
 {
-#line 48 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+#line 63 "/home/alain/Proyectos/byte/src/Views/Main.vala"
 	_views_main___lambda9_ (self);
-#line 310 "Main.c"
+#line 519 "Main.c"
 }
 
 
@@ -314,11 +523,11 @@ static void
 _views_main___lambda10_ (ViewsMain* self)
 {
 	ServicesStreamPlayer* _tmp0_;
-#line 56 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+#line 71 "/home/alain/Proyectos/byte/src/Views/Main.vala"
 	_tmp0_ = application_stream_player;
-#line 56 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+#line 71 "/home/alain/Proyectos/byte/src/Views/Main.vala"
 	services_stream_player_pause_file (_tmp0_);
-#line 322 "Main.c"
+#line 531 "Main.c"
 }
 
 
@@ -326,9 +535,9 @@ static void
 __views_main___lambda10__services_signals_pause_track (ServicesSignals* _sender,
                                                        gpointer self)
 {
-#line 55 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+#line 70 "/home/alain/Proyectos/byte/src/Views/Main.vala"
 	_views_main___lambda10_ ((ViewsMain*) self);
-#line 332 "Main.c"
+#line 541 "Main.c"
 }
 
 
@@ -337,13 +546,13 @@ _views_main___lambda11_ (ViewsMain* self)
 {
 	GraniteSeekBar* _tmp0_;
 	ServicesStreamPlayer* _tmp1_;
-#line 60 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+#line 75 "/home/alain/Proyectos/byte/src/Views/Main.vala"
 	_tmp0_ = self->priv->seekbar;
-#line 60 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+#line 75 "/home/alain/Proyectos/byte/src/Views/Main.vala"
 	_tmp1_ = application_stream_player;
-#line 60 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+#line 75 "/home/alain/Proyectos/byte/src/Views/Main.vala"
 	granite_seek_bar_set_playback_duration (_tmp0_, (gdouble) services_stream_player_get_duration (_tmp1_));
-#line 347 "Main.c"
+#line 556 "Main.c"
 }
 
 
@@ -351,9 +560,9 @@ static void
 __views_main___lambda11__services_signals_ready_file (ServicesSignals* _sender,
                                                       gpointer self)
 {
-#line 59 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+#line 74 "/home/alain/Proyectos/byte/src/Views/Main.vala"
 	_views_main___lambda11_ ((ViewsMain*) self);
-#line 357 "Main.c"
+#line 566 "Main.c"
 }
 
 
@@ -365,17 +574,17 @@ _views_main___lambda12_ (ViewsMain* self,
 {
 	gboolean result = FALSE;
 	ServicesStreamPlayer* _tmp0_;
-#line 63 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+#line 78 "/home/alain/Proyectos/byte/src/Views/Main.vala"
 	g_return_val_if_fail (slider != NULL, FALSE);
-#line 64 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+#line 79 "/home/alain/Proyectos/byte/src/Views/Main.vala"
 	_tmp0_ = application_stream_player;
-#line 64 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+#line 79 "/home/alain/Proyectos/byte/src/Views/Main.vala"
 	services_stream_player_set_position (_tmp0_, (gfloat) new_value);
-#line 65 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+#line 80 "/home/alain/Proyectos/byte/src/Views/Main.vala"
 	result = TRUE;
-#line 65 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+#line 80 "/home/alain/Proyectos/byte/src/Views/Main.vala"
 	return result;
-#line 379 "Main.c"
+#line 588 "Main.c"
 }
 
 
@@ -387,9 +596,9 @@ __views_main___lambda12__gtk_range_change_value (GtkRange* _sender,
 {
 	gboolean result;
 	result = _views_main___lambda12_ ((ViewsMain*) self, _sender, scroll, new_value);
-#line 63 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+#line 78 "/home/alain/Proyectos/byte/src/Views/Main.vala"
 	return result;
-#line 393 "Main.c"
+#line 602 "Main.c"
 }
 
 
@@ -412,49 +621,49 @@ _views_main___lambda13_ (ViewsMain* self)
 	GraniteSeekBar* _tmp10_;
 	gdouble _tmp11_;
 	gdouble _tmp12_;
-#line 69 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+#line 84 "/home/alain/Proyectos/byte/src/Views/Main.vala"
 	_tmp0_ = application_utils;
-#line 69 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+#line 84 "/home/alain/Proyectos/byte/src/Views/Main.vala"
 	utils_get_position_str (_tmp0_, &_tmp1_);
-#line 69 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+#line 84 "/home/alain/Proyectos/byte/src/Views/Main.vala"
 	pos_info = _tmp1_;
-#line 70 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+#line 85 "/home/alain/Proyectos/byte/src/Views/Main.vala"
 	_tmp2_ = application_utils;
-#line 70 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+#line 85 "/home/alain/Proyectos/byte/src/Views/Main.vala"
 	utils_get_duration_str (_tmp2_, &_tmp3_);
-#line 70 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+#line 85 "/home/alain/Proyectos/byte/src/Views/Main.vala"
 	dur_info = _tmp3_;
-#line 73 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+#line 88 "/home/alain/Proyectos/byte/src/Views/Main.vala"
 	_tmp4_ = self->priv->seekbar;
-#line 73 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+#line 88 "/home/alain/Proyectos/byte/src/Views/Main.vala"
 	_tmp5_ = dur_info;
-#line 73 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+#line 88 "/home/alain/Proyectos/byte/src/Views/Main.vala"
 	_tmp6_ = _tmp5_.nanoseconds;
-#line 73 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+#line 88 "/home/alain/Proyectos/byte/src/Views/Main.vala"
 	granite_seek_bar_set_playback_duration (_tmp4_, (gdouble) (_tmp6_ / 1000000000.0));
-#line 74 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+#line 89 "/home/alain/Proyectos/byte/src/Views/Main.vala"
 	_tmp7_ = self->priv->seekbar;
-#line 74 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+#line 89 "/home/alain/Proyectos/byte/src/Views/Main.vala"
 	_tmp8_ = pos_info;
-#line 74 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+#line 89 "/home/alain/Proyectos/byte/src/Views/Main.vala"
 	_tmp9_ = _tmp8_.nanoseconds;
-#line 74 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+#line 89 "/home/alain/Proyectos/byte/src/Views/Main.vala"
 	_tmp10_ = self->priv->seekbar;
-#line 74 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+#line 89 "/home/alain/Proyectos/byte/src/Views/Main.vala"
 	_tmp11_ = granite_seek_bar_get_playback_duration (_tmp10_);
-#line 74 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+#line 89 "/home/alain/Proyectos/byte/src/Views/Main.vala"
 	_tmp12_ = _tmp11_;
-#line 74 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+#line 89 "/home/alain/Proyectos/byte/src/Views/Main.vala"
 	granite_seek_bar_set_playback_progress (_tmp7_, ((gdouble) (_tmp9_ / 1000000000.0)) / _tmp12_);
-#line 76 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+#line 91 "/home/alain/Proyectos/byte/src/Views/Main.vala"
 	result = TRUE;
-#line 76 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+#line 91 "/home/alain/Proyectos/byte/src/Views/Main.vala"
 	stream_time_info_destroy (&dur_info);
-#line 76 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+#line 91 "/home/alain/Proyectos/byte/src/Views/Main.vala"
 	stream_time_info_destroy (&pos_info);
-#line 76 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+#line 91 "/home/alain/Proyectos/byte/src/Views/Main.vala"
 	return result;
-#line 458 "Main.c"
+#line 667 "Main.c"
 }
 
 
@@ -463,9 +672,125 @@ __views_main___lambda13__gsource_func (gpointer self)
 {
 	gboolean result;
 	result = _views_main___lambda13_ ((ViewsMain*) self);
-#line 68 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+#line 83 "/home/alain/Proyectos/byte/src/Views/Main.vala"
 	return result;
-#line 469 "Main.c"
+#line 678 "Main.c"
+}
+
+
+static void
+_views_main___lambda17_ (Block5Data* _data5_,
+                         GtkListBoxRow* row)
+{
+	ViewsMain* self;
+	WidgetsTrackRow* item = NULL;
+	WidgetsTrackRow* _tmp0_;
+	ServicesStreamPlayer* _tmp1_;
+	WidgetsTrackRow* _tmp2_;
+	ObjectsTrack* _tmp3_;
+	ObjectsTrack* _tmp4_;
+	const gchar* _tmp5_;
+	ServicesStreamPlayer* _tmp6_;
+	GtkLabel* _tmp7_;
+	WidgetsTrackRow* _tmp8_;
+	ObjectsTrack* _tmp9_;
+	ObjectsTrack* _tmp10_;
+	const gchar* _tmp11_;
+	gchar* _tmp12_;
+	gchar* _tmp13_;
+	GtkLabel* _tmp14_;
+	WidgetsTrackRow* _tmp15_;
+	ObjectsTrack* _tmp16_;
+	ObjectsTrack* _tmp17_;
+	const gchar* _tmp18_;
+	WidgetsTrackRow* _tmp19_;
+	ObjectsTrack* _tmp20_;
+	ObjectsTrack* _tmp21_;
+	const gchar* _tmp22_;
+	gchar* _tmp23_;
+	gchar* _tmp24_;
+#line 94 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+	self = _data5_->self;
+#line 94 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+	g_return_if_fail (row != NULL);
+#line 95 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+	_tmp0_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_TYPE (row, WIDGETS_TYPE_TRACK_ROW) ? ((WidgetsTrackRow*) row) : NULL);
+#line 95 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+	item = _tmp0_;
+#line 97 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+	_tmp1_ = application_stream_player;
+#line 97 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+	_tmp2_ = item;
+#line 97 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+	_tmp3_ = widgets_track_row_get_track (_tmp2_);
+#line 97 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+	_tmp4_ = _tmp3_;
+#line 97 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+	_tmp5_ = _tmp4_->path;
+#line 97 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+	services_stream_player_ready_file (_tmp1_, _tmp5_);
+#line 98 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+	_tmp6_ = application_stream_player;
+#line 98 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+	services_stream_player_play_file (_tmp6_);
+#line 100 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+	_tmp7_ = _data5_->title_label;
+#line 100 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+	_tmp8_ = item;
+#line 100 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+	_tmp9_ = widgets_track_row_get_track (_tmp8_);
+#line 100 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+	_tmp10_ = _tmp9_;
+#line 100 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+	_tmp11_ = _tmp10_->title;
+#line 100 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+	_tmp12_ = g_strdup_printf ("<b>%s</b>", _tmp11_);
+#line 100 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+	_tmp13_ = _tmp12_;
+#line 100 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+	gtk_label_set_label (_tmp7_, _tmp13_);
+#line 100 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+	_g_free0 (_tmp13_);
+#line 101 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+	_tmp14_ = _data5_->artist_album_label;
+#line 101 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+	_tmp15_ = item;
+#line 101 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+	_tmp16_ = widgets_track_row_get_track (_tmp15_);
+#line 101 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+	_tmp17_ = _tmp16_;
+#line 101 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+	_tmp18_ = _tmp17_->artist;
+#line 101 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+	_tmp19_ = item;
+#line 101 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+	_tmp20_ = widgets_track_row_get_track (_tmp19_);
+#line 101 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+	_tmp21_ = _tmp20_;
+#line 101 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+	_tmp22_ = _tmp21_->album;
+#line 101 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+	_tmp23_ = g_strdup_printf ("%s - %s", _tmp18_, _tmp22_);
+#line 101 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+	_tmp24_ = _tmp23_;
+#line 101 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+	gtk_label_set_label (_tmp14_, _tmp24_);
+#line 101 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+	_g_free0 (_tmp24_);
+#line 94 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+	_g_object_unref0 (item);
+#line 783 "Main.c"
+}
+
+
+static void
+__views_main___lambda17__gtk_list_box_row_activated (GtkListBox* _sender,
+                                                     GtkListBoxRow* row,
+                                                     gpointer self)
+{
+#line 94 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+	_views_main___lambda17_ (self, row);
+#line 794 "Main.c"
 }
 
 
@@ -477,55 +802,72 @@ views_main_constructor (GType type,
 	GObject * obj;
 	GObjectClass * parent_class;
 	ViewsMain * self;
-	Block2Data* _data2_;
+	Block5Data* _data5_;
 	GraniteSeekBar* _tmp0_;
 	GraniteSeekBar* _tmp1_;
-	GtkStyleContext* _tmp2_;
+	GraniteSeekBar* _tmp2_;
 	GraniteSeekBar* _tmp3_;
-	GtkStyleContext* _tmp4_;
-	GtkLabel* _tmp5_;
-	GtkLabel* _tmp6_;
-	GtkLabel* _tmp7_;
-	GtkBox* metainfo_box = NULL;
-	GtkBox* _tmp8_;
-	GtkBox* _tmp9_;
+	GraniteSeekBar* _tmp4_;
+	GtkStyleContext* _tmp5_;
+	GraniteSeekBar* _tmp6_;
+	GtkStyleContext* _tmp7_;
+	GtkLabel* _tmp8_;
+	GtkLabel* _tmp9_;
 	GtkLabel* _tmp10_;
+	GtkBox* metainfo_box = NULL;
 	GtkBox* _tmp11_;
-	GtkLabel* _tmp12_;
+	GtkBox* _tmp12_;
+	GtkLabel* _tmp13_;
+	GtkBox* _tmp14_;
+	GtkLabel* _tmp15_;
 	GtkButton* slider_button = NULL;
-	GtkButton* _tmp13_;
-	GtkButton* _tmp14_;
-	GtkButton* _tmp15_;
-	GtkStyleContext* _tmp16_;
-	GtkButton* info_button = NULL;
+	GtkButton* _tmp16_;
 	GtkButton* _tmp17_;
 	GtkButton* _tmp18_;
-	GtkButton* _tmp19_;
-	GtkStyleContext* _tmp20_;
+	GtkStyleContext* _tmp19_;
+	GtkButton* info_button = NULL;
+	GtkButton* _tmp20_;
+	GtkButton* _tmp21_;
+	GtkButton* _tmp22_;
+	GtkStyleContext* _tmp23_;
 	GtkBox* header_box = NULL;
-	GtkBox* _tmp21_;
-	GtkBox* _tmp22_;
-	GtkButton* _tmp23_;
 	GtkBox* _tmp24_;
-	GtkButton* _tmp25_;
+	GtkBox* _tmp25_;
 	GtkBox* _tmp26_;
 	GtkBox* _tmp27_;
+	GtkButton* _tmp28_;
+	GtkBox* _tmp29_;
+	GtkButton* _tmp30_;
+	GtkBox* _tmp31_;
+	GtkBox* _tmp32_;
+	GtkListBox* _tmp33_;
+	GtkListBox* _tmp34_;
+	GtkStyleContext* _tmp35_;
+	GtkListBox* _tmp36_;
+	GtkListBox* _tmp37_;
+	GtkListBox* _tmp38_;
+	GtkScrolledWindow* scrolled_window = NULL;
+	GtkScrolledWindow* _tmp39_;
+	GtkScrolledWindow* _tmp40_;
+	GtkListBox* _tmp41_;
 	GtkGrid* main_grid = NULL;
-	GtkGrid* _tmp28_;
-	GtkGrid* _tmp29_;
-	GtkGrid* _tmp30_;
-	GtkGrid* _tmp31_;
-	GtkGrid* _tmp32_;
-	GraniteSeekBar* _tmp33_;
-	GtkGrid* _tmp34_;
-	GtkBox* _tmp35_;
-	GtkGrid* _tmp36_;
-	ServicesSignals* _tmp37_;
-	ServicesSignals* _tmp38_;
-	ServicesSignals* _tmp39_;
-	GraniteSeekBar* _tmp40_;
-	GtkScale* _tmp41_;
-	GtkScale* _tmp42_;
+	GtkGrid* _tmp42_;
+	GtkGrid* _tmp43_;
+	GtkGrid* _tmp44_;
+	GtkGrid* _tmp45_;
+	GraniteSeekBar* _tmp46_;
+	GtkGrid* _tmp47_;
+	GtkBox* _tmp48_;
+	GtkGrid* _tmp49_;
+	GtkScrolledWindow* _tmp50_;
+	GtkGrid* _tmp51_;
+	ServicesSignals* _tmp52_;
+	ServicesSignals* _tmp53_;
+	ServicesSignals* _tmp54_;
+	GraniteSeekBar* _tmp55_;
+	GtkScale* _tmp56_;
+	GtkScale* _tmp57_;
+	GtkListBox* _tmp58_;
 #line 11 "/home/alain/Proyectos/byte/src/Views/Main.vala"
 	parent_class = G_OBJECT_CLASS (views_main_parent_class);
 #line 11 "/home/alain/Proyectos/byte/src/Views/Main.vala"
@@ -533,11 +875,11 @@ views_main_constructor (GType type,
 #line 11 "/home/alain/Proyectos/byte/src/Views/Main.vala"
 	self = G_TYPE_CHECK_INSTANCE_CAST (obj, VIEWS_TYPE_MAIN, ViewsMain);
 #line 11 "/home/alain/Proyectos/byte/src/Views/Main.vala"
-	_data2_ = g_slice_new0 (Block2Data);
+	_data5_ = g_slice_new0 (Block5Data);
 #line 11 "/home/alain/Proyectos/byte/src/Views/Main.vala"
-	_data2_->_ref_count_ = 1;
+	_data5_->_ref_count_ = 1;
 #line 11 "/home/alain/Proyectos/byte/src/Views/Main.vala"
-	_data2_->self = g_object_ref (self);
+	_data5_->self = g_object_ref (self);
 #line 12 "/home/alain/Proyectos/byte/src/Views/Main.vala"
 	_tmp0_ = granite_seek_bar_new ((gdouble) 0);
 #line 12 "/home/alain/Proyectos/byte/src/Views/Main.vala"
@@ -549,163 +891,231 @@ views_main_constructor (GType type,
 #line 13 "/home/alain/Proyectos/byte/src/Views/Main.vala"
 	_tmp1_ = self->priv->seekbar;
 #line 13 "/home/alain/Proyectos/byte/src/Views/Main.vala"
-	_tmp2_ = gtk_widget_get_style_context ((GtkWidget*) _tmp1_);
-#line 13 "/home/alain/Proyectos/byte/src/Views/Main.vala"
-	gtk_style_context_remove_class (_tmp2_, "seek-bar");
+	gtk_widget_set_margin_top ((GtkWidget*) _tmp1_, 12);
 #line 14 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+	_tmp2_ = self->priv->seekbar;
+#line 14 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+	gtk_widget_set_margin_start ((GtkWidget*) _tmp2_, 12);
+#line 15 "/home/alain/Proyectos/byte/src/Views/Main.vala"
 	_tmp3_ = self->priv->seekbar;
-#line 14 "/home/alain/Proyectos/byte/src/Views/Main.vala"
-	_tmp4_ = gtk_widget_get_style_context ((GtkWidget*) _tmp3_);
-#line 14 "/home/alain/Proyectos/byte/src/Views/Main.vala"
-	gtk_style_context_add_class (_tmp4_, "byte-seekbar");
+#line 15 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+	gtk_widget_set_margin_end ((GtkWidget*) _tmp3_, 12);
 #line 16 "/home/alain/Proyectos/byte/src/Views/Main.vala"
-	_tmp5_ = (GtkLabel*) gtk_label_new (NULL);
+	_tmp4_ = self->priv->seekbar;
 #line 16 "/home/alain/Proyectos/byte/src/Views/Main.vala"
-	g_object_ref_sink (_tmp5_);
+	_tmp5_ = gtk_widget_get_style_context ((GtkWidget*) _tmp4_);
 #line 16 "/home/alain/Proyectos/byte/src/Views/Main.vala"
-	_data2_->title_label = _tmp5_;
+	gtk_style_context_remove_class (_tmp5_, "seek-bar");
 #line 17 "/home/alain/Proyectos/byte/src/Views/Main.vala"
-	_tmp6_ = _data2_->title_label;
+	_tmp6_ = self->priv->seekbar;
 #line 17 "/home/alain/Proyectos/byte/src/Views/Main.vala"
-	gtk_label_set_use_markup (_tmp6_, TRUE);
+	_tmp7_ = gtk_widget_get_style_context ((GtkWidget*) _tmp6_);
+#line 17 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+	gtk_style_context_add_class (_tmp7_, "byte-seekbar");
 #line 19 "/home/alain/Proyectos/byte/src/Views/Main.vala"
-	_tmp7_ = (GtkLabel*) gtk_label_new (NULL);
+	_tmp8_ = (GtkLabel*) gtk_label_new (NULL);
 #line 19 "/home/alain/Proyectos/byte/src/Views/Main.vala"
-	g_object_ref_sink (_tmp7_);
-#line 19 "/home/alain/Proyectos/byte/src/Views/Main.vala"
-	_data2_->artist_album_label = _tmp7_;
-#line 21 "/home/alain/Proyectos/byte/src/Views/Main.vala"
-	_tmp8_ = (GtkBox*) gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-#line 21 "/home/alain/Proyectos/byte/src/Views/Main.vala"
 	g_object_ref_sink (_tmp8_);
-#line 21 "/home/alain/Proyectos/byte/src/Views/Main.vala"
-	metainfo_box = _tmp8_;
+#line 19 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+	_data5_->title_label = _tmp8_;
+#line 20 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+	_tmp9_ = _data5_->title_label;
+#line 20 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+	gtk_label_set_use_markup (_tmp9_, TRUE);
 #line 22 "/home/alain/Proyectos/byte/src/Views/Main.vala"
-	_tmp9_ = metainfo_box;
+	_tmp10_ = (GtkLabel*) gtk_label_new (NULL);
 #line 22 "/home/alain/Proyectos/byte/src/Views/Main.vala"
-	_tmp10_ = _data2_->title_label;
+	g_object_ref_sink (_tmp10_);
 #line 22 "/home/alain/Proyectos/byte/src/Views/Main.vala"
-	gtk_container_add ((GtkContainer*) _tmp9_, (GtkWidget*) _tmp10_);
-#line 23 "/home/alain/Proyectos/byte/src/Views/Main.vala"
-	_tmp11_ = metainfo_box;
-#line 23 "/home/alain/Proyectos/byte/src/Views/Main.vala"
-	_tmp12_ = _data2_->artist_album_label;
-#line 23 "/home/alain/Proyectos/byte/src/Views/Main.vala"
-	gtk_container_add ((GtkContainer*) _tmp11_, (GtkWidget*) _tmp12_);
+	_data5_->artist_album_label = _tmp10_;
+#line 24 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+	_tmp11_ = (GtkBox*) gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
+#line 24 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+	g_object_ref_sink (_tmp11_);
+#line 24 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+	metainfo_box = _tmp11_;
 #line 25 "/home/alain/Proyectos/byte/src/Views/Main.vala"
-	_tmp13_ = (GtkButton*) gtk_button_new_from_icon_name ("view-column-symbolic", (GtkIconSize) GTK_ICON_SIZE_MENU);
+	_tmp12_ = metainfo_box;
 #line 25 "/home/alain/Proyectos/byte/src/Views/Main.vala"
-	g_object_ref_sink (_tmp13_);
+	_tmp13_ = _data5_->title_label;
 #line 25 "/home/alain/Proyectos/byte/src/Views/Main.vala"
-	slider_button = _tmp13_;
+	gtk_container_add ((GtkContainer*) _tmp12_, (GtkWidget*) _tmp13_);
 #line 26 "/home/alain/Proyectos/byte/src/Views/Main.vala"
-	_tmp14_ = slider_button;
+	_tmp14_ = metainfo_box;
 #line 26 "/home/alain/Proyectos/byte/src/Views/Main.vala"
-	gtk_widget_set_can_focus ((GtkWidget*) _tmp14_, FALSE);
-#line 27 "/home/alain/Proyectos/byte/src/Views/Main.vala"
-	_tmp15_ = slider_button;
-#line 27 "/home/alain/Proyectos/byte/src/Views/Main.vala"
-	_tmp16_ = gtk_widget_get_style_context ((GtkWidget*) _tmp15_);
-#line 27 "/home/alain/Proyectos/byte/src/Views/Main.vala"
-	gtk_style_context_add_class (_tmp16_, GTK_STYLE_CLASS_FLAT);
+	_tmp15_ = _data5_->artist_album_label;
+#line 26 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+	gtk_container_add ((GtkContainer*) _tmp14_, (GtkWidget*) _tmp15_);
+#line 28 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+	_tmp16_ = (GtkButton*) gtk_button_new_from_icon_name ("view-column-symbolic", (GtkIconSize) GTK_ICON_SIZE_MENU);
+#line 28 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+	g_object_ref_sink (_tmp16_);
+#line 28 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+	slider_button = _tmp16_;
 #line 29 "/home/alain/Proyectos/byte/src/Views/Main.vala"
-	_tmp17_ = (GtkButton*) gtk_button_new_from_icon_name ("dialog-information-symbolic", (GtkIconSize) GTK_ICON_SIZE_MENU);
+	_tmp17_ = slider_button;
 #line 29 "/home/alain/Proyectos/byte/src/Views/Main.vala"
-	g_object_ref_sink (_tmp17_);
-#line 29 "/home/alain/Proyectos/byte/src/Views/Main.vala"
-	info_button = _tmp17_;
+	gtk_widget_set_can_focus ((GtkWidget*) _tmp17_, FALSE);
 #line 30 "/home/alain/Proyectos/byte/src/Views/Main.vala"
-	_tmp18_ = info_button;
+	_tmp18_ = slider_button;
 #line 30 "/home/alain/Proyectos/byte/src/Views/Main.vala"
-	gtk_widget_set_can_focus ((GtkWidget*) _tmp18_, FALSE);
-#line 31 "/home/alain/Proyectos/byte/src/Views/Main.vala"
-	_tmp19_ = info_button;
-#line 31 "/home/alain/Proyectos/byte/src/Views/Main.vala"
-	_tmp20_ = gtk_widget_get_style_context ((GtkWidget*) _tmp19_);
-#line 31 "/home/alain/Proyectos/byte/src/Views/Main.vala"
-	gtk_style_context_add_class (_tmp20_, GTK_STYLE_CLASS_FLAT);
+	_tmp19_ = gtk_widget_get_style_context ((GtkWidget*) _tmp18_);
+#line 30 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+	gtk_style_context_add_class (_tmp19_, GTK_STYLE_CLASS_FLAT);
+#line 32 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+	_tmp20_ = (GtkButton*) gtk_button_new_from_icon_name ("dialog-information-symbolic", (GtkIconSize) GTK_ICON_SIZE_MENU);
+#line 32 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+	g_object_ref_sink (_tmp20_);
+#line 32 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+	info_button = _tmp20_;
 #line 33 "/home/alain/Proyectos/byte/src/Views/Main.vala"
-	_tmp21_ = (GtkBox*) gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+	_tmp21_ = info_button;
 #line 33 "/home/alain/Proyectos/byte/src/Views/Main.vala"
-	g_object_ref_sink (_tmp21_);
-#line 33 "/home/alain/Proyectos/byte/src/Views/Main.vala"
-	header_box = _tmp21_;
+	gtk_widget_set_can_focus ((GtkWidget*) _tmp21_, FALSE);
 #line 34 "/home/alain/Proyectos/byte/src/Views/Main.vala"
-	_tmp22_ = header_box;
+	_tmp22_ = info_button;
 #line 34 "/home/alain/Proyectos/byte/src/Views/Main.vala"
-	_tmp23_ = slider_button;
+	_tmp23_ = gtk_widget_get_style_context ((GtkWidget*) _tmp22_);
 #line 34 "/home/alain/Proyectos/byte/src/Views/Main.vala"
-	gtk_container_add ((GtkContainer*) _tmp22_, (GtkWidget*) _tmp23_);
-#line 35 "/home/alain/Proyectos/byte/src/Views/Main.vala"
-	_tmp24_ = header_box;
-#line 35 "/home/alain/Proyectos/byte/src/Views/Main.vala"
-	_tmp25_ = info_button;
-#line 35 "/home/alain/Proyectos/byte/src/Views/Main.vala"
-	gtk_box_pack_end (_tmp24_, (GtkWidget*) _tmp25_, FALSE, FALSE, (guint) 0);
+	gtk_style_context_add_class (_tmp23_, GTK_STYLE_CLASS_FLAT);
 #line 36 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+	_tmp24_ = (GtkBox*) gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+#line 36 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+	g_object_ref_sink (_tmp24_);
+#line 36 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+	header_box = _tmp24_;
+#line 37 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+	_tmp25_ = header_box;
+#line 37 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+	gtk_widget_set_margin_start ((GtkWidget*) _tmp25_, 12);
+#line 38 "/home/alain/Proyectos/byte/src/Views/Main.vala"
 	_tmp26_ = header_box;
-#line 36 "/home/alain/Proyectos/byte/src/Views/Main.vala"
-	_tmp27_ = metainfo_box;
-#line 36 "/home/alain/Proyectos/byte/src/Views/Main.vala"
-	gtk_box_pack_end (_tmp26_, (GtkWidget*) _tmp27_, TRUE, TRUE, (guint) 0);
 #line 38 "/home/alain/Proyectos/byte/src/Views/Main.vala"
-	_tmp28_ = (GtkGrid*) gtk_grid_new ();
-#line 38 "/home/alain/Proyectos/byte/src/Views/Main.vala"
-	g_object_ref_sink (_tmp28_);
-#line 38 "/home/alain/Proyectos/byte/src/Views/Main.vala"
-	main_grid = _tmp28_;
+	gtk_widget_set_margin_end ((GtkWidget*) _tmp26_, 12);
 #line 39 "/home/alain/Proyectos/byte/src/Views/Main.vala"
-	_tmp29_ = main_grid;
+	_tmp27_ = header_box;
 #line 39 "/home/alain/Proyectos/byte/src/Views/Main.vala"
-	gtk_grid_set_row_spacing (_tmp29_, 6);
+	_tmp28_ = slider_button;
+#line 39 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+	gtk_container_add ((GtkContainer*) _tmp27_, (GtkWidget*) _tmp28_);
 #line 40 "/home/alain/Proyectos/byte/src/Views/Main.vala"
-	_tmp30_ = main_grid;
+	_tmp29_ = header_box;
 #line 40 "/home/alain/Proyectos/byte/src/Views/Main.vala"
-	g_object_set ((GtkWidget*) _tmp30_, "margin", 12, NULL);
+	_tmp30_ = info_button;
+#line 40 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+	gtk_box_pack_end (_tmp29_, (GtkWidget*) _tmp30_, FALSE, FALSE, (guint) 0);
 #line 41 "/home/alain/Proyectos/byte/src/Views/Main.vala"
-	_tmp31_ = main_grid;
+	_tmp31_ = header_box;
 #line 41 "/home/alain/Proyectos/byte/src/Views/Main.vala"
-	gtk_orientable_set_orientation ((GtkOrientable*) _tmp31_, GTK_ORIENTATION_VERTICAL);
+	_tmp32_ = metainfo_box;
+#line 41 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+	gtk_box_pack_end (_tmp31_, (GtkWidget*) _tmp32_, TRUE, TRUE, (guint) 0);
 #line 43 "/home/alain/Proyectos/byte/src/Views/Main.vala"
-	_tmp32_ = main_grid;
+	_tmp33_ = (GtkListBox*) gtk_list_box_new ();
 #line 43 "/home/alain/Proyectos/byte/src/Views/Main.vala"
-	_tmp33_ = self->priv->seekbar;
+	g_object_ref_sink (_tmp33_);
 #line 43 "/home/alain/Proyectos/byte/src/Views/Main.vala"
-	gtk_container_add ((GtkContainer*) _tmp32_, (GtkWidget*) _tmp33_);
+	_g_object_unref0 (self->priv->listbox);
+#line 43 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+	self->priv->listbox = _tmp33_;
 #line 44 "/home/alain/Proyectos/byte/src/Views/Main.vala"
-	_tmp34_ = main_grid;
+	_tmp34_ = self->priv->listbox;
 #line 44 "/home/alain/Proyectos/byte/src/Views/Main.vala"
-	_tmp35_ = header_box;
+	_tmp35_ = gtk_widget_get_style_context ((GtkWidget*) _tmp34_);
 #line 44 "/home/alain/Proyectos/byte/src/Views/Main.vala"
-	gtk_container_add ((GtkContainer*) _tmp34_, (GtkWidget*) _tmp35_);
+	gtk_style_context_add_class (_tmp35_, GTK_STYLE_CLASS_BACKGROUND);
+#line 45 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+	_tmp36_ = self->priv->listbox;
+#line 45 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+	gtk_list_box_set_activate_on_single_click (_tmp36_, TRUE);
 #line 46 "/home/alain/Proyectos/byte/src/Views/Main.vala"
-	_tmp36_ = main_grid;
+	_tmp37_ = self->priv->listbox;
 #line 46 "/home/alain/Proyectos/byte/src/Views/Main.vala"
-	gtk_container_add ((GtkContainer*) self, (GtkWidget*) _tmp36_);
-#line 48 "/home/alain/Proyectos/byte/src/Views/Main.vala"
-	_tmp37_ = application_signals;
-#line 48 "/home/alain/Proyectos/byte/src/Views/Main.vala"
-	g_signal_connect_data (_tmp37_, "play-track", (GCallback) __views_main___lambda9__services_signals_play_track, block2_data_ref (_data2_), (GClosureNotify) block2_data_unref, 0);
-#line 55 "/home/alain/Proyectos/byte/src/Views/Main.vala"
-	_tmp38_ = application_signals;
-#line 55 "/home/alain/Proyectos/byte/src/Views/Main.vala"
-	g_signal_connect_object (_tmp38_, "pause-track", (GCallback) __views_main___lambda10__services_signals_pause_track, self, 0);
-#line 59 "/home/alain/Proyectos/byte/src/Views/Main.vala"
-	_tmp39_ = application_signals;
-#line 59 "/home/alain/Proyectos/byte/src/Views/Main.vala"
-	g_signal_connect_object (_tmp39_, "ready-file", (GCallback) __views_main___lambda11__services_signals_ready_file, self, 0);
+	gtk_list_box_set_selection_mode (_tmp37_, GTK_SELECTION_SINGLE);
+#line 47 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+	_tmp38_ = self->priv->listbox;
+#line 47 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+	g_object_set ((GtkWidget*) _tmp38_, "expand", TRUE, NULL);
+#line 49 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+	_tmp39_ = (GtkScrolledWindow*) gtk_scrolled_window_new (NULL, NULL);
+#line 49 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+	g_object_ref_sink (_tmp39_);
+#line 49 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+	scrolled_window = _tmp39_;
+#line 50 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+	_tmp40_ = scrolled_window;
+#line 50 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+	_tmp41_ = self->priv->listbox;
+#line 50 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+	gtk_container_add ((GtkContainer*) _tmp40_, (GtkWidget*) _tmp41_);
+#line 52 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+	_tmp42_ = (GtkGrid*) gtk_grid_new ();
+#line 52 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+	g_object_ref_sink (_tmp42_);
+#line 52 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+	main_grid = _tmp42_;
+#line 53 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+	_tmp43_ = main_grid;
+#line 53 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+	gtk_grid_set_row_spacing (_tmp43_, 6);
+#line 54 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+	_tmp44_ = main_grid;
+#line 54 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+	gtk_orientable_set_orientation ((GtkOrientable*) _tmp44_, GTK_ORIENTATION_VERTICAL);
+#line 56 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+	_tmp45_ = main_grid;
+#line 56 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+	_tmp46_ = self->priv->seekbar;
+#line 56 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+	gtk_container_add ((GtkContainer*) _tmp45_, (GtkWidget*) _tmp46_);
+#line 57 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+	_tmp47_ = main_grid;
+#line 57 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+	_tmp48_ = header_box;
+#line 57 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+	gtk_container_add ((GtkContainer*) _tmp47_, (GtkWidget*) _tmp48_);
+#line 58 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+	_tmp49_ = main_grid;
+#line 58 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+	_tmp50_ = scrolled_window;
+#line 58 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+	gtk_container_add ((GtkContainer*) _tmp49_, (GtkWidget*) _tmp50_);
+#line 60 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+	_tmp51_ = main_grid;
+#line 60 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+	gtk_container_add ((GtkContainer*) self, (GtkWidget*) _tmp51_);
+#line 61 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+	views_main_update_project_list (self);
 #line 63 "/home/alain/Proyectos/byte/src/Views/Main.vala"
-	_tmp40_ = self->priv->seekbar;
+	_tmp52_ = application_signals;
 #line 63 "/home/alain/Proyectos/byte/src/Views/Main.vala"
-	_tmp41_ = granite_seek_bar_get_scale (_tmp40_);
-#line 63 "/home/alain/Proyectos/byte/src/Views/Main.vala"
-	_tmp42_ = _tmp41_;
-#line 63 "/home/alain/Proyectos/byte/src/Views/Main.vala"
-	g_signal_connect_object ((GtkRange*) _tmp42_, "change-value", (GCallback) __views_main___lambda12__gtk_range_change_value, self, 0);
-#line 68 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+	g_signal_connect_data (_tmp52_, "play-track", (GCallback) __views_main___lambda9__services_signals_play_track, block5_data_ref (_data5_), (GClosureNotify) block5_data_unref, 0);
+#line 70 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+	_tmp53_ = application_signals;
+#line 70 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+	g_signal_connect_object (_tmp53_, "pause-track", (GCallback) __views_main___lambda10__services_signals_pause_track, self, 0);
+#line 74 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+	_tmp54_ = application_signals;
+#line 74 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+	g_signal_connect_object (_tmp54_, "ready-file", (GCallback) __views_main___lambda11__services_signals_ready_file, self, 0);
+#line 78 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+	_tmp55_ = self->priv->seekbar;
+#line 78 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+	_tmp56_ = granite_seek_bar_get_scale (_tmp55_);
+#line 78 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+	_tmp57_ = _tmp56_;
+#line 78 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+	g_signal_connect_object ((GtkRange*) _tmp57_, "change-value", (GCallback) __views_main___lambda12__gtk_range_change_value, self, 0);
+#line 83 "/home/alain/Proyectos/byte/src/Views/Main.vala"
 	g_timeout_add_seconds_full (G_PRIORITY_DEFAULT, (guint) 1, __views_main___lambda13__gsource_func, g_object_ref (self), g_object_unref);
+#line 94 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+	_tmp58_ = self->priv->listbox;
+#line 94 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+	g_signal_connect_data (_tmp58_, "row-activated", (GCallback) __views_main___lambda17__gtk_list_box_row_activated, block5_data_ref (_data5_), (GClosureNotify) block5_data_unref, 0);
 #line 11 "/home/alain/Proyectos/byte/src/Views/Main.vala"
 	_g_object_unref0 (main_grid);
+#line 11 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+	_g_object_unref0 (scrolled_window);
 #line 11 "/home/alain/Proyectos/byte/src/Views/Main.vala"
 	_g_object_unref0 (header_box);
 #line 11 "/home/alain/Proyectos/byte/src/Views/Main.vala"
@@ -715,12 +1125,12 @@ views_main_constructor (GType type,
 #line 11 "/home/alain/Proyectos/byte/src/Views/Main.vala"
 	_g_object_unref0 (metainfo_box);
 #line 11 "/home/alain/Proyectos/byte/src/Views/Main.vala"
-	block2_data_unref (_data2_);
+	block5_data_unref (_data5_);
 #line 11 "/home/alain/Proyectos/byte/src/Views/Main.vala"
-	_data2_ = NULL;
+	_data5_ = NULL;
 #line 11 "/home/alain/Proyectos/byte/src/Views/Main.vala"
 	return obj;
-#line 724 "Main.c"
+#line 1134 "Main.c"
 }
 
 
@@ -735,7 +1145,7 @@ views_main_class_init (ViewsMainClass * klass)
 	G_OBJECT_CLASS (klass)->constructor = views_main_constructor;
 #line 1 "/home/alain/Proyectos/byte/src/Views/Main.vala"
 	G_OBJECT_CLASS (klass)->finalize = views_main_finalize;
-#line 739 "Main.c"
+#line 1149 "Main.c"
 }
 
 
@@ -744,7 +1154,7 @@ views_main_instance_init (ViewsMain * self)
 {
 #line 1 "/home/alain/Proyectos/byte/src/Views/Main.vala"
 	self->priv = VIEWS_MAIN_GET_PRIVATE (self);
-#line 748 "Main.c"
+#line 1158 "Main.c"
 }
 
 
@@ -756,9 +1166,11 @@ views_main_finalize (GObject * obj)
 	self = G_TYPE_CHECK_INSTANCE_CAST (obj, VIEWS_TYPE_MAIN, ViewsMain);
 #line 2 "/home/alain/Proyectos/byte/src/Views/Main.vala"
 	_g_object_unref0 (self->priv->seekbar);
+#line 3 "/home/alain/Proyectos/byte/src/Views/Main.vala"
+	_g_object_unref0 (self->priv->listbox);
 #line 1 "/home/alain/Proyectos/byte/src/Views/Main.vala"
 	G_OBJECT_CLASS (views_main_parent_class)->finalize (obj);
-#line 762 "Main.c"
+#line 1174 "Main.c"
 }
 
 

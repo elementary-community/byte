@@ -39,6 +39,16 @@ enum  {
 static GParamSpec* application_properties[APPLICATION_NUM_PROPERTIES];
 #define _g_object_unref0(var) ((var == NULL) ? NULL : (var = (g_object_unref (var), NULL)))
 
+#define SERVICES_TYPE_DATABASE (services_database_get_type ())
+#define SERVICES_DATABASE(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), SERVICES_TYPE_DATABASE, ServicesDatabase))
+#define SERVICES_DATABASE_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), SERVICES_TYPE_DATABASE, ServicesDatabaseClass))
+#define SERVICES_IS_DATABASE(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SERVICES_TYPE_DATABASE))
+#define SERVICES_IS_DATABASE_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), SERVICES_TYPE_DATABASE))
+#define SERVICES_DATABASE_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), SERVICES_TYPE_DATABASE, ServicesDatabaseClass))
+
+typedef struct _ServicesDatabase ServicesDatabase;
+typedef struct _ServicesDatabaseClass ServicesDatabaseClass;
+
 #define SERVICES_TYPE_STREAM_PLAYER (services_stream_player_get_type ())
 #define SERVICES_STREAM_PLAYER(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), SERVICES_TYPE_STREAM_PLAYER, ServicesStreamPlayer))
 #define SERVICES_STREAM_PLAYER_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), SERVICES_TYPE_STREAM_PLAYER, ServicesStreamPlayerClass))
@@ -58,6 +68,16 @@ typedef struct _ServicesStreamPlayerClass ServicesStreamPlayerClass;
 
 typedef struct _ServicesSignals ServicesSignals;
 typedef struct _ServicesSignalsClass ServicesSignalsClass;
+
+#define SERVICES_TYPE_TAG_MANAGER (services_tag_manager_get_type ())
+#define SERVICES_TAG_MANAGER(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), SERVICES_TYPE_TAG_MANAGER, ServicesTagManager))
+#define SERVICES_TAG_MANAGER_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), SERVICES_TYPE_TAG_MANAGER, ServicesTagManagerClass))
+#define SERVICES_IS_TAG_MANAGER(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), SERVICES_TYPE_TAG_MANAGER))
+#define SERVICES_IS_TAG_MANAGER_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), SERVICES_TYPE_TAG_MANAGER))
+#define SERVICES_TAG_MANAGER_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), SERVICES_TYPE_TAG_MANAGER, ServicesTagManagerClass))
+
+typedef struct _ServicesTagManager ServicesTagManager;
+typedef struct _ServicesTagManagerClass ServicesTagManagerClass;
 
 #define TYPE_UTILS (utils_get_type ())
 #define UTILS(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), TYPE_UTILS, Utils))
@@ -83,25 +103,35 @@ struct _ApplicationClass {
 
 
 static gpointer application_parent_class = NULL;
+extern ServicesDatabase* application_database;
+ServicesDatabase* application_database = NULL;
 extern GSettings* application_settings;
 GSettings* application_settings = NULL;
 extern ServicesStreamPlayer* application_stream_player;
 ServicesStreamPlayer* application_stream_player = NULL;
 extern ServicesSignals* application_signals;
 ServicesSignals* application_signals = NULL;
+extern ServicesTagManager* application_tg_manager;
+ServicesTagManager* application_tg_manager = NULL;
 extern Utils* application_utils;
 Utils* application_utils = NULL;
 
 GType application_get_type (void) G_GNUC_CONST;
 GType main_window_get_type (void) G_GNUC_CONST;
+GType services_database_get_type (void) G_GNUC_CONST;
 GType services_stream_player_get_type (void) G_GNUC_CONST;
 GType services_signals_get_type (void) G_GNUC_CONST;
+GType services_tag_manager_get_type (void) G_GNUC_CONST;
 GType utils_get_type (void) G_GNUC_CONST;
 Application* application_new (gchar** args,
                               int args_length1);
 Application* application_construct (GType object_type,
                                     gchar** args,
                                     int args_length1);
+Utils* utils_new (void);
+Utils* utils_construct (GType object_type);
+void utils_create_dir_with_parents (Utils* self,
+                                    const gchar* dir);
 ServicesStreamPlayer* services_stream_player_new (gchar** args,
                                                   int args_length1,
                                                   const gchar* name);
@@ -109,16 +139,19 @@ ServicesStreamPlayer* services_stream_player_construct (GType object_type,
                                                         gchar** args,
                                                         int args_length1,
                                                         const gchar* name);
+ServicesDatabase* services_database_new (gboolean skip_tables);
+ServicesDatabase* services_database_construct (GType object_type,
+                                               gboolean skip_tables);
 ServicesSignals* services_signals_new (void);
 ServicesSignals* services_signals_construct (GType object_type);
-Utils* utils_new (void);
-Utils* utils_construct (GType object_type);
+ServicesTagManager* services_tag_manager_new (void);
+ServicesTagManager* services_tag_manager_construct (GType object_type);
 static void application_real_activate (GApplication* base);
 MainWindow* main_window_new (Application* application);
 MainWindow* main_window_construct (GType object_type,
                                    Application* application);
-static void __lambda15_ (Application* self);
-static void ___lambda15__g_simple_action_activate (GSimpleAction* _sender,
+static void __lambda20_ (Application* self);
+static void ___lambda20__g_simple_action_activate (GSimpleAction* _sender,
                                             GVariant* parameter,
                                             gpointer self);
 gint application_main (gchar** args,
@@ -138,39 +171,63 @@ application_construct (GType object_type,
                        int args_length1)
 {
 	Application * self = NULL;
-	GSettings* _tmp0_;
-	ServicesStreamPlayer* _tmp1_;
-	ServicesSignals* _tmp2_;
-	Utils* _tmp3_;
-#line 12 "/home/alain/Proyectos/byte/src/Application.vala"
+	Utils* _tmp0_;
+	Utils* _tmp1_;
+	Utils* _tmp2_;
+	GSettings* _tmp3_;
+	ServicesStreamPlayer* _tmp4_;
+	ServicesDatabase* _tmp5_;
+	ServicesSignals* _tmp6_;
+	ServicesTagManager* _tmp7_;
+#line 14 "/home/alain/Proyectos/byte/src/Application.vala"
 	self = (Application*) g_object_new (object_type, "application-id", "com.github.alainm23.byte", "flags", G_APPLICATION_HANDLES_OPEN, NULL);
-#line 17 "/home/alain/Proyectos/byte/src/Application.vala"
-	_tmp0_ = g_settings_new ("com.github.alainm23.byte");
-#line 17 "/home/alain/Proyectos/byte/src/Application.vala"
-	_g_object_unref0 (application_settings);
-#line 17 "/home/alain/Proyectos/byte/src/Application.vala"
-	application_settings = _tmp0_;
-#line 18 "/home/alain/Proyectos/byte/src/Application.vala"
-	_tmp1_ = services_stream_player_new (args, args_length1, "MAIN");
-#line 18 "/home/alain/Proyectos/byte/src/Application.vala"
-	_g_object_unref0 (application_stream_player);
-#line 18 "/home/alain/Proyectos/byte/src/Application.vala"
-	application_stream_player = _tmp1_;
 #line 19 "/home/alain/Proyectos/byte/src/Application.vala"
-	_tmp2_ = services_signals_new ();
+	_tmp0_ = utils_new ();
 #line 19 "/home/alain/Proyectos/byte/src/Application.vala"
-	_g_object_unref0 (application_signals);
-#line 19 "/home/alain/Proyectos/byte/src/Application.vala"
-	application_signals = _tmp2_;
-#line 20 "/home/alain/Proyectos/byte/src/Application.vala"
-	_tmp3_ = utils_new ();
-#line 20 "/home/alain/Proyectos/byte/src/Application.vala"
 	_g_object_unref0 (application_utils);
+#line 19 "/home/alain/Proyectos/byte/src/Application.vala"
+	application_utils = _tmp0_;
 #line 20 "/home/alain/Proyectos/byte/src/Application.vala"
-	application_utils = _tmp3_;
-#line 11 "/home/alain/Proyectos/byte/src/Application.vala"
+	_tmp1_ = application_utils;
+#line 20 "/home/alain/Proyectos/byte/src/Application.vala"
+	utils_create_dir_with_parents (_tmp1_, "/.cache/com.github.alainm23.byte");
+#line 21 "/home/alain/Proyectos/byte/src/Application.vala"
+	_tmp2_ = application_utils;
+#line 21 "/home/alain/Proyectos/byte/src/Application.vala"
+	utils_create_dir_with_parents (_tmp2_, "/.cache/com.github.alainm23.byte/covers");
+#line 23 "/home/alain/Proyectos/byte/src/Application.vala"
+	_tmp3_ = g_settings_new ("com.github.alainm23.byte");
+#line 23 "/home/alain/Proyectos/byte/src/Application.vala"
+	_g_object_unref0 (application_settings);
+#line 23 "/home/alain/Proyectos/byte/src/Application.vala"
+	application_settings = _tmp3_;
+#line 24 "/home/alain/Proyectos/byte/src/Application.vala"
+	_tmp4_ = services_stream_player_new (args, args_length1, "MAIN");
+#line 24 "/home/alain/Proyectos/byte/src/Application.vala"
+	_g_object_unref0 (application_stream_player);
+#line 24 "/home/alain/Proyectos/byte/src/Application.vala"
+	application_stream_player = _tmp4_;
+#line 25 "/home/alain/Proyectos/byte/src/Application.vala"
+	_tmp5_ = services_database_new (FALSE);
+#line 25 "/home/alain/Proyectos/byte/src/Application.vala"
+	_g_object_unref0 (application_database);
+#line 25 "/home/alain/Proyectos/byte/src/Application.vala"
+	application_database = _tmp5_;
+#line 26 "/home/alain/Proyectos/byte/src/Application.vala"
+	_tmp6_ = services_signals_new ();
+#line 26 "/home/alain/Proyectos/byte/src/Application.vala"
+	_g_object_unref0 (application_signals);
+#line 26 "/home/alain/Proyectos/byte/src/Application.vala"
+	application_signals = _tmp6_;
+#line 27 "/home/alain/Proyectos/byte/src/Application.vala"
+	_tmp7_ = services_tag_manager_new ();
+#line 27 "/home/alain/Proyectos/byte/src/Application.vala"
+	_g_object_unref0 (application_tg_manager);
+#line 27 "/home/alain/Proyectos/byte/src/Application.vala"
+	application_tg_manager = _tmp7_;
+#line 13 "/home/alain/Proyectos/byte/src/Application.vala"
 	return self;
-#line 174 "Application.c"
+#line 231 "Application.c"
 }
 
 
@@ -178,39 +235,39 @@ Application*
 application_new (gchar** args,
                  int args_length1)
 {
-#line 11 "/home/alain/Proyectos/byte/src/Application.vala"
+#line 13 "/home/alain/Proyectos/byte/src/Application.vala"
 	return application_construct (TYPE_APPLICATION, args, args_length1);
-#line 184 "Application.c"
+#line 241 "Application.c"
 }
 
 
 static void
-__lambda15_ (Application* self)
+__lambda20_ (Application* self)
 {
 	MainWindow* _tmp0_;
-#line 39 "/home/alain/Proyectos/byte/src/Application.vala"
+#line 46 "/home/alain/Proyectos/byte/src/Application.vala"
 	_tmp0_ = self->main_window;
-#line 39 "/home/alain/Proyectos/byte/src/Application.vala"
+#line 46 "/home/alain/Proyectos/byte/src/Application.vala"
 	if (_tmp0_ != NULL) {
-#line 196 "Application.c"
+#line 253 "Application.c"
 		MainWindow* _tmp1_;
-#line 40 "/home/alain/Proyectos/byte/src/Application.vala"
+#line 47 "/home/alain/Proyectos/byte/src/Application.vala"
 		_tmp1_ = self->main_window;
-#line 40 "/home/alain/Proyectos/byte/src/Application.vala"
+#line 47 "/home/alain/Proyectos/byte/src/Application.vala"
 		gtk_widget_destroy ((GtkWidget*) _tmp1_);
-#line 202 "Application.c"
+#line 259 "Application.c"
 	}
 }
 
 
 static void
-___lambda15__g_simple_action_activate (GSimpleAction* _sender,
+___lambda20__g_simple_action_activate (GSimpleAction* _sender,
                                        GVariant* parameter,
                                        gpointer self)
 {
-#line 38 "/home/alain/Proyectos/byte/src/Application.vala"
-	__lambda15_ ((Application*) self);
-#line 214 "Application.c"
+#line 45 "/home/alain/Proyectos/byte/src/Application.vala"
+	__lambda20_ ((Application*) self);
+#line 271 "Application.c"
 }
 
 
@@ -237,90 +294,90 @@ application_real_activate (GApplication* base)
 	GtkIconTheme* default_theme = NULL;
 	GtkIconTheme* _tmp15_;
 	GtkIconTheme* _tmp16_;
-#line 23 "/home/alain/Proyectos/byte/src/Application.vala"
+#line 30 "/home/alain/Proyectos/byte/src/Application.vala"
 	self = (Application*) base;
-#line 24 "/home/alain/Proyectos/byte/src/Application.vala"
+#line 31 "/home/alain/Proyectos/byte/src/Application.vala"
 	_tmp0_ = gtk_application_get_windows ((GtkApplication*) self);
-#line 24 "/home/alain/Proyectos/byte/src/Application.vala"
+#line 31 "/home/alain/Proyectos/byte/src/Application.vala"
 	if (g_list_length (_tmp0_) > ((guint) 0)) {
-#line 247 "Application.c"
+#line 304 "Application.c"
 		GList* _tmp1_;
 		gconstpointer _tmp2_;
-#line 25 "/home/alain/Proyectos/byte/src/Application.vala"
+#line 32 "/home/alain/Proyectos/byte/src/Application.vala"
 		_tmp1_ = gtk_application_get_windows ((GtkApplication*) self);
-#line 25 "/home/alain/Proyectos/byte/src/Application.vala"
+#line 32 "/home/alain/Proyectos/byte/src/Application.vala"
 		_tmp2_ = _tmp1_->data;
-#line 25 "/home/alain/Proyectos/byte/src/Application.vala"
+#line 32 "/home/alain/Proyectos/byte/src/Application.vala"
 		gtk_window_present ((GtkWindow*) _tmp2_);
-#line 26 "/home/alain/Proyectos/byte/src/Application.vala"
+#line 33 "/home/alain/Proyectos/byte/src/Application.vala"
 		return;
-#line 258 "Application.c"
+#line 315 "Application.c"
 	}
-#line 29 "/home/alain/Proyectos/byte/src/Application.vala"
+#line 36 "/home/alain/Proyectos/byte/src/Application.vala"
 	_tmp3_ = main_window_new (self);
-#line 29 "/home/alain/Proyectos/byte/src/Application.vala"
+#line 36 "/home/alain/Proyectos/byte/src/Application.vala"
 	g_object_ref_sink (_tmp3_);
-#line 29 "/home/alain/Proyectos/byte/src/Application.vala"
+#line 36 "/home/alain/Proyectos/byte/src/Application.vala"
 	_g_object_unref0 (self->main_window);
-#line 29 "/home/alain/Proyectos/byte/src/Application.vala"
+#line 36 "/home/alain/Proyectos/byte/src/Application.vala"
 	self->main_window = _tmp3_;
-#line 30 "/home/alain/Proyectos/byte/src/Application.vala"
+#line 37 "/home/alain/Proyectos/byte/src/Application.vala"
 	_tmp4_ = self->main_window;
-#line 30 "/home/alain/Proyectos/byte/src/Application.vala"
+#line 37 "/home/alain/Proyectos/byte/src/Application.vala"
 	gtk_widget_show_all ((GtkWidget*) _tmp4_);
-#line 33 "/home/alain/Proyectos/byte/src/Application.vala"
+#line 40 "/home/alain/Proyectos/byte/src/Application.vala"
 	_tmp5_ = g_simple_action_new ("quit", NULL);
-#line 33 "/home/alain/Proyectos/byte/src/Application.vala"
+#line 40 "/home/alain/Proyectos/byte/src/Application.vala"
 	quit_action = _tmp5_;
-#line 35 "/home/alain/Proyectos/byte/src/Application.vala"
+#line 42 "/home/alain/Proyectos/byte/src/Application.vala"
 	_tmp6_ = quit_action;
-#line 35 "/home/alain/Proyectos/byte/src/Application.vala"
+#line 42 "/home/alain/Proyectos/byte/src/Application.vala"
 	g_action_map_add_action ((GActionMap*) self, (GAction*) _tmp6_);
-#line 36 "/home/alain/Proyectos/byte/src/Application.vala"
+#line 43 "/home/alain/Proyectos/byte/src/Application.vala"
 	_tmp7_ = g_strdup ("<Control>q");
-#line 36 "/home/alain/Proyectos/byte/src/Application.vala"
+#line 43 "/home/alain/Proyectos/byte/src/Application.vala"
 	_tmp8_ = g_new0 (gchar*, 1 + 1);
-#line 36 "/home/alain/Proyectos/byte/src/Application.vala"
+#line 43 "/home/alain/Proyectos/byte/src/Application.vala"
 	_tmp8_[0] = _tmp7_;
-#line 36 "/home/alain/Proyectos/byte/src/Application.vala"
+#line 43 "/home/alain/Proyectos/byte/src/Application.vala"
 	_tmp9_ = _tmp8_;
-#line 36 "/home/alain/Proyectos/byte/src/Application.vala"
+#line 43 "/home/alain/Proyectos/byte/src/Application.vala"
 	_tmp9__length1 = 1;
-#line 36 "/home/alain/Proyectos/byte/src/Application.vala"
+#line 43 "/home/alain/Proyectos/byte/src/Application.vala"
 	gtk_application_set_accels_for_action ((GtkApplication*) self, "app.quit", _tmp9_);
-#line 36 "/home/alain/Proyectos/byte/src/Application.vala"
+#line 43 "/home/alain/Proyectos/byte/src/Application.vala"
 	_tmp9_ = (_vala_array_free (_tmp9_, _tmp9__length1, (GDestroyNotify) g_free), NULL);
-#line 38 "/home/alain/Proyectos/byte/src/Application.vala"
+#line 45 "/home/alain/Proyectos/byte/src/Application.vala"
 	_tmp10_ = quit_action;
-#line 38 "/home/alain/Proyectos/byte/src/Application.vala"
-	g_signal_connect_object (_tmp10_, "activate", (GCallback) ___lambda15__g_simple_action_activate, self, 0);
 #line 45 "/home/alain/Proyectos/byte/src/Application.vala"
+	g_signal_connect_object (_tmp10_, "activate", (GCallback) ___lambda20__g_simple_action_activate, self, 0);
+#line 52 "/home/alain/Proyectos/byte/src/Application.vala"
 	_tmp11_ = gtk_css_provider_new ();
-#line 45 "/home/alain/Proyectos/byte/src/Application.vala"
+#line 52 "/home/alain/Proyectos/byte/src/Application.vala"
 	provider = _tmp11_;
-#line 46 "/home/alain/Proyectos/byte/src/Application.vala"
+#line 53 "/home/alain/Proyectos/byte/src/Application.vala"
 	_tmp12_ = provider;
-#line 46 "/home/alain/Proyectos/byte/src/Application.vala"
+#line 53 "/home/alain/Proyectos/byte/src/Application.vala"
 	gtk_css_provider_load_from_resource (_tmp12_, "/com/github/alainm23/byte/stylesheet.css");
-#line 47 "/home/alain/Proyectos/byte/src/Application.vala"
+#line 54 "/home/alain/Proyectos/byte/src/Application.vala"
 	_tmp13_ = gdk_screen_get_default ();
-#line 47 "/home/alain/Proyectos/byte/src/Application.vala"
+#line 54 "/home/alain/Proyectos/byte/src/Application.vala"
 	_tmp14_ = provider;
-#line 47 "/home/alain/Proyectos/byte/src/Application.vala"
+#line 54 "/home/alain/Proyectos/byte/src/Application.vala"
 	gtk_style_context_add_provider_for_screen (_tmp13_, (GtkStyleProvider*) _tmp14_, (guint) GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
-#line 50 "/home/alain/Proyectos/byte/src/Application.vala"
+#line 57 "/home/alain/Proyectos/byte/src/Application.vala"
 	_tmp15_ = gtk_icon_theme_get_default ();
-#line 50 "/home/alain/Proyectos/byte/src/Application.vala"
+#line 57 "/home/alain/Proyectos/byte/src/Application.vala"
 	default_theme = _tmp15_;
-#line 51 "/home/alain/Proyectos/byte/src/Application.vala"
+#line 58 "/home/alain/Proyectos/byte/src/Application.vala"
 	_tmp16_ = default_theme;
-#line 51 "/home/alain/Proyectos/byte/src/Application.vala"
+#line 58 "/home/alain/Proyectos/byte/src/Application.vala"
 	gtk_icon_theme_add_resource_path (_tmp16_, "/com/github/alainm23/byte");
-#line 23 "/home/alain/Proyectos/byte/src/Application.vala"
+#line 30 "/home/alain/Proyectos/byte/src/Application.vala"
 	_g_object_unref0 (provider);
-#line 23 "/home/alain/Proyectos/byte/src/Application.vala"
+#line 30 "/home/alain/Proyectos/byte/src/Application.vala"
 	_g_object_unref0 (quit_action);
-#line 324 "Application.c"
+#line 381 "Application.c"
 }
 
 
@@ -331,17 +388,17 @@ application_main (gchar** args,
 	gint result = 0;
 	Application* app = NULL;
 	Application* _tmp0_;
-#line 54 "/home/alain/Proyectos/byte/src/Application.vala"
+#line 61 "/home/alain/Proyectos/byte/src/Application.vala"
 	_tmp0_ = application_new (args, args_length1);
-#line 54 "/home/alain/Proyectos/byte/src/Application.vala"
+#line 61 "/home/alain/Proyectos/byte/src/Application.vala"
 	app = _tmp0_;
-#line 55 "/home/alain/Proyectos/byte/src/Application.vala"
+#line 62 "/home/alain/Proyectos/byte/src/Application.vala"
 	result = g_application_run ((GApplication*) app, args_length1, args);
-#line 55 "/home/alain/Proyectos/byte/src/Application.vala"
+#line 62 "/home/alain/Proyectos/byte/src/Application.vala"
 	_g_object_unref0 (app);
-#line 55 "/home/alain/Proyectos/byte/src/Application.vala"
+#line 62 "/home/alain/Proyectos/byte/src/Application.vala"
 	return result;
-#line 345 "Application.c"
+#line 402 "Application.c"
 }
 
 
@@ -349,9 +406,9 @@ int
 main (int argc,
       char ** argv)
 {
-#line 53 "/home/alain/Proyectos/byte/src/Application.vala"
+#line 60 "/home/alain/Proyectos/byte/src/Application.vala"
 	return application_main (argv, argc);
-#line 355 "Application.c"
+#line 412 "Application.c"
 }
 
 
@@ -364,7 +421,7 @@ application_class_init (ApplicationClass * klass)
 	((GApplicationClass *) klass)->activate = (void (*) (GApplication*)) application_real_activate;
 #line 1 "/home/alain/Proyectos/byte/src/Application.vala"
 	G_OBJECT_CLASS (klass)->finalize = application_finalize;
-#line 368 "Application.c"
+#line 425 "Application.c"
 }
 
 
@@ -382,11 +439,11 @@ application_finalize (GObject * obj)
 	self = G_TYPE_CHECK_INSTANCE_CAST (obj, TYPE_APPLICATION, Application);
 #line 2 "/home/alain/Proyectos/byte/src/Application.vala"
 	_g_object_unref0 (self->main_window);
-#line 9 "/home/alain/Proyectos/byte/src/Application.vala"
+#line 11 "/home/alain/Proyectos/byte/src/Application.vala"
 	self->argsv = (_vala_array_free (self->argsv, self->argsv_length1, (GDestroyNotify) g_free), NULL);
 #line 1 "/home/alain/Proyectos/byte/src/Application.vala"
 	G_OBJECT_CLASS (application_parent_class)->finalize (obj);
-#line 390 "Application.c"
+#line 447 "Application.c"
 }
 
 

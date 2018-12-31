@@ -4,6 +4,10 @@ public class Services.Signals : GLib.Object {
 
     public signal void ready_file ();
 
+    public signal void discovered_new_item (Objects.Track track);
+    public signal void discover_started ();
+    public signal void discover_finished ();
+    
     public Signals () {
 
     }

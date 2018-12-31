@@ -1,4 +1,4 @@
-Build started at 2018-12-29T22:22:58.790069
+Build started at 2018-12-30T22:59:10.402622
 Main binary: /usr/bin/python3
 Python system: Linux
 The Meson build system
@@ -24,8 +24,8 @@ Called `/usr/bin/pkg-config glib-2.0 --libs` -> 0
 Called `/usr/bin/pkg-config glib-2.0 --libs` -> 0
 -lglib-2.0
 Running compile:
-Working directory:  /tmp/tmp7v14tgmi
-Command line:  cc /tmp/tmp7v14tgmi/testfile.c -pipe -D_FILE_OFFSET_BITS=64 -c -o /tmp/tmp7v14tgmi/output.obj -O0 --print-search-dirs 
+Working directory:  /tmp/tmpvjvs6fr_
+Command line:  cc /tmp/tmpvjvs6fr_/testfile.c -pipe -D_FILE_OFFSET_BITS=64 -c -o /tmp/tmpvjvs6fr_/output.obj -O0 --print-search-dirs 
 
 Code:
  
@@ -47,8 +47,8 @@ Dependency json-glib-1.0 found: YES (cached)
 Dependency gstreamer-pbutils-1.0 found: YES (cached)
 Dependency gstreamer-tag-1.0 found: YES (cached)
 Running compile:
-Working directory:  /tmp/tmp52n7e_g4
-Command line:  cc /tmp/tmp52n7e_g4/testfile.c -pipe -D_FILE_OFFSET_BITS=64 -o /tmp/tmp52n7e_g4/output.exe -O0 -Wl,--start-group -lm -Wl,--end-group -Wl,--allow-shlib-undefined 
+Working directory:  /tmp/tmpxdqp3tx0
+Command line:  cc /tmp/tmpxdqp3tx0/testfile.c -pipe -D_FILE_OFFSET_BITS=64 -o /tmp/tmpxdqp3tx0/output.exe -O0 -Wl,--start-group -lm -Wl,--end-group -Wl,--allow-shlib-undefined 
 
 Code:
  int main(int argc, char **argv) { return 0; }
