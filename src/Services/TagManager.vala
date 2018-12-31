@@ -66,7 +66,11 @@ public class Services.TagManager : GLib.Object {
                         track.artist = _artist;
                     }
 
-                    Application.database.add_track (track);
+                    new Thread<void*> (null, () => {
+                        Application.database.add_track (track);
+
+                        return null;
+                    });
                 }
             }
 

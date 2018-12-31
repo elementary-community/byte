@@ -2,13 +2,9 @@ public class Services.StreamPlayer : GLib.Object {
     private MainLoop loop;
     public dynamic Gst.Element player;
     public string state = "pause";
-
     public string n;
 
     private Gst.ClockTime duration = Gst.CLOCK_TIME_NONE;
-    public StreamMetadata? metadata = null;
-    public double volume = 1.0;
-
     public StreamPlayer (string[]? args, string name) {
         if (args != null) {
             Gst.init (ref args);
@@ -47,20 +43,6 @@ public class Services.StreamPlayer : GLib.Object {
                 message.parse_state_changed (out oldstate, out newstate, out pending);
 
                 break;
-            case Gst.MessageType.TAG:
-                if (metadata == null) {
-                    metadata = StreamMetadata ();
-
-                    Gst.TagList tag_list;
-                    message.parse_tag (out tag_list);
-
-                    tag_list.get_string ("title", out this.metadata.title);
-                    tag_list.get_string ("album", out this.metadata.album);
-                    tag_list.get_string ("artist", out this.metadata.artist);
-                    tag_list = null;
-                }
-
-                break;
             case Gst.MessageType.DURATION_CHANGED :
                 this.duration = Gst.CLOCK_TIME_NONE;
 			    break;
@@ -83,11 +65,11 @@ public class Services.StreamPlayer : GLib.Object {
 
         bus.add_watch (0, bus_callback);
 
-        play_file();
+        play_file ();
         int aux = 0;
 
         while (aux < 10000000) {
-            aux = aux+1;
+            aux = aux + 1;
         }
 
         pause_file ();

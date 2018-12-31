@@ -59,6 +59,7 @@ public class Utils : GLib.Object {
                         if (!directory.get_uri ().has_prefix ("file://")) {
                             Thread.usleep (1000000);
                         }
+                        
                         scan_local_files (directory.get_uri () + "/" + file_info.get_name ());
                     } else {
                         string mime_type = file_info.get_content_type ();

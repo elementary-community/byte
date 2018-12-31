@@ -25,7 +25,7 @@ public class Widgets.TrackRow : Gtk.ListBoxRow {
         artist_album_label.halign = Gtk.Align.START;
         artist_album_label.valign = Gtk.Align.START;
 
-        duration_label = new Gtk.Label (track.duration.to_string ());
+        //duration_label = new Gtk.Label (track.duration.to_string ());
 
         var main_grid = new Gtk.Grid ();
         main_grid.margin = 3;

@@ -103,5 +103,14 @@ public class Widgets.HeaderBar : Gtk.HeaderBar {
                 repeat_button.opacity = 1;
             }
         });
+
+        /*
+        Application.signals.stream_state_change.connect ((state) => {
+            if (state == "play") {
+                playback_button.active = true;
+                playback_icon.icon_name = "media-playback-pause-symbolic";
+            }
+        });
+        */
     }
 }

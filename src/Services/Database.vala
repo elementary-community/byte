@@ -2,6 +2,8 @@ public class Services.Database : GLib.Object {
     private Sqlite.Database db;
     private string db_path;
 
+    public signal void adden_new_track (Objects.Track track);
+
     public Database (bool skip_tables = false) {
         int rc = 0;
         db_path = Environment.get_home_dir () + "/.cache/com.github.alainm23.byte/database.db";
@@ -89,11 +91,27 @@ public class Services.Database : GLib.Object {
         res = stmt.bind_text(6, track.album);
         assert (res == Sqlite.OK);
 
-        res = stmt.step ();
-
-        if (res == Sqlite.DONE) {
-            //on_add_track_signal ();
+        if (stmt.step () != Sqlite.DONE) {
+            warning ("Error: %d: %s", db.errcode (), db.errmsg ());
         }
+
+        stmt.reset ();
+
+        int res_2 = db.prepare_v2 ("SELECT id FROM tracks WHERE path = ?", -1, out stmt);
+        assert (res_2 == Sqlite.OK);
+
+        res_2 = stmt.bind_text (1, track.path);
+        assert (res_2 == Sqlite.OK);
+
+        if (stmt.step () == Sqlite.ROW) {
+            track.id = stmt.column_int (0);
+            stdout.printf ("Track ID: %d - %s\n", track.id, track.title);
+            adden_new_track (track);
+        } else {
+            warning ("Error: %d: %s", db.errcode (), db.errmsg ());
+        }
+
+        stmt.reset ();
     }
 
     public Gee.ArrayList<Objects.Track?> get_all_tracks () {
@@ -120,5 +138,27 @@ public class Services.Database : GLib.Object {
         }
 
         return all;
+    }
+
+    public Objects.Track get_last_track () {
+        Sqlite.Statement stmt;
+
+        int res = db.prepare_v2 ("SELECT * FROM tracks ORDER BY id DESC LIMIT 1",
+            -1, out stmt);
+        assert (res == Sqlite.OK);
+
+        stmt.step ();
+
+        var track = new Objects.Track ();
+
+        track.id = stmt.column_int (0);
+        track.path = stmt.column_text (1);
+        track.title = stmt.column_text (2);
+        track.artist = stmt.column_text (3);
+        track.genre = stmt.column_text (4);
+        track.duration = stmt.column_int (5);
+        track.album = stmt.column_text (6);
+
+        return track;
     }
 }
