@@ -18,27 +18,42 @@ public class Widgets.ActionBar : Gtk.ActionBar {
         remove_button.margin = 3;
         remove_button.can_focus = false;
 
+        var preferences_button = new Gtk.ToggleButton ();
+        preferences_button.add (new Gtk.Image.from_icon_name ("preferences-system-symbolic", Gtk.IconSize.MENU));
+        preferences_button.tooltip_text = _("Preferences");
+        preferences_button.valign = Gtk.Align.CENTER;
+        preferences_button.halign = Gtk.Align.CENTER;
+        preferences_button.margin = 3;
+        preferences_button.get_style_context ().add_class (Gtk.STYLE_CLASS_FLAT);
+
         pack_start (add_button);
         pack_start (remove_button);
+        pack_end (preferences_button);
 
         add_button.clicked.connect (() => {
-            var file = new Gtk.FileChooserDialog (_("Select a music file"), null, Gtk.FileChooserAction.OPEN);
-            file.add_button (Gtk.Stock.CLOSE, Gtk.ResponseType.CLOSE);
-            file.add_button (Gtk.Stock.OK, Gtk.ResponseType.ACCEPT);
+            var chooser = new Gtk.FileChooserDialog (
+    				_("Select your favorite file"), null, Gtk.FileChooserAction.OPEN,
+    				_("Cancel"),
+    				Gtk.ResponseType.CANCEL,
+    				_("Open"),
+    				Gtk.ResponseType.ACCEPT);
 
-            if (file.run () == Gtk.ResponseType.ACCEPT) {
-                File archi = file.get_file (); //obtiene el archivo en un puntero 'archi'
-                //info_view.pat.set_text (archi.get_uri ()); //obtiene la ruta del archivo y la guarda en PAT
-                //info = info_view.discover.discover_uri(archi.get_uri ());
+    		chooser.select_multiple = true;
 
-                Application.stream_player.ready_file (archi.get_uri ());
-                Application.signals.ready_file ();
+    		Gtk.FileFilter filter = new Gtk.FileFilter ();
+    		filter.set_filter_name ("Audio");
+    		filter.add_pattern ("*.mp3");
+    		filter.add_pattern ("*.flac");
+    		chooser.add_filter (filter);
 
-                Application.stream_player.play_file ();
-                Application.signals.play_track ();
-            }
+    		if (chooser.run () == Gtk.ResponseType.ACCEPT) {
+    			SList<string> uris = chooser.get_uris ();
+    			foreach (unowned string uri in uris) {
+    				stdout.printf (uri + "\n");
+    			}
+    		}
 
-            file.destroy ();
+    		chooser.close ();
         });
     }
 }

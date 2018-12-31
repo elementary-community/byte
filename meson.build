@@ -40,7 +40,7 @@ executable(
     'src/Widgets/TrackRow.vala',
 
     'src/Views/Welcome.vala',
-    'src/Views/Main.vala',
+    'src/Views/Music.vala',
 
     'src/Objects/Track.vala',
     dependencies: [

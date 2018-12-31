@@ -17,6 +17,7 @@ public class Widgets.TrackRow : Gtk.ListBoxRow {
         var image = new Granite.Widgets.Avatar.with_default_icon (32);
 
         title_label = new Gtk.Label ("<b>%s</b>".printf (track.title));
+        title_label.ellipsize = Pango.EllipsizeMode.END;
         title_label.use_markup = true;
         title_label.halign = Gtk.Align.START;
         title_label.valign = Gtk.Align.END;
@@ -24,6 +25,7 @@ public class Widgets.TrackRow : Gtk.ListBoxRow {
         artist_album_label = new Gtk.Label ("%s - %s".printf (track.artist, track.album));
         artist_album_label.halign = Gtk.Align.START;
         artist_album_label.valign = Gtk.Align.START;
+        artist_album_label.ellipsize = Pango.EllipsizeMode.END;
 
         //duration_label = new Gtk.Label (track.duration.to_string ());
 

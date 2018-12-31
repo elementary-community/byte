@@ -1,10 +1,10 @@
-public class Views.Main : Gtk.EventBox {
+public class Views.Music : Gtk.EventBox {
     private Granite.SeekBar seekbar;
     private Gtk.Label title_label;
     private Gtk.Label artist_album_label;
     private Gtk.ListBox listbox;
 
-    public Main () {
+    public Music () {
         Object (
 
         );
@@ -36,8 +36,7 @@ public class Views.Main : Gtk.EventBox {
         info_button.get_style_context ().add_class (Gtk.STYLE_CLASS_FLAT);
 
         var header_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 0);
-        header_box.margin_start = 12;
-        header_box.margin_end = 12;
+        header_box.margin = 12;
         header_box.add (slider_button);
         header_box.pack_end (info_button, false, false, 0);
         header_box.pack_end (metainfo_box, true, true, 0);
@@ -47,8 +46,10 @@ public class Views.Main : Gtk.EventBox {
         image_cover.halign = Gtk.Align.CENTER;
         image_cover.pixel_size = 128;
 
+        var search_entry = new Gtk.SearchEntry ();
+        search_entry.margin = 6;
+
         listbox = new Gtk.ListBox  ();
-        listbox.get_style_context ().add_class (Gtk.STYLE_CLASS_BACKGROUND);
         listbox.activate_on_single_click = true;
         listbox.selection_mode = Gtk.SelectionMode.SINGLE;
         listbox.expand = true;
@@ -57,12 +58,12 @@ public class Views.Main : Gtk.EventBox {
         scrolled_window.add (listbox);
 
         var main_grid = new Gtk.Grid ();
-        main_grid.row_spacing = 6;
         main_grid.orientation = Gtk.Orientation.VERTICAL;
 
         main_grid.add (seekbar);
         main_grid.add (header_box);
-        //main_grid.add (image_cover);
+        //main_grid.add (search_entry);
+        main_grid.add (new Gtk.Separator (Gtk.Orientation.HORIZONTAL));
         main_grid.add (scrolled_window);
 
         add (main_grid);

@@ -15,16 +15,7 @@
 }
 
 .actionbar {
-    background-image:
-        linear-gradient(
-            to bottom,
-            shade (
-            #FE639E,
-                1.1
-            ),
-            #FE639E
-        );
-    border-top: 0.5px solid shade (#FE639E, 1);
+    background-color: #FE639E;
 }
 
 .actionbar image {

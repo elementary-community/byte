@@ -91,6 +91,7 @@ public class Services.StreamPlayer : GLib.Object {
             stderr.puts ("Could not query current duration.\n");
             return (ulong) 0;
         }
+        
         return (ulong) duration;
     }
 
