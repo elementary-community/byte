@@ -14,14 +14,12 @@ public class MainWindow : Gtk.Window {
             app: application,
             icon_name: "com.github.alainm23.byte",
             title: _("Byte")
-            //height_request: 750,
-            //width_request: 575
         );
     }
 
     construct {
         get_style_context ().add_class ("rounded");
-        
+
         headerbar = new Widgets.HeaderBar (this);
         headerbar.show_close_button = true;
 

@@ -4,6 +4,8 @@ public class Views.Music : Gtk.EventBox {
     private Gtk.Label artist_album_label;
     private Gtk.ListBox listbox;
 
+    private string cache_folder;
+    private string cover_folder;
     public Music () {
         Object (
 
@@ -11,6 +13,9 @@ public class Views.Music : Gtk.EventBox {
     }
 
     construct {
+        cache_folder = GLib.Path.build_filename (GLib.Environment.get_user_cache_dir (), "com.github.alainm23.byte");
+        cover_folder = GLib.Path.build_filename (cache_folder, "covers");
+
         seekbar = new Granite.SeekBar (0);
         seekbar.margin_top = 12;
         seekbar.margin_start = 12;
@@ -19,9 +24,11 @@ public class Views.Music : Gtk.EventBox {
         seekbar.get_style_context ().add_class ("byte-seekbar");
 
         title_label = new Gtk.Label (null);
+        title_label.ellipsize = Pango.EllipsizeMode.END;
         title_label.use_markup = true;
 
         artist_album_label = new Gtk.Label (null);
+        artist_album_label.ellipsize = Pango.EllipsizeMode.END;
 
         var metainfo_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 0);
         metainfo_box.add (title_label);
@@ -41,10 +48,11 @@ public class Views.Music : Gtk.EventBox {
         header_box.pack_end (info_button, false, false, 0);
         header_box.pack_end (metainfo_box, true, true, 0);
 
-        var image_cover = new Gtk.Image.from_file ("/home/alain/.cache/com.github.artemanufrij.playmymusic/covers/album_4.jpg");
+        var image_cover = new Gtk.Image ();
         image_cover.valign = Gtk.Align.CENTER;
         image_cover.halign = Gtk.Align.CENTER;
         image_cover.pixel_size = 128;
+        image_cover.margin = 12;
 
         var search_entry = new Gtk.SearchEntry ();
         search_entry.margin = 6;
@@ -62,7 +70,7 @@ public class Views.Music : Gtk.EventBox {
 
         main_grid.add (seekbar);
         main_grid.add (header_box);
-        //main_grid.add (search_entry);
+        main_grid.add (image_cover);
         main_grid.add (new Gtk.Separator (Gtk.Orientation.HORIZONTAL));
         main_grid.add (scrolled_window);
 
@@ -105,6 +113,8 @@ public class Views.Music : Gtk.EventBox {
 
             title_label.label = "<b>%s</b>".printf (item.track.title);
             artist_album_label.label = "%s - %s".printf (item.track.artist, item.track.album);
+
+            image_cover.file = GLib.Path.build_filename (cover_folder, ("%i.jpg").printf (item.track.id));
         });
 
         Application.database.adden_new_track.connect ((track) => {

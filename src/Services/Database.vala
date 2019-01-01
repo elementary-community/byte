@@ -106,6 +106,11 @@ public class Services.Database : GLib.Object {
         if (stmt.step () == Sqlite.ROW) {
             track.id = stmt.column_int (0);
             stdout.printf ("Track ID: %d - %s\n", track.id, track.title);
+
+            // Add cover to cache folder
+            Application.cover_import.import (track);
+
+            // Add track to list
             adden_new_track (track);
         } else {
             warning ("Error: %d: %s", db.errcode (), db.errmsg ());

@@ -34,6 +34,7 @@ executable(
     'src/Services/Signals.vala',
     'src/Services/Database.vala',
     'src/Services/TagManager.vala',
+    'src/Services/CoverImport.vala',
 
     'src/Widgets/HeaderBar.vala',
     'src/Widgets/ActionBar.vala',

@@ -12,9 +12,15 @@ public class Widgets.TrackRow : Gtk.ListBoxRow {
     }
 
     construct {
+        string cache_folder = GLib.Path.build_filename (GLib.Environment.get_user_cache_dir (), "com.github.alainm23.byte");
+        string cover_folder = GLib.Path.build_filename (cache_folder, "covers");
+
         get_style_context ().add_class ("track-row");
 
-        var image = new Granite.Widgets.Avatar.with_default_icon (32);
+        string path = GLib.Path.build_filename (cover_folder, ("%i.jpg").printf (track.id));
+
+        var image_cover = new Granite.Widgets.Avatar.from_file (path, 32);
+        image_cover.get_style_context ().remove_class ("avatar");
 
         title_label = new Gtk.Label ("<b>%s</b>".printf (track.title));
         title_label.ellipsize = Pango.EllipsizeMode.END;
@@ -32,7 +38,7 @@ public class Widgets.TrackRow : Gtk.ListBoxRow {
         var main_grid = new Gtk.Grid ();
         main_grid.margin = 3;
         main_grid.column_spacing = 6;
-        main_grid.attach (image, 0, 0, 1, 2);
+        main_grid.attach (image_cover, 0, 0, 1, 2);
         main_grid.attach (title_label, 1, 0, 1, 1);
         main_grid.attach (artist_album_label, 1, 1, 1, 1);
         //main_grid.attach (duration_label, 2, 0, 2, 2);

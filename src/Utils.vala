@@ -1,4 +1,5 @@
 public class Utils : GLib.Object {
+    
     public void create_dir_with_parents (string dir) {
         string path = Environment.get_home_dir () + dir;
         File tmp = File.new_for_path (path);
@@ -59,7 +60,7 @@ public class Utils : GLib.Object {
                         if (!directory.get_uri ().has_prefix ("file://")) {
                             Thread.usleep (1000000);
                         }
-                        
+
                         scan_local_files (directory.get_uri () + "/" + file_info.get_name ());
                     } else {
                         string mime_type = file_info.get_content_type ();

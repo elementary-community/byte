@@ -6,6 +6,7 @@ public class Application : Gtk.Application {
     public static Services.StreamPlayer stream_player;
     public static Services.Signals signals;
     public static Services.TagManager tg_manager;
+    public static Services.CoverImport cover_import;
     public static Utils utils;
 
     public string[] argsv;
@@ -25,6 +26,7 @@ public class Application : Gtk.Application {
         database = new Services.Database ();
         signals = new Services.Signals ();
         tg_manager = new Services.TagManager ();
+        cover_import = new Services.CoverImport ();
     }
 
     protected override void activate () {
