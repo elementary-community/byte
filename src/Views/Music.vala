@@ -114,7 +114,11 @@ public class Views.Music : Gtk.EventBox {
             title_label.label = "<b>%s</b>".printf (item.track.title);
             artist_album_label.label = "%s - %s".printf (item.track.artist, item.track.album);
 
-            image_cover.file = GLib.Path.build_filename (cover_folder, ("%i.jpg").printf (item.track.id));
+            if (item.is_pixbuf == true) {
+                image_cover.pixbuf = new Gdk.Pixbuf.from_file_at_size (item.path_cover, 128, 128);
+            } else {
+                image_cover.gicon = new ThemedIcon ("byte-drag-music");
+            }
         });
 
         Application.database.adden_new_track.connect ((track) => {

@@ -1,9 +1,14 @@
 public class Widgets.TrackRow : Gtk.ListBoxRow {
     public Objects.Track track { get; construct; }
 
+    private Gtk.Image image_cover;
+    private Gdk.Pixbuf pixbuf_cover;
     private Gtk.Label title_label;
     private Gtk.Label artist_album_label;
     private Gtk.Label duration_label;
+
+    public bool is_pixbuf;
+    public string path_cover;
 
     public TrackRow (Objects.Track _track) {
         Object (
@@ -12,15 +17,28 @@ public class Widgets.TrackRow : Gtk.ListBoxRow {
     }
 
     construct {
+        get_style_context ().add_class ("track-row");
+
+        image_cover = new Gtk.Image ();
+        image_cover.valign = Gtk.Align.CENTER;
+        image_cover.halign = Gtk.Align.CENTER;
+        image_cover.pixel_size = 32;
+
         string cache_folder = GLib.Path.build_filename (GLib.Environment.get_user_cache_dir (), "com.github.alainm23.byte");
         string cover_folder = GLib.Path.build_filename (cache_folder, "covers");
 
-        get_style_context ().add_class ("track-row");
+        path_cover = GLib.Path.build_filename (cover_folder, ("%i.jpg").printf (track.id));
+        File tmp = File.new_for_path (path_cover);
 
-        string path = GLib.Path.build_filename (cover_folder, ("%i.jpg").printf (track.id));
+        if (tmp.query_exists ()) {
+            image_cover.pixbuf = new Gdk.Pixbuf.from_file_at_size (path_cover, 32, 32);
 
-        var image_cover = new Granite.Widgets.Avatar.from_file (path, 32);
-        image_cover.get_style_context ().remove_class ("avatar");
+            is_pixbuf = true;
+        } else {
+            image_cover.gicon = new ThemedIcon ("byte-drag-music");
+
+            is_pixbuf = false;
+        }
 
         title_label = new Gtk.Label ("<b>%s</b>".printf (track.title));
         title_label.ellipsize = Pango.EllipsizeMode.END;
