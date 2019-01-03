@@ -41,6 +41,8 @@ public class Services.Database : GLib.Object {
             "title          VARCHAR," +
             "artist         VARCHAR," +
             "genre          VARCHAR," +
+            "year           INTEGER," +
+            "lyrics         VARCHAR," +
             "duration       INTEGER," +
             "album          VARCHAR)", null, null);
         debug ("Table trackS created");
@@ -69,8 +71,8 @@ public class Services.Database : GLib.Object {
         Sqlite.Statement stmt;
 
         int res = db.prepare_v2 ("INSERT INTO tracks (path," +
-            "title, artist, genre, duration, album)" +
-            "VALUES (?, ?, ?, ?, ?, ?)", -1, out stmt);
+            "title, artist, genre, year, lyrics, duration, album)" +
+            "VALUES (?, ?, ?, ?, ?, ?, ?, ?)", -1, out stmt);
         assert (res == Sqlite.OK);
 
         res = stmt.bind_text (1, track.path);
@@ -85,10 +87,16 @@ public class Services.Database : GLib.Object {
         res = stmt.bind_text (4, track.genre);
         assert (res == Sqlite.OK);
 
-        res = stmt.bind_int64 (5, (int64) track.duration);
+        res = stmt.bind_int (5, track.year);
         assert (res == Sqlite.OK);
 
-        res = stmt.bind_text(6, track.album);
+        res = stmt.bind_text (6, track.lyrics);
+        assert (res == Sqlite.OK);
+
+        res = stmt.bind_int64 (7, (int64) track.duration);
+        assert (res == Sqlite.OK);
+
+        res = stmt.bind_text (8, track.album);
         assert (res == Sqlite.OK);
 
         if (stmt.step () != Sqlite.DONE) {
@@ -136,34 +144,14 @@ public class Services.Database : GLib.Object {
             track.title = stmt.column_text (2);
             track.artist = stmt.column_text (3);
             track.genre = stmt.column_text (4);
-            track.duration = stmt.column_int64 (5);
-            track.album = stmt.column_text (6);
+            track.year = stmt.column_int (5);
+            track.lyrics = stmt.column_text (6);
+            track.duration = stmt.column_int64 (7);
+            track.album = stmt.column_text (8);
 
             all.add (track);
         }
 
         return all;
-    }
-
-    public Objects.Track get_last_track () {
-        Sqlite.Statement stmt;
-
-        int res = db.prepare_v2 ("SELECT * FROM tracks ORDER BY id DESC LIMIT 1",
-            -1, out stmt);
-        assert (res == Sqlite.OK);
-
-        stmt.step ();
-
-        var track = new Objects.Track ();
-
-        track.id = stmt.column_int (0);
-        track.path = stmt.column_text (1);
-        track.title = stmt.column_text (2);
-        track.artist = stmt.column_text (3);
-        track.genre = stmt.column_text (4);
-        track.duration = stmt.column_int (5);
-        track.album = stmt.column_text (6);
-
-        return track;
     }
 }

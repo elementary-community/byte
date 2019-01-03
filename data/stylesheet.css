@@ -42,3 +42,7 @@
 .slider-button.active {
     color: #FE639E;
 }
+
+.lyric text {
+    background-color: @bg_color;
+}

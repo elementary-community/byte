@@ -10,6 +10,8 @@ public class Views.Music : Gtk.EventBox {
     private string cover_folder;
     private double vadjustment_value_old = 0;
     private bool search_entry_activate = false;
+
+    private Objects.Track track_playing;
     public Music () {
         Object (
 
@@ -160,6 +162,8 @@ public class Views.Music : Gtk.EventBox {
 
         info_button.clicked.connect (() => {
             if (stack.visible_child_name == "tracks_listbox") {
+                track_editor.track = track_playing;
+                
                 stack.visible_child_name = "track_editor";
             } else {
                 stack.visible_child_name = "tracks_listbox";
@@ -206,6 +210,7 @@ public class Views.Music : Gtk.EventBox {
 
         tracks_listbox.row_activated.connect ((row) => {
             var item = row as Widgets.TrackRow;
+            track_playing = item.track;
 
             Application.stream_player.ready_file (item.track.path);
             Application.stream_player.play_file ();

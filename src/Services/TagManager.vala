@@ -33,6 +33,9 @@ public class Services.TagManager : GLib.Object {
                     string _genre;
                     string _album;
                     string _artist;
+                    string _lyrics;
+                    Gst.DateTime? _datetime;
+                    Date? _date;
 
                     // TRACK OBJECT
                     var track = new Objects.Track ();
@@ -64,6 +67,24 @@ public class Services.TagManager : GLib.Object {
                         track.artist = _artist;
                     } else if (tags.get_string (Gst.Tags.ARTIST, out _artist)) {
                         track.artist = _artist;
+                    }
+
+                    if (tags.get_string (Gst.Tags.LYRICS, out _lyrics)) {
+                        track.lyrics = _lyrics;
+                    }
+
+                    if (tags.get_date_time (Gst.Tags.DATE_TIME, out _datetime)) {
+                        if (_datetime != null) {
+                            track.year = _datetime.get_year ();
+                        } else {
+                            if (tags.get_date (Gst.Tags.DATE, out _date)) {
+                                // Don't let the assumption that @date is non-null deceive you.
+                                // This is sometimes null even though get_date() returned true!
+                                if (_date != null) {
+                                    track.year = _date.get_year ();
+                                }
+                            }
+                        }
                     }
 
                     track.duration = _duration;
