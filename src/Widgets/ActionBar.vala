@@ -32,7 +32,7 @@ public class Widgets.ActionBar : Gtk.ActionBar {
 
         add_button.clicked.connect (() => {
             var chooser = new Gtk.FileChooserDialog (
-    				_("Select your favorite file"), null, Gtk.FileChooserAction.OPEN,
+    				_("Select your favorite files"), null, Gtk.FileChooserAction.OPEN,
     				_("Cancel"),
     				Gtk.ResponseType.CANCEL,
     				_("Open"),
@@ -49,7 +49,8 @@ public class Widgets.ActionBar : Gtk.ActionBar {
     		if (chooser.run () == Gtk.ResponseType.ACCEPT) {
     			SList<string> uris = chooser.get_uris ();
     			foreach (unowned string uri in uris) {
-    				stdout.printf (uri + "\n");
+                    stdout.printf (uri + "\n");
+                    Application.utils.found_music_file (uri);
     			}
     		}
 

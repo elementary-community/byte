@@ -1,5 +1,4 @@
 public class Utils : GLib.Object {
-    
     public void create_dir_with_parents (string dir) {
         string path = Environment.get_home_dir () + dir;
         File tmp = File.new_for_path (path);
@@ -111,6 +110,21 @@ public class Utils : GLib.Object {
 
         chooser.destroy ();
         return return_value;
+    }
+
+    public static string get_formated_duration (uint64 duration) {
+        uint seconds = (uint)(duration / 1000000000);
+        if (seconds < 3600) {
+            uint minutes = seconds / 60;
+            seconds -= minutes * 60;
+            return "%u:%02u".printf (minutes, seconds);
+        }
+
+        uint hours = seconds / 3600;
+        seconds -= hours * 3600;
+        uint minutes = seconds / 60;
+        seconds -= minutes * 60;
+        return "%u:%02u:%02u".printf (hours, minutes, seconds);
     }
 }
 

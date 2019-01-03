@@ -136,7 +136,7 @@ public class Services.Database : GLib.Object {
             track.title = stmt.column_text (2);
             track.artist = stmt.column_text (3);
             track.genre = stmt.column_text (4);
-            track.duration = stmt.column_int (5);
+            track.duration = stmt.column_int64 (5);
             track.album = stmt.column_text (6);
 
             all.add (track);

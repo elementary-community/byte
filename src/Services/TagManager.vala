@@ -28,16 +28,14 @@ public class Services.TagManager : GLib.Object {
                 var tags = info.get_tags ();
 
                 if (tags != null) {
-                    uint64 duration = info.get_duration ();
+                    uint64 _duration = info.get_duration ();
                     string _title;
                     string _genre;
                     string _album;
                     string _artist;
-                    uint64 _duration = 0;
 
                     // TRACK OBJECT
                     var track = new Objects.Track ();
-                    track.duration = duration;
                     track.path = uri;
 
                     if (tags.get_string (Gst.Tags.TITLE, out _title)) {
@@ -52,8 +50,10 @@ public class Services.TagManager : GLib.Object {
                         track.genre = _genre;
                     }
 
-                    if (track.duration == 0 && tags.get_uint64 (Gst.Tags.DURATION, out _duration)) {
-                        track.duration = _duration;
+                    if (_duration == 0) {
+                        if (!tags.get_uint64 (Gst.Tags.DURATION, out _duration)) {
+                            _duration = 0;
+                        }
                     }
 
                     if (tags.get_string (Gst.Tags.ALBUM, out _album)) {
@@ -65,6 +65,8 @@ public class Services.TagManager : GLib.Object {
                     } else if (tags.get_string (Gst.Tags.ARTIST, out _artist)) {
                         track.artist = _artist;
                     }
+
+                    track.duration = _duration;
 
                     Application.database.add_track (track);
                 }

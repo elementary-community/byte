@@ -39,7 +39,8 @@ executable(
     'src/Widgets/HeaderBar.vala',
     'src/Widgets/ActionBar.vala',
     'src/Widgets/TrackRow.vala',
-
+    'src/Widgets/TrackEditor.vala',
+    
     'src/Views/Welcome.vala',
     'src/Views/Music.vala',
 

@@ -51,15 +51,18 @@ public class Widgets.TrackRow : Gtk.ListBoxRow {
         artist_album_label.valign = Gtk.Align.START;
         artist_album_label.ellipsize = Pango.EllipsizeMode.END;
 
-        //duration_label = new Gtk.Label (track.duration.to_string ());
+        duration_label = new Gtk.Label (Application.utils.get_formated_duration (track.duration));
+        duration_label.halign = Gtk.Align.END;
+        duration_label.hexpand = true;
 
         var main_grid = new Gtk.Grid ();
         main_grid.margin = 3;
+        main_grid.margin_end = 12;
         main_grid.column_spacing = 6;
         main_grid.attach (image_cover, 0, 0, 1, 2);
         main_grid.attach (title_label, 1, 0, 1, 1);
         main_grid.attach (artist_album_label, 1, 1, 1, 1);
-        //main_grid.attach (duration_label, 2, 0, 2, 2);
+        main_grid.attach (duration_label, 2, 0, 2, 2);
 
         add (main_grid);
     }

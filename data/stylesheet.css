@@ -32,3 +32,13 @@
     -gtk-icon-shadow: none;
     color: @color_text;
 }
+
+.slider-button {
+    padding: 1px 6px 1px 6px;
+    border-radius: 50px;
+    border: none;
+}
+
+.slider-button.active {
+    color: #FE639E;
+}
