@@ -1,6 +1,8 @@
 # Byte
 A music player without the library management. Just toss in your music to the playlist from your meticulously managed music folder.
 
+![Byte Screenshot](https://github.com/alainm23/byte/raw/master/data/screenshot/screenshot-01.png)
+
 ## Building and Installation
 
 You'll need the following dependencies:
@@ -13,7 +15,7 @@ You'll need the following dependencies:
 * meson
 * valac >= 0.40.3
 
-## Building
+## Building  
 
 ```
 meson build && cd build
