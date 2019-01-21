@@ -1,10 +1,10 @@
 public class Objects.Track {
     public int id;
+    public int year;
     public string path;
     public string title;
     public string artist;
     public string genre;
-    public int year;
     public string lyrics;
     public uint64 duration;
     public string album;

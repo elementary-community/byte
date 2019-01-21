@@ -30,8 +30,7 @@ executable(
     'src/MainWindow.vala',
     'src/Utils.vala',
 
-    'src/Services/StreamPlayer.vala',
-    'src/Services/Signals.vala',
+    'src/Services/Player.vala',
     'src/Services/Database.vala',
     'src/Services/TagManager.vala',
     'src/Services/CoverImport.vala',
@@ -42,7 +41,7 @@ executable(
     'src/Widgets/TrackEditor.vala',
     
     'src/Views/Welcome.vala',
-    'src/Views/Music.vala',
+    'src/Views/Main.vala',
 
     'src/Objects/Track.vala',
     dependencies: [

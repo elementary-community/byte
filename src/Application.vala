@@ -3,8 +3,7 @@ public class Application : Gtk.Application {
 
     public static Services.Database database;
     public static GLib.Settings settings;
-    public static Services.StreamPlayer stream_player;
-    public static Services.Signals signals;
+    public static Services.Player player;
     public static Services.TagManager tg_manager;
     public static Services.CoverImport cover_import;
     public static Utils utils;
@@ -22,9 +21,8 @@ public class Application : Gtk.Application {
         utils.create_dir_with_parents ("/.cache/com.github.alainm23.byte/covers");
 
         settings = new Settings ("com.github.alainm23.byte");
-        stream_player = new Services.StreamPlayer (args, "MAIN");
+        player = new Services.Player ();
         database = new Services.Database ();
-        signals = new Services.Signals ();
         tg_manager = new Services.TagManager ();
         cover_import = new Services.CoverImport ();
     }
@@ -74,6 +72,7 @@ public class Application : Gtk.Application {
         default_theme.add_resource_path ("/com/github/alainm23/byte");
     }
     public static int main (string[] args) {
+        Gst.init (ref args);
         Application app = new Application (args);
         return app.run (args);
     }

@@ -4,7 +4,7 @@ public class MainWindow : Gtk.Window {
     private Widgets.ActionBar actionbar;
 
     private Views.Welcome welcome_view;
-    private Views.Music music_view;
+    private Views.Main main_view;
 
     private Gtk.Stack main_stack;
 
@@ -26,14 +26,14 @@ public class MainWindow : Gtk.Window {
         set_titlebar (headerbar);
 
         welcome_view = new Views.Welcome ();
-        music_view = new Views.Music ();
+        main_view = new Views.Main ();
 
         main_stack = new Gtk.Stack ();
         main_stack.expand = true;
         main_stack.transition_type = Gtk.StackTransitionType.SLIDE_LEFT_RIGHT;
 
         main_stack.add_named (welcome_view, "welcome_view");
-        main_stack.add_named (music_view, "music_view");
+        main_stack.add_named (main_view, "main_view");
 
         actionbar = new Widgets.ActionBar ();
 
@@ -45,11 +45,12 @@ public class MainWindow : Gtk.Window {
         add (main_box);
 
         Timeout.add (200, () => {
-            if (Application.settings.get_string ("library-location") == "") {
+            if (Application.database.is_database_empty ()) {
                 main_stack.visible_child_name = "welcome_view";
             } else {
-                main_stack.visible_child_name = "music_view";
+                main_stack.visible_child_name = "main_view";
             }
+
             return false;
         });
 
@@ -60,10 +61,14 @@ public class MainWindow : Gtk.Window {
                     Application.settings.set_string ("library-location", folder);
                     Application.utils.scan_local_files (folder);
 
-                    main_stack.visible_child_name = "music_view";
+                    main_stack.visible_child_name = "main_view";
                 }
             }
         });
+    }
+ 
+    public void toggle_playing () {
+        headerbar.toggle_playing ();
     }
 
     public override bool configure_event (Gdk.EventConfigure event) {

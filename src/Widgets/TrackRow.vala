@@ -2,7 +2,6 @@ public class Widgets.TrackRow : Gtk.ListBoxRow {
     public Objects.Track track { get; construct; }
 
     private Gtk.Image image_cover;
-    private Gdk.Pixbuf pixbuf_cover;
     private Gtk.Label title_label;
     private Gtk.Label artist_album_label;
     private Gtk.Label duration_label;

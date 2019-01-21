@@ -21,8 +21,6 @@ public class Services.Database : GLib.Object {
             stderr.printf ("Can't open database: %d, %s\n", rc, db.errmsg ());
             Gtk.main_quit ();
         }
-
-        Application.signals.discovered_new_item.connect (add_track);
     }
 
     private int create_tables () {
@@ -65,6 +63,20 @@ public class Services.Database : GLib.Object {
         }
 
         return file_exists;
+    }
+
+    public bool is_database_empty () {
+        bool empty = false;
+        Sqlite.Statement stmt;
+
+        int res = db.prepare_v2 ("SELECT COUNT (*) FROM tracks", -1, out stmt);
+        assert (res == Sqlite.OK);
+
+        if (stmt.step () == Sqlite.ROW) {
+            empty = stmt.column_int (0) <= 0;
+        }
+
+        return empty;
     }
 
     public void add_track (Objects.Track track) {
@@ -153,5 +165,20 @@ public class Services.Database : GLib.Object {
         }
 
         return all;
+    }
+
+    public int get_tracks_number () {
+        Sqlite.Statement stmt;
+        int c = 0;
+
+        int res = db.prepare_v2 ("SELECT COUNT (*) FROM tracks",
+            -1, out stmt);
+        assert (res == Sqlite.OK);
+
+        if (stmt.step () == Sqlite.ROW) {
+            c = stmt.column_int (0);
+        }
+
+        return c;
     }
 }

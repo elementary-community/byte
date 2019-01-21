@@ -1,4 +1,4 @@
-@define-color colorPrimary #FE639E;
+@define-color colorPrimary #FA0080;
 @define-color textColorPrimary #fafafa;
 
 .titlebar {
@@ -10,12 +10,14 @@
     padding: 0 8px;
     border-radius: 0;
     border: none;
-    box-shadow: none;
+    box-shadow: none; 
     background: transparent;
 }
 
 .actionbar {
-    background-color: #FE639E;
+    color: #ffffff;
+    background: linear-gradient(#fa0080, #db0070);
+    border-top: 1px solid darker(#FA0080);
 }
 
 .actionbar image {
@@ -23,11 +25,11 @@
 }
 
 .byte-seekbar highlight {
-    background-color: #FE639E;
+    background-color: #FA0080;
 }
 
 .track-row:selected {
-    background-color: #FE639E;
+    background-color: #FA0080;
     text-shadow: none;
     -gtk-icon-shadow: none;
     color: @color_text;
@@ -40,7 +42,7 @@
 }
 
 .slider-button.active {
-    color: #FE639E;
+    color: #FA0080;
 }
 
 .lyric text {

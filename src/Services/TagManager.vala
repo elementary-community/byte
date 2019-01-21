@@ -1,9 +1,6 @@
 public class Services.TagManager : GLib.Object {
     private Gst.PbUtils.Discoverer discoverer;
 
-    private string unknown = _("Unknown");
-    public int discover_counter { get; private set; default = 0; }
-
     public TagManager () {}
 
     construct {
@@ -93,22 +90,12 @@ public class Services.TagManager : GLib.Object {
                 }
             }
 
-            discover_counter = discover_counter - 1;
-            if (discover_counter == 0) {
-                //discover_finished ();
-            }
-
             info.dispose ();
             return null;
         });
     }
 
     public void add_discover_uri (string uri) {
-        if (discover_counter == 0) {
-            //discover_started ();
-        }
-
-        discover_counter = discover_counter + 1;
         discoverer.discover_uri_async (uri);
     }
 }

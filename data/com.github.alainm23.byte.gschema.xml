@@ -14,14 +14,14 @@
 
         <key name="repeat-mode" enum="com.github.alainm23.byte.repeat-mode">
 			<default>"off"</default>
-			<summary>Repeat mode.</summary>
-			<description>Repeat mode.</description>
+			<summary>Repeat mode</summary>
+			<description>Repeat mode</description>
 		</key>
 
         <key name="shuffle-mode" type="b">
 			<default>false</default>
-			<summary>Shuffle mode.</summary>
-			<description>Shuffle mode.</description>
+			<summary>Shuffle mode</summary>
+			<description>Shuffle mode</description>
 		</key>
 
         <key name="window-size" type="ai">
