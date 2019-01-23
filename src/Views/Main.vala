@@ -42,7 +42,7 @@ public class Views.Main : Gtk.EventBox {
         slider_button.can_focus = false;
 
         var slider_icon = new Gtk.Image ();
-        slider_icon.gicon = new ThemedIcon ("view-column-symbolic");
+        slider_icon.gicon = new ThemedIcon ("slider-symbolic");
         slider_icon.pixel_size = 16;
 
         slider_button.add (slider_icon);

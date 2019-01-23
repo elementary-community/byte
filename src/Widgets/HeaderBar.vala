@@ -129,6 +129,10 @@ public class Widgets.HeaderBar : Gtk.HeaderBar {
                 check_repeat_button ();
             }   
         });
+
+        Application.player.toggle_playing.connect (() => {
+            toggle_playing ();
+        });
     }
 
     public void toggle_playing () {

@@ -56,6 +56,7 @@ public class Widgets.TrackRow : Gtk.ListBoxRow {
 
         var main_grid = new Gtk.Grid ();
         main_grid.margin = 3;
+        main_grid.margin_start = 6;
         main_grid.margin_end = 12;
         main_grid.column_spacing = 6;
         main_grid.attach (image_cover, 0, 0, 1, 2);

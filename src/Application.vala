@@ -6,11 +6,24 @@ public class Application : Gtk.Application {
     public static Services.Player player;
     public static Services.TagManager tg_manager;
     public static Services.CoverImport cover_import;
+    public static Services.Indicator indicator;
+    public static Services.MediaKey media_keys;
     public static Utils utils;
 
     public string[] argsv;
 
-    public Application (string[] args) {
+    public static Application _instance = null;
+
+    public static Application instance {
+        get {
+            if (_instance == null) {
+                _instance = new Application ();
+            }
+            return _instance;
+        }
+    }
+
+    public Application () {
         Object (
             application_id: "com.github.alainm23.byte",
             flags: ApplicationFlags.HANDLES_OPEN
@@ -50,7 +63,13 @@ public class Application : Gtk.Application {
         main_window.set_allocation (rect);
         main_window.show_all ();
 
-        // Actions
+        // Indicator
+        indicator = new Services.Indicator ();
+        indicator.initialize ();
+
+        // Media Keys
+        media_keys = new Services.MediaKey ();
+        
         var quit_action = new SimpleAction ("quit", null);
 
         add_action (quit_action);
@@ -73,7 +92,7 @@ public class Application : Gtk.Application {
     }
     public static int main (string[] args) {
         Gst.init (ref args);
-        Application app = new Application (args);
+        Application app = Application.instance;
         return app.run (args);
     }
 }

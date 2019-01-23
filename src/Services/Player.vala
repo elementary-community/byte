@@ -3,6 +3,8 @@ public class Services.Player : GLib.Object {
     public signal void current_progress_changed (double percent);
     public signal void current_duration_changed (int64 duration);
     public signal void current_track_changed (Objects.Track? track);
+    
+    public signal void toggle_playing (); 
 
     uint progress_timer = 0;
 

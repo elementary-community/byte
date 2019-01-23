@@ -2,9 +2,15 @@ public class Utils : GLib.Object {
     public Gee.ArrayList<Objects.Track?> playlist;
     public Gee.ArrayList<Objects.Track?> playlist_shuffle;
 
+    public string CACHE_FOLDER;
+    public string COVER_FOLDER;
+
     public Utils () {    
         playlist = new Gee.ArrayList<Objects.Track?> ();
         playlist_shuffle = new Gee.ArrayList<Objects.Track?> ();
+
+        CACHE_FOLDER = GLib.Path.build_filename (GLib.Environment.get_user_cache_dir (), "com.github.alainm23.byte");
+        COVER_FOLDER = GLib.Path.build_filename (CACHE_FOLDER, "covers");
     }
 
     public void add_track_playlist (Objects.Track? track) {
