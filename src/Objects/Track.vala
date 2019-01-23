@@ -9,6 +9,20 @@ public class Objects.Track {
     public uint64 duration;
     public string album;
 
+    public string path_cover;
+    public string cover {
+        get {
+            path_cover = GLib.Path.build_filename (Application.utils.COVER_FOLDER, ("%i.jpg").printf (id));
+            var tmp = File.new_for_path (path_cover);
+
+            if (tmp.query_exists ()) {
+                return path_cover;
+            } else {
+                return "/usr/share/com.github.alainm23.byte/default-cover.svg";
+            }
+        }
+    }
+
     public Track (int id = 0,
                   string path = "",
                   string title = "",

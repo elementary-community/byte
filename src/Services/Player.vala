@@ -96,7 +96,9 @@ public class Services.Player : GLib.Object {
 
         if (load_track (track)) {
             play ();
+
             current_track_changed (track);
+            Application.notification.send_notification (track);
         }
     }
 
@@ -175,7 +177,7 @@ public class Services.Player : GLib.Object {
             current_track = null;
         } else {
             if (shuffle_mode) {
-
+                next_track = Application.utils.get_next_shuffle_track ();
             } else {
                 next_track = Application.utils.get_next_track ();
             }
@@ -189,13 +191,21 @@ public class Services.Player : GLib.Object {
     }
 
     public void prev () {
+        var repeat_mode = Application.settings.get_enum ("repeat-mode");
+        var shuffle_mode = Application.settings.get_boolean ("shuffle-mode");
+        
         if (current_track == null) {
             return;
         }
 
         if (get_position_sec () < 1) {
             Objects.Track? prev_track = null;
-            prev_track = Application.utils.get_prev_track ();
+
+            if (shuffle_mode) {
+                prev_track = Application.utils.get_prev_shuffle_track ();
+            } else {
+                prev_track = Application.utils.get_prev_track ();
+            }
             
             if (prev_track != null) {
                 set_track (prev_track);

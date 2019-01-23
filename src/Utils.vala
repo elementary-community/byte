@@ -13,6 +13,44 @@ public class Utils : GLib.Object {
         COVER_FOLDER = GLib.Path.build_filename (CACHE_FOLDER, "covers");
     }
 
+    public void generate_playlist () {
+        playlist = Application.database.get_all_tracks ();
+    }
+
+    public void generate_shuffle_list () {
+        playlist_shuffle = Application.database.get_all_tracks ();
+
+        for (int i = playlist_shuffle.size - 1; i > 0; i--) {
+            int random_index = GLib.Random.int_range (0, i);
+
+            var tmp_track = playlist_shuffle [random_index];
+            playlist_shuffle [random_index] = playlist_shuffle [i];
+            playlist_shuffle [i] = tmp_track;
+        }
+    }
+
+    public Objects.Track? get_next_shuffle_track () {
+        var current_track = Application.player.current_track;
+        var index = playlist_shuffle.index_of (current_track);
+
+        if (index + 1 >= playlist_shuffle.size) {
+            return playlist_shuffle [0];
+        } else {
+            return playlist_shuffle [index + 1];
+        }
+    }
+
+    public Objects.Track? get_prev_shuffle_track () {
+        var current_track = Application.player.current_track;
+        var index = playlist_shuffle.index_of (current_track);
+
+        if (index - 1 < 0) {
+            return playlist_shuffle [playlist_shuffle.size - 1];
+        } else {
+            return playlist_shuffle [index - 1];
+        }
+    }
+
     public void add_track_playlist (Objects.Track? track) {
         playlist.add (track);
     }

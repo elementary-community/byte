@@ -131,6 +131,12 @@ public class Views.Main : Gtk.EventBox {
             timeline.playback_duration = duration / Gst.SECOND;
         });
 
+        Application.player.current_track_changed.connect ((track) => {
+            title_label.label = "<b>%s</b>".printf (track.title);
+            artist_album_label.label = "%s - %s".printf (track.artist, track.album);
+            image_cover.pixbuf = new Gdk.Pixbuf.from_file_at_size (track.cover, 128, 128);
+        });
+
         timeline.scale.change_value.connect ((scroll, new_value) => {
             Application.player.seek_to_progress (new_value);
             return true;
@@ -138,17 +144,7 @@ public class Views.Main : Gtk.EventBox {
 
         tracks_listbox.row_activated.connect ((row) => {
             var item = row as Widgets.TrackRow;
-
             Application.player.set_track (item.track);
-
-            title_label.label = "<b>%s</b>".printf (item.track.title);
-            artist_album_label.label = "%s - %s".printf (item.track.artist, item.track.album);
-
-            if (item.is_pixbuf == true) {
-                image_cover.pixbuf = new Gdk.Pixbuf.from_file_at_size (item.path_cover, 128, 128);
-            } else {
-                image_cover.gicon = new ThemedIcon ("byte-drag-music");
-            }
         });
 
         Application.player.current_track_changed.connect ((track) => {
@@ -168,8 +164,9 @@ public class Views.Main : Gtk.EventBox {
                 Idle.add (() => {
                     var item = new Widgets.TrackRow (track);
                     
-                    tracks_listbox.add (item);
-
+                    tracks_listbox.add (item); 
+                    Application.utils.add_track_playlist (track);
+                    
                     tracks_listbox.show_all ();
                     return false;
                 });
@@ -185,10 +182,7 @@ public class Views.Main : Gtk.EventBox {
 
         foreach (var track in all_tracks) {
             var row = new Widgets.TrackRow (track);
-
             tracks_listbox.add (row);
-
-            Application.utils.add_track_playlist (track);
         }
 
         tracks_listbox.show_all ();

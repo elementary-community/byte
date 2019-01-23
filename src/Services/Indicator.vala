@@ -124,15 +124,7 @@ public class SoundIndicatorPlayer : GLib.Object {
                 property = "Playing";
                 var metadata = new HashTable<string, Variant> (null, null);
                 if (Application.player.current_track != null) {
-                    string path_cover = GLib.Path.build_filename (Application.utils.COVER_FOLDER, ("%i.jpg").printf (Application.player.current_track.id));
-                    var file = File.new_for_path (path_cover);
-                    
-                    if (file.query_exists ()) {
-                        metadata.insert("mpris:artUrl", file.get_uri ());
-                    } else {
-                        metadata.insert("mpris:artUrl", "/usr/share/icons/hicolor/48x48/apps/com.github.alainm23.byte.svg");
-                    } 
-
+                    metadata.insert("mpris:artUrl", "file://" + Application.player.current_track.cover);
                     metadata.insert("xesam:title", Application.player.current_track.title);
                     metadata.insert("xesam:artist", get_simple_string_array (Application.player.current_track.artist));
                 }

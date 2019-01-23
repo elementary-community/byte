@@ -74,12 +74,12 @@ public class Widgets.HeaderBar : Gtk.HeaderBar {
 
         var main_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 0);
         main_box.spacing = 6;
-        main_box.pack_start (shuffle_button, false, false, 24);
+        main_box.pack_start (repeat_button, false, false, 24);
         main_box.pack_start (previous_button, false, false, 0);
         main_box.pack_start (play_button, false, false, 0);
         main_box.pack_start (next_button, false, false, 0);
-        main_box.pack_start (repeat_button, false, false, 24);
-
+        main_box.pack_start (shuffle_button, false, false, 24);
+        
         custom_title = main_box;
         pack_end (eq_button);
 

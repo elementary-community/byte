@@ -36,7 +36,8 @@ executable(
     'src/Services/CoverImport.vala',
     'src/Services/Indicator.vala',
     'src/Services/MediaKey.vala',
-
+    'src/Services/Notification.vala',
+    
     'src/Widgets/HeaderBar.vala',
     'src/Widgets/ActionBar.vala',
     'src/Widgets/TrackRow.vala',

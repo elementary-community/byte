@@ -8,6 +8,7 @@ public class Application : Gtk.Application {
     public static Services.CoverImport cover_import;
     public static Services.Indicator indicator;
     public static Services.MediaKey media_keys;
+    public static Services.Notification notification;
     public static Utils utils;
 
     public string[] argsv;
@@ -38,6 +39,7 @@ public class Application : Gtk.Application {
         database = new Services.Database ();
         tg_manager = new Services.TagManager ();
         cover_import = new Services.CoverImport ();
+        notification = new Services.Notification ();
     }
 
     protected override void activate () {
@@ -70,6 +72,10 @@ public class Application : Gtk.Application {
         // Media Keys
         media_keys = new Services.MediaKey ();
         
+        // Generate aleaotiro list
+        utils.generate_shuffle_list ();
+        utils.generate_playlist ();
+
         var quit_action = new SimpleAction ("quit", null);
 
         add_action (quit_action);

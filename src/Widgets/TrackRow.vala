@@ -22,22 +22,7 @@ public class Widgets.TrackRow : Gtk.ListBoxRow {
         image_cover.valign = Gtk.Align.CENTER;
         image_cover.halign = Gtk.Align.CENTER;
         image_cover.pixel_size = 32;
-
-        string cache_folder = GLib.Path.build_filename (GLib.Environment.get_user_cache_dir (), "com.github.alainm23.byte");
-        string cover_folder = GLib.Path.build_filename (cache_folder, "covers");
-
-        path_cover = GLib.Path.build_filename (cover_folder, ("%i.jpg").printf (track.id));
-        File tmp = File.new_for_path (path_cover);
-
-        if (tmp.query_exists ()) {
-            image_cover.pixbuf = new Gdk.Pixbuf.from_file_at_size (path_cover, 32, 32);
-
-            is_pixbuf = true;
-        } else {
-            image_cover.gicon = new ThemedIcon ("byte-drag-music");
-
-            is_pixbuf = false;
-        }
+        image_cover.pixbuf = new Gdk.Pixbuf.from_file_at_size (track.cover, 32, 32);
 
         title_label = new Gtk.Label ("<b>%s</b>".printf (track.title));
         title_label.ellipsize = Pango.EllipsizeMode.END;

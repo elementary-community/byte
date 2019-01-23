@@ -16,6 +16,11 @@ install_data(
     install_dir: join_paths(get_option('datadir'), 'glib-2.0', 'schemas')
 )
 
+install_data(
+    join_paths('resources', 'default-cover.svg'),
+    install_dir: join_paths(get_option('datadir'), 'com.github.alainm23.byte')
+)
+
 i18n.merge_file(
   input: meson.project_name() + '.desktop.in',
   output: meson.project_name() + '.desktop',
