@@ -60,11 +60,17 @@ public class Utils : GLib.Object {
     }
 
     public Objects.Track? get_next_track () {
+        var repeat_mode = Application.settings.get_enum ("repeat-mode");
+
         var current_track = Application.player.current_track;
         var index = playlist.index_of (current_track);
 
         if (index + 1 >= playlist.size) {
-            return playlist [0];
+            if (repeat_mode == 0) {
+                return null;
+            } else {
+                return playlist [0];
+            }
         } else {
             return playlist [index + 1];
         }

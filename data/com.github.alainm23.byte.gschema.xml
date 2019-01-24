@@ -35,5 +35,11 @@
             <summary>Most recent window position (x, y)</summary>
             <description>Most recent window position (x, y)</description>
         </key>
+
+        <key name="prefer-dark-style" type="b">
+            <default>false</default>
+            <summary>If the dark Gtk stylesheet should be used</summary>
+            <description>If the dark Gtk stylesheet should be used</description>
+        </key>
     </schema>
 </schemalist>

@@ -47,8 +47,12 @@ public class MainWindow : Gtk.Window {
         Timeout.add (200, () => {
             if (Application.database.is_database_empty ()) {
                 main_stack.visible_child_name = "welcome_view";
+                headerbar.active = false;
+                actionbar.visible = false;
             } else {
                 main_stack.visible_child_name = "main_view";
+                headerbar.active = true;
+                actionbar.visible = true;
             }
 
             return false;
@@ -62,6 +66,7 @@ public class MainWindow : Gtk.Window {
                     Application.utils.scan_local_files (folder);
 
                     main_stack.visible_child_name = "main_view";
+                    headerbar.active = false;
                 }
             }
         });

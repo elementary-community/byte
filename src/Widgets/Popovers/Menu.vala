@@ -29,6 +29,66 @@ public class Widgets.Popovers.Menu : Gtk.Popover {
     }
 
     construct {
+        var folder_menu = new Widgets.ModelButton (_("Change Folder"), _("Change project name"));
         
+        var mode_switch = new Granite.ModeSwitch.from_icon_name ("display-brightness-symbolic", "weather-clear-night-symbolic");
+        mode_switch.margin_start = 12;
+        mode_switch.primary_icon_tooltip_text = ("Light background");
+        mode_switch.secondary_icon_tooltip_text = ("Dark background");
+        mode_switch.valign = Gtk.Align.CENTER;
+
+        var label = new Gtk.Label (_("Night Mode"));
+        label.margin_start = 6;
+
+        var night_mode_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 0);
+        night_mode_box.get_style_context ().add_class ("menuitem");
+        night_mode_box.pack_start (label, false, false, 0);
+        night_mode_box.pack_end (mode_switch, false, false, 0);
+
+        var night_mode_eventbox = new Gtk.EventBox ();
+        night_mode_eventbox.add_events (Gdk.EventMask.ENTER_NOTIFY_MASK | Gdk.EventMask.LEAVE_NOTIFY_MASK);
+        night_mode_eventbox.get_style_context ().add_class ("menuitem");
+        night_mode_eventbox.add (night_mode_box);
+
+        var main_grid = new Gtk.Grid ();
+        main_grid.margin_top = 6;
+        main_grid.margin_bottom = 6;
+        main_grid.orientation = Gtk.Orientation.VERTICAL;
+        main_grid.width_request = 200;
+
+        main_grid.add (folder_menu);
+        main_grid.add (night_mode_eventbox);
+
+        add (main_grid);
+
+        night_mode_eventbox.enter_notify_event.connect ((event) => {
+            night_mode_eventbox.get_style_context ().add_class ("night-mode");
+            return false;
+        });
+
+        night_mode_eventbox.leave_notify_event.connect ((event) => {
+            if (event.detail == Gdk.NotifyType.INFERIOR) {
+                return false;
+            }
+
+            night_mode_eventbox.get_style_context ().remove_class ("night-mode");
+            return false;
+        });
+
+        night_mode_eventbox.event.connect ((event) => {
+            if (event.type == Gdk.EventType.BUTTON_PRESS) {
+                if (mode_switch.active) {
+                    mode_switch.active = false;
+                } else {
+                    mode_switch.active = true;
+                }
+            }
+
+            return false;
+        });
+
+        var gtk_settings = Gtk.Settings.get_default ();
+        mode_switch.bind_property ("active", gtk_settings, "gtk_application_prefer_dark_theme");
+        Application.settings.bind ("prefer-dark-style", mode_switch, "active", GLib.SettingsBindFlags.DEFAULT);
     }
 }

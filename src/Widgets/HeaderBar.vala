@@ -5,6 +5,7 @@ public class Widgets.HeaderBar : Gtk.HeaderBar {
     private Gtk.Button play_button;
     private Gtk.Button next_button;
     private Gtk.Button previous_button;
+    private Gtk.Button eq_button;
 
     private Gtk.Image icon_play;
     private Gtk.Image icon_pause;
@@ -16,6 +17,17 @@ public class Widgets.HeaderBar : Gtk.HeaderBar {
     private Gtk.Image icon_repeat_all;
     private Gtk.Image icon_repeat_off;
     
+    public bool active {
+        set {
+            shuffle_button.sensitive = value;
+            repeat_button.sensitive = value;
+            play_button.sensitive = value;
+            next_button.sensitive = value;
+            previous_button.sensitive = value;
+            eq_button.sensitive = value;
+        }
+    }
+
     public HeaderBar (Gtk.Window parent) {
         Object (
             window: parent,
@@ -69,7 +81,7 @@ public class Widgets.HeaderBar : Gtk.HeaderBar {
         repeat_button.get_style_context ().add_class (Gtk.STYLE_CLASS_FLAT);
         repeat_button.can_focus = false;
 
-        var eq_button = new Gtk.Button.from_icon_name ("media-eq-symbolic", Gtk.IconSize.MENU);
+        eq_button = new Gtk.Button.from_icon_name ("media-eq-symbolic", Gtk.IconSize.MENU);
         eq_button.can_focus = false;
 
         var main_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 0);

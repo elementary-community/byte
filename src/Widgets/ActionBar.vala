@@ -22,6 +22,18 @@ public class Widgets.ActionBar : Gtk.EventBox {
         menu_button.margin = 3;
         menu_button.get_style_context ().add_class (Gtk.STYLE_CLASS_FLAT);
 
+        var menu_popover = new Widgets.Popovers.Menu (menu_button);
+
+        menu_button.toggled.connect (() => {
+            if (menu_button.active) {
+                menu_popover.show_all ();
+            }
+        });
+  
+        menu_popover.closed.connect (() => {
+            menu_button.active = false;
+        });
+
         var action_bar = new Gtk.ActionBar ();
         action_bar.get_style_context ().add_class (Gtk.STYLE_CLASS_INLINE_TOOLBAR);
         action_bar.get_style_context ().add_class ("actionbar");
@@ -37,7 +49,6 @@ public class Widgets.ActionBar : Gtk.EventBox {
         add (eventbox);
 
         eventbox.enter_notify_event.connect ((event) => {
-            
             return false;
         });
 

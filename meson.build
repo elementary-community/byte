@@ -37,12 +37,15 @@ executable(
     'src/Services/Indicator.vala',
     'src/Services/MediaKey.vala',
     'src/Services/Notification.vala',
-    
+
     'src/Widgets/HeaderBar.vala',
     'src/Widgets/ActionBar.vala',
     'src/Widgets/TrackRow.vala',
     'src/Widgets/TrackEditor.vala',
-    
+    'src/Widgets/ModelButton.vala',
+
+    'src/Widgets/Popovers/Menu.vala',
+
     'src/Views/Welcome.vala',
     'src/Views/Main.vala',
 
