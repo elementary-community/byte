@@ -1,5 +1,5 @@
-@define-color colorPrimary #FA0080;
-@define-color textColorPrimary #fafafa;
+@define-color colorPrimary #fe2851;
+@define-color textColorPrimary #ffffff;
 
 .titlebar {
     padding: 6px 6px;
@@ -14,22 +14,12 @@
     background: transparent;
 }
 
-.actionbar {
-    color: #ffffff;
-    background: linear-gradient(#fa0080, #db0070);
-    border-top: 1px solid darker(#FA0080);
-}
-
-.actionbar image {
-    color: #FAFAFA;
-}
-
 .byte-seekbar highlight {
-    background-color: #FA0080;
+    background-color: @colorPrimary;
 }
 
 .track-row:selected {
-    background-color: #FA0080;
+    background-color: @colorPrimary;
     text-shadow: none;
     -gtk-icon-shadow: none;
     color: @color_text;
@@ -42,7 +32,7 @@
 }
 
 .slider-button.active {
-    color: #FA0080;
+    color: @colorPrimary;
 }
 
 .lyric text {
@@ -52,4 +42,20 @@
 .night-mode {
     transition: all 200ms ease;
     background-color: alpha (@text_color, 0.15);
+}
+
+.header-label {
+    color: @colorPrimary;
+}
+
+.sub-header-label {
+ font-size: 21px;
+}
+
+.button-color {
+    color: @colorPrimary;
+}
+
+.w-round {
+    border-radius: 0px 0px 6px 6px;
 }

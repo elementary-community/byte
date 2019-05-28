@@ -16,6 +16,7 @@ public class Widgets.TrackRow : Gtk.ListBoxRow {
     }
 
     construct {
+        /*
         get_style_context ().add_class ("track-row");
 
         image_cover = new Gtk.Image ();
@@ -50,5 +51,6 @@ public class Widgets.TrackRow : Gtk.ListBoxRow {
         main_grid.attach (duration_label, 2, 0, 2, 2);
 
         add (main_grid);
+        */
     }
 }

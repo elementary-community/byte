@@ -12,7 +12,7 @@
    viewBox="0 0 48 48"
    height="48"
    width="48"
-   sodipodi:docname="byte-drag-music (copy).svg"
+   sodipodi:docname="default-cover.svg"
    inkscape:version="0.92.3 (2405546, 2018-03-11)">
   <sodipodi:namedview
      pagecolor="#ffffff"
@@ -28,8 +28,8 @@
      id="namedview14"
      showgrid="false"
      inkscape:zoom="4.9166667"
-     inkscape:cx="-38.440678"
-     inkscape:cy="0.77690442"
+     inkscape:cx="26.433399"
+     inkscape:cy="18.080345"
      inkscape:window-x="0"
      inkscape:window-y="30"
      inkscape:window-maximized="1"
@@ -62,5 +62,5 @@
      inkscape:connector-curvature="0"
      d="m 29.37,16 -7.376,1.906 c -0.554,0.149 -1,0.74 -1,1.313 v 9.094 c -0.625993,-0.322462 -1.349459,-0.400867 -2.03,-0.22 -1.35,0.351 -2.196,1.485 -1.907,2.532 0.29,1.047 1.619,1.632 2.969,1.281 1.076,-0.28 1.819,-1.071 1.937,-1.906 l 0.031,-8.594 7,-1.875 v 6.781 c -0.626533,-0.322043 -1.350393,-0.39974 -2.031,-0.218 -1.35,0.35 -2.196,1.484 -1.906,2.531 0.289,1.047 1.619,1.632 2.968,1.281 1.077,-0.28 1.82,-1.071 1.938,-1.906 l 0.03,-11.188 c 0,-0.43 -0.265,-0.751 -0.624,-0.812 z"
      id="path23"
-     style="fill:#ea4c89;fill-rule:evenodd;stroke:none;stroke-width:1" />
+     style="fill:#fe2851;fill-rule:evenodd;stroke:none;stroke-width:1;fill-opacity:1" />
 </svg>

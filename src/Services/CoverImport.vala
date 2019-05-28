@@ -2,16 +2,9 @@ public class Services.CoverImport : GLib.Object {
     private const int DISCOVERER_TIMEOUT = 5;
 
     private Gst.PbUtils.Discoverer discoverer;
-    private string cover_path;
-    private string cache_folder;
-    private string cover_folder;
-
     construct {
         try {
             discoverer = new Gst.PbUtils.Discoverer ((Gst.ClockTime) (DISCOVERER_TIMEOUT * Gst.SECOND));
-
-            cache_folder = GLib.Path.build_filename (GLib.Environment.get_user_cache_dir (), "com.github.alainm23.byte");
-            cover_folder = GLib.Path.build_filename (cache_folder, "covers");
         } catch (Error err) {
             critical ("Could not create Gst discoverer object: %s", err.message);
         }
@@ -19,21 +12,17 @@ public class Services.CoverImport : GLib.Object {
 
     public void import (Objects.Track track) {
         try {
-            cover_path = GLib.Path.build_filename (cover_folder, ("%i.jpg").printf (track.id));
+            string cover_path = GLib.Path.build_filename (Byte.utils.COVER_FOLDER, 
+                ("album-%i.jpg").printf (track.album_id));
 
             var info = discoverer.discover_uri (track.path);
-            read_info (info);
+            read_info (info, cover_path);
         } catch (Error err) {
             critical ("Error while importing .. ");
         }
-        /*
-        new Thread<void*> (null, () => {
-            return null;
-        });
-        */
     }
 
-    private void read_info (Gst.PbUtils.DiscovererInfo info) {
+    private void read_info (Gst.PbUtils.DiscovererInfo info, string cover_path) {
         string uri = info.get_uri ();
         bool gstreamer_discovery_successful = false;
         switch (info.get_result ()) {
@@ -84,7 +73,7 @@ public class Services.CoverImport : GLib.Object {
                     if (buffer != null) {
                         pixbuf = get_pixbuf_from_buffer (buffer);
                         if (pixbuf != null) {
-                            save_cover_pixbuf (pixbuf);
+                            save_cover_pixbuf (pixbuf, cover_path);
                         }
                     }
 
@@ -140,7 +129,7 @@ public class Services.CoverImport : GLib.Object {
         return pix;
     }
 
-    private void save_cover_pixbuf (Gdk.Pixbuf p) {
+    private void save_cover_pixbuf (Gdk.Pixbuf p, string cover_path) {
         Gdk.Pixbuf ? pixbuf = align_and_scale_pixbuf (p, 128);
 
         try {

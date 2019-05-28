@@ -1,27 +1,22 @@
 public class MainWindow : Gtk.Window {
-    public weak Application app { get; construct; }
     private Widgets.HeaderBar headerbar;
-    private Widgets.ActionBar actionbar;
 
     private Views.Welcome welcome_view;
     private Views.Main main_view;
 
     private Gtk.Stack main_stack;
-
-    public MainWindow (Application application) {
+    public MainWindow (Byte application) {
         Object (
             application: application,
-            app: application,
             icon_name: "com.github.alainm23.byte",
-            title: _("Byte")
+            title: "Byte"
         );
     }
 
     construct {
         get_style_context ().add_class ("rounded");
 
-        headerbar = new Widgets.HeaderBar (this);
-        headerbar.show_close_button = true;
+        headerbar = new Widgets.HeaderBar ();
 
         set_titlebar (headerbar);
 
@@ -34,25 +29,16 @@ public class MainWindow : Gtk.Window {
 
         main_stack.add_named (welcome_view, "welcome_view");
         main_stack.add_named (main_view, "main_view");
-
-        actionbar = new Widgets.ActionBar ();
-
-        var main_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 0);
-        main_box.expand = true;
-        main_box.pack_start (main_stack, true, true, 0);
-        main_box.pack_end (actionbar, false, false, 0);
-
-        add (main_box);
+        
+        add (main_stack);
 
         Timeout.add (200, () => {
-            if (Application.database.is_database_empty ()) {
+            if (Byte.database.is_database_empty ()) {
                 main_stack.visible_child_name = "welcome_view";
-                headerbar.active = false;
-                actionbar.visible = false;
+                headerbar.visible_ui = false;
             } else {
                 main_stack.visible_child_name = "main_view";
-                headerbar.active = true;
-                actionbar.visible = true;
+                headerbar.visible_ui = true;
             }
 
             return false;
@@ -60,13 +46,13 @@ public class MainWindow : Gtk.Window {
 
         welcome_view.selected.connect ((index) => {
             if (index == 0) {
-                string folder = Application.utils.choose_folder (this);
+                string folder = Byte.scan_service.choose_folder (this);
                 if (folder != null) {
-                    Application.settings.set_string ("library-location", folder);
-                    Application.utils.scan_local_files (folder);
+                    Byte.settings.set_string ("library-location", folder);
+                    Byte.scan_service.scan_local_files (folder);
 
                     main_stack.visible_child_name = "main_view";
-                    headerbar.active = false;
+                    headerbar.visible_ui = true;
                 }
             }
         });
@@ -79,11 +65,11 @@ public class MainWindow : Gtk.Window {
     public override bool configure_event (Gdk.EventConfigure event) {
         Gtk.Allocation rect;
         get_allocation (out rect);
-        Application.settings.set_value ("window-size",  new int[] { rect.height, rect.width });
+        Byte.settings.set_value ("window-size",  new int[] { rect.height, rect.width });
 
         int root_x, root_y;
         get_position (out root_x, out root_y);
-        Application.settings.set_value ("window-position",  new int[] { root_x, root_y });
+        Byte.settings.set_value ("window-position",  new int[] { root_x, root_y });
 
         return base.configure_event (event);
     }

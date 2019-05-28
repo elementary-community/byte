@@ -2,23 +2,23 @@ public class Utils : GLib.Object {
     public Gee.ArrayList<Objects.Track?> playlist;
     public Gee.ArrayList<Objects.Track?> playlist_shuffle;
 
-    public string CACHE_FOLDER;
+    public string MAIN_FOLDER;
     public string COVER_FOLDER;
 
     public Utils () {    
         playlist = new Gee.ArrayList<Objects.Track?> ();
         playlist_shuffle = new Gee.ArrayList<Objects.Track?> ();
 
-        CACHE_FOLDER = GLib.Path.build_filename (GLib.Environment.get_user_cache_dir (), "com.github.alainm23.byte");
-        COVER_FOLDER = GLib.Path.build_filename (CACHE_FOLDER, "covers");
+        MAIN_FOLDER = Environment.get_home_dir () + "/.local/share/com.github.alainm23.byte";
+        COVER_FOLDER = GLib.Path.build_filename (MAIN_FOLDER, "covers");
     }
 
     public void generate_playlist () {
-        playlist = Application.database.get_all_tracks ();
+        playlist = Byte.database.get_all_tracks ();
     }
 
     public void generate_shuffle_list () {
-        playlist_shuffle = Application.database.get_all_tracks ();
+        playlist_shuffle = Byte.database.get_all_tracks ();
 
         for (int i = playlist_shuffle.size - 1; i > 0; i--) {
             int random_index = GLib.Random.int_range (0, i);
@@ -30,7 +30,7 @@ public class Utils : GLib.Object {
     }
 
     public Objects.Track? get_next_shuffle_track () {
-        var current_track = Application.player.current_track;
+        var current_track = Byte.player.current_track;
         var index = playlist_shuffle.index_of (current_track);
 
         if (index + 1 >= playlist_shuffle.size) {
@@ -41,7 +41,7 @@ public class Utils : GLib.Object {
     }
 
     public Objects.Track? get_prev_shuffle_track () {
-        var current_track = Application.player.current_track;
+        var current_track = Byte.player.current_track;
         var index = playlist_shuffle.index_of (current_track);
 
         if (index - 1 < 0) {
@@ -60,9 +60,9 @@ public class Utils : GLib.Object {
     }
 
     public Objects.Track? get_next_track () {
-        var repeat_mode = Application.settings.get_enum ("repeat-mode");
+        var repeat_mode = Byte.settings.get_enum ("repeat-mode");
 
-        var current_track = Application.player.current_track;
+        var current_track = Byte.player.current_track;
         var index = playlist.index_of (current_track);
 
         if (index + 1 >= playlist.size) {
@@ -77,7 +77,7 @@ public class Utils : GLib.Object {
     }
 
     public Objects.Track? get_prev_track () {
-        var current_track = Application.player.current_track;
+        var current_track = Byte.player.current_track;
         var index = playlist.index_of (current_track);
 
         if (index - 1 < 0) {
@@ -98,89 +98,7 @@ public class Utils : GLib.Object {
             GLib.DirUtils.create_with_parents (path, 0775);
         }
     }
-
-    public static bool is_audio_file (string mime_type) {
-        return mime_type.has_prefix ("audio/") && !mime_type.contains ("x-mpegurl") && !mime_type.contains ("x-scpls");
-    }
-
-    public void scan_local_files (string uri) {
-        new Thread<void*> ("scan_local_files", () => {
-            File directory = File.new_for_uri (uri.replace ("#", "%23"));
-            stdout.printf ("%s\n", directory.get_uri ());
-            try {
-                var children = directory.enumerate_children ("standard::*," + FileAttribute.STANDARD_CONTENT_TYPE + "," + FileAttribute.STANDARD_IS_HIDDEN + "," + FileAttribute.STANDARD_IS_SYMLINK + "," + FileAttribute.STANDARD_SYMLINK_TARGET, GLib.FileQueryInfoFlags.NONE);
-                FileInfo file_info = null;
-
-                while ((file_info = children.next_file ()) != null) {
-                    if (file_info.get_is_hidden ()) {
-                        continue;
-                    }
-
-                    if (file_info.get_is_symlink ()) {
-                        string target = file_info.get_symlink_target ();
-                        var symlink = File.new_for_path (target);
-                        var file_type = symlink.query_file_type (0);
-                        if (file_type == FileType.DIRECTORY) {
-                            scan_local_files (target);
-                        }
-                    } else if (file_info.get_file_type () == FileType.DIRECTORY) {
-                        // Without usleep it crashes on smb:// protocol
-                        if (!directory.get_uri ().has_prefix ("file://")) {
-                            Thread.usleep (1000000);
-                        }
-
-                        scan_local_files (directory.get_uri () + "/" + file_info.get_name ());
-                    } else {
-                        string mime_type = file_info.get_content_type ();
-                        if (is_audio_file (mime_type)) {
-                            found_music_file (directory.get_uri () + "/" + file_info.get_name ().replace ("#", "%23"));
-                        }
-                    }
-                }
-
-                children.close ();
-                children.dispose ();
-            } catch (Error err) {
-                warning ("%s\n%s", err.message, uri);
-            }
-
-            directory.dispose ();
-            return null;
-        });
-    }
-
-    public void found_music_file (string path) {
-        new Thread<void*> ("found_local_music_file", () => {
-            if (Application.database.music_file_exists (path) == false) {
-                Application.tg_manager.add_discover_uri (path);
-            }
-
-            return null;
-        });
-    }
-
-    public string? choose_folder (MainWindow window) {
-        string? return_value = null;
-
-        Gtk.FileChooserDialog chooser = new Gtk.FileChooserDialog (
-            _ ("Select a folder."), window, Gtk.FileChooserAction.SELECT_FOLDER,
-            _ ("_Cancel"), Gtk.ResponseType.CANCEL,
-            _ ("_Open"), Gtk.ResponseType.ACCEPT);
-
-        var filter = new Gtk.FileFilter ();
-        filter.set_filter_name (_ ("Folder"));
-        filter.add_mime_type ("inode/directory");
-
-        chooser.add_filter (filter);
-
-        if (chooser.run () == Gtk.ResponseType.ACCEPT) {
-            return_value = chooser.get_file ().get_uri ();
-        }
-
-        chooser.destroy ();
-        return return_value;
-    }
-
+    
     public string get_formated_duration (uint64 duration) {
         uint seconds = (uint)(duration / 1000000000);
         if (seconds < 3600) {

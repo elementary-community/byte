@@ -98,7 +98,7 @@ public class Services.Player : GLib.Object {
             play ();
 
             current_track_changed (track);
-            Application.notification.send_notification (track);
+            Byte.notification.send_notification (track);
         }
     }
 
@@ -163,8 +163,8 @@ public class Services.Player : GLib.Object {
     }
 
     public void next () {
-        var repeat_mode = Application.settings.get_enum ("repeat-mode");
-        var shuffle_mode = Application.settings.get_boolean ("shuffle-mode");
+        var repeat_mode = Byte.settings.get_enum ("repeat-mode");
+        var shuffle_mode = Byte.settings.get_boolean ("shuffle-mode");
 
         if (current_track == null) {
             return;
@@ -177,9 +177,9 @@ public class Services.Player : GLib.Object {
             current_track = null;
         } else {
             if (shuffle_mode) {
-                next_track = Application.utils.get_next_shuffle_track ();
+                next_track = Byte.utils.get_next_shuffle_track ();
             } else {
-                next_track = Application.utils.get_next_track ();
+                next_track = Byte.utils.get_next_track ();
             }
         }
 
@@ -191,8 +191,8 @@ public class Services.Player : GLib.Object {
     }
 
     public void prev () {
-        var repeat_mode = Application.settings.get_enum ("repeat-mode");
-        var shuffle_mode = Application.settings.get_boolean ("shuffle-mode");
+        var repeat_mode = Byte.settings.get_enum ("repeat-mode");
+        var shuffle_mode = Byte.settings.get_boolean ("shuffle-mode");
         
         if (current_track == null) {
             return;
@@ -202,9 +202,9 @@ public class Services.Player : GLib.Object {
             Objects.Track? prev_track = null;
 
             if (shuffle_mode) {
-                prev_track = Application.utils.get_prev_shuffle_track ();
+                prev_track = Byte.utils.get_prev_shuffle_track ();
             } else {
-                prev_track = Application.utils.get_prev_track ();
+                prev_track = Byte.utils.get_prev_track ();
             }
             
             if (prev_track != null) {

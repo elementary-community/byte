@@ -1,4 +1,4 @@
-public class Application : Gtk.Application {
+public class Byte : Gtk.Application {
     public MainWindow main_window;
 
     public static Services.Database database;
@@ -9,30 +9,31 @@ public class Application : Gtk.Application {
     public static Services.Indicator indicator;
     public static Services.MediaKey media_keys;
     public static Services.Notification notification;
+    public static Services.Scan scan_service;
     public static Utils utils;
 
     public string[] argsv;
 
-    public static Application _instance = null;
+    public static Byte _instance = null;
 
-    public static Application instance {
+    public static Byte instance {
         get {
             if (_instance == null) {
-                _instance = new Application ();
+                _instance = new Byte ();
             }
             return _instance;
         }
     }
 
-    public Application () {
+    public Byte () {
         Object (
             application_id: "com.github.alainm23.byte",
             flags: ApplicationFlags.HANDLES_OPEN
         );
         // Dir to Database
         utils = new Utils ();
-        utils.create_dir_with_parents ("/.cache/com.github.alainm23.byte");
-        utils.create_dir_with_parents ("/.cache/com.github.alainm23.byte/covers");
+        utils.create_dir_with_parents ("/.local/share/com.github.alainm23.byte");
+        utils.create_dir_with_parents ("/.local/share/com.github.alainm23.byte/covers");
 
         settings = new Settings ("com.github.alainm23.byte");
         player = new Services.Player ();
@@ -40,6 +41,7 @@ public class Application : Gtk.Application {
         tg_manager = new Services.TagManager ();
         cover_import = new Services.CoverImport ();
         notification = new Services.Notification ();
+        scan_service = new Services.Scan ();
     }
 
     protected override void activate () {
@@ -73,8 +75,8 @@ public class Application : Gtk.Application {
         media_keys = new Services.MediaKey ();
         
         // Generate aleaotiro list
-        utils.generate_shuffle_list ();
-        utils.generate_playlist ();
+        //utils.generate_shuffle_list ();
+        //utils.generate_playlist ();
 
         var quit_action = new SimpleAction ("quit", null);
 
@@ -98,7 +100,7 @@ public class Application : Gtk.Application {
     }
     public static int main (string[] args) {
         Gst.init (ref args);
-        Application app = Application.instance;
+        var app = Byte.instance;
         return app.run (args);
     }
 }

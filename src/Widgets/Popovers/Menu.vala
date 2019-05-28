@@ -88,7 +88,7 @@ public class Widgets.Popovers.Menu : Gtk.Popover {
         });
 
         var gtk_settings = Gtk.Settings.get_default ();
-        mode_switch.bind_property ("active", gtk_settings, "gtk_application_prefer_dark_theme");
-        Application.settings.bind ("prefer-dark-style", mode_switch, "active", GLib.SettingsBindFlags.DEFAULT);
+        mode_switch.bind_property ("active", gtk_settings, "gtk_Byte_prefer_dark_theme");
+        Byte.settings.bind ("prefer-dark-style", mode_switch, "active", GLib.SettingsBindFlags.DEFAULT);
     }
 }

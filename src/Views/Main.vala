@@ -2,26 +2,203 @@ public class Views.Main : Gtk.EventBox {
     private Granite.SeekBar timeline;
     private Gtk.Label title_label;
     private Gtk.Label artist_album_label;
-    private Gtk.ListBox tracks_listbox;
 
-    private string cache_folder;
-    private string cover_folder;
-    public Main () {
-        Object (
-
-        );
-    }
+    private Gtk.Button favorite_button;
+    private Gtk.Button lyric_button;
+    
+    private Gtk.Image icon_favorite;
+    private Gtk.Image icon_no_favorite;
+    public Main () {}
 
     construct {
-        cache_folder = GLib.Path.build_filename (GLib.Environment.get_user_cache_dir (), "com.github.alainm23.byte");
-        cover_folder = GLib.Path.build_filename (cache_folder, "covers");
+        icon_favorite = new Gtk.Image.from_icon_name ("emblem-favorite-symbolic", Gtk.IconSize.MENU);
+        icon_no_favorite = new Gtk.Image.from_icon_name ("face-heart-symbolic", Gtk.IconSize.MENU);
 
         timeline = new Granite.SeekBar (0);
-        timeline.margin_top = 6;
         timeline.margin_start = 6;
+        timeline.margin_top = 9;
         timeline.margin_end = 6;
         timeline.get_style_context ().remove_class ("seek-bar");
         timeline.get_style_context ().add_class ("byte-seekbar");
+
+        title_label = new Gtk.Label ("<b>I Love My Friends</b>");
+        title_label.ellipsize = Pango.EllipsizeMode.END;
+        title_label.use_markup = true;
+
+        artist_album_label = new Gtk.Label ("Foster the People - Torches");
+        artist_album_label.ellipsize = Pango.EllipsizeMode.END;
+        artist_album_label.use_markup = true;
+
+        favorite_button = new Gtk.Button ();
+        favorite_button.get_style_context ().add_class (Gtk.STYLE_CLASS_FLAT);
+        favorite_button.get_style_context ().add_class ("button-color");
+        favorite_button.can_focus = false;
+        favorite_button.valign = Gtk.Align.CENTER;
+        favorite_button.image = icon_no_favorite;
+
+        lyric_button = new Gtk.Button.from_icon_name ("text-x-generic-symbolic", Gtk.IconSize.MENU);
+        lyric_button.get_style_context ().add_class (Gtk.STYLE_CLASS_FLAT);
+        lyric_button.get_style_context ().add_class ("button-color");
+        lyric_button.can_focus = false;
+        lyric_button.valign = Gtk.Align.CENTER;
+
+        var metainfo_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 0);
+        metainfo_box.add (title_label);
+        metainfo_box.add (artist_album_label);
+
+        var header_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 0);
+        header_box.margin = 3;
+        header_box.margin_bottom = 6;
+        header_box.pack_start (favorite_button, false, false, 0);
+        header_box.pack_start (metainfo_box, true, true, 0);
+        header_box.pack_end (lyric_button, false, false, 0);
+
+        // Spinner loading
+        var loading_spinner = new Gtk.Spinner ();
+        loading_spinner.active = true;
+        loading_spinner.start ();
+
+        var loading_label = new Gtk.Label (_("Sync library…"));
+
+        var loading_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 6);
+        loading_box.halign = Gtk.Align.CENTER;
+        loading_box.hexpand = true;
+        loading_box.margin = 6;
+        loading_box.add (loading_spinner);
+        loading_box.add (loading_label);
+
+        var loading_revealer = new Gtk.Revealer ();
+        loading_revealer.transition_type = Gtk.RevealerTransitionType.SLIDE_UP;
+        loading_revealer.add (loading_box);
+        loading_revealer.reveal_child = false;
+
+        var library_label = new Gtk.Label ("<b>%s</b>".printf (_("Library")));
+        library_label.get_style_context ().add_class ("header-label");
+        library_label.margin_start = 9;
+        library_label.margin_top = 6;
+        library_label.halign =Gtk.Align.START;
+        library_label.use_markup = true;
+        
+        var playlist_label = new Gtk.Label ("<b>%s</b>".printf (_("Playlists")));
+        playlist_label.get_style_context ().add_class ("sub-header-label");
+        playlist_label.get_style_context ().add_class (Granite.STYLE_CLASS_H2_LABEL);
+        playlist_label.halign =Gtk.Align.START;
+        playlist_label.use_markup = true;
+
+        var playlists_button = new Gtk.Button.with_label (_("View all"));
+        playlists_button.get_style_context ().add_class (Gtk.STYLE_CLASS_FLAT);
+        playlists_button.get_style_context ().add_class ("button-color");
+        playlists_button.can_focus = false;
+        playlists_button.valign = Gtk.Align.CENTER;
+
+        var playlists_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 0);
+        playlists_box.margin_start = 9;
+        playlists_box.pack_start (playlist_label, false, false, 0);
+        playlists_box.pack_end (playlists_button, false, false, 0);
+
+        var artists_label = new Gtk.Label ("<b>%s</b>".printf (_("Artists")));
+        artists_label.get_style_context ().add_class (Granite.STYLE_CLASS_H2_LABEL);
+        artists_label.get_style_context ().add_class ("sub-header-label");
+        artists_label.halign =Gtk.Align.START;
+        artists_label.use_markup = true;
+
+        var artists_button = new Gtk.Button.with_label (_("View all"));
+        artists_button.get_style_context ().add_class (Gtk.STYLE_CLASS_FLAT);
+        artists_button.get_style_context ().add_class ("button-color");
+        artists_button.can_focus = false;
+        artists_button.valign = Gtk.Align.CENTER;
+
+        var artists_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 0);
+        artists_box.margin_start = 9;
+        artists_box.pack_start (artists_label, false, false, 0);
+        artists_box.pack_end (artists_button, false, false, 0);
+
+        var albums_label = new Gtk.Label ("<b>%s</b>".printf (_("Albums")));
+        albums_label.get_style_context ().add_class ("sub-header-label");
+        albums_label.get_style_context ().add_class (Granite.STYLE_CLASS_H2_LABEL);
+        albums_label.halign =Gtk.Align.START;
+        albums_label.use_markup = true;
+
+        var albums_button = new Gtk.Button.with_label (_("View all"));
+        albums_button.get_style_context ().add_class (Gtk.STYLE_CLASS_FLAT);
+        albums_button.get_style_context ().add_class ("button-color");
+        albums_button.can_focus = false;
+        albums_button.valign = Gtk.Align.CENTER;
+
+        var albums_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 0);
+        albums_box.margin_start = 9;
+        albums_box.pack_start (albums_label, false, false, 0);
+        albums_box.pack_end (albums_button, false, false, 0);
+
+        var tracks_label = new Gtk.Label ("<b>%s</b>".printf (_("Tracks")));
+        tracks_label.get_style_context ().add_class ("sub-header-label");
+        tracks_label.get_style_context ().add_class (Granite.STYLE_CLASS_H2_LABEL);
+        tracks_label.halign =Gtk.Align.START;
+        tracks_label.use_markup = true;
+
+        var tracks_button = new Gtk.Button.with_label (_("View all"));
+        tracks_button.get_style_context ().add_class (Gtk.STYLE_CLASS_FLAT);
+        tracks_button.get_style_context ().add_class ("button-color");
+        tracks_button.can_focus = false;
+        tracks_button.valign = Gtk.Align.CENTER;
+
+        var tracks_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 0);
+        tracks_box.margin_start = 9;
+        tracks_box.pack_start (tracks_label, false, false, 0);
+        tracks_box.pack_end (tracks_button, false, false, 0);
+
+        var radio_label = new Gtk.Label ("<b>%s</b>".printf (_("Radios")));
+        radio_label.get_style_context ().add_class ("header-label");
+        radio_label.margin_start = 9;
+        radio_label.margin_top = 6;
+        radio_label.halign =Gtk.Align.START;
+        radio_label.use_markup = true;
+
+        var podcast_label = new Gtk.Label ("<b>%s</b>".printf (_("Podcast")));
+        podcast_label.get_style_context ().add_class ("header-label");
+        podcast_label.margin_start = 9;
+        podcast_label.margin_top = 6;
+        podcast_label.halign =Gtk.Align.START;
+        podcast_label.use_markup = true;
+
+        var library_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 0);
+        library_box.get_style_context ().add_class (Gtk.STYLE_CLASS_VIEW);
+        library_box.get_style_context ().add_class ("w-round");
+        library_box.expand = true;
+        library_box.pack_start (loading_revealer, false, true, 0);
+        library_box.pack_start (library_label, false, false, 0);
+        library_box.pack_start (playlists_box, false, false, 0);
+        library_box.pack_start (artists_box, false, false, 0);
+        library_box.pack_start (albums_box, false, false, 0);
+        library_box.pack_start (tracks_box, false, false, 0);
+        library_box.pack_start (radio_label, false, false, 0);
+        library_box.pack_start (podcast_label, false, false, 0);
+
+        var main_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 0);
+        main_box.pack_start (timeline, false, false, 0);
+        main_box.pack_start (header_box, false, false, 0);
+        main_box.pack_start (new Gtk.Separator (Gtk.Orientation.HORIZONTAL), false, false, 0);
+        main_box.pack_start (library_box, true, true, 0);
+
+        add (main_box);
+
+        favorite_button.clicked.connect (() => {
+            if (favorite_button.image == icon_favorite) {
+                favorite_button.image = icon_no_favorite;
+            } else {
+                favorite_button.image = icon_favorite;
+            }
+        });
+
+        Byte.scan_service.sync_started.connect (() => {
+            loading_revealer.reveal_child = true;
+        });
+
+        Byte.scan_service.sync_finished.connect (() => {
+            loading_revealer.reveal_child = false;
+        });
+        /*
+        
 
         title_label = new Gtk.Label ("<b>%s</b>".printf ("Byte"));
         title_label.ellipsize = Pango.EllipsizeMode.END;
@@ -53,7 +230,7 @@ public class Views.Main : Gtk.EventBox {
 
         var header_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 0);
         header_box.margin_top = 6;
-        header_box.margin_start = 9;
+        header_box.margin_start = 12;
         header_box.margin_end = 9;
         header_box.margin_bottom = 9;
         header_box.spacing = 6;
@@ -63,7 +240,8 @@ public class Views.Main : Gtk.EventBox {
 
         var image_cover = new Gtk.Image ();
         image_cover.gicon = new ThemedIcon ("byte-drag-music");
-        image_cover.pixel_size = 128;
+        image_cover.pixel_size = 96;
+        image_cover.margin = 3;
         
         var image_grid = new Gtk.Grid ();
         image_grid.get_style_context ().add_class (Granite.STYLE_CLASS_CARD);
@@ -77,7 +255,7 @@ public class Views.Main : Gtk.EventBox {
         image_cover_revealer.add (image_grid);
 
         tracks_listbox = new Gtk.ListBox  ();
-        tracks_listbox.activate_on_single_click = true;
+        //tracks_listbox.activate_on_single_click = true;
         tracks_listbox.selection_mode = Gtk.SelectionMode.SINGLE;
         tracks_listbox.expand = true;
 
@@ -107,7 +285,9 @@ public class Views.Main : Gtk.EventBox {
         });
 
         info_button.clicked.connect (() => {
-            
+            var editor_dialog = new Dialogs.TrackEditor (Byte.player.current_track);
+            editor_dialog.destroy.connect (Gtk.main_quit);
+            editor_dialog.show_all ();
         });
 
         slider_button.toggled.connect (() => {
@@ -120,34 +300,34 @@ public class Views.Main : Gtk.EventBox {
             }
         });
 
-        Application.player.current_progress_changed.connect ((progress) => {
+        Byte.player.current_progress_changed.connect ((progress) => {
             timeline.playback_progress = progress;
             if (timeline.playback_duration == 0) {
-                timeline.playback_duration = Application.player.duration / Gst.SECOND;
+                timeline.playback_duration = Byte.player.duration / Gst.SECOND;
             }
         });
 
-        Application.player.current_duration_changed.connect ((duration) => {
+        Byte.player.current_duration_changed.connect ((duration) => {
             timeline.playback_duration = duration / Gst.SECOND;
         });
 
-        Application.player.current_track_changed.connect ((track) => {
+        Byte.player.current_track_changed.connect ((track) => {
             title_label.label = "<b>%s</b>".printf (track.title);
             artist_album_label.label = "%s - %s".printf (track.artist, track.album);
-            image_cover.pixbuf = new Gdk.Pixbuf.from_file_at_size (track.cover, 128, 128);
+            image_cover.pixbuf = new Gdk.Pixbuf.from_file_at_size (track.cover, 96, 96);
         });
 
         timeline.scale.change_value.connect ((scroll, new_value) => {
-            Application.player.seek_to_progress (new_value);
+            Byte.player.seek_to_progress (new_value);
             return true;
         });
 
         tracks_listbox.row_activated.connect ((row) => {
             var item = row as Widgets.TrackRow;
-            Application.player.set_track (item.track);
+            Byte.player.set_track (item.track);
         });
 
-        Application.player.current_track_changed.connect ((track) => {
+        Byte.player.current_track_changed.connect ((track) => {
             tracks_listbox.set_filter_func ((row) => {
                 var item = row as Widgets.TrackRow;
 
@@ -159,13 +339,13 @@ public class Views.Main : Gtk.EventBox {
             });
         });
 
-        Application.database.adden_new_track.connect ((track) => {
+        Byte.database.adden_new_track.connect ((track) => {
             try {
                 Idle.add (() => {
                     var item = new Widgets.TrackRow (track);
                     
                     tracks_listbox.add (item); 
-                    Application.utils.add_track_playlist (track);
+                    Byte.utils.add_track_playlist (track);
                     
                     tracks_listbox.show_all ();
                     return false;
@@ -174,11 +354,13 @@ public class Views.Main : Gtk.EventBox {
                 warning ("%s\n", err.message);
             }
         });
+        */
     }
 
     public void update_project_list () {
+        /*
         var all_tracks = new Gee.ArrayList<Objects.Track?> ();
-        all_tracks = Application.database.get_all_tracks ();
+        all_tracks = Byte.database.get_all_tracks ();
 
         foreach (var track in all_tracks) {
             var row = new Widgets.TrackRow (track);
@@ -186,5 +368,6 @@ public class Views.Main : Gtk.EventBox {
         }
 
         tracks_listbox.show_all ();
+        */
     }
 }

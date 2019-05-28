@@ -36,12 +36,11 @@ executable(
     'src/Services/CoverImport.vala',
     'src/Services/Indicator.vala',
     'src/Services/MediaKey.vala',
+    'src/Services/Scan.vala',
     'src/Services/Notification.vala',
 
     'src/Widgets/HeaderBar.vala',
-    'src/Widgets/ActionBar.vala',
     'src/Widgets/TrackRow.vala',
-    'src/Widgets/TrackEditor.vala',
     'src/Widgets/ModelButton.vala',
 
     'src/Widgets/Popovers/Menu.vala',
@@ -50,6 +49,8 @@ executable(
     'src/Views/Main.vala',
 
     'src/Objects/Track.vala',
+    'src/Objects/Album.vala',
+    'src/Objects/Artist.vala',
     dependencies: [
         dependency('gee-0.8'),
         dependency('gobject-2.0'),

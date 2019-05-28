@@ -1,11 +1,12 @@
 public class Widgets.HeaderBar : Gtk.HeaderBar {
-    public weak Gtk.Window window { get; construct; }
+    private Gtk.Box main_box;
+
     private Gtk.Button shuffle_button;
     private Gtk.Button repeat_button;
     private Gtk.Button play_button;
     private Gtk.Button next_button;
     private Gtk.Button previous_button;
-    private Gtk.Button eq_button;
+    private Gtk.Button search_button;
 
     private Gtk.Image icon_play;
     private Gtk.Image icon_pause;
@@ -17,20 +18,21 @@ public class Widgets.HeaderBar : Gtk.HeaderBar {
     private Gtk.Image icon_repeat_all;
     private Gtk.Image icon_repeat_off;
     
-    public bool active {
+    public bool visible_ui {
         set {
-            shuffle_button.sensitive = value;
-            repeat_button.sensitive = value;
-            play_button.sensitive = value;
-            next_button.sensitive = value;
-            previous_button.sensitive = value;
-            eq_button.sensitive = value;
+            main_box.visible = value;
+            search_button.visible = value;
+
+            if (value) {
+                custom_title = main_box;
+            } else {
+                custom_title = null;
+            }
         }
     }
 
-    public HeaderBar (Gtk.Window parent) {
+    public HeaderBar () {
         Object (
-            window: parent,
             show_close_button: true
         );
     }
@@ -81,11 +83,10 @@ public class Widgets.HeaderBar : Gtk.HeaderBar {
         repeat_button.get_style_context ().add_class (Gtk.STYLE_CLASS_FLAT);
         repeat_button.can_focus = false;
 
-        eq_button = new Gtk.Button.from_icon_name ("media-eq-symbolic", Gtk.IconSize.MENU);
-        eq_button.can_focus = false;
+        search_button = new Gtk.Button.from_icon_name ("edit-find-symbolic", Gtk.IconSize.MENU);
+        search_button.can_focus = false;
 
-        var main_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 0);
-        main_box.spacing = 6;
+        main_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 6);
         main_box.pack_start (repeat_button, false, false, 24);
         main_box.pack_start (previous_button, false, false, 0);
         main_box.pack_start (play_button, false, false, 0);
@@ -93,7 +94,7 @@ public class Widgets.HeaderBar : Gtk.HeaderBar {
         main_box.pack_start (shuffle_button, false, false, 24);
         
         custom_title = main_box;
-        pack_end (eq_button);
+        pack_end (search_button);
 
         check_shuffle_button ();
         check_repeat_button ();
@@ -102,7 +103,7 @@ public class Widgets.HeaderBar : Gtk.HeaderBar {
             toggle_playing ();
         });
 
-        Application.player.state_changed.connect ((state) => {
+        Byte.player.state_changed.connect ((state) => {
             if (state == Gst.State.PLAYING) {
                 play_button.image = icon_pause;
             } else {
@@ -111,30 +112,30 @@ public class Widgets.HeaderBar : Gtk.HeaderBar {
         });
 
         shuffle_button.clicked.connect (() => {
-            Application.settings.set_boolean ("shuffle-mode", !Application.settings.get_boolean ("shuffle-mode"));
+            Byte.settings.set_boolean ("shuffle-mode", !Byte.settings.get_boolean ("shuffle-mode"));
         });
 
         repeat_button.clicked.connect (() => {
-            var enum = Application.settings.get_enum ("repeat-mode");
+            var enum = Byte.settings.get_enum ("repeat-mode");
 
             if (enum == 1) {
-                Application.settings.set_enum ("repeat-mode", 2);
+                Byte.settings.set_enum ("repeat-mode", 2);
             } else if (enum == 2) {
-                Application.settings.set_enum ("repeat-mode", 0);
+                Byte.settings.set_enum ("repeat-mode", 0);
             } else {
-                Application.settings.set_enum ("repeat-mode", 1);
+                Byte.settings.set_enum ("repeat-mode", 1);
             }
         });
 
         previous_button.clicked.connect (() => {
-            Application.player.prev ();
+            Byte.player.prev ();
         });
 
         next_button.clicked.connect (() => {
-            Application.player.next ();
+            Byte.player.next ();
         });
 
-        Application.settings.changed.connect ((key) => {
+        Byte.settings.changed.connect ((key) => {
             if (key == "shuffle-mode") {
                 check_shuffle_button ();
             } else if (key == "repeat-mode") {
@@ -142,7 +143,7 @@ public class Widgets.HeaderBar : Gtk.HeaderBar {
             }   
         });
 
-        Application.player.toggle_playing.connect (() => {
+        Byte.player.toggle_playing.connect (() => {
             toggle_playing ();
         });
     }
@@ -150,15 +151,15 @@ public class Widgets.HeaderBar : Gtk.HeaderBar {
     public void toggle_playing () {
         if (play_button.image == icon_play) {
             play_button.image = icon_pause;
-            Application.player.state_changed (Gst.State.PLAYING);
+            Byte.player.state_changed (Gst.State.PLAYING);
         } else {
             play_button.image = icon_play;
-            Application.player.state_changed (Gst.State.PAUSED);
+            Byte.player.state_changed (Gst.State.PAUSED);
         }
     }
 
     private void check_shuffle_button () {
-        if (Application.settings.get_boolean ("shuffle-mode")) {
+        if (Byte.settings.get_boolean ("shuffle-mode")) {
             shuffle_button.image = icon_shuffle_on;
             shuffle_button.tooltip_text = _ ("Shuffle On");
         } else {
@@ -168,7 +169,7 @@ public class Widgets.HeaderBar : Gtk.HeaderBar {
     }
 
     private void check_repeat_button () {
-        var repeat_mode = Application.settings.get_enum ("repeat-mode");
+        var repeat_mode = Byte.settings.get_enum ("repeat-mode");
 
         if (repeat_mode == 0) {
             repeat_button.image = icon_repeat_off;

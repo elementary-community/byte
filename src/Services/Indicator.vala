@@ -13,7 +13,7 @@ public class Services.Indicator : GLib.Object {
             warning ("Could not initialize MPRIS session.\n");
         }
 
-        Application.instance.main_window.destroy.connect (() => {
+        Byte.instance.main_window.destroy.connect (() => {
             conn.unregister_object (root_id);
             conn.unregister_object (player_id);
             Bus.unown_name (owner_id);
@@ -43,10 +43,10 @@ public class Services.Indicator : GLib.Object {
 
 [DBus(name = "org.mpris.MediaPlayer2")]
 public class SoundIndicatorRoot : GLib.Object {
-    Application app;
+    Byte app;
 
     construct {
-        app = Application.instance;
+        app = Byte.instance;
     }
 
     public string DesktopEntry {
@@ -59,13 +59,13 @@ public class SoundIndicatorRoot : GLib.Object {
 [DBus(name = "org.mpris.MediaPlayer2.Player")]
 public class SoundIndicatorPlayer : GLib.Object {
     DBusConnection connection;
-    Application app;
+    Byte app;
     
     public SoundIndicatorPlayer (DBusConnection conn) {
-        app = Application.instance;
+        app = Byte.instance;
         connection = conn;
         
-        Application.player.state_changed.connect_after (player_state_changed);
+        Byte.player.state_changed.connect_after (player_state_changed);
     }
 
     private static string[] get_simple_string_array (string text) {
@@ -106,15 +106,15 @@ public class SoundIndicatorPlayer : GLib.Object {
     public bool CanPause { get { return true; } }
 
     public void PlayPause () throws Error {
-        Application.player.toggle_playing ();
+        Byte.player.toggle_playing ();
     }
 
     public void Next () throws Error {
-        Application.player.next ();
+        Byte.player.next ();
     }
 
     public void Previous() throws Error {
-        Application.player.prev ();
+        Byte.player.prev ();
     }
 
     private void player_state_changed (Gst.State state) {
@@ -123,10 +123,12 @@ public class SoundIndicatorPlayer : GLib.Object {
             case Gst.State.PLAYING:
                 property = "Playing";
                 var metadata = new HashTable<string, Variant> (null, null);
-                if (Application.player.current_track != null) {
-                    metadata.insert("mpris:artUrl", "file://" + Application.player.current_track.cover);
-                    metadata.insert("xesam:title", Application.player.current_track.title);
-                    metadata.insert("xesam:artist", get_simple_string_array (Application.player.current_track.artist));
+                if (Byte.player.current_track != null) {
+                    /*
+                    metadata.insert("mpris:artUrl", "file://" + Byte.player.current_track.cover);
+                    metadata.insert("xesam:title", Byte.player.current_track.title);
+                    metadata.insert("xesam:artist", get_simple_string_array (Byte.player.current_track.artist));
+                    */
                 }
 
                 send_properties ("Metadata", metadata);

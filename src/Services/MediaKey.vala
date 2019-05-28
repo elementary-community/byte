@@ -21,7 +21,7 @@ public class Services.MediaKey : GLib.Object {
         if (media_keys != null) {
             media_keys.MediaPlayerKeyPressed.connect (pressed_key);
             try {
-                media_keys.GrabMediaPlayerKeys (Application.instance.application_id, (uint32)0);
+                media_keys.GrabMediaPlayerKeys (Byte.instance.application_id, (uint32) 0);
             }
             catch (Error err) {
                 warning ("Could not grab media player keys: %s", err.message);
@@ -30,15 +30,19 @@ public class Services.MediaKey : GLib.Object {
     }
 
     private void pressed_key (dynamic Object bus, string application, string key) {
-        if (application == (Application.instance.application_id)) {
+        if (application == (Byte.instance.application_id)) {
             if (key == "Previous") {
-                Application.player.prev ();
+                print ("Previous \n");
+                Byte.player.prev ();
             } else if (key == "Play") {
-                Application.player.toggle_playing ();
+                print ("Play \n");
+                Byte.player.toggle_playing ();
             } else if (key == "Next") {
-                Application.player.next ();
+                print ("Next \n");
+                Byte.player.next ();
             } else if (key == "Pause") {
-                Application.player.pause ();
+                print ("Pause \n");
+                Byte.player.pause ();
             }
         }
     }

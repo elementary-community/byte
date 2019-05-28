@@ -1,8 +1,12 @@
 public class Services.TagManager : GLib.Object {
+    public signal void discovered_new_item (Objects.Artist artist, Objects.Album album, Objects.Track track);
+    public signal void discover_started ();
+    public signal void discover_finished ();
+    
     private Gst.PbUtils.Discoverer discoverer;
-
-    public TagManager () {}
-
+    public int discover_counter { get; private set; default = 0; }
+    string unknown = _("Unknown");
+     
     construct {
         try {
             discoverer = new Gst.PbUtils.Discoverer ((Gst.ClockTime) (5 * Gst.SECOND));
@@ -25,69 +29,83 @@ public class Services.TagManager : GLib.Object {
                 var tags = info.get_tags ();
 
                 if (tags != null) {
-                    uint64 _duration = info.get_duration ();
-                    string _title;
-                    string _genre;
-                    string _album;
-                    string _artist;
-                    string _lyrics;
-                    Gst.DateTime? _datetime;
-                    Date? _date;
+                    uint64 duration = info.get_duration ();
+                    string o;
+                    GLib.Date? d; 
+                    Gst.DateTime? dt;
+                    uint u;
+                    uint64 u64 = 0;
 
                     // TRACK OBJECT
                     var track = new Objects.Track ();
+                    track.duration = duration;
                     track.path = uri;
 
-                    if (tags.get_string (Gst.Tags.TITLE, out _title)) {
-                        track.title = _title;
+                    if (tags.get_string (Gst.Tags.TITLE, out o)) {
+                        track.title = o;
                     }
 
                     if (track.title.strip () == "") {
                         track.title = Path.get_basename (uri);
                     }
-
-                    if (tags.get_string (Gst.Tags.GENRE, out _genre)) {
-                        track.genre = _genre;
+                    
+                    if (tags.get_uint (Gst.Tags.TRACK_NUMBER, out u)) {
+                        track.track = (int)u;
+                    }
+                    
+                    if (tags.get_uint (Gst.Tags.ALBUM_VOLUME_NUMBER, out u)) {
+                        track.disc = (int)u;
+                    }
+                    
+                    // ALBUM OBJECT
+                    var album = new Objects.Album ();
+                    if (tags.get_string (Gst.Tags.ALBUM, out o)) {
+                        album.title = o;
                     }
 
-                    if (_duration == 0) {
-                        if (!tags.get_uint64 (Gst.Tags.DURATION, out _duration)) {
-                            _duration = 0;
+                    if (album.title.strip () == "") {
+                        var dir = Path.get_dirname (uri);
+                        if (dir != null) {
+                            album.title = Path.get_basename (dir);
+                        } else {
+                            album.title = unknown;
                         }
                     }
 
-                    if (tags.get_string (Gst.Tags.ALBUM, out _album)) {
-                        track.album = _album;
-                    }
-
-                    if (tags.get_string (Gst.Tags.ALBUM_ARTIST, out _artist)) {
-                        track.artist = _artist;
-                    } else if (tags.get_string (Gst.Tags.ARTIST, out _artist)) {
-                        track.artist = _artist;
-                    }
-
-                    if (tags.get_string (Gst.Tags.LYRICS, out _lyrics)) {
-                        track.lyrics = _lyrics;
-                    }
-
-                    if (tags.get_date_time (Gst.Tags.DATE_TIME, out _datetime)) {
-                        if (_datetime != null) {
-                            track.year = _datetime.get_year ();
-                        } else {
-                            if (tags.get_date (Gst.Tags.DATE, out _date)) {
-                                // Don't let the assumption that @date is non-null deceive you.
-                                // This is sometimes null even though get_date() returned true!
-                                if (_date != null) {
-                                    track.year = _date.get_year ();
-                                }
+                    if (tags.get_date_time (Gst.Tags.DATE_TIME, out dt)) {
+                        if (dt != null) {
+                            album.year = dt.get_year ();
+                        } else if (tags.get_date (Gst.Tags.DATE, out d)) {
+                            if (d != null) {
+                                album.year = dt.get_year ();
                             }
                         }
                     }
 
-                    track.duration = _duration;
+                    // ARTIST OBJECT
+                    var artist = new Objects.Artist ();
+                    if (tags.get_string (Gst.Tags.ALBUM_ARTIST, out o)) {
+                        artist.name = o;
+                    } else if (tags.get_string (Gst.Tags.ARTIST, out o)) {
+                        artist.name = o;
+                    }
 
-                    Application.database.add_track (track);
+                    if (artist.name.strip () == "") {
+                        var dir = Path.get_dirname (Path.get_dirname (uri));
+                        if (dir != null) {
+                            artist.name = Path.get_basename (dir);
+                        } else {
+                            artist.name = unknown;
+                        }
+                    }
+
+                    discovered_new_item (artist, album, track);
                 }
+            } 
+
+            discover_counter--;
+            if (discover_counter == 0) {
+                discover_finished ();
             }
 
             info.dispose ();
@@ -96,6 +114,11 @@ public class Services.TagManager : GLib.Object {
     }
 
     public void add_discover_uri (string uri) {
+        if (discover_counter == 0) {
+            discover_started ();
+        }
+        discover_counter++;
+
         discoverer.discover_uri_async (uri);
     }
 }
