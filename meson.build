@@ -39,15 +39,19 @@ executable(
     'src/Services/Scan.vala',
     'src/Services/Notification.vala',
 
+    'src/Widgets/Welcome.vala',
     'src/Widgets/HeaderBar.vala',
     'src/Widgets/TrackRow.vala',
+    'src/Widgets/AlbumRow.vala',
+    'src/Widgets/AlbumChild.vala',
     'src/Widgets/ModelButton.vala',
-
+    'src/Widgets/MediaControl.vala',
+    
     'src/Widgets/Popovers/Menu.vala',
 
-    'src/Views/Welcome.vala',
-    'src/Views/Main.vala',
-
+    'src/Views/Home.vala',
+    'src/Views/Albums.vala',
+    
     'src/Objects/Track.vala',
     'src/Objects/Album.vala',
     'src/Objects/Artist.vala',

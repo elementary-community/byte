@@ -2,6 +2,8 @@
 A music player without the library management. Just toss in your music to the playlist from your meticulously managed music folder.
 
 ![Byte Screenshot](https://github.com/alainm23/byte/raw/master/data/screenshot/screenshot-01.png)
+![Byte Screenshot](https://github.com/alainm23/byte/raw/master/data/screenshot/screenshot-02.png)
+![Byte Screenshot](https://github.com/alainm23/byte/raw/master/data/screenshot/screenshot-03.png)
 
 ## Building and Installation
 

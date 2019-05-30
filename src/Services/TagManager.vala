@@ -82,6 +82,10 @@ public class Services.TagManager : GLib.Object {
                         }
                     }
 
+                    if (tags.get_string (Gst.Tags.GENRE, out o)) {
+                        album.genre = o;
+                    }
+
                     // ARTIST OBJECT
                     var artist = new Objects.Artist ();
                     if (tags.get_string (Gst.Tags.ALBUM_ARTIST, out o)) {

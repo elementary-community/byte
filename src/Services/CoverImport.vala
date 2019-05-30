@@ -12,17 +12,14 @@ public class Services.CoverImport : GLib.Object {
 
     public void import (Objects.Track track) {
         try {
-            string cover_path = GLib.Path.build_filename (Byte.utils.COVER_FOLDER, 
-                ("album-%i.jpg").printf (track.album_id));
-
             var info = discoverer.discover_uri (track.path);
-            read_info (info, cover_path);
+            read_info (info, track.album_id);
         } catch (Error err) {
             critical ("Error while importing .. ");
         }
     }
 
-    private void read_info (Gst.PbUtils.DiscovererInfo info, string cover_path) {
+    private void read_info (Gst.PbUtils.DiscovererInfo info, int album_id) {
         string uri = info.get_uri ();
         bool gstreamer_discovery_successful = false;
         switch (info.get_result ()) {
@@ -73,7 +70,7 @@ public class Services.CoverImport : GLib.Object {
                     if (buffer != null) {
                         pixbuf = get_pixbuf_from_buffer (buffer);
                         if (pixbuf != null) {
-                            save_cover_pixbuf (pixbuf, cover_path);
+                            save_cover_pixbuf (pixbuf, album_id);
                         }
                     }
 
@@ -129,11 +126,16 @@ public class Services.CoverImport : GLib.Object {
         return pix;
     }
 
-    private void save_cover_pixbuf (Gdk.Pixbuf p, string cover_path) {
+    private void save_cover_pixbuf (Gdk.Pixbuf p, int album_id) {
         Gdk.Pixbuf ? pixbuf = align_and_scale_pixbuf (p, 128);
 
         try {
-            pixbuf.save (cover_path, "jpeg", "quality", "100");
+            string cover_path = GLib.Path.build_filename (Byte.utils.COVER_FOLDER, 
+                ("album-%i.jpg").printf (album_id));
+
+            if (pixbuf.save (cover_path, "jpeg", "quality", "100")) {
+                Byte.database.updated_album_cover (album_id);
+            }
         } catch (Error err) {
             warning (err.message);
         }

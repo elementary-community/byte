@@ -3,9 +3,9 @@ public class Services.Database : GLib.Object {
     private string db_path;
 
     public signal void adden_new_track (Objects.Track track);
-
     public signal void added_new_artist (Objects.Artist artist);
     public signal void added_new_album (Objects.Album album);
+    public signal void updated_album_cover (int album_id);
     public Database (bool skip_tables = false) {
         int rc = 0;
         db_path = Environment.get_home_dir () + "/.local/share/com.github.alainm23.byte/database.db";
@@ -246,8 +246,9 @@ public class Services.Database : GLib.Object {
             }
 
             album.id = get_id_if_album_exists (album);
-            added_new_album (album);
+            stdout.printf ("Album ID: %d - %s\n", album.id, album.title);
 
+            added_new_album (album);
             return album.id;
         } else {
             return id;
@@ -312,6 +313,37 @@ public class Services.Database : GLib.Object {
         }
 
         stmt.reset ();
+    }
+
+    public Gee.ArrayList<Objects.Album?> get_all_albums () {
+        Sqlite.Statement stmt;
+        string sql;
+        int res;
+
+        sql = """
+            SELECT albums.id, albums.artist_id, albums.year, albums.title, albums.genre, artists.name from albums
+            INNER JOIN artists ON artists.id = albums.artist_id ORDER BY albums.title;
+        """;
+
+        res = db.prepare_v2 (sql, -1, out stmt);
+        assert (res == Sqlite.OK);
+
+        var all = new Gee.ArrayList<Objects.Album?> ();
+
+        while ((res = stmt.step()) == Sqlite.ROW) {
+            var album = new Objects.Album ();
+
+            album.id = stmt.column_int (0);
+            album.artist_id = stmt.column_int (1);
+            album.year = stmt.column_int (2);
+            album.title = stmt.column_text (3);
+            album.genre = stmt.column_text (4);
+            album.artist_name = stmt.column_text (5);
+            
+            all.add (album);
+        }
+
+        return all;
     }
 
     public Gee.ArrayList<Objects.Track?> get_all_tracks () {

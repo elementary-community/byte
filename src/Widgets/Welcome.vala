@@ -1,4 +1,4 @@
-public class Views.Welcome : Gtk.EventBox {
+public class Widgets.Welcome : Gtk.EventBox {
     private Granite.Widgets.Welcome welcome;
 
     public signal void selected (int index);

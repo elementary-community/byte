@@ -98,7 +98,12 @@ public class Services.Scan : GLib.Object {
     public void discovered_new_local_item (Objects.Artist artist, Objects.Album album, Objects.Track track) {
         new Thread<void*> ("discovered_new_local_item", () => {
             album.artist_id = Byte.database.insert_artist_if_not_exists (artist);
+            album.artist_name = artist.name;
+
             track.album_id = Byte.database.insert_album_if_not_exists (album);
+            track.artist_name = artist.name;
+            track.album_title = album.title;
+
             Byte.database.insert_track (track);
             return null;
         });
