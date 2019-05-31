@@ -46,6 +46,7 @@ executable(
     'src/Widgets/AlbumChild.vala',
     'src/Widgets/ModelButton.vala',
     'src/Widgets/MediaControl.vala',
+    'src/Widgets/Cover.vala',
     
     'src/Widgets/Popovers/Menu.vala',
 

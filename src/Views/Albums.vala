@@ -1,9 +1,10 @@
 public class Views.Albums : Gtk.EventBox {
-    private Gtk.ListBox listbox;
     private Gtk.FlowBox flowbox;
-
     public signal void go_back ();
-    public Albums () {}
+
+    public Albums () {
+        add_events (Gdk.EventMask.ENTER_NOTIFY_MASK | Gdk.EventMask.LEAVE_NOTIFY_MASK);
+    }
 
     construct {
         var back_button = new Gtk.Button.with_label (_("Back"));
@@ -15,38 +16,44 @@ public class Views.Albums : Gtk.EventBox {
         title_label.valign = Gtk.Align.CENTER;
         title_label.get_style_context ().add_class ("h3");
 
-        var search_button = new Gtk.Button.from_icon_name ("edit-find-symbolic", Gtk.IconSize.MENU);
-        search_button.margin = 6;
-        search_button.get_style_context ().add_class (Gtk.STYLE_CLASS_FLAT);
-
         var search_entry = new Gtk.SearchEntry ();
         search_entry.valign = Gtk.Align.CENTER;
         search_entry.width_request = 250;
         search_entry.get_style_context ().add_class ("search-entry");
         search_entry.get_style_context ().add_class (Gtk.STYLE_CLASS_FLAT);
         search_entry.placeholder_text = _("Your library");
-        search_entry.no_show_all = true;
-        search_entry.visible = false;
 
-        var center_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 0);
-        center_box.pack_start (title_label, false, false, 0);
-        center_box.pack_start (search_entry, true, true, 0);
+        var center_stack = new Gtk.Stack ();
+        center_stack.hexpand = true;
+        center_stack.transition_type = Gtk.StackTransitionType.CROSSFADE;
+
+        center_stack.add_named (title_label, "title_label");
+        center_stack.add_named (search_entry, "search_entry");
+        
+        center_stack.visible_child_name = "title_label";
+
+        var search_button = new Gtk.Button.from_icon_name ("edit-find-symbolic", Gtk.IconSize.MENU);
+        search_button.margin = 6;
+        search_button.get_style_context ().add_class (Gtk.STYLE_CLASS_FLAT);
 
         var header_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 0);
         header_box.pack_start (back_button, false, false, 0);
-        header_box.set_center_widget (center_box);
+        header_box.set_center_widget (center_stack);
         header_box.pack_end (search_button, false, false, 0);
-
-        listbox = new Gtk.ListBox ();
-        listbox.expand = true;
 
         flowbox = new Gtk.FlowBox ();
         flowbox.margin = 6;
         flowbox.row_spacing = 6;
         flowbox.homogeneous = true;
-
-        flowbox.min_children_per_line = 3;
+        flowbox.min_children_per_line = 2;
         flowbox.expand = true;
+        flowbox.valign = Gtk.Align.START;
+
+        flowbox.set_filter_func ((child) => {
+            var item = child as Widgets.AlbumChild;
+            return search_entry.text.down () in item.album.title.down () ||
+                search_entry.text.down () in item.album.artist_name.down ();
+        });
 
         var scrolled = new Gtk.ScrolledWindow (null, null);
         scrolled.hscrollbar_policy = Gtk.PolicyType.NEVER;
@@ -60,7 +67,6 @@ public class Views.Albums : Gtk.EventBox {
         main_box.expand = true;
         main_box.pack_start (header_box, false, false, 0);
         main_box.pack_start (new Gtk.Separator (Gtk.Orientation.HORIZONTAL), false, false, 0);
-        //main_box.pack_start (search_entry, false, false, 0);
         main_box.pack_start (scrolled, true, true, 0);
         
         add (main_box);
@@ -70,29 +76,60 @@ public class Views.Albums : Gtk.EventBox {
             go_back ();
         });
 
-        Byte.database.added_new_album.connect ((album) => {
-            var child = new Widgets.AlbumChild (album);
-            flowbox.add (child);
-
-            flowbox.show_all ();
-        });
-
         search_button.clicked.connect (() => {
-            if (title_label.visible) {
-                title_label.no_show_all = true;
-                title_label.visible = false;
-
-                search_entry.no_show_all = false;
-                search_entry.visible = true;
-
+            if (center_stack.visible_child_name == "title_label") {
+                center_stack.visible_child_name = "search_entry";
                 search_entry.grab_focus ();
             } else {
-                title_label.no_show_all = false;
-                title_label.visible = true;
-
-                search_entry.no_show_all = true;
-                search_entry.visible = false;
+                center_stack.visible_child_name = "title_label";
             }
+        });
+
+        Byte.database.added_new_album.connect ((album) => {
+            if (album.id != 0) {
+                var child = new Widgets.AlbumChild (album);
+                flowbox.add (child);
+
+                flowbox.show_all ();
+            }
+        });
+
+        search_entry.search_changed.connect (() => {
+            flowbox.invalidate_filter ();
+        });
+
+        search_entry.key_release_event.connect ((key) => {
+            if (key.keyval == 65307) {
+                center_stack.visible_child_name = "title_label";
+            }
+
+            return false;
+        });
+
+        search_entry.focus_out_event.connect (() => {
+            center_stack.visible_child_name = "title_label";
+            return false;
+        });
+        
+        this.enter_notify_event.connect ((event) => {
+            var select_cursor = new Gdk.Cursor.for_display (Gdk.Display.get_default (), Gdk.CursorType.HAND2);
+            var window = Gdk.Screen.get_default ().get_root_window ();
+
+            window.cursor = select_cursor;
+            return false;
+        });
+
+        this.leave_notify_event.connect ((event) => {
+            if (event.detail == Gdk.NotifyType.INFERIOR) {
+                return false;
+            }
+
+            var select_cursor = new Gdk.Cursor.for_display (Gdk.Display.get_default (), Gdk.CursorType.ARROW);
+            var window = Gdk.Screen.get_default ().get_root_window ();
+
+            window.cursor = select_cursor;
+
+            return false;
         });
     }
 

@@ -17,7 +17,7 @@ install_data(
 )
 
 install_data(
-    join_paths('resources', 'default-cover.svg'),
+    join_paths('resources', 'album-default-cover.svg'),
     install_dir: join_paths(get_option('datadir'), 'com.github.alainm23.byte')
 )
 
