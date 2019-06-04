@@ -5,9 +5,6 @@ public class Services.Scan : GLib.Object {
     uint finish_timer = 0;
     construct {
         Byte.tg_manager.discovered_new_item.connect (discovered_new_local_item);
-        Byte.tg_manager.discover_finished.connect (() => {
-            sync_finished ();
-        });
     }
 
     public void scan_local_files (string uri) {

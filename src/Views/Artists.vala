@@ -1,11 +1,11 @@
-public class Views.Albums : Gtk.EventBox {
+public class Views.Artists : Gtk.EventBox {
     private Gtk.ListBox listbox;
     public signal void go_back ();
-    public signal void go_album (int id);
 
     private bool is_initialized = false;
+    
+    public Artists () {
 
-    public Albums () {
     }
 
     construct {
@@ -16,7 +16,7 @@ public class Views.Albums : Gtk.EventBox {
         back_button.margin = 6;
         back_button.get_style_context ().add_class (Granite.STYLE_CLASS_BACK_BUTTON);
 
-        var title_label = new Gtk.Label ("<b>%s</b>".printf (_("Albums")));
+        var title_label = new Gtk.Label ("<b>%s</b>".printf (_("Artists")));
         title_label.use_markup = true;
         title_label.valign = Gtk.Align.CENTER;
         title_label.get_style_context ().add_class ("h3");
@@ -47,13 +47,7 @@ public class Views.Albums : Gtk.EventBox {
         header_box.pack_end (search_button, false, false, 0);
 
         listbox = new Gtk.ListBox ();
-        listbox.vexpand = true;
-
-        listbox.set_filter_func ((child) => {
-            var item = child as Widgets.AlbumRow;
-            return search_entry.text.down () in item.album.title.down () ||
-                search_entry.text.down () in item.album.artist_name.down ();
-        });
+        listbox.expand = true;
 
         var scrolled = new Gtk.ScrolledWindow (null, null);
         scrolled.hscrollbar_policy = Gtk.PolicyType.NEVER;
@@ -72,76 +66,43 @@ public class Views.Albums : Gtk.EventBox {
             go_back ();
         });
 
-        search_button.clicked.connect (() => {
-            if (center_stack.visible_child_name == "title_label") {
-                center_stack.visible_child_name = "search_entry";
-                search_entry.grab_focus ();
-            } else {
-                center_stack.visible_child_name = "title_label";
-            }
-        });
-
-        search_entry.search_changed.connect (() => {
-            listbox.invalidate_filter ();
-        });
-
-        search_entry.key_release_event.connect ((key) => {
-            if (key.keyval == 65307) {
-                center_stack.visible_child_name = "title_label";
-            }
-
-            return false;
-        });
-
-        search_entry.focus_out_event.connect (() => {
-            center_stack.visible_child_name = "title_label";
-            return false;
-        });
-
-        listbox.row_activated.connect ((row) => {
-            var item = row as Widgets.AlbumRow;
-            go_album (item.album.id);
-        });
-
-        Byte.database.added_new_album.connect ((album) => {
+        Byte.database.added_new_artist.connect ((track) => {
             Idle.add (() => {
-                add_album (album);
+                add_artist (track);
 
                 return false;
             });
         });
     }
 
-    private void add_album (Objects.Album album) {
-        if (album.id != 0) {
-            var row = new Widgets.AlbumRow (album);
-            listbox.add (row);
-            listbox.show_all ();
-        }
+    private void add_artist (Objects.Artist artist) {
+        var row = new Widgets.ArtistRow (artist);
+        listbox.add (row);
+        
+        listbox.show_all ();
     }
 
-    public void get_all_albums () {
-        Timeout.add (120, () => {
-            if (is_initialized == false) {
-                new Thread<void*> ("get_all_albums", () => {
-                    var all_albums = new Gee.ArrayList<Objects.Album?> ();
-                    all_albums = Byte.database.get_all_albums ();
+    public void get_all_artists () {
+        if (is_initialized == false) {
+            Timeout.add (120, () => {
+                new Thread<void*> ("get_all_artists", () => {
+                    var all_artists = new Gee.ArrayList<Objects.Artist?> ();
+                    all_artists = Byte.database.get_all_artists ();
         
-                    foreach (var item in all_albums) {
+                    foreach (var item in all_artists) {
                         Idle.add (() => {
-                            add_album (item);
-            
+                            add_artist (item);
+        
                             return false;
-                        });
+                        });    
                     }
-
-                    print ("Termino\n");
+        
                     is_initialized = true;
                     return null;
-                }); 
-            }
+                });
 
-            return false;
-        });
+                return false;
+            });
+        }
     }
 }

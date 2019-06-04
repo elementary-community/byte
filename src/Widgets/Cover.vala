@@ -1,5 +1,5 @@
 public class Widgets.Cover : Gtk.EventBox {
-    private string DEFAULT_ICON;
+    private string DEFAULT_ICON = "/usr/share/com.github.alainm23.byte/track-default-cover.svg";
     private const int EXTRA_MARGIN = 4;
     private bool draw_theme_background = true;
 
@@ -27,6 +27,29 @@ public class Widgets.Cover : Gtk.EventBox {
         orig_type = type;
     }
 
+    public Cover.from_url_async (string uri, int pixel_size, bool preserve_aspect_ratio, string type, Cancellable? cancellable = null) {
+        set_default (type);
+
+        var file = GLib.File.new_for_uri (uri);
+        set_size_request (pixel_size, pixel_size);
+
+        set_from_file_async (file, pixel_size, preserve_aspect_ratio);
+
+        orig_filename = uri;
+        orig_pixel_size = pixel_size;
+        orig_type = type;
+    }
+
+    private async void set_from_file_async (GLib.File file, int pixel_size, bool preserve_aspect_ratio, Cancellable? cancellable = null)  throws Error {
+        try {
+            var stream = yield file.read_async ();
+            pixbuf = yield new Gdk.Pixbuf.from_stream_at_scale_async (stream, pixel_size * get_scale_factor (), pixel_size * get_scale_factor (), preserve_aspect_ratio, cancellable);
+        } catch (Error e) {
+            show_default (pixel_size);
+            throw e;
+        }
+    }
+
     private void load_image (string filepath, int pixel_size) {
         try {
             var size = pixel_size * get_scale_factor ();
@@ -37,6 +60,8 @@ public class Widgets.Cover : Gtk.EventBox {
     }
 
     public Cover.with_default_icon (int pixel_size) {
+        get_style_context ().add_class ("album-cover");
+        
         show_default (pixel_size);
         orig_pixel_size = pixel_size;
     }
@@ -82,10 +107,11 @@ public class Widgets.Cover : Gtk.EventBox {
             DEFAULT_ICON = "/usr/share/com.github.alainm23.byte/album-default-cover.svg";
             get_style_context ().add_class ("album-cover");
         } else if (type == "artist") {
-            DEFAULT_ICON = "";
+            DEFAULT_ICON = "/usr/share/com.github.alainm23.byte/artist-default-cover.svg";
             get_style_context ().add_class ("artist-cover");
         } else {
-            DEFAULT_ICON = "";
+            DEFAULT_ICON = "/usr/share/com.github.alainm23.byte/track-default-cover.svg";
+            get_style_context ().add_class ("album-cover");
         }
     }
 

@@ -19,9 +19,7 @@
 }
 
 .track-row:selected {
-    background-color: @colorPrimary;
-    text-shadow: none;
-    -gtk-icon-shadow: none;
+    background-color: shade (@colorPrimary, 0.95);
     color: @color_text;
 }
 
@@ -69,7 +67,7 @@
 }
 
 .album-cover {
-    border-radius: 6px;
+    border-radius: 3px;
     border: 1px solid alpha (#000, 0.35);
     box-shadow:
         inset 0 0 0 1px alpha (#fff, 0.05),
@@ -86,7 +84,7 @@
         inset 0 0 0 1px alpha (#fff, 0.05),
         inset 0 1px 0 0 alpha (#fff, 0.45),
         inset 0 -1px 0 0 alpha (#fff, 0.15),
-        0 1px 3px alpha (#000, 0.12),
+        0 1px 3px alpha (#fff, 0.12),
         0 1px 2px alpha (#000, 0.24);
 }
 
@@ -97,4 +95,117 @@
 .album-child:focus {
     background-color: transparent;
     color: @text_color;
+}
+
+.quick-find {
+    border-radius: 6px;
+    border: 1px solid alpha (#000, 0.3);
+    background-color: @base_color;
+    box-shadow:
+        inset 0 0 0 1px alpha (#fff, 0.05),
+        inset 0 1px 0 0 alpha (#fff, 0.45),
+        inset 0 -1px 0 0 alpha (#fff, 0.15),
+        0 1px 3px alpha (#fff, 0.12),
+        0 1px 2px alpha (#000, 0.24);
+    margin: 12px;
+    text-shadow: none;
+}
+
+.quick-find-entry:focus {
+    border-color: alpha (@colorPrimary, 0.8);
+}
+
+.quick-find-entry {
+    border-color: alpha (@colorPrimary, 0.8);
+    box-shadow: none;
+    background-image: none;
+    background: #F6F8FB;
+    border-radius: 4px;
+    color: @colorPrimary;
+}
+
+.quick-find-entry image.left {
+    color: @colorPrimary;
+}
+
+.quick-find-entry image.right {
+    color: @colorPrimary;
+}
+
+selection {
+    background-color: alpha (@colorPrimary, 0.75);
+    color: @selected_fg_color;
+    text-shadow: none;
+}
+
+.quick-find-cancel {
+    color: @colorPrimary;
+    font-weight: bold;
+}
+
+.queue {
+    border-radius: 4px;
+    border: 1px solid alpha (#000, 0.3);
+    background-color: @base_color;
+    box-shadow:
+        inset 0 0 0 1px alpha (#fff, 0.05),
+        inset 0 1px 0 0 alpha (#fff, 0.45),
+        inset 0 -1px 0 0 alpha (#fff, 0.15),
+        0 1px 3px alpha (#fff, 0.12),
+        0 1px 2px alpha (#000, 0.24);
+    text-shadow: none;
+}
+
+.font-album-artist {
+    font-weight: 600;
+    color: @colorPrimary;
+}
+
+.shuffle-button {
+    background-color: @colorPrimary;
+    border: 1px solid darker(@colorPrimary);
+    transition: all 200ms ease-in-out;
+    padding: 1px 0px 1px 0px;
+    color: #ffffff;
+    border-radius: 6px;
+}
+
+.home-button {
+    background-color: #F6F8FB;
+    border: 1px solid @menu_separator;
+    border-radius: 6px;
+    color: @colorPrimary;
+    font-weight: 600;
+}
+
+.media-control {
+    background-color: #F6F8FB;
+}
+
+.quick-find-modebutton button {
+    border: 1px solid @colorPrimary;
+    color: @colorPrimary;
+    background-image: none;
+}
+
+.quick-find-modebutton button:checked {
+    background-color: @colorPrimary;
+    color: #ffffff;
+}
+
+.quick-find-modebutton button:first-child {
+    border-left: 1px solid @colorPrimary;
+    border-top: 1px solid @colorPrimary;
+    border-bottom: 1px solid @colorPrimary;
+    border-right: none;
+    border-radius: 4px 0px 0px 4px;
+}
+
+
+.quick-find-modebutton button:last-child {
+    border-left: none;
+    border-top: 1px solid @colorPrimary;
+    border-bottom: 1px solid @colorPrimary;
+    border-right: 1px solid @colorPrimary;
+    border-radius: 0px 4px 4px 0px;
 }

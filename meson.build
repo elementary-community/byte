@@ -42,16 +42,23 @@ executable(
     'src/Widgets/Welcome.vala',
     'src/Widgets/HeaderBar.vala',
     'src/Widgets/TrackRow.vala',
+    'src/Widgets/ArtistRow.vala',
     'src/Widgets/AlbumRow.vala',
     'src/Widgets/AlbumChild.vala',
     'src/Widgets/ModelButton.vala',
     'src/Widgets/MediaControl.vala',
     'src/Widgets/Cover.vala',
+    'src/Widgets/QuickFind.vala',
+    'src/Widgets/Queue.vala',
+    'src/Widgets/HomeButton.vala',
     
     'src/Widgets/Popovers/Menu.vala',
 
     'src/Views/Home.vala',
     'src/Views/Albums.vala',
+    'src/Views/Album.vala',
+    'src/Views/Tracks.vala',
+    'src/Views/Artists.vala',
     
     'src/Objects/Track.vala',
     'src/Objects/Album.vala',

@@ -14,6 +14,8 @@ public class Widgets.MediaControl : Gtk.EventBox {
     }
     
     construct {
+        get_style_context ().add_class ("media-control");
+
         icon_favorite = new Gtk.Image.from_icon_name ("emblem-favorite-symbolic", Gtk.IconSize.MENU);
         icon_no_favorite = new Gtk.Image.from_icon_name ("face-heart-symbolic", Gtk.IconSize.MENU);
 

@@ -5,6 +5,13 @@ public class MainWindow : Gtk.Window {
     private Widgets.Welcome welcome_view;
     private Views.Home home_view;
     private Views.Albums albums_view;
+    private Views.Tracks tracks_view;
+    private Views.Artists artists_view;
+
+    private Views.Album album_view;
+
+    private Widgets.QuickFind quick_find;
+    private Widgets.Queue queue;
 
     private Gtk.Stack main_stack;
     private Gtk.Stack library_stack;
@@ -12,7 +19,9 @@ public class MainWindow : Gtk.Window {
         Object (
             application: application,
             icon_name: "com.github.alainm23.byte",
-            title: "Byte"
+            title: "Byte",
+            height_request: 769,
+            width_request: 562
         );
     }
 
@@ -20,6 +29,7 @@ public class MainWindow : Gtk.Window {
         get_style_context ().add_class ("rounded");
 
         headerbar = new Widgets.HeaderBar ();
+
         set_titlebar (headerbar);
 
         // Media control
@@ -32,9 +42,16 @@ public class MainWindow : Gtk.Window {
 
         home_view = new Views.Home ();
         albums_view = new Views.Albums ();
+        tracks_view = new Views.Tracks ();
+        artists_view = new Views.Artists ();
+
+        //album_view = new Views.Album ();
 
         library_stack.add_named (home_view, "home_view");
         library_stack.add_named (albums_view, "albums_view");
+        library_stack.add_named (tracks_view, "tracks_view");
+        library_stack.add_named (artists_view, "artists_view");
+        //library_stack.add_named (album_view, "album_view");
 
         var library_view = new Gtk.Box (Gtk.Orientation.VERTICAL, 0);
         library_view.pack_start (media_control, false, false, 0);
@@ -51,8 +68,18 @@ public class MainWindow : Gtk.Window {
         main_stack.add_named (welcome_view, "welcome_view");
         main_stack.add_named (library_view, "library_view");
 
-        add (main_stack);
+        quick_find = new Widgets.QuickFind ();
+        queue = new Widgets.Queue ();
+        
+        var overlay = new Gtk.Overlay ();
+        overlay.add_overlay (quick_find);
+        overlay.add_overlay (queue);
+        overlay.add (main_stack); 
 
+        add (overlay);
+
+        get_all_albums_view ();
+        
         Timeout.add (200, () => {
             if (Byte.database.is_database_empty ()) {
                 main_stack.visible_child_name = "welcome_view";
@@ -60,6 +87,8 @@ public class MainWindow : Gtk.Window {
             } else {
                 main_stack.visible_child_name = "library_view";
                 headerbar.visible_ui = true;
+
+                Byte.scan_service.scan_local_files (Byte.settings.get_string ("library-location"));
             }
 
             return false;
@@ -82,11 +111,48 @@ public class MainWindow : Gtk.Window {
             library_stack.visible_child_name = "home_view";
         });
 
+        albums_view.go_album.connect ((id) => {
+            library_stack.visible_child_name = "album_view-%i".printf (id);
+        });
+
+        tracks_view.go_back.connect (() => {
+            library_stack.visible_child_name = "home_view";
+        });
+
+        artists_view.go_back.connect (() => {
+            library_stack.visible_child_name = "home_view";
+        });
+
         home_view.go_albums_view.connect (() => {
             library_stack.visible_child_name = "albums_view";
+            albums_view.get_all_albums ();
+        });
+
+        home_view.go_tracks_view.connect (() => {
+            library_stack.visible_child_name = "tracks_view";
+            tracks_view.get_all_tracks ();
+        });
+
+        home_view.go_artists_view.connect (() => {
+            library_stack.visible_child_name = "artists_view";
+            artists_view.get_all_artists ();
+        });
+
+        headerbar.show_quick_find.connect (() => {
+            quick_find.reveal = !quick_find.reveal_child;
         });
     }
- 
+    
+    public void get_all_albums_view () {
+        var all_albums = new Gee.ArrayList<Objects.Album?> ();
+        all_albums = Byte.database.get_all_albums ();
+        
+        foreach (var item in all_albums) {
+            var album_view = new Views.Album (item);
+            library_stack.add_named (album_view, "album_view-%i".printf (item.id));
+        }
+    }
+
     public void toggle_playing () {
         headerbar.toggle_playing ();
     }

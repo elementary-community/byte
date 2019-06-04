@@ -346,12 +346,49 @@ public class Services.Database : GLib.Object {
         return all;
     }
 
-    public Gee.ArrayList<Objects.Track?> get_all_tracks () {
-        /*
+    public Gee.ArrayList<Objects.Album?> get_random_albums () {
         Sqlite.Statement stmt;
+        string sql;
+        int res;
 
-        int res = db.prepare_v2 ("SELECT * FROM tracks",
-            -1, out stmt);
+        sql = """
+            SELECT albums.id, albums.artist_id, albums.year, albums.title, albums.genre, artists.name from albums
+            INNER JOIN artists ON artists.id = albums.artist_id ORDER BY RANDOM() LIMIT 4;
+        """;
+
+        res = db.prepare_v2 (sql, -1, out stmt);
+        assert (res == Sqlite.OK);
+
+        var all = new Gee.ArrayList<Objects.Album?> ();
+
+        while ((res = stmt.step()) == Sqlite.ROW) {
+            var album = new Objects.Album ();
+
+            album.id = stmt.column_int (0);
+            album.artist_id = stmt.column_int (1);
+            album.year = stmt.column_int (2);
+            album.title = stmt.column_text (3);
+            album.genre = stmt.column_text (4);
+            album.artist_name = stmt.column_text (5);
+            
+            all.add (album);
+        }
+
+        return all;
+    }
+
+    public Gee.ArrayList<Objects.Track?> get_all_tracks () {
+        Sqlite.Statement stmt;
+        string sql;
+        int res;
+
+        sql = """
+            SELECT  tracks.id, tracks.path, tracks.title, tracks.duration, tracks.album_id, albums.title, artists.name FROM tracks 
+            INNER JOIN albums ON tracks.album_id = albums.id
+            INNER JOIN artists ON albums.artist_id = artists.id ORDER BY tracks.title;
+        """;
+
+        res = db.prepare_v2 (sql, -1, out stmt);
         assert (res == Sqlite.OK);
 
         var all = new Gee.ArrayList<Objects.Track?> ();
@@ -362,19 +399,40 @@ public class Services.Database : GLib.Object {
             track.id = stmt.column_int (0);
             track.path = stmt.column_text (1);
             track.title = stmt.column_text (2);
-            track.artist = stmt.column_text (3);
-            track.genre = stmt.column_text (4);
-            track.year = stmt.column_int (5);
-            track.lyrics = stmt.column_text (6);
-            track.duration = stmt.column_int64 (7);
-            track.album = stmt.column_text (8);
-
+            track.duration = stmt.column_int64 (3);
+            track.album_id = stmt.column_int (4);
+            track.album_title = stmt.column_text (5);
+            track.artist_name = stmt.column_text (6);
+            
             all.add (track);
         }
 
         return all;
-        */
-        var all = new Gee.ArrayList<Objects.Track?> ();
+    }
+
+    public Gee.ArrayList<Objects.Artist?> get_all_artists () {
+        Sqlite.Statement stmt;
+        string sql;
+        int res;
+
+        sql = """
+            SELECT artists.id, artists.name FROM artists ORDER BY artists.name;
+        """;
+
+        res = db.prepare_v2 (sql, -1, out stmt);
+        assert (res == Sqlite.OK);
+
+        var all = new Gee.ArrayList<Objects.Artist?> ();
+
+        while ((res = stmt.step()) == Sqlite.ROW) {
+            var artist = new Objects.Artist ();
+
+            artist.id = stmt.column_int (0);
+            artist.name = stmt.column_text (1);
+            
+            all.add (artist);
+        }
+
         return all;
     }
 

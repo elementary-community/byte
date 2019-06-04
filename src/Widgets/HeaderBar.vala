@@ -17,7 +17,8 @@ public class Widgets.HeaderBar : Gtk.HeaderBar {
     private Gtk.Image icon_repeat_one;
     private Gtk.Image icon_repeat_all;
     private Gtk.Image icon_repeat_off;
-    
+
+    public signal void show_quick_find ();
     public bool visible_ui {
         set {
             main_box.visible = value;
@@ -84,6 +85,7 @@ public class Widgets.HeaderBar : Gtk.HeaderBar {
         repeat_button.can_focus = false;
 
         search_button = new Gtk.Button.from_icon_name ("edit-find-symbolic", Gtk.IconSize.MENU);
+        search_button.valign = Gtk.Align.CENTER;
         search_button.can_focus = false;
 
         main_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 6);
@@ -145,6 +147,10 @@ public class Widgets.HeaderBar : Gtk.HeaderBar {
 
         Byte.player.toggle_playing.connect (() => {
             toggle_playing ();
+        });
+
+        search_button.clicked.connect (() => {
+            show_quick_find ();
         });
     }
 
