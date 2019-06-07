@@ -43,5 +43,12 @@ public class Widgets.AlbumRow : Gtk.ListBoxRow {
         main_grid.attach (artist_label, 1, 1, 1, 1);
 
         add (main_grid);
+
+        Byte.database.updated_album_cover.connect ((album_id) => {
+            if (album_id == album.id) {
+                cover_path = GLib.Path.build_filename (Byte.utils.COVER_FOLDER, ("album-%i.jpg").printf (album_id));
+                image_cover.pixbuf = new Gdk.Pixbuf.from_file_at_size (cover_path, 48, 48);
+            }
+        });
     }
 }

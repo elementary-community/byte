@@ -5,6 +5,7 @@ public class Services.Database : GLib.Object {
     public signal void adden_new_track (Objects.Track track);
     public signal void added_new_artist (Objects.Artist artist);
     public signal void added_new_album (Objects.Album album);
+    public signal void adden_new_radio (Objects.Radio radio);
     public signal void updated_album_cover (int album_id);
     public Database (bool skip_tables = false) {
         int rc = 0;
@@ -56,12 +57,25 @@ public class Services.Database : GLib.Object {
             "album_id       INT     NOT NULL," +
             "path           TEXT    NOT NULL," +
             "title          TEXT    NOT NULL," +
+            "added_date     TEXT    NOT NULL," +
             "track          INT     NOT NULL," +
             "disc           INT     NOT NULL," +
+            "is_favorite    INT     NOT NULL," +
             "duration       INT     NOT NULL," +
             "CONSTRAINT unique_track UNIQUE (path)," +
             "FOREIGN KEY (album_id) REFERENCES albums (id) ON DELETE CASCADE)", null, null);
         debug ("Table trackS created");
+
+        rc = db.exec ("CREATE TABLE IF NOT EXISTS radios (" +
+            "id         INTEGER PRIMARY KEY AUTOINCREMENT," +
+            "name       TEXT," +
+            "url        TEXT," +
+            "homepage   TEXT," +
+            "tags       TEXT," +
+            "favicon    TEXT," +
+            "country    TEXT," +
+            "state      TEXT)", null, null);
+        debug ("Table radios created");
 
         rc = db.exec ("PRAGMA foreign_keys = ON;");
 
@@ -83,6 +97,23 @@ public class Services.Database : GLib.Object {
         }
 
         return file_exists;
+    }
+
+    public bool radio_exists (string url) {
+        bool exists = false;
+        Sqlite.Statement stmt;
+
+        int res = db.prepare_v2 ("SELECT COUNT (*) FROM radios WHERE url = ?", -1, out stmt);
+        assert (res == Sqlite.OK);
+
+        res = stmt.bind_text (1, url);
+        assert (res == Sqlite.OK);
+
+        if (stmt.step () == Sqlite.ROW) {
+            exists = stmt.column_int (0) > 0;
+        }
+
+        return exists;
     }
 
     public bool is_database_empty () {
@@ -261,8 +292,8 @@ public class Services.Database : GLib.Object {
         int res;
 
         sql = """
-            INSERT OR IGNORE INTO tracks (album_id, path, title, track, disc, duration)
-            VALUES (?, ?, ?, ?, ?, ?);
+            INSERT OR IGNORE INTO tracks (album_id, path, title, track, disc, duration, is_favorite, added_date)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?);
         """;
 
         res = db.prepare_v2 (sql, -1, out stmt);
@@ -284,6 +315,12 @@ public class Services.Database : GLib.Object {
         assert (res == Sqlite.OK);
 
         res = stmt.bind_int64 (6, (int64) track.duration);
+        assert (res == Sqlite.OK);
+
+        res = stmt.bind_int (7, track.is_favorite);
+        assert (res == Sqlite.OK);
+
+        res = stmt.bind_text (8, track.added_date);
         assert (res == Sqlite.OK);
 
         if (stmt.step () != Sqlite.DONE) {
@@ -383,7 +420,7 @@ public class Services.Database : GLib.Object {
         int res;
 
         sql = """
-            SELECT  tracks.id, tracks.path, tracks.title, tracks.duration, tracks.album_id, albums.title, artists.name FROM tracks 
+            SELECT  tracks.id, tracks.path, tracks.title, tracks.duration, tracks.is_favorite, tracks.added_date, tracks.album_id, albums.title, artists.name FROM tracks 
             INNER JOIN albums ON tracks.album_id = albums.id
             INNER JOIN artists ON albums.artist_id = artists.id ORDER BY tracks.title;
         """;
@@ -400,9 +437,58 @@ public class Services.Database : GLib.Object {
             track.path = stmt.column_text (1);
             track.title = stmt.column_text (2);
             track.duration = stmt.column_int64 (3);
-            track.album_id = stmt.column_int (4);
-            track.album_title = stmt.column_text (5);
-            track.artist_name = stmt.column_text (6);
+            track.is_favorite = stmt.column_int (4);
+            track.added_date = stmt.column_text (5);
+            track.album_id = stmt.column_int (6);
+            track.album_title = stmt.column_text (7);
+            track.artist_name = stmt.column_text (8);
+            
+            all.add (track);
+        }
+
+        return all;
+    }
+
+    public Gee.ArrayList<Objects.Track?> get_all_tracks_order_by (int item) {
+        Sqlite.Statement stmt;
+        string sql;
+        int res;
+        string order_mode = "tracks.title";
+        
+        if (item == 0) {
+            order_mode = "tracks.title";
+        } else if (item == 1) {
+            order_mode = "artists.name";
+        } else if (item == 2) {
+            order_mode = "albums.title";
+            //order_mode = "tracks.album_id";
+        } else if (item == 3) {
+            order_mode = "tracks.added_date";
+        }
+
+        sql = """
+            SELECT  tracks.id, tracks.path, tracks.title, tracks.duration, tracks.is_favorite, tracks.added_date, tracks.album_id, albums.title, artists.name FROM tracks 
+            INNER JOIN albums ON tracks.album_id = albums.id
+            INNER JOIN artists ON albums.artist_id = artists.id ORDER BY %s;
+        """.printf (order_mode);
+
+        res = db.prepare_v2 (sql, -1, out stmt);
+        assert (res == Sqlite.OK);
+
+        var all = new Gee.ArrayList<Objects.Track?> ();
+
+        while ((res = stmt.step()) == Sqlite.ROW) {
+            var track = new Objects.Track ();
+
+            track.id = stmt.column_int (0);
+            track.path = stmt.column_text (1);
+            track.title = stmt.column_text (2);
+            track.duration = stmt.column_int64 (3);
+            track.is_favorite = stmt.column_int (4);
+            track.added_date = stmt.column_text (5);
+            track.album_id = stmt.column_int (6);
+            track.album_title = stmt.column_text (7);
+            track.artist_name = stmt.column_text (8);
             
             all.add (track);
         }
@@ -453,5 +539,69 @@ public class Services.Database : GLib.Object {
         */
 
         return 0;
+    }
+
+    public void insert_radio (Objects.Radio radio) {
+        Sqlite.Statement stmt;
+        string sql;
+        int res;
+
+        sql = """
+            INSERT OR IGNORE INTO radios (name, url, homepage, tags, favicon, country, state)
+            VALUES (?, ?, ?, ?, ?, ?, ?);
+        """;
+
+        res = db.prepare_v2 (sql, -1, out stmt);
+        assert (res == Sqlite.OK);
+
+        res = stmt.bind_text (1, radio.name);
+        assert (res == Sqlite.OK);
+        
+        res = stmt.bind_text (2, radio.url);
+        assert (res == Sqlite.OK);
+
+        res = stmt.bind_text (3, radio.homepage);
+        assert (res == Sqlite.OK);
+
+        res = stmt.bind_text (4, radio.tags);
+        assert (res == Sqlite.OK);
+
+        res = stmt.bind_text (5, radio.favicon);
+        assert (res == Sqlite.OK);
+
+        res = stmt.bind_text (6, radio.country);
+        assert (res == Sqlite.OK);
+
+        res = stmt.bind_text (7, radio.state);
+        assert (res == Sqlite.OK);
+
+        if (stmt.step () != Sqlite.DONE) {
+            warning ("Error: %d: %s", db.errcode (), db.errmsg ());
+        }
+        stmt.reset ();
+
+        sql = """
+            SELECT id FROM radios WHERE url = ?;
+        """;
+
+        res = db.prepare_v2 (sql, -1, out stmt);
+        assert (res == Sqlite.OK);
+
+        res = stmt.bind_text (1, radio.url);
+        assert (res == Sqlite.OK);
+
+        if (stmt.step () == Sqlite.ROW) {
+            radio.id = stmt.column_int (0);
+            stdout.printf ("Radio ID: %d - %s\n", radio.id, radio.name);
+
+            //Byte.cover_import.import (track);
+            Byte.utils.download_image ("radio", radio.id, radio.favicon);
+
+            adden_new_radio (radio);
+        } else {
+            warning ("Error: %d: %s", db.errcode (), db.errmsg ());
+        }
+
+        stmt.reset ();
     }
 }

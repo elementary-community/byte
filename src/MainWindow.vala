@@ -78,7 +78,7 @@ public class MainWindow : Gtk.Window {
 
         add (overlay);
 
-        get_all_albums_view ();
+        //get_all_albums_view ();
         
         Timeout.add (200, () => {
             if (Byte.database.is_database_empty ()) {
@@ -88,7 +88,7 @@ public class MainWindow : Gtk.Window {
                 main_stack.visible_child_name = "library_view";
                 headerbar.visible_ui = true;
 
-                Byte.scan_service.scan_local_files (Byte.settings.get_string ("library-location"));
+                //Byte.scan_service.scan_local_files (Byte.settings.get_string ("library-location"));
             }
 
             return false;
@@ -130,7 +130,7 @@ public class MainWindow : Gtk.Window {
 
         home_view.go_tracks_view.connect (() => {
             library_stack.visible_child_name = "tracks_view";
-            tracks_view.get_all_tracks ();
+            tracks_view.add_all_tracks ();
         });
 
         home_view.go_artists_view.connect (() => {

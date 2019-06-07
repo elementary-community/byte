@@ -6,5 +6,15 @@
 
     <file alias="byte-drag-music.svg">resources/byte-drag-music.svg</file>
     <file alias="byte-folder-open.svg">resources/byte-folder-open.svg</file>
+
+    <file alias="planner-album-symbolic.svg">resources/planner-album-symbolic.svg</file>
+    <file alias="planner-artist-symbolic.svg">resources/planner-artist-symbolic.svg</file>
+    <file alias="planner-favorite-symbolic.svg">resources/planner-favorite-symbolic.svg</file>
+    <file alias="planner-no-favorite-symbolic.svg">resources/planner-no-favorite-symbolic.svg</file>
+    <file alias="planner-playlist-symbolic.svg">resources/planner-playlist-symbolic.svg</file>
+    <file alias="planner-radio-symbolic.svg">resources/planner-radio-symbolic.svg</file>
+    <file alias="planner-track-symbolic.svg">resources/planner-track-symbolic.svg</file>
+    <file alias="planner-arrow-back-symbolic.svg">resources/planner-arrow-back-symbolic.svg</file>
+    <file alias="planner-sort-symbolic.svg">resources/planner-sort-symbolic.svg</file>
   </gresource>
 </gresources>

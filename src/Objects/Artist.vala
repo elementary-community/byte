@@ -1,4 +1,4 @@
-public class Objects.Artist {
+public class Objects.Artist : GLib.Object {
     public int id;
     public string name;
 

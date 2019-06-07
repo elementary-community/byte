@@ -1,4 +1,4 @@
-public class Objects.Album {
+public class Objects.Album : GLib.Object {
     public int id;
     public int artist_id;
     public string artist_name;

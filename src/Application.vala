@@ -10,6 +10,7 @@ public class Byte : Gtk.Application {
     public static Services.MediaKey media_keys;
     public static Services.Notification notification;
     public static Services.Scan scan_service;
+    public static Services.RadioBrowser radio_browser;
     public static Utils utils;
 
     public string[] argsv;
@@ -42,6 +43,7 @@ public class Byte : Gtk.Application {
         cover_import = new Services.CoverImport ();
         notification = new Services.Notification ();
         scan_service = new Services.Scan ();
+        radio_browser = new Services.RadioBrowser ();
     }
 
     protected override void activate () {

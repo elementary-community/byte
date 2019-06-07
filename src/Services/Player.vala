@@ -9,6 +9,7 @@ public class Services.Player : GLib.Object {
     uint progress_timer = 0;
 
     public Objects.Track? current_track { get; set; }
+    public Objects.Radio? current_radio { get; private set; }
 
     Gst.Format fmt = Gst.Format.TIME;
     dynamic Gst.Element playbin;
@@ -60,6 +61,48 @@ public class Services.Player : GLib.Object {
         });
     }
     
+    public void set_radio (Objects.Radio radio) {
+        if (radio == current_radio || radio == null || radio.url == null) {
+            print ("Se salio\n");
+            return;
+        }
+
+        print ("%s\n".printf (radio.url));
+        current_radio = radio;
+        stop ();
+        playbin.uri = get_file_from_pls (radio.url);
+        playbin.set_state (Gst.State.PLAYING);
+        play ();
+    }
+
+    private string ? get_file_from_pls (string content) {
+        string group = "playlist";
+
+        var file = new KeyFile ();
+        try {
+            file.load_from_data (content, -1, KeyFileFlags.NONE);
+        } catch (Error err) {
+            warning (err.message);
+        }
+
+        if (!file.has_group (group)) {
+            return null;
+        }
+
+        try {
+            foreach (unowned string key in file.get_keys (group)) {
+                string val = file.get_value (group, key);
+                if (key.down ().has_prefix ("file")) {
+                    return val;
+                }
+            }
+        } catch (Error err) {
+            warning (err.message);
+        }
+
+        return null;
+    }
+
     public bool load_track (Objects.Track? track, double progress = 0) {
         if (track == current_track || track == null) {
             return false;
@@ -164,7 +207,6 @@ public class Services.Player : GLib.Object {
 
     public void next () {
         var repeat_mode = Byte.settings.get_enum ("repeat-mode");
-        var shuffle_mode = Byte.settings.get_boolean ("shuffle-mode");
 
         if (current_track == null) {
             return;
@@ -176,11 +218,7 @@ public class Services.Player : GLib.Object {
             next_track = current_track;
             current_track = null;
         } else {
-            if (shuffle_mode) {
-                next_track = Byte.utils.get_next_shuffle_track ();
-            } else {
-                next_track = Byte.utils.get_next_track ();
-            }
+            next_track = Byte.utils.get_next_track (current_track);
         }
 
         if (next_track != null) {
@@ -192,7 +230,6 @@ public class Services.Player : GLib.Object {
 
     public void prev () {
         var repeat_mode = Byte.settings.get_enum ("repeat-mode");
-        var shuffle_mode = Byte.settings.get_boolean ("shuffle-mode");
         
         if (current_track == null) {
             return;
@@ -201,12 +238,8 @@ public class Services.Player : GLib.Object {
         if (get_position_sec () < 1) {
             Objects.Track? prev_track = null;
 
-            if (shuffle_mode) {
-                prev_track = Byte.utils.get_prev_shuffle_track ();
-            } else {
-                prev_track = Byte.utils.get_prev_track ();
-            }
-            
+            prev_track = Byte.utils.get_prev_track (current_track);
+
             if (prev_track != null) {
                 set_track (prev_track);
             }

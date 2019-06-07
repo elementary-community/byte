@@ -32,16 +32,12 @@ public class Services.MediaKey : GLib.Object {
     private void pressed_key (dynamic Object bus, string application, string key) {
         if (application == (Byte.instance.application_id)) {
             if (key == "Previous") {
-                print ("Previous \n");
                 Byte.player.prev ();
             } else if (key == "Play") {
-                print ("Play \n");
                 Byte.player.toggle_playing ();
             } else if (key == "Next") {
-                print ("Next \n");
                 Byte.player.next ();
             } else if (key == "Pause") {
-                print ("Pause \n");
                 Byte.player.pause ();
             }
         }

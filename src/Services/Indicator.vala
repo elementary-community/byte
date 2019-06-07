@@ -124,11 +124,9 @@ public class SoundIndicatorPlayer : GLib.Object {
                 property = "Playing";
                 var metadata = new HashTable<string, Variant> (null, null);
                 if (Byte.player.current_track != null) {
-                    /*
-                    metadata.insert("mpris:artUrl", "file://" + Byte.player.current_track.cover);
-                    metadata.insert("xesam:title", Byte.player.current_track.title);
-                    metadata.insert("xesam:artist", get_simple_string_array (Byte.player.current_track.artist));
-                    */
+                    metadata.insert ("mpris:artUrl", get_cover_file (Byte.player.current_track.album_id));
+                    metadata.insert ("xesam:title", Byte.player.current_track.title);
+                    metadata.insert ("xesam:artist", get_simple_string_array (Byte.player.current_track.artist_name));
                 }
 
                 send_properties ("Metadata", metadata);
@@ -147,5 +145,14 @@ public class SoundIndicatorPlayer : GLib.Object {
         }
 
         send_properties ("PlaybackStatus", property);
+    }
+
+    private string get_cover_file (int album_id) {
+        var cover_path = GLib.Path.build_filename (Byte.utils.COVER_FOLDER, ("album-%i.jpg").printf (album_id));
+        if (File.new_for_path (cover_path).query_exists ()) {
+            return "file://" + cover_path;
+        }
+
+        return "file:///usr/share/com.github.alainm23.byte/track-default-cover.svg";
     }
 }

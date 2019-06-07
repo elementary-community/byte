@@ -63,10 +63,12 @@ public class Widgets.HeaderBar : Gtk.HeaderBar {
         // Previous Button
         previous_button = new Gtk.Button.from_icon_name ("media-skip-backward-symbolic", Gtk.IconSize.LARGE_TOOLBAR);
         previous_button.valign = Gtk.Align.CENTER;
+        previous_button.get_style_context ().add_class (Gtk.STYLE_CLASS_FLAT);
         previous_button.can_focus = false;
         previous_button.tooltip_text = _ ("Previous");
 
         play_button = new Gtk.Button ();
+        play_button.get_style_context ().add_class (Gtk.STYLE_CLASS_FLAT);
         play_button.can_focus = false;
         play_button.valign = Gtk.Align.CENTER;
         play_button.image = icon_play;
@@ -75,6 +77,7 @@ public class Widgets.HeaderBar : Gtk.HeaderBar {
         // Next Button
         next_button = new Gtk.Button.from_icon_name ("media-skip-forward-symbolic", Gtk.IconSize.LARGE_TOOLBAR);
         next_button.valign = Gtk.Align.CENTER;
+        next_button.get_style_context ().add_class (Gtk.STYLE_CLASS_FLAT);
         next_button.can_focus = false;
         next_button.tooltip_text = _ ("Next");
 
@@ -87,6 +90,7 @@ public class Widgets.HeaderBar : Gtk.HeaderBar {
         search_button = new Gtk.Button.from_icon_name ("edit-find-symbolic", Gtk.IconSize.MENU);
         search_button.valign = Gtk.Align.CENTER;
         search_button.can_focus = false;
+        search_button.get_style_context ().add_class (Gtk.STYLE_CLASS_FLAT);
 
         main_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 6);
         main_box.pack_start (repeat_button, false, false, 24);

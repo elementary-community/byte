@@ -27,7 +27,12 @@ install_data(
 )
 
 install_data(
-    join_paths('resources', 'artist-default-cover.svg'),
+    join_paths('resources', 'radio-default-cover.svg'),
+    install_dir: join_paths(get_option('datadir'), 'com.github.alainm23.byte')
+)
+
+install_data(
+    join_paths('resources', 'playlist-default-cover.svg'),
     install_dir: join_paths(get_option('datadir'), 'com.github.alainm23.byte')
 )
 

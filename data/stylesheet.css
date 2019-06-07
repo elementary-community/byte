@@ -62,8 +62,24 @@
     font-weight: bold;
 }
 
+.search-entry:focus {
+    border-color: alpha (@colorPrimary, 0.8);
+}
+
 .search-entry {
+    border-color: alpha (@colorPrimary, 0.8);
+    box-shadow: none;
+    background-image: none;
     background: @base_color;
+    color: @colorPrimary;
+}
+
+.search-entry image.left {
+    color: @colorPrimary;
+}
+
+.search-entry image.right {
+    color: @colorPrimary;
 }
 
 .album-cover {
@@ -95,6 +111,14 @@
 .album-child:focus {
     background-color: transparent;
     color: @text_color;
+}
+
+.radio-search-row {
+    background-color: transparent;
+}
+
+.radio-search-row:selected {
+    background-color: transparent;
 }
 
 .quick-find {
@@ -132,6 +156,8 @@
     color: @colorPrimary;
 }
 
+
+
 selection {
     background-color: alpha (@colorPrimary, 0.75);
     color: @selected_fg_color;
@@ -144,7 +170,7 @@ selection {
 }
 
 .queue {
-    border-radius: 4px;
+    border-radius: 6px;
     border: 1px solid alpha (#000, 0.3);
     background-color: @base_color;
     box-shadow:
@@ -154,6 +180,20 @@ selection {
         0 1px 3px alpha (#fff, 0.12),
         0 1px 2px alpha (#000, 0.24);
     text-shadow: none;
+}
+
+.queue-title {
+    background-color: @colorPrimary;
+    border-radius: 4px 4px 0px 0px;
+    border: 1px solid @colorPrimary;
+    color: #fff;
+    padding: 3px 0px 3px 6px;
+    font-weight: bold;
+}
+
+.queue-title button {
+    padding: 0px;
+    color: #ffffff;
 }
 
 .font-album-artist {
@@ -172,10 +212,10 @@ selection {
 
 .home-button {
     background-color: #F6F8FB;
-    border: 1px solid @menu_separator;
-    border-radius: 6px;
     color: @colorPrimary;
+    border-radius: 6px;
     font-weight: 600;
+    border: 1px solid shade (#F6F8FB, 0.95);
 }
 
 .media-control {
@@ -208,4 +248,44 @@ selection {
     border-bottom: 1px solid @colorPrimary;
     border-right: 1px solid @colorPrimary;
     border-radius: 0px 4px 4px 0px;
+}
+
+.quick-find-add-radio {
+    border-radius: 50%;
+    padding: 0px;
+    background-color: @colorPrimary;
+    color: #ffffff;
+    border: 1px solid @colorPrimary;
+}
+
+.planner-back-button {
+    color: @colorPrimary;
+}
+
+.search-title {
+    color: @colorPrimary;
+}
+
+.sort-radio radio:checked {
+    background-image:
+         linear-gradient(
+             to bottom,
+             shade (
+                 @colorPrimary,
+                 1.2
+             ),
+             @colorPrimary
+         );
+     border-color: shade (@colorPrimary, 0.9);
+     box-shadow:
+         inset 0 0 0 1px shade (@colorPrimary, 1.15),
+         inset 0 1px 0 0 shade (@colorPrimary, 1.3),
+         0 1px 1px 0 shade (@bg_color, 0.85);
+     -gtk-icon-shadow: 0 1px 1px shade (@colorPrimary, 0.85);
+ }
+
+ .sort-button {
+    color: @colorPrimary;
+    border-radius: 6px;
+    
 }

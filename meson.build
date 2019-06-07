@@ -38,6 +38,7 @@ executable(
     'src/Services/MediaKey.vala',
     'src/Services/Scan.vala',
     'src/Services/Notification.vala',
+    'src/Services/RadioBrowser.vala',
 
     'src/Widgets/Welcome.vala',
     'src/Widgets/HeaderBar.vala',
@@ -51,8 +52,10 @@ executable(
     'src/Widgets/QuickFind.vala',
     'src/Widgets/Queue.vala',
     'src/Widgets/HomeButton.vala',
+    'src/Widgets/RadioSearchRow.vala',
     
     'src/Widgets/Popovers/Menu.vala',
+    'src/Widgets/Popovers/Sort.vala',
 
     'src/Views/Home.vala',
     'src/Views/Albums.vala',
@@ -63,6 +66,7 @@ executable(
     'src/Objects/Track.vala',
     'src/Objects/Album.vala',
     'src/Objects/Artist.vala',
+    'src/Objects/Radio.vala',
     dependencies: [
         dependency('gee-0.8'),
         dependency('gobject-2.0'),

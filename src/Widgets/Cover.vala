@@ -9,7 +9,7 @@ public class Widgets.Cover : Gtk.EventBox {
     private string? orig_type = null;
 
     public Gdk.Pixbuf? pixbuf { get; set; }
-
+    
     public Cover () {
     }
 
@@ -29,10 +29,10 @@ public class Widgets.Cover : Gtk.EventBox {
 
     public Cover.from_url_async (string uri, int pixel_size, bool preserve_aspect_ratio, string type, Cancellable? cancellable = null) {
         set_default (type);
+        show_default (pixel_size);
 
         var file = GLib.File.new_for_uri (uri);
-        set_size_request (pixel_size, pixel_size);
-
+        
         set_from_file_async (file, pixel_size, preserve_aspect_ratio);
 
         orig_filename = uri;
@@ -109,6 +109,9 @@ public class Widgets.Cover : Gtk.EventBox {
         } else if (type == "artist") {
             DEFAULT_ICON = "/usr/share/com.github.alainm23.byte/artist-default-cover.svg";
             get_style_context ().add_class ("artist-cover");
+        } else if (type == "radio") {
+            DEFAULT_ICON = "/usr/share/com.github.alainm23.byte/radio-default-cover.svg";
+            get_style_context ().add_class ("album-cover");
         } else {
             DEFAULT_ICON = "/usr/share/com.github.alainm23.byte/track-default-cover.svg";
             get_style_context ().add_class ("album-cover");
