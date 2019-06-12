@@ -1,15 +1,23 @@
 public class Services.Player : GLib.Object {
     public signal void state_changed (Gst.State state);
+    public signal void mode_changed (string mode);
+
     public signal void current_progress_changed (double percent);
     public signal void current_duration_changed (int64 duration);
+
     public signal void current_track_changed (Objects.Track? track);
-    
+    public signal void current_radio_changed (Objects.Radio? radio);
+
     public signal void toggle_playing (); 
+    public signal void current_radio_title_changed (string? title);
 
     uint progress_timer = 0;
 
     public Objects.Track? current_track { get; set; }
     public Objects.Radio? current_radio { get; private set; }
+    public string? current_radio_title { get; set; }
+    public string? mode { get; set; }
+    public Gst.State? player_state { get; set; }
 
     Gst.Format fmt = Gst.Format.TIME;
     dynamic Gst.Element playbin;
@@ -62,45 +70,36 @@ public class Services.Player : GLib.Object {
     }
     
     public void set_radio (Objects.Radio radio) {
-        if (radio == current_radio || radio == null || radio.url == null) {
-            print ("Se salio\n");
+        if (radio == current_radio || radio == null || radio.file == null) {
             return;
         }
 
-        print ("%s\n".printf (radio.url));
         current_radio = radio;
+
         stop ();
-        playbin.uri = get_file_from_pls (radio.url);
+        playbin.uri = radio.file;
         playbin.set_state (Gst.State.PLAYING);
+        state_changed (Gst.State.PLAYING);
+        player_state = Gst.State.PLAYING;
         play ();
+
+        mode_changed ("radio");
+        mode = "radio";
+        current_radio_changed (radio);
     }
 
-    private string ? get_file_from_pls (string content) {
-        string group = "playlist";
-
-        var file = new KeyFile ();
-        try {
-            file.load_from_data (content, -1, KeyFileFlags.NONE);
-        } catch (Error err) {
-            warning (err.message);
+    public void set_track (Objects.Track? track) {
+        if (track == null) {
+            current_duration_changed (0);
         }
 
-        if (!file.has_group (group)) {
-            return null;
-        }
+        if (load_track (track)) {
+            play ();
 
-        try {
-            foreach (unowned string key in file.get_keys (group)) {
-                string val = file.get_value (group, key);
-                if (key.down ().has_prefix ("file")) {
-                    return val;
-                }
-            }
-        } catch (Error err) {
-            warning (err.message);
+            current_track_changed (track);
+            mode_changed ("track");
+            mode = "track";
         }
-
-        return null;
     }
 
     public bool load_track (Objects.Track? track, double progress = 0) {
@@ -116,12 +115,14 @@ public class Services.Player : GLib.Object {
         playbin.uri = current_track.path;
         playbin.set_state (Gst.State.PLAYING);
         state_changed (Gst.State.PLAYING);
+        player_state = Gst.State.PLAYING;
 
         while (duration == 0) {};
 
         if (last_state != Gst.State.PLAYING) {
             pause ();
         }
+
         current_duration_changed (duration);
 
         if (progress > 0) {
@@ -130,19 +131,6 @@ public class Services.Player : GLib.Object {
         }
         
         return true;
-    }
-    
-    public void set_track (Objects.Track? track) {
-        if (track == null) {
-            current_duration_changed (0);
-        }
-
-        if (load_track (track)) {
-            play ();
-
-            current_track_changed (track);
-            Byte.notification.send_notification (track);
-        }
     }
 
     public void seek_to_position (int64 position) {
@@ -194,15 +182,18 @@ public class Services.Player : GLib.Object {
     public void play () {
         if (current_track != null) {
             state_changed (Gst.State.PLAYING);
+            player_state = Gst.State.PLAYING;
         }
     }
 
     public void pause () {
         state_changed (Gst.State.PAUSED);
+        player_state = Gst.State.PAUSED;
     }
 
     public void stop () {
         state_changed (Gst.State.READY);
+        player_state = Gst.State.READY;
     }
 
     public void next () {
@@ -225,12 +216,11 @@ public class Services.Player : GLib.Object {
             set_track (next_track);
         } else {
             state_changed (Gst.State.NULL);
+            player_state = Gst.State.NULL;
         }
     }
 
-    public void prev () {
-        var repeat_mode = Byte.settings.get_enum ("repeat-mode");
-        
+    public void prev () {        
         if (current_track == null) {
             return;
         }
@@ -259,6 +249,20 @@ public class Services.Player : GLib.Object {
                 break;
             case Gst.MessageType.EOS:
                 next ();
+                break;
+            case Gst.MessageType.TAG:
+                Gst.TagList tag_list;
+                string title;
+
+                message.parse_tag (out tag_list);
+                tag_list.get_string ("title", out title);
+                tag_list = null;
+
+                current_radio_title = title;
+                if (current_radio_title != null) {
+                    current_radio_title_changed (current_radio_title);
+                }
+                
                 break;
             default:
                 break;

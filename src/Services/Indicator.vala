@@ -65,7 +65,65 @@ public class SoundIndicatorPlayer : GLib.Object {
         app = Byte.instance;
         connection = conn;
         
-        Byte.player.state_changed.connect_after (player_state_changed);
+        Byte.player.current_track_changed.connect_after ((track) => {
+            Variant property;
+            if (Byte.player.player_state == Gst.State.PLAYING) {
+                property = "Playing";
+                var metadata = new HashTable<string, Variant> (null, null);
+
+                if (track != null) {
+                    metadata.insert ("mpris:artUrl", Byte.utils.get_cover_file (track.album_id));
+                    metadata.insert ("xesam:title", track.title);
+                    metadata.insert ("xesam:artist", get_simple_string_array (track.artist_name));
+                }
+
+                send_properties ("Metadata", metadata);
+            } else if (Byte.player.player_state == Gst.State.PAUSED) {
+                property = "Paused";
+            } else {
+                property = "Stopped";
+                var metadata = new HashTable<string, Variant> (null, null);
+                metadata.insert("mpris:artUrl", "");
+                metadata.insert("xesam:title", "");
+                metadata.insert("xesam:artist", new string [0]);
+                send_properties ("Metadata", metadata);
+            }
+
+            //CanGoNext = true;
+            //CanGoPrevious = true;
+
+            send_properties ("PlaybackStatus", property);
+        });
+
+        Byte.player.current_radio_title_changed.connect ((title) => {
+            Variant property;
+            if (Byte.player.player_state == Gst.State.PLAYING) {
+                property = "Playing";
+                var metadata = new HashTable<string, Variant> (null, null);
+
+                if (Byte.player.current_radio != null) {
+                    metadata.insert ("mpris:artUrl", Byte.utils.get_cover_radio_file (Byte.player.current_radio.id));
+                    metadata.insert ("xesam:title", Byte.player.current_radio.name);
+                    metadata.insert ("xesam:artist", get_simple_string_array (title));
+                }
+
+                send_properties ("Metadata", metadata);
+            } else if (Byte.player.player_state == Gst.State.PAUSED) {
+                property = "Paused";
+            } else {
+                property = "Stopped";
+                var metadata = new HashTable<string, Variant> (null, null);
+                metadata.insert("mpris:artUrl", "");
+                metadata.insert("xesam:title", "");
+                metadata.insert("xesam:artist", new string [0]);
+                send_properties ("Metadata", metadata);
+            }
+
+            //CanGoNext = false;
+            //CanGoPrevious = false;
+            
+            send_properties ("PlaybackStatus", property);
+        });
     }
 
     private static string[] get_simple_string_array (string text) {
@@ -113,46 +171,7 @@ public class SoundIndicatorPlayer : GLib.Object {
         Byte.player.next ();
     }
 
-    public void Previous() throws Error {
+    public void Previous () throws Error {
         Byte.player.prev ();
-    }
-
-    private void player_state_changed (Gst.State state) {
-        Variant property;
-        switch (state) {
-            case Gst.State.PLAYING:
-                property = "Playing";
-                var metadata = new HashTable<string, Variant> (null, null);
-                if (Byte.player.current_track != null) {
-                    metadata.insert ("mpris:artUrl", get_cover_file (Byte.player.current_track.album_id));
-                    metadata.insert ("xesam:title", Byte.player.current_track.title);
-                    metadata.insert ("xesam:artist", get_simple_string_array (Byte.player.current_track.artist_name));
-                }
-
-                send_properties ("Metadata", metadata);
-                break;
-            case Gst.State.PAUSED:
-                property = "Paused";
-                break;
-            default:
-                property = "Stopped";
-                var metadata = new HashTable<string, Variant> (null, null);
-                metadata.insert("mpris:artUrl", "");
-                metadata.insert("xesam:title", "");
-                metadata.insert("xesam:artist", new string [0]);
-                send_properties ("Metadata", metadata);
-                break;
-        }
-
-        send_properties ("PlaybackStatus", property);
-    }
-
-    private string get_cover_file (int album_id) {
-        var cover_path = GLib.Path.build_filename (Byte.utils.COVER_FOLDER, ("album-%i.jpg").printf (album_id));
-        if (File.new_for_path (cover_path).query_exists ()) {
-            return "file://" + cover_path;
-        }
-
-        return "file:///usr/share/com.github.alainm23.byte/track-default-cover.svg";
     }
 }

@@ -1,21 +1,24 @@
 public class Views.Tracks : Gtk.EventBox {
     private Gtk.ListBox listbox;
-    private Gtk.Revealer loading_revealer;
+    private Gtk.Label time_label;
     public signal void go_back ();
-
     private int item_index;
     private int item_max;
-    private bool is_completed = false;
     private Gee.ArrayList<Objects.Track?> all_tracks;
-    public Tracks () {
-    }
+
+    private int tracks_number = 0;
+    private uint64 tracks_time = 0;
+
+    public Tracks () {} 
 
     construct {
         item_index = 0;
-        item_max = 100;
+        item_max = 25;
 
-        all_tracks = new Gee.ArrayList<Objects.Track?> ();
-        all_tracks = Byte.database.get_all_tracks_order_by (Byte.settings.get_enum ("tracks-sort"));
+        all_tracks = Byte.database.get_all_tracks_order_by (
+            Byte.settings.get_enum ("tracks-sort"), 
+            Byte.settings.get_boolean ("tracks-order-reverse")
+        );
 
         get_style_context ().add_class (Gtk.STYLE_CLASS_VIEW);
         get_style_context ().add_class ("w-round");
@@ -73,42 +76,35 @@ public class Views.Tracks : Gtk.EventBox {
 
         var sort_popover = new Widgets.Popovers.Sort (sort_button);
         sort_popover.selected = Byte.settings.get_enum ("tracks-sort");
+        sort_popover.reverse = Byte.settings.get_boolean ("tracks-order-reverse");
 
         listbox = new Gtk.ListBox (); 
         listbox.expand = true;
 
-        var play_button = new Gtk.Button.from_icon_name ("media-playback-start-symbolic", Gtk.IconSize.MENU);
-        play_button.label = _("Play");
-        play_button.width_request = 150;
-        play_button.can_focus = false;
-        play_button.image_position = Gtk.PositionType.LEFT;
-        play_button.valign = Gtk.Align.CENTER;
-        play_button.hexpand = true;
-        play_button.get_style_context ().add_class ("home-button");
-        play_button.get_style_context ().add_class (Gtk.STYLE_CLASS_FLAT);
-        play_button.always_show_image = true;
-
         var shuffle_button = new Gtk.Button.from_icon_name ("media-playlist-shuffle-symbolic", Gtk.IconSize.MENU);
-        shuffle_button.label = _("Shuffle");
-        shuffle_button.width_request = 150;
+        //shuffle_button.label = _("Shuffle");
+        shuffle_button.margin = 6;
+        shuffle_button.width_request = 85;
         shuffle_button.can_focus = false;
-        shuffle_button.image_position = Gtk.PositionType.LEFT;
+        //shuffle_button.image_position = Gtk.PositionType.LEFT;
         shuffle_button.valign = Gtk.Align.CENTER;
+        shuffle_button.halign = Gtk.Align.END;
         shuffle_button.hexpand = true;
-        shuffle_button.get_style_context ().add_class ("home-button");
+        shuffle_button.get_style_context ().add_class ("shuffle-button");
         shuffle_button.get_style_context ().add_class (Gtk.STYLE_CLASS_FLAT);
-        shuffle_button.always_show_image = true;
+        //shuffle_button.always_show_image = true;
 
-        var action_grid = new Gtk.Grid ();
-        action_grid.column_homogeneous = true;
-        action_grid.valign = Gtk.Align.CENTER;
-        action_grid.hexpand = true;
-        action_grid.margin = 6;
-        action_grid.column_spacing = 6;
-        action_grid.add (play_button);
-        action_grid.add (shuffle_button);
+        time_label = new Gtk.Label (null);
+        time_label.get_style_context ().add_class ("h3");
+        time_label.get_style_context ().add_class ("dim-label");
+
+        var grid = new Gtk.Grid ();
+        grid.margin_start = 6;
+        grid.add (time_label);
+        grid.add (shuffle_button);
 
         var scrolled = new Gtk.ScrolledWindow (null, null);
+        scrolled.margin_top = 3;
         scrolled.hscrollbar_policy = Gtk.PolicyType.NEVER;
         scrolled.expand = true;
         scrolled.add (listbox);
@@ -117,11 +113,15 @@ public class Views.Tracks : Gtk.EventBox {
         main_box.margin_bottom = 3;
         main_box.expand = true;
         main_box.pack_start (header_box, false, false, 0);
-        main_box.pack_start (action_grid, false, false);
+        main_box.pack_start (new Gtk.Separator (Gtk.Orientation.HORIZONTAL), false, false);
+        main_box.pack_start (grid, false, false);
+        main_box.pack_start (new Gtk.Separator (Gtk.Orientation.HORIZONTAL), false, false);
         main_box.pack_start (scrolled, true, true, 0);
         
         add (main_box);
-        
+        add_all_tracks ();
+        get_realtive_time ();
+
         back_button.clicked.connect (() => {
             go_back ();
         });
@@ -168,25 +168,50 @@ public class Views.Tracks : Gtk.EventBox {
 
             item_index = 0;
             item_max = 100;
-            is_completed = false;
             
             listbox.foreach ((widget) => {
                 widget.destroy (); 
             });
 
-            all_tracks = Byte.database.get_all_tracks_order_by (mode);
+            all_tracks = Byte.database.get_all_tracks_order_by (mode, Byte.settings.get_boolean ("tracks-order-reverse"));
 
             add_all_tracks ();
         });
 
-        play_button.clicked.connect (() => {
-            all_tracks = Byte.database.get_all_tracks_order_by (Byte.settings.get_enum ("tracks-sort"));
-            Byte.utils.set_items (all_tracks, "shuffle_off");
+        sort_popover.order_reverse.connect ((reverse) => {
+            Byte.settings.set_boolean ("tracks-order-reverse", reverse); 
+
+            item_index = 0;
+            item_max = 100;
+            
+            listbox.foreach ((widget) => {
+                widget.destroy (); 
+            });
+
+            all_tracks = Byte.database.get_all_tracks_order_by (
+                Byte.settings.get_enum ("tracks-sort"), 
+                Byte.settings.get_boolean ("tracks-order-reverse")
+            );
+
+            add_all_tracks ();
+        });
+        
+        shuffle_button.clicked.connect (() => {
+            Byte.utils.set_items (
+                all_tracks,
+                true,
+                null
+            );
         });
 
-        shuffle_button.clicked.connect (() => {
-            all_tracks = Byte.database.get_all_tracks_order_by (Byte.settings.get_enum ("tracks-sort"));
-            Byte.utils.set_items (all_tracks, "shuffle_on");
+        listbox.row_activated.connect ((row) => {
+            var item = row as Widgets.TrackRow;
+            
+            Byte.utils.set_items (
+                all_tracks,
+                Byte.settings.get_boolean ("shuffle-mode"),
+                item.track
+            );
         });
 
         Byte.database.adden_new_track.connect ((track) => {
@@ -194,17 +219,6 @@ public class Views.Tracks : Gtk.EventBox {
                 add_track (track);
 
                 return false;
-            });
-        });
-
-        Byte.player.current_track_changed.connect ((track) => {
-            listbox.set_filter_func ((row) => {
-                var item = row as Widgets.TrackRow;
-                if (track.id == item.track.id) {
-                    listbox.select_row (row);
-                }
-                
-                return true;
             });
         });
 
@@ -218,10 +232,6 @@ public class Views.Tracks : Gtk.EventBox {
                     item_max = all_tracks.size;
                 }
 
-                if (item_index == item_max) {
-                    is_completed = true;
-                }
-
                 add_all_tracks ();
             }
         });
@@ -230,22 +240,34 @@ public class Views.Tracks : Gtk.EventBox {
     private void add_track (Objects.Track track) {
         var row = new Widgets.TrackRow (track);
         
+        all_tracks.add (track);
         listbox.add (row);
         listbox.show_all ();
     }
 
     public void add_all_tracks () {
-        if (is_completed == false) {
-            if (item_max > all_tracks.size) {
-                item_max = all_tracks.size;
-            }
-
-            for (int i = item_index; i < item_max; i++) {
-                var row = new Widgets.TrackRow (all_tracks [i]);
-    
-                listbox.add (row);
-                listbox.show_all ();
-            }   
+        if (item_max > all_tracks.size) {
+            item_max = all_tracks.size;
         }
+
+        for (int i = item_index; i < item_max; i++) {
+            var row = new Widgets.TrackRow (all_tracks [i]);
+
+            listbox.add (row);
+            listbox.show_all ();
+        }   
+    }
+
+    private void get_realtive_time () {
+        tracks_number = all_tracks.size;
+
+        foreach (var item in all_tracks) {
+            tracks_time = tracks_time + item.duration;
+        }
+
+        time_label.label = "%i Tracks - %s".printf (tracks_number, Byte.utils.get_relative_duration (tracks_time));
+
+        print ("tracks_time: %s\n".printf (Byte.utils.get_relative_duration (tracks_time)));
+        print ("size: %s\n".printf (tracks_number.to_string ()));
     }
 }

@@ -153,6 +153,20 @@ public class Widgets.HeaderBar : Gtk.HeaderBar {
             toggle_playing ();
         });
 
+        Byte.player.mode_changed.connect ((mode) => {
+            if (mode == "radio") {
+                shuffle_button.visible = false;
+                repeat_button.visible = false;
+                next_button.visible = false;
+                previous_button.visible = false;
+            } else {
+                shuffle_button.visible = true;
+                repeat_button.visible = true;
+                next_button.visible = true;
+                previous_button.visible = true;
+            }
+        });
+
         search_button.clicked.connect (() => {
             show_quick_find ();
         });

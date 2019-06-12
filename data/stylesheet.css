@@ -18,9 +18,28 @@
     background-color: @colorPrimary;
 }
 
+.track-row {
+    background-color: transparent;
+}
+
 .track-row:selected {
-    background-color: shade (@colorPrimary, 0.95);
-    color: @color_text;
+    background-color: transparent;
+    color: @text_color;
+}
+
+.track-row button {
+    background-color: @base_color;
+    color: @colorPrimary;
+}
+
+.track-row:focus button image {
+    background-color: @base_color;
+    color: @colorPrimary;
+}
+
+.track-queue-row:selected {
+    background-color: transparent;
+    color: @text_color;
 }
 
 .slider-button {
@@ -33,21 +52,12 @@
     color: @colorPrimary;
 }
 
-.lyric text {
-    background-color: @bg_color;
-}
-
-.night-mode {
-    transition: all 200ms ease;
-    background-color: alpha (@text_color, 0.15);
-}
-
 .header-label {
     color: @colorPrimary;
 }
 
 .sub-header-label {
- font-size: 21px;
+    font-size: 21px;
 }
 
 .button-color {
@@ -113,10 +123,6 @@
     color: @text_color;
 }
 
-.radio-search-row {
-    background-color: transparent;
-}
-
 .radio-search-row:selected {
     background-color: transparent;
 }
@@ -125,12 +131,7 @@
     border-radius: 6px;
     border: 1px solid alpha (#000, 0.3);
     background-color: @base_color;
-    box-shadow:
-        inset 0 0 0 1px alpha (#fff, 0.05),
-        inset 0 1px 0 0 alpha (#fff, 0.45),
-        inset 0 -1px 0 0 alpha (#fff, 0.15),
-        0 1px 3px alpha (#fff, 0.12),
-        0 1px 2px alpha (#000, 0.24);
+    box-shadow: 0 3px 1px -2px rgba(0,0,0,.2), 0 2px 2px 0 rgba(0,0,0,.14), 0 1px 5px 0 rgba(0,0,0,.12);
     margin: 12px;
     text-shadow: none;
 }
@@ -156,8 +157,6 @@
     color: @colorPrimary;
 }
 
-
-
 selection {
     background-color: alpha (@colorPrimary, 0.75);
     color: @selected_fg_color;
@@ -173,12 +172,7 @@ selection {
     border-radius: 6px;
     border: 1px solid alpha (#000, 0.3);
     background-color: @base_color;
-    box-shadow:
-        inset 0 0 0 1px alpha (#fff, 0.05),
-        inset 0 1px 0 0 alpha (#fff, 0.45),
-        inset 0 -1px 0 0 alpha (#fff, 0.15),
-        0 1px 3px alpha (#fff, 0.12),
-        0 1px 2px alpha (#000, 0.24);
+    box-shadow: 0 3px 1px -2px rgba(0,0,0,.2), 0 2px 2px 0 rgba(0,0,0,.14), 0 1px 5px 0 rgba(0,0,0,.12);
     text-shadow: none;
 }
 
@@ -205,9 +199,9 @@ selection {
     background-color: @colorPrimary;
     border: 1px solid darker(@colorPrimary);
     transition: all 200ms ease-in-out;
-    padding: 1px 0px 1px 0px;
+    padding: 3px;
     color: #ffffff;
-    border-radius: 6px;
+    border-radius: 12px;
 }
 
 .home-button {
@@ -266,7 +260,7 @@ selection {
     color: @colorPrimary;
 }
 
-.sort-radio radio:checked {
+.planner-radio radio:checked {
     background-image:
          linear-gradient(
              to bottom,
@@ -276,16 +270,97 @@ selection {
              ),
              @colorPrimary
          );
-     border-color: shade (@colorPrimary, 0.9);
-     box-shadow:
-         inset 0 0 0 1px shade (@colorPrimary, 1.15),
-         inset 0 1px 0 0 shade (@colorPrimary, 1.3),
-         0 1px 1px 0 shade (@bg_color, 0.85);
-     -gtk-icon-shadow: 0 1px 1px shade (@colorPrimary, 0.85);
- }
+    border-color: shade (@colorPrimary, 0.9);
+    box-shadow:
+        inset 0 0 0 1px shade (@colorPrimary, 1.15),
+        inset 0 1px 0 0 shade (@colorPrimary, 1.3),
+        0 1px 1px 0 shade (@bg_color, 0.85);
+    -gtk-icon-shadow: 0 1px 1px shade (@colorPrimary, 0.85);
+}
 
- .sort-button {
+.planner-radio radio:focus {
+    border-color: @colorPrimary;
+    box-shadow:
+        inset 0 1px 0 0 alpha (@inset_dark_color, 0.7),
+        inset 0 0 0 1px alpha (@inset_dark_color, 0.3),
+        0 0 2px 1px alpha (@colorPrimary, 0.5);
+    transition: all 100ms ease-out;
+}
+
+.planner-radio radio:checked:focus {
+    border-color: shade (@colorPrimary, 0.8);
+    box-shadow:
+        inset 0 0 0 1px shade (@colorPrimary, 1.15),
+        inset 0 1px 0 0 shade (@colorPrimary, 1.3),
+        0 0 2px 1px alpha (@colorPrimary, 0.5),
+        0 1px 1px 0 shade (@bg_color, 0.85);
+}
+
+.planner-check check:checked {
+    background-image:
+         linear-gradient(
+             to bottom,
+             shade (
+                 @colorPrimary,
+                 1.2
+             ),
+             @colorPrimary
+         );
+    border-color: shade (@colorPrimary, 0.9);
+    box-shadow:
+        inset 0 0 0 1px shade (@colorPrimary, 1.15),
+        inset 0 1px 0 0 shade (@colorPrimary, 1.3),
+        0 1px 1px 0 shade (@bg_color, 0.85);
+    -gtk-icon-shadow: 0 1px 1px shade (@colorPrimary, 0.85);
+}
+
+.planner-check check:focus {
+    border-color: @colorPrimary;
+    box-shadow:
+        inset 0 1px 0 0 alpha (@inset_dark_color, 0.7),
+        inset 0 0 0 1px alpha (@inset_dark_color, 0.3),
+        0 0 2px 1px alpha (@colorPrimary, 0.5);
+    transition: all 100ms ease-out;
+}
+
+.planner-check check:checked:focus {
+    border-color: shade (@colorPrimary, 0.8);
+    box-shadow:
+        inset 0 0 0 1px shade (@colorPrimary, 1.15),
+        inset 0 1px 0 0 shade (@colorPrimary, 1.3),
+        0 0 2px 1px alpha (@colorPrimary, 0.5),
+        0 1px 1px 0 shade (@bg_color, 0.85);
+}
+
+.sort-button {
     color: @colorPrimary;
     border-radius: 6px;
-    
+}
+
+.playing-ani-color {
+    color: #ffffff;
+    background-color: @colorPrimary;
+    border-radius: 50px;
+    padding: 2px;
+}
+
+.options-button {
+    color: @colorPrimary;
+    border-radius: 4px;
+    padding: 2px;
+}
+
+.remove-button {
+    background-color: @colorPrimary;
+    color: #ffffff;
+    border-radius: 50%;
+    padding: 0px;
+}
+
+.remove-button image {
+    transition: all 240ms ease-in-out;
+}
+
+.remove-button.closed image {
+    -gtk-icon-transform: rotate(-90deg);
 }

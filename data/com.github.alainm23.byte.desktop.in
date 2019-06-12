@@ -10,19 +10,3 @@ Type=Application
 X-GNOME-Gettext-Domain=byte
 Keywords=mp3;music;byte;radio;playlist;
 X-GNOME-UsesNotifications=true
-Actions=Toggle;Next;Prev;
-
-[Desktop Action Toggle]
-Name=Play/Pause
-Exec=com.github.alainm23.byte --play
-Icon=media-playback-start-symbolic
-
-[Desktop Action Next]
-Name=Next
-Exec=com.github.alainm23.byte --next
-Icon=media-skip-forward-symbolic
-
-[Desktop Action Prev]
-Name=Previous
-Exec=com.github.alainm23.byte --prev
-Icon=media-skip-backward-symbolic

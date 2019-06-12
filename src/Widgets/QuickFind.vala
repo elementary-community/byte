@@ -22,14 +22,14 @@ public class Widgets.QuickFind : Gtk.Revealer {
     }
 
     construct {
-        var toast = new Granite.Widgets.Toast ("Radio ya agregada");
+        var toast = new Granite.Widgets.Toast (_("The radio station was added correctly"));
 
         search_entry = new Gtk.SearchEntry ();
         search_entry.get_style_context ().add_class ("quick-find-entry");
         search_entry.placeholder_text = _("Quick find");
 
         var cancel_button = new Gtk.Button.with_label (_("Cancel"));
-        cancel_button.set_focus_on_click (false);
+        cancel_button.can_focus = false;
         cancel_button.valign = Gtk.Align.CENTER;
         cancel_button.get_style_context ().add_class (Gtk.STYLE_CLASS_FLAT);
         cancel_button.get_style_context ().add_class ("quick-find-cancel");
@@ -109,7 +109,7 @@ public class Widgets.QuickFind : Gtk.Revealer {
             var row = new Widgets.RadioSearchRow (item);
 
             row.send_notification_error.connect (() => {
-                toast.title = "Radio ya agregada";
+                toast.title = _("the radio station is already added");
                 toast.send_notification ();
             });
 
@@ -140,7 +140,7 @@ public class Widgets.QuickFind : Gtk.Revealer {
         });
 
         Byte.database.adden_new_radio.connect ((radio) => {
-            toast.title = "%s se agrego correctamente".printf (radio.name);
+            toast.title = _("The radio station was added correctly");
             toast.send_notification ();
         });
     }

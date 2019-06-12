@@ -2,8 +2,7 @@ public class Views.Home : Gtk.EventBox {
     public signal void go_albums_view ();
     public signal void go_tracks_view ();
     public signal void go_artists_view ();
-
-    private Gtk.FlowBox albums_flowbox;
+    public signal void go_radios_view ();
     public Home () {}
 
     construct {
@@ -32,14 +31,16 @@ public class Views.Home : Gtk.EventBox {
 
         var library_label = new Gtk.Label ("<b>%s</b>".printf (_("Library")));
         library_label.get_style_context ().add_class ("font-bold");
-        library_label.margin_start = 9;
-        library_label.margin_top = 6;
+        library_label.get_style_context ().add_class ("h3");
+        library_label.margin_start = 12;
+        library_label.margin_top = 9;
         library_label.halign =Gtk.Align.START;
         library_label.use_markup = true;
         
         var recently_added_label = new Gtk.Label ("<b>%s</b>".printf (_("Recently added")));
         recently_added_label.get_style_context ().add_class ("font-bold");
-        recently_added_label.margin_start = 9;
+        recently_added_label.get_style_context ().add_class ("h3");
+        recently_added_label.margin_start = 12;
         recently_added_label.halign =Gtk.Align.START;
         recently_added_label.use_markup = true;
 
@@ -53,10 +54,7 @@ public class Views.Home : Gtk.EventBox {
         var items_grid = new Gtk.Grid ();
         items_grid.row_spacing = 12;
         items_grid.column_spacing = 12;
-        items_grid.margin = 6;
-        items_grid.margin_top = 12;
-        items_grid.margin_bottom = 12;
-        items_grid.margin_end = 12;
+        items_grid.margin = 12;
         items_grid.column_homogeneous = true;
         items_grid.row_homogeneous = true;
         items_grid.attach (songs_button,     0, 0, 1, 1);
@@ -97,13 +95,14 @@ public class Views.Home : Gtk.EventBox {
         });
 
         radios_button.clicked.connect (() => {
+            go_radios_view ();
+            /*
             var radio = new Objects.Radio ();
             radio.name = "Radio Planeta";
-            radio.url = "file:///home/alain/CRP_PLA.pls";
+            radio.url = "http://www.181.fm/stream/pls/181-energy93.pls";
             
             Byte.player.set_radio (radio);
+            */
         });
     }
 }
-
-// file:///home/alain/Deezloader%20Music/Disturbed%20-%20The%20Studio%20Album%20Collection/12 - Meaning of Life.mp3

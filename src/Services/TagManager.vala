@@ -34,7 +34,6 @@ public class Services.TagManager : GLib.Object {
                     GLib.Date? d; 
                     Gst.DateTime? dt;
                     uint u;
-                    uint64 u64 = 0;
 
                     // TRACK OBJECT
                     var track = new Objects.Track ();

@@ -1,6 +1,4 @@
 public class Views.Album : Gtk.EventBox {
-    public Objects.Album album { get; construct; }
-
     private Gtk.Label title_label;
     private Gtk.Label artist_label;
     private Gtk.Label genre_label;
@@ -12,13 +10,33 @@ public class Views.Album : Gtk.EventBox {
     
     public signal void go_back ();
 
-    private bool is_initialized = false;
-    
-    public Album (Objects.Album album) {
-        Object (
-            album: album
-        );
+    public Objects.Album? _album;
+    public Objects.Album album {
+        set {
+            _album = value;
+
+            print ("Title: %s\n".printf (_album.title));
+
+            title_label.label = _album.title;
+            artist_label.label = _album.artist_name;
+            genre_label.label = _album.genre;
+            year_label.label = "%i".printf (_album.year);
+
+            try {
+                cover_path = GLib.Path.build_filename (Byte.utils.COVER_FOLDER, ("album-%i.jpg").printf (_album.id));
+                var pixbuf = new Gdk.Pixbuf.from_file_at_size (cover_path, 128, 128);
+                image_cover.pixbuf = pixbuf;
+            } catch (Error e) {
+                var pixbuf = new Gdk.Pixbuf.from_file_at_size ("/usr/share/com.github.alainm23.byte/album-default-cover.svg", 128, 128);
+                image_cover.pixbuf = pixbuf;
+            }
+        }
+        get {
+            return _album;
+        }
     }
+
+    public Album () {}
 
     construct {
         get_style_context ().add_class (Gtk.STYLE_CLASS_VIEW);
@@ -28,61 +46,44 @@ public class Views.Album : Gtk.EventBox {
         back_button.margin = 6;
         back_button.get_style_context ().add_class (Granite.STYLE_CLASS_BACK_BUTTON);
 
-        var title_label = new Gtk.Label ("<b>%s</b>".printf (_("Albums")));
-        title_label.use_markup = true;
-        title_label.valign = Gtk.Align.CENTER;
-        title_label.get_style_context ().add_class ("h3");
-
-        var search_entry = new Gtk.SearchEntry ();
-        search_entry.valign = Gtk.Align.CENTER;
-        search_entry.width_request = 250;
-        search_entry.get_style_context ().add_class ("search-entry");
-        search_entry.get_style_context ().add_class (Gtk.STYLE_CLASS_FLAT);
-        search_entry.placeholder_text = _("Your library");
-
-        var center_stack = new Gtk.Stack ();
-        center_stack.hexpand = true;
-        center_stack.transition_type = Gtk.StackTransitionType.CROSSFADE;
-
-        center_stack.add_named (title_label, "title_label");
-        center_stack.add_named (search_entry, "search_entry");
-        
-        center_stack.visible_child_name = "title_label";
-
-        var search_button = new Gtk.Button.from_icon_name ("edit-find-symbolic", Gtk.IconSize.MENU);
-        search_button.margin = 6;
-        search_button.get_style_context ().add_class (Gtk.STYLE_CLASS_FLAT);
+        var center_label = new Gtk.Label ("<b>%s</b>".printf (_("Album")));
+        center_label.use_markup = true;
+        center_label.valign = Gtk.Align.CENTER;
+        center_label.get_style_context ().add_class ("h3");
 
         var header_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 0);
         header_box.pack_start (back_button, false, false, 0);
-        header_box.set_center_widget (center_stack);
-        header_box.pack_end (search_button, false, false, 0);
+        header_box.set_center_widget (center_label);
 
-        cover_path = GLib.Path.build_filename (Byte.utils.COVER_FOLDER, ("album-%i.jpg").printf (album.id));
-        image_cover = new Widgets.Cover.from_file (cover_path, 128, "album");
+        //cover_path = GLib.Path.build_filename (Byte.utils.COVER_FOLDER, ("album-%i.jpg").printf (album.id));
+        image_cover = new Widgets.Cover.from_file (
+            "/usr/share/com.github.alainm23.byte/album-default-cover.svg", 
+            128, 
+            "album"
+        );
         image_cover.halign = Gtk.Align.START;
         image_cover.valign = Gtk.Align.START;
 
-        title_label = new Gtk.Label (album.title);
+        title_label = new Gtk.Label (null);
         title_label.wrap = true;
         title_label.wrap_mode = Pango.WrapMode.CHAR; 
         title_label.justify = Gtk.Justification.FILL;
         title_label.get_style_context ().add_class ("font-bold");
         title_label.halign = Gtk.Align.START;
         
-        artist_label = new Gtk.Label (album.artist_name);
+        artist_label = new Gtk.Label (null);
         artist_label.get_style_context ().add_class ("font-album-artist");
         artist_label.wrap = true;
         artist_label.justify = Gtk.Justification.FILL;
         artist_label.wrap_mode = Pango.WrapMode.CHAR;
         artist_label.halign = Gtk.Align.START;
 
-        genre_label = new Gtk.Label (album.genre);
+        genre_label = new Gtk.Label (null);
         genre_label.halign = Gtk.Align.START;
         genre_label.ellipsize = Pango.EllipsizeMode.END;
         genre_label.get_style_context ().add_class (Gtk.STYLE_CLASS_DIM_LABEL);
 
-        year_label = new Gtk.Label ("%i".printf (album.year));
+        year_label = new Gtk.Label (null);
         year_label.halign = Gtk.Align.START;
         year_label.ellipsize = Pango.EllipsizeMode.END;
         year_label.get_style_context ().add_class (Gtk.STYLE_CLASS_DIM_LABEL);
@@ -120,5 +121,9 @@ public class Views.Album : Gtk.EventBox {
         scrolled.add (main_box);
 
         add (scrolled);
+
+        back_button.clicked.connect (() => {
+            go_back ();
+        });
     }
 }

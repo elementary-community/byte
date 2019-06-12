@@ -1,22 +1,24 @@
-public class Widgets.TrackRow : Gtk.ListBoxRow {
+public class Widgets.TrackQueueRow : Gtk.ListBoxRow {
     public Objects.Track track { get; construct; }
+
+    public signal void remove_track (int id);
 
     private Gtk.Label track_title_label;
     private Gtk.Label artist_album_label;
-    private Gtk.Label duration_label;
+    private Gtk.Button remove_button;
 
     private Widgets.Cover image_cover;
-
     private string cover_path;
-
-    public TrackRow (Objects.Track track) {
+    private bool is_current_track;
+    public TrackQueueRow (Objects.Track track) {
         Object (
             track: track
         );
     }
 
     construct {
-        get_style_context ().add_class ("track-row");
+        is_current_track = false;
+        get_style_context ().add_class ("track-queue-row");
         
         var playing_icon = new Gtk.Image ();
         playing_icon.gicon = new ThemedIcon ("audio-volume-medium-symbolic");
@@ -48,26 +50,20 @@ public class Widgets.TrackRow : Gtk.ListBoxRow {
         image_cover.halign = Gtk.Align.START;
         image_cover.valign = Gtk.Align.START;
 
-        duration_label = new Gtk.Label (Byte.utils.get_formated_duration (track.duration));
-        duration_label.halign = Gtk.Align.END;
-        duration_label.hexpand = true;
-
-        var options_button = new Gtk.ToggleButton ();
-        options_button.valign = Gtk.Align.CENTER;
-        options_button.halign = Gtk.Align.END;
-        options_button.hexpand = true;
-        options_button.can_focus = false;
-        options_button.add (new Gtk.Image.from_icon_name ("view-more-symbolic", Gtk.IconSize.MENU));
-        options_button.tooltip_text = _("Options");
-        options_button.get_style_context ().add_class (Gtk.STYLE_CLASS_FLAT);
-        options_button.get_style_context ().add_class ("options-button");
-        options_button.get_style_context ().remove_class ("button");
-
-        var options_stack = new Gtk.Stack ();
-        options_stack.transition_type = Gtk.StackTransitionType.CROSSFADE;
-
-        options_stack.add_named (duration_label, "duration_label");
-        options_stack.add_named (options_button, "options_button");
+        remove_button = new Gtk.Button.from_icon_name ("window-close-symbolic", Gtk.IconSize.MENU);
+        remove_button.valign = Gtk.Align.CENTER;
+        remove_button.halign = Gtk.Align.END;
+        remove_button.hexpand = true;
+        remove_button.can_focus = false;
+        remove_button.tooltip_text = _("Remove");
+        remove_button.get_style_context ().add_class (Gtk.STYLE_CLASS_FLAT);
+        remove_button.get_style_context ().add_class ("remove-button");
+        
+        var remove_revealer = new Gtk.Revealer ();
+        remove_revealer.halign = Gtk.Align.END;
+        remove_revealer.transition_type = Gtk.RevealerTransitionType.SLIDE_LEFT;
+        remove_revealer.add (remove_button);
+        remove_revealer.reveal_child = false;
 
         var overlay = new Gtk.Overlay ();
         overlay.halign = Gtk.Align.START;
@@ -82,7 +78,7 @@ public class Widgets.TrackRow : Gtk.ListBoxRow {
         main_grid.attach (overlay, 0, 0, 1, 2);
         main_grid.attach (track_title_label, 1, 0, 1, 1);
         main_grid.attach (artist_album_label, 1, 1, 1, 1);
-        main_grid.attach (options_stack, 2, 0, 2, 2);
+        main_grid.attach (remove_revealer, 2, 0, 2, 2);
         
         var eventbox = new Gtk.EventBox ();
         eventbox.add_events (Gdk.EventMask.ENTER_NOTIFY_MASK | Gdk.EventMask.LEAVE_NOTIFY_MASK);
@@ -90,16 +86,11 @@ public class Widgets.TrackRow : Gtk.ListBoxRow {
 
         add (eventbox);
         
-        Byte.player.current_track_changed.connect ((current_track) => {
-            if (track.id == current_track.id) {
-                playing_revealer.reveal_child = true;
-            } else {
-                playing_revealer.reveal_child = false;
-            }
-        });
-
         eventbox.enter_notify_event.connect ((event) => {
-            options_stack.visible_child_name = "options_button";
+            if (!is_current_track) {
+                remove_revealer.reveal_child = true;
+                remove_button.get_style_context ().add_class ("closed");
+            }
 
             return false;
         });
@@ -109,9 +100,26 @@ public class Widgets.TrackRow : Gtk.ListBoxRow {
                 return false;
             }
 
-            options_stack.visible_child_name = "duration_label";
+            if (!is_current_track) {
+                remove_button.get_style_context ().remove_class ("closed");
+                remove_revealer.reveal_child = false;
+            }
 
             return false;
+        });
+
+        remove_button.clicked.connect (() => {
+            remove_track (track.id);
+        });
+
+        Byte.player.current_track_changed.connect ((current_track) => {
+            if (current_track.id == track.id) {
+                is_current_track = true;
+                playing_revealer.reveal_child =  true;
+            } else {
+                is_current_track = false;
+                playing_revealer.reveal_child =  false;
+            }
         });
     }
 }

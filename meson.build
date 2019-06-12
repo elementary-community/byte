@@ -39,13 +39,14 @@ executable(
     'src/Services/Scan.vala',
     'src/Services/Notification.vala',
     'src/Services/RadioBrowser.vala',
+    'src/Services/Lastfm.vala',
 
     'src/Widgets/Welcome.vala',
     'src/Widgets/HeaderBar.vala',
     'src/Widgets/TrackRow.vala',
+    'src/Widgets/TrackQueueRow.vala',
     'src/Widgets/ArtistRow.vala',
     'src/Widgets/AlbumRow.vala',
-    'src/Widgets/AlbumChild.vala',
     'src/Widgets/ModelButton.vala',
     'src/Widgets/MediaControl.vala',
     'src/Widgets/Cover.vala',
@@ -53,6 +54,7 @@ executable(
     'src/Widgets/Queue.vala',
     'src/Widgets/HomeButton.vala',
     'src/Widgets/RadioSearchRow.vala',
+    'src/Widgets/RadioRow.vala',
     
     'src/Widgets/Popovers/Menu.vala',
     'src/Widgets/Popovers/Sort.vala',
@@ -62,6 +64,7 @@ executable(
     'src/Views/Album.vala',
     'src/Views/Tracks.vala',
     'src/Views/Artists.vala',
+    'src/Views/Radios.vala',
     
     'src/Objects/Track.vala',
     'src/Objects/Album.vala',

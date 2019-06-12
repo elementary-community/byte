@@ -7,6 +7,7 @@ public class MainWindow : Gtk.Window {
     private Views.Albums albums_view;
     private Views.Tracks tracks_view;
     private Views.Artists artists_view;
+    private Views.Radios radios_view;
 
     private Views.Album album_view;
 
@@ -44,14 +45,15 @@ public class MainWindow : Gtk.Window {
         albums_view = new Views.Albums ();
         tracks_view = new Views.Tracks ();
         artists_view = new Views.Artists ();
-
-        //album_view = new Views.Album ();
+        album_view = new Views.Album ();
+        radios_view = new Views.Radios ();
 
         library_stack.add_named (home_view, "home_view");
         library_stack.add_named (albums_view, "albums_view");
         library_stack.add_named (tracks_view, "tracks_view");
         library_stack.add_named (artists_view, "artists_view");
-        //library_stack.add_named (album_view, "album_view");
+        library_stack.add_named (album_view, "album_view");
+        library_stack.add_named (radios_view, "radios_view");
 
         var library_view = new Gtk.Box (Gtk.Orientation.VERTICAL, 0);
         library_view.pack_start (media_control, false, false, 0);
@@ -78,8 +80,6 @@ public class MainWindow : Gtk.Window {
 
         add (overlay);
 
-        //get_all_albums_view ();
-        
         Timeout.add (200, () => {
             if (Byte.database.is_database_empty ()) {
                 main_stack.visible_child_name = "welcome_view";
@@ -111,8 +111,13 @@ public class MainWindow : Gtk.Window {
             library_stack.visible_child_name = "home_view";
         });
 
-        albums_view.go_album.connect ((id) => {
-            library_stack.visible_child_name = "album_view-%i".printf (id);
+        albums_view.go_album.connect ((album) => {
+            library_stack.visible_child_name = "album_view";
+            album_view.album = album;
+        });
+
+        album_view.go_back.connect (() => {
+            library_stack.visible_child_name = "home_view";
         });
 
         tracks_view.go_back.connect (() => {
@@ -123,6 +128,10 @@ public class MainWindow : Gtk.Window {
             library_stack.visible_child_name = "home_view";
         });
 
+        radios_view.go_back.connect (() => {
+            library_stack.visible_child_name = "home_view";
+        });
+
         home_view.go_albums_view.connect (() => {
             library_stack.visible_child_name = "albums_view";
             albums_view.get_all_albums ();
@@ -130,7 +139,7 @@ public class MainWindow : Gtk.Window {
 
         home_view.go_tracks_view.connect (() => {
             library_stack.visible_child_name = "tracks_view";
-            tracks_view.add_all_tracks ();
+            //tracks_view.add_all_tracks ();
         });
 
         home_view.go_artists_view.connect (() => {
@@ -138,25 +147,15 @@ public class MainWindow : Gtk.Window {
             artists_view.get_all_artists ();
         });
 
+        home_view.go_radios_view.connect (() => {
+            library_stack.visible_child_name = "radios_view";
+        });
+
         headerbar.show_quick_find.connect (() => {
             quick_find.reveal = !quick_find.reveal_child;
         });
     }
     
-    public void get_all_albums_view () {
-        var all_albums = new Gee.ArrayList<Objects.Album?> ();
-        all_albums = Byte.database.get_all_albums ();
-        
-        foreach (var item in all_albums) {
-            var album_view = new Views.Album (item);
-            library_stack.add_named (album_view, "album_view-%i".printf (item.id));
-        }
-    }
-
-    public void toggle_playing () {
-        headerbar.toggle_playing ();
-    }
-
     public override bool configure_event (Gdk.EventConfigure event) {
         Gtk.Allocation rect;
         get_allocation (out rect);

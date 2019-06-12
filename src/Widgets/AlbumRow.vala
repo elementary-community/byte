@@ -46,8 +46,12 @@ public class Widgets.AlbumRow : Gtk.ListBoxRow {
 
         Byte.database.updated_album_cover.connect ((album_id) => {
             if (album_id == album.id) {
-                cover_path = GLib.Path.build_filename (Byte.utils.COVER_FOLDER, ("album-%i.jpg").printf (album_id));
-                image_cover.pixbuf = new Gdk.Pixbuf.from_file_at_size (cover_path, 48, 48);
+                try {
+                    cover_path = GLib.Path.build_filename (Byte.utils.COVER_FOLDER, ("album-%i.jpg").printf (album_id));
+                    image_cover.pixbuf = new Gdk.Pixbuf.from_file_at_size (cover_path, 48, 48);
+                } catch (Error e) {
+                    stderr.printf ("Error setting default avatar icon: %s ", e.message);
+                }
             }
         });
     }

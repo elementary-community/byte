@@ -11,6 +11,7 @@ public class Byte : Gtk.Application {
     public static Services.Notification notification;
     public static Services.Scan scan_service;
     public static Services.RadioBrowser radio_browser;
+    public static Services.Lastfm lastfm_service;
     public static Utils utils;
 
     public string[] argsv;
@@ -44,6 +45,7 @@ public class Byte : Gtk.Application {
         notification = new Services.Notification ();
         scan_service = new Services.Scan ();
         radio_browser = new Services.RadioBrowser ();
+        lastfm_service = new Services.Lastfm ();
     }
 
     protected override void activate () {
@@ -76,10 +78,6 @@ public class Byte : Gtk.Application {
         // Media Keys
         media_keys = new Services.MediaKey ();
         
-        // Generate aleaotiro list
-        //utils.generate_shuffle_list ();
-        //utils.generate_playlist ();
-
         var quit_action = new SimpleAction ("quit", null);
 
         add_action (quit_action);
@@ -100,6 +98,7 @@ public class Byte : Gtk.Application {
         weak Gtk.IconTheme default_theme = Gtk.IconTheme.get_default ();
         default_theme.add_resource_path ("/com/github/alainm23/byte");
     }
+
     public static int main (string[] args) {
         Gst.init (ref args);
         var app = Byte.instance;

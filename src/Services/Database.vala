@@ -449,11 +449,12 @@ public class Services.Database : GLib.Object {
         return all;
     }
 
-    public Gee.ArrayList<Objects.Track?> get_all_tracks_order_by (int item) {
+    public Gee.ArrayList<Objects.Track?> get_all_tracks_order_by (int item, bool is_invested) {
         Sqlite.Statement stmt;
         string sql;
         int res;
         string order_mode = "tracks.title";
+        string invested_mode = "DESC";
         
         if (item == 0) {
             order_mode = "tracks.title";
@@ -466,11 +467,15 @@ public class Services.Database : GLib.Object {
             order_mode = "tracks.added_date";
         }
 
+        if (is_invested == false) {
+            invested_mode = "";
+        }
+
         sql = """
             SELECT  tracks.id, tracks.path, tracks.title, tracks.duration, tracks.is_favorite, tracks.added_date, tracks.album_id, albums.title, artists.name FROM tracks 
             INNER JOIN albums ON tracks.album_id = albums.id
-            INNER JOIN artists ON albums.artist_id = artists.id ORDER BY %s;
-        """.printf (order_mode);
+            INNER JOIN artists ON albums.artist_id = artists.id ORDER BY %s %s;
+        """.printf (order_mode, invested_mode);
 
         res = db.prepare_v2 (sql, -1, out stmt);
         assert (res == Sqlite.OK);
@@ -603,5 +608,37 @@ public class Services.Database : GLib.Object {
         }
 
         stmt.reset ();
+    }
+
+    public Gee.ArrayList<Objects.Radio?> get_all_radios () {
+        Sqlite.Statement stmt;
+        string sql;
+        int res;
+
+        sql = """
+            SELECT * FROM radios;
+        """;
+
+        res = db.prepare_v2 (sql, -1, out stmt);
+        assert (res == Sqlite.OK);
+
+        var all = new Gee.ArrayList<Objects.Radio?> ();
+
+        while ((res = stmt.step ()) == Sqlite.ROW) {
+            var radio = new Objects.Radio ();
+
+            radio.id = stmt.column_int (0);
+            radio.name = stmt.column_text (1);
+            radio.url = stmt.column_text (2);
+            radio.homepage = stmt.column_text (3);
+            radio.tags = stmt.column_text (4);
+            radio.favicon = stmt.column_text (5);
+            radio.country = stmt.column_text (6);
+            radio.state = stmt.column_text (7);
+            
+            all.add (radio);
+        }
+
+        return all;
     }
 }

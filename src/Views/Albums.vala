@@ -1,7 +1,7 @@
 public class Views.Albums : Gtk.EventBox {
     private Gtk.ListBox listbox;
     public signal void go_back ();
-    public signal void go_album (int id);
+    public signal void go_album (Objects.Album album);
 
     private bool is_initialized = false;
 
@@ -100,7 +100,7 @@ public class Views.Albums : Gtk.EventBox {
 
         listbox.row_activated.connect ((row) => {
             var item = row as Widgets.AlbumRow;
-            go_album (item.album.id);
+            go_album (item.album);
         });
 
         Byte.database.added_new_album.connect ((album) => {

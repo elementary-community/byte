@@ -27,7 +27,30 @@ public class Widgets.Cover : Gtk.EventBox {
         orig_type = type;
     }
 
+    public void set_from_file (string filepath, int pixel_size, string type) {
+        set_default (type);
+        
+        load_image (filepath, pixel_size);
+
+        orig_filename = filepath;
+        orig_pixel_size = pixel_size;
+        orig_type = type;
+    }
+
     public Cover.from_url_async (string uri, int pixel_size, bool preserve_aspect_ratio, string type, Cancellable? cancellable = null) {
+        set_default (type);
+        show_default (pixel_size);
+
+        var file = GLib.File.new_for_uri (uri);
+        
+        set_from_file_async (file, pixel_size, preserve_aspect_ratio);
+
+        orig_filename = uri;
+        orig_pixel_size = pixel_size;
+        orig_type = type;
+    }
+
+    public void set_from_url_async (string uri, int pixel_size, bool preserve_aspect_ratio, string type, Cancellable? cancellable = null) {
         set_default (type);
         show_default (pixel_size);
 

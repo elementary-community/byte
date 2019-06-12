@@ -31,6 +31,12 @@
 			<description>Tracks sort mode</description>
 		</key>
 
+        <key name="tracks-order-reverse" type="b">
+			<default>false</default>
+			<summary>Order reverse</summary>
+			<description>Order reverse</description>
+		</key>
+
         <key name="shuffle-mode" type="b">
 			<default>false</default>
 			<summary>Shuffle mode</summary>
