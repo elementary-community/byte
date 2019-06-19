@@ -8,6 +8,7 @@ public class MainWindow : Gtk.Window {
     private Views.Tracks tracks_view;
     private Views.Artists artists_view;
     private Views.Radios radios_view;
+    private Views.Playlists playlists_view;
 
     private Views.Album album_view;
 
@@ -47,6 +48,7 @@ public class MainWindow : Gtk.Window {
         artists_view = new Views.Artists ();
         album_view = new Views.Album ();
         radios_view = new Views.Radios ();
+        playlists_view = new Views.Playlists ();
 
         library_stack.add_named (home_view, "home_view");
         library_stack.add_named (albums_view, "albums_view");
@@ -54,6 +56,7 @@ public class MainWindow : Gtk.Window {
         library_stack.add_named (artists_view, "artists_view");
         library_stack.add_named (album_view, "album_view");
         library_stack.add_named (radios_view, "radios_view");
+        library_stack.add_named (playlists_view, "playlists_view");
 
         var library_view = new Gtk.Box (Gtk.Orientation.VERTICAL, 0);
         library_view.pack_start (media_control, false, false, 0);
@@ -88,7 +91,7 @@ public class MainWindow : Gtk.Window {
                 main_stack.visible_child_name = "library_view";
                 headerbar.visible_ui = true;
 
-                //Byte.scan_service.scan_local_files (Byte.settings.get_string ("library-location"));
+                Byte.scan_service.scan_local_files (Byte.settings.get_string ("library-location"));
             }
 
             return false;
@@ -117,7 +120,7 @@ public class MainWindow : Gtk.Window {
         });
 
         album_view.go_back.connect (() => {
-            library_stack.visible_child_name = "home_view";
+            library_stack.visible_child_name = "albums_view";
         });
 
         tracks_view.go_back.connect (() => {
@@ -132,9 +135,13 @@ public class MainWindow : Gtk.Window {
             library_stack.visible_child_name = "home_view";
         });
 
+        playlists_view.go_back.connect (() => {
+            library_stack.visible_child_name = "home_view";
+        });
+        
         home_view.go_albums_view.connect (() => {
             library_stack.visible_child_name = "albums_view";
-            albums_view.get_all_albums ();
+            //albums_view.get_all_albums ();
         });
 
         home_view.go_tracks_view.connect (() => {
@@ -149,6 +156,10 @@ public class MainWindow : Gtk.Window {
 
         home_view.go_radios_view.connect (() => {
             library_stack.visible_child_name = "radios_view";
+        });
+
+        home_view.go_playlists_view.connect (() => {
+            library_stack.visible_child_name = "playlists_view";
         });
 
         headerbar.show_quick_find.connect (() => {

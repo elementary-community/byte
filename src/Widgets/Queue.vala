@@ -119,8 +119,6 @@ public class Widgets.Queue : Gtk.Revealer {
                 item_max = items.size;
             }
             
-            reveal_child = true;
-
             add_all_items (items);
             
             if (_track == null) {
@@ -142,6 +140,8 @@ public class Widgets.Queue : Gtk.Revealer {
             var next_track = Byte.utils.get_next_track (track);
 
             if (next_track != null) {
+                reveal_child = true;
+
                 next_track_name.label = "%s <b>by</b> %s".printf (next_track.title, next_track.artist_name);
                 next_track_grid.tooltip_text = _("%s - %s".printf (next_track.artist_name, next_track.title));
                 
@@ -153,6 +153,7 @@ public class Widgets.Queue : Gtk.Revealer {
                     stderr.printf ("Error setting default avatar icon: %s ", e.message);
                 }
             } else {
+                print ("Se ejecuto aqui\n");
                 reveal_child = false;
             }
         });

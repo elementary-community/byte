@@ -1,8 +1,8 @@
 public class Widgets.AlbumRow : Gtk.ListBoxRow {
     public Objects.Album album { get; construct; }
 
-    private Gtk.Label title_label;
-    private Gtk.Label artist_label;
+    private Gtk.Label primary_label;
+    private Gtk.Label secondary_label;
 
     private Widgets.Cover image_cover;
 
@@ -17,18 +17,29 @@ public class Widgets.AlbumRow : Gtk.ListBoxRow {
         tooltip_text = album.title;
         get_style_context ().add_class ("album-child");
 
-        title_label = new Gtk.Label (album.title);
-        title_label.get_style_context ().add_class ("font-bold");
-        title_label.ellipsize = Pango.EllipsizeMode.END;
-        title_label.halign = Gtk.Align.START;
-        title_label.max_width_chars = 45;
-        title_label.valign = Gtk.Align.END;
+        primary_label = new Gtk.Label (album.title);
+        primary_label.get_style_context ().add_class ("font-bold");
+        primary_label.ellipsize = Pango.EllipsizeMode.END;
+        primary_label.halign = Gtk.Align.START;
+        primary_label.max_width_chars = 45;
+        primary_label.valign = Gtk.Align.END;
 
-        artist_label = new Gtk.Label (album.artist_name);
-        artist_label.halign = Gtk.Align.START;
-        artist_label.valign = Gtk.Align.START;
-        artist_label.ellipsize = Pango.EllipsizeMode.END;
+        secondary_label = new Gtk.Label (null);
+        secondary_label.halign = Gtk.Align.START;
+        secondary_label.valign = Gtk.Align.START;
+        secondary_label.ellipsize = Pango.EllipsizeMode.END;
 
+        int _value = Byte.settings.get_enum ("album-sort");
+        if (_value == 0) {
+            secondary_label.label = "%s - %s".printf (album.artist_name, album.title);
+        } else if (_value == 1) {
+            secondary_label.label = "%s - %s".printf (album.artist_name, album.title);
+        } else if (_value == 2) {
+            secondary_label.label = "%s - %i".printf (album.artist_name, album.year);
+        } else if (_value == 3) {
+            secondary_label.label = "%s - %s".printf (album.artist_name, album.genre);
+        }
+        
         cover_path = GLib.Path.build_filename (Byte.utils.COVER_FOLDER, ("album-%i.jpg").printf (album.id));
         image_cover = new Widgets.Cover.from_file (cover_path, 48, "album");
         image_cover.halign = Gtk.Align.START;
@@ -39,8 +50,8 @@ public class Widgets.AlbumRow : Gtk.ListBoxRow {
         main_grid.column_spacing = 6;
         main_grid.row_spacing = 3;
         main_grid.attach (image_cover, 0, 0, 1, 2);
-        main_grid.attach (title_label, 1, 0, 1, 1);
-        main_grid.attach (artist_label, 1, 1, 1, 1);
+        main_grid.attach (primary_label, 1, 0, 1, 1);
+        main_grid.attach (secondary_label, 1, 1, 1, 1);
 
         add (main_grid);
 

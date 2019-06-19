@@ -3,12 +3,18 @@ public class Views.Album : Gtk.EventBox {
     private Gtk.Label artist_label;
     private Gtk.Label genre_label;
     private Gtk.Label year_label;
+    
+    private Gtk.ListBox listbox;
+
     private Gtk.Button shuffle_button;
 
     private string cover_path;
     private Widgets.Cover image_cover;
     
-    public signal void go_back ();
+    public signal void go_back (string page);
+    public string back_page { set; get; }
+
+    private Gee.ArrayList<Objects.Track?> all_tracks;
 
     public Objects.Album? _album;
     public Objects.Album album {
@@ -30,6 +36,20 @@ public class Views.Album : Gtk.EventBox {
                 var pixbuf = new Gdk.Pixbuf.from_file_at_size ("/usr/share/com.github.alainm23.byte/album-default-cover.svg", 128, 128);
                 image_cover.pixbuf = pixbuf;
             }
+
+            listbox.foreach ((widget) => {
+                widget.destroy (); 
+            });
+
+            all_tracks = new Gee.ArrayList<Objects.Track?> ();
+            all_tracks = Byte.database.get_all_tracks_by_album (_album.id);
+
+            foreach (var item in all_tracks) {
+                var row = new Widgets.TrackAlbumRow (item);
+                listbox.add (row);
+            }
+
+            listbox.show_all ();
         }
         get {
             return _album;
@@ -42,9 +62,11 @@ public class Views.Album : Gtk.EventBox {
         get_style_context ().add_class (Gtk.STYLE_CLASS_VIEW);
         get_style_context ().add_class ("w-round");
 
-        var back_button = new Gtk.Button.with_label (_("Back"));
+        var back_button = new Gtk.Button.from_icon_name ("planner-arrow-back-symbolic", Gtk.IconSize.MENU);
+        back_button.can_focus = false;
         back_button.margin = 6;
-        back_button.get_style_context ().add_class (Granite.STYLE_CLASS_BACK_BUTTON);
+        back_button.get_style_context ().add_class (Gtk.STYLE_CLASS_FLAT);
+        back_button.get_style_context ().add_class ("planner-back-button");
 
         var center_label = new Gtk.Label ("<b>%s</b>".printf (_("Album")));
         center_label.use_markup = true;
@@ -102,28 +124,54 @@ public class Views.Album : Gtk.EventBox {
         detail_box.pack_start (artist_label, false, false, 0);
         detail_box.pack_start (genre_label, false, false, 0);
         detail_box.pack_start (year_label, false, false, 0);
-        detail_box.pack_end (shuffle_button, false, false, 0);
+        //detail_box.pack_end (shuffle_button, false, false, 0);
 
         var album_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 6);
         album_box.hexpand = true;
         album_box.margin = 12;
+        album_box.margin_top = 0;
         album_box.pack_start (image_cover, false, false, 0);
         album_box.pack_start (detail_box, false, false, 0);
+
+        listbox = new Gtk.ListBox (); 
+        listbox.expand = true; 
+        listbox.margin_start = 9;
+        listbox.margin_end = 9;
+
+        var separator = new Gtk.Separator (Gtk.Orientation.HORIZONTAL);
+        separator.margin_start = 14;
+        separator.margin_end = 9;
+
+        var scrolled_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 0);
+        scrolled_box.expand = true;
+        scrolled_box.pack_start (album_box, false, false, 0);
+        scrolled_box.pack_start (separator, false, false, 0);
+        scrolled_box.pack_start (listbox, true, true, 0);
+        
+        var main_scrolled = new Gtk.ScrolledWindow (null, null);
+        main_scrolled.hscrollbar_policy = Gtk.PolicyType.NEVER;
+        main_scrolled.expand = true;
+        main_scrolled.add (scrolled_box);
 
         var main_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 0);
         main_box.expand = true;
         main_box.pack_start (header_box, false, false, 0);
-        main_box.pack_start (album_box, false, false, 0);
+        main_box.pack_start (main_scrolled, true, true, 0);
 
-        var scrolled = new Gtk.ScrolledWindow (null, null);
-        scrolled.hscrollbar_policy = Gtk.PolicyType.NEVER;
-        scrolled.expand = true;
-        scrolled.add (main_box);
-
-        add (scrolled);
+        add (main_box);
 
         back_button.clicked.connect (() => {
-            go_back ();
+            go_back (back_page);
+        });
+
+        listbox.row_activated.connect ((row) => {
+            var item = row as Widgets.TrackAlbumRow;
+            
+            Byte.utils.set_items (
+                all_tracks,
+                Byte.settings.get_boolean ("shuffle-mode"),
+                item.track
+            );
         });
     }
 }

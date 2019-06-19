@@ -12,6 +12,14 @@
 		<value nick="album" value="2" />
         <value nick="added date" value="3" />
 	</enum>
+
+	<enum id="com.github.alainm23.byte.album-sort-mode">
+		<value nick="title" value="0" />
+		<value nick="artist" value="1" />
+		<value nick="year" value="2" />
+		<value nick="genre" value="3" />
+	</enum>
+
     <schema path="/com/github/alainm23/byte/" id="com.github.alainm23.byte" gettext-domain="com.github.alainm23.byte">
         <key name="library-location" type="s">
 		    <default>""</default>
@@ -25,16 +33,28 @@
 			<description>Repeat mode</description>
 		</key>
 
-        <key name="tracks-sort" enum="com.github.alainm23.byte.tracks-sort-mode">
+        <key name="track-sort" enum="com.github.alainm23.byte.tracks-sort-mode">
 			<default>"title"</default>
 			<summary>Tracks sort mode</summary>
 			<description>Tracks sort mode</description>
 		</key>
 
-        <key name="tracks-order-reverse" type="b">
+		<key name="track-order-reverse" type="b">
 			<default>false</default>
-			<summary>Order reverse</summary>
-			<description>Order reverse</description>
+			<summary>Track order reverse</summary>
+			<description>Track order reverse</description>
+		</key>
+
+		<key name="album-sort" enum="com.github.alainm23.byte.album-sort-mode">
+			<default>"title"</default>
+			<summary>Album sort mode</summary>
+			<description>Album sort mode</description>
+		</key>
+
+		<key name="album-order-reverse" type="b">
+			<default>false</default>
+			<summary>Album order reverse</summary>
+			<description>Album order reverse</description>
 		</key>
 
         <key name="shuffle-mode" type="b">

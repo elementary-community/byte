@@ -20,26 +20,48 @@
 */
 
 public class Widgets.Popovers.TrackOptions : Gtk.Popover {
+    public Objects.Track track { get; construct; }
+
     public signal void on_selected_menu (string name);
-    public TrackOptions (Gtk.Widget relative) {
+    public TrackOptions (Gtk.Widget relative, Objects.Track track) {
         Object (
             relative_to: relative,
             modal: true,
-            position: Gtk.PositionType.RIGHT
+            position: Gtk.PositionType.LEFT,
+            track: track
         );
     }
 
     construct {
-        var finalize_menu = new ModelButton (_("Mark as Completed"), "emblem-default-symbolic", _("Finalize project"));
+        var primary_label = new Gtk.Label (track.title);
+        primary_label.get_style_context ().add_class ("font-bold");
+        primary_label.ellipsize = Pango.EllipsizeMode.END;
+        primary_label.max_width_chars = 25;
+        primary_label.halign = Gtk.Align.START;
+        primary_label.valign = Gtk.Align.END;
+
+        var secondary_label = new Gtk.Label ("%s - %s".printf (track.artist_name, track.album_title));
+        secondary_label.halign = Gtk.Align.START;
+        secondary_label.valign = Gtk.Align.START;
+        secondary_label.max_width_chars = 25;
+        secondary_label.ellipsize = Pango.EllipsizeMode.END;
         
-        var edit_menu = new ModelButton (_("Edit"), "edit-symbolic", _("Change project name"));
-        //favorite_menu = new ModelButton (_("Favorite"), "emblem-favorite-symbolic", _("Favorite"));
+        var cover_path = GLib.Path.build_filename (Byte.utils.COVER_FOLDER, ("album-%i.jpg").printf (track.album_id));
+        var image_cover = new Widgets.Cover.from_file (cover_path, 32, "track");
+        image_cover.halign = Gtk.Align.START;
+        image_cover.valign = Gtk.Align.START;
 
-        var export_menu = new ModelButton (_("Export"), "document-export-symbolic", _("Export project"));
-        var share_menu = new ModelButton (_("Share"), "emblem-shared-symbolic", _("Share project"));
+        var track_grid = new Gtk.Grid ();
+        track_grid.column_spacing = 6;
+        track_grid.margin_end = 6;
+        track_grid.attach (image_cover, 0, 0, 1, 2);
+        track_grid.attach (primary_label, 1, 0, 1, 1);
+        track_grid.attach (secondary_label, 1, 1, 1, 1);
 
-        var archived_menu = new ModelButton (_("Archived"), "package-x-generic-symbolic", _("Delete project"));
-        var remove_menu = new ModelButton (_("Delete"), "user-trash-symbolic", _("Delete project"));
+        var play_menu = new ModelButton (_("Play / Pause"), "media-playback-start-symbolic", _("Finalize project"));
+        var add_playlist_menu = new ModelButton (_("Add to Playlist"), "list-add-symbolic", _("Change project name"));
+        var play_next_menu = new ModelButton (_("Play Next"), "document-export-symbolic", _("Export project"));
+        var play_last_menu = new ModelButton (_("Play Last"), "emblem-shared-symbolic", _("Share project"));
         
         var separator_1 = new Gtk.Separator (Gtk.Orientation.HORIZONTAL);
         separator_1.margin_top = 3;
@@ -57,61 +79,23 @@ public class Widgets.Popovers.TrackOptions : Gtk.Popover {
         separator_3.expand = true;
         
         var main_grid = new Gtk.Grid ();
-        main_grid.margin_top = 6;
         main_grid.margin_bottom = 6;
         main_grid.orientation = Gtk.Orientation.VERTICAL;
         main_grid.width_request = 200;
 
-        main_grid.add (finalize_menu);
-        main_grid.add (separator_1);
-        main_grid.add (edit_menu);
-        //main_grid.add (favorite_menu);
-        main_grid.add (separator_2);
-        main_grid.add (export_menu);
-        main_grid.add (share_menu);
-        main_grid.add (separator_3);
+        main_grid.add (track_grid);
+        main_grid.add (play_menu);
+        main_grid.add (add_playlist_menu);
+        main_grid.add (play_next_menu);
+        main_grid.add (play_last_menu);
+        //main_grid.add (separator_2);
+        //main_grid.add (export_menu);
+        //main_grid.add (share_menu);
+        //main_grid.add (separator_3);
         //main_grid.add (archived_menu);
-        main_grid.add (remove_menu);
+        //main_grid.add (remove_menu);
    
         add (main_grid);
-
-        // Event
-        finalize_menu.clicked.connect (() => {
-            popdown ();
-            on_selected_menu ("finalize");
-        });
-
-        edit_menu.clicked.connect (() => {
-            popdown ();
-            on_selected_menu ("edit");
-        });
-
-        /*
-        favorite_menu.clicked.connect (() => {
-            popdown ();
-            on_selected_menu ("favorite");
-        });
-        */
-
-        share_menu.clicked.connect (() => {
-            popdown ();
-            on_selected_menu ("share");
-        });
-
-        remove_menu.clicked.connect (() => {
-            popdown ();
-            on_selected_menu ("remove");
-        });
-
-        export_menu.clicked.connect (() => {
-            popdown ();
-            on_selected_menu ("export");
-        });
-
-        archived_menu.clicked.connect (() => {
-            popdown ();
-            on_selected_menu ("archived");
-        });
     }
 }
 

@@ -23,7 +23,7 @@ public class Widgets.TrackQueueRow : Gtk.ListBoxRow {
         var playing_icon = new Gtk.Image ();
         playing_icon.gicon = new ThemedIcon ("audio-volume-medium-symbolic");
         playing_icon.get_style_context ().add_class ("playing-ani-color");
-        playing_icon.pixel_size = 16;
+        playing_icon.pixel_size = 12;
 
         var playing_revealer = new Gtk.Revealer ();
         playing_revealer.halign = Gtk.Align.CENTER;

@@ -6,6 +6,8 @@ public class Services.Database : GLib.Object {
     public signal void added_new_artist (Objects.Artist artist);
     public signal void added_new_album (Objects.Album album);
     public signal void adden_new_radio (Objects.Radio radio);
+    public signal void adden_new_playlist (Objects.Playlist playlist);
+    
     public signal void updated_album_cover (int album_id);
     public Database (bool skip_tables = false) {
         int rc = 0;
@@ -76,6 +78,24 @@ public class Services.Database : GLib.Object {
             "country    TEXT," +
             "state      TEXT)", null, null);
         debug ("Table radios created");
+
+        rc = db.exec ("CREATE TABLE IF NOT EXISTS playlists (" +
+            "id           INTEGER PRIMARY KEY AUTOINCREMENT," +
+            "title        TEXT," +
+            "note         TEXT," +
+            "added_date   TEXT," +
+            "updated_date TEXT," +
+            "CONSTRAINT unique_title UNIQUE (title))", null, null);
+        debug ("Table playlists created");
+
+        rc = db.exec ("CREATE TABLE IF NOT EXISTS playlist_tracks (" +
+            "id           INTEGER PRIMARY KEY AUTOINCREMENT," +
+            "playlist_id  INT," +
+            "track_id     INT," +
+            "CONSTRAINT unique_track UNIQUE (playlist_id, track_id)," +
+            "FOREIGN KEY (track_id) REFERENCES tracks (id) ON DELETE CASCADE," +
+            "FOREIGN KEY (playlist_id) REFERENCES playlists (id) ON DELETE CASCADE)", null, null);
+        debug ("Table playlist_tracks created");
 
         rc = db.exec ("PRAGMA foreign_keys = ON;");
 
@@ -383,6 +403,53 @@ public class Services.Database : GLib.Object {
         return all;
     }
 
+    public Gee.ArrayList<Objects.Album?> get_all_albums_order_by (int item, bool is_reverse) {
+        Sqlite.Statement stmt;
+        string sql;
+        int res;
+        string order_mode = "albums.title";
+        string reverse_mode = "DESC";
+        
+        if (item == 0) {
+            order_mode = "albums.title";
+        } else if (item == 1) {
+            order_mode = "artists.name";
+        } else if (item == 2) {
+            order_mode = "albums.year";
+        } else if (item == 3) {
+            order_mode = "albums.genre";
+        }
+
+        if (is_reverse == false) {
+            reverse_mode = "";
+        }
+
+        sql = """
+            SELECT albums.id, albums.artist_id, albums.year, albums.title, albums.genre, artists.name from albums
+            INNER JOIN artists ON artists.id = albums.artist_id ORDER BY %s %s;
+        """.printf (order_mode, reverse_mode);
+
+        res = db.prepare_v2 (sql, -1, out stmt);
+        assert (res == Sqlite.OK);
+
+        var all = new Gee.ArrayList<Objects.Album?> ();
+
+        while ((res = stmt.step()) == Sqlite.ROW) {
+            var album = new Objects.Album ();
+
+            album.id = stmt.column_int (0);
+            album.artist_id = stmt.column_int (1);
+            album.year = stmt.column_int (2);
+            album.title = stmt.column_text (3);
+            album.genre = stmt.column_text (4);
+            album.artist_name = stmt.column_text (5);
+            
+            all.add (album);
+        }
+
+        return all;
+    }
+
     public Gee.ArrayList<Objects.Album?> get_random_albums () {
         Sqlite.Statement stmt;
         string sql;
@@ -414,15 +481,15 @@ public class Services.Database : GLib.Object {
         return all;
     }
 
-    public Gee.ArrayList<Objects.Track?> get_all_tracks () {
+    public Gee.ArrayList<Objects.Track?> get_tracks_recently_added () {
         Sqlite.Statement stmt;
         string sql;
         int res;
 
         sql = """
-            SELECT  tracks.id, tracks.path, tracks.title, tracks.duration, tracks.is_favorite, tracks.added_date, tracks.album_id, albums.title, artists.name FROM tracks 
+            SELECT tracks.id, tracks.path, tracks.title, tracks.duration, tracks.is_favorite, tracks.added_date, tracks.album_id, albums.title, artists.name FROM tracks 
             INNER JOIN albums ON tracks.album_id = albums.id
-            INNER JOIN artists ON albums.artist_id = artists.id ORDER BY tracks.title;
+            INNER JOIN artists ON albums.artist_id = artists.id ORDER BY tracks.added_date DESC LIMIT 100;
         """;
 
         res = db.prepare_v2 (sql, -1, out stmt);
@@ -449,12 +516,12 @@ public class Services.Database : GLib.Object {
         return all;
     }
 
-    public Gee.ArrayList<Objects.Track?> get_all_tracks_order_by (int item, bool is_invested) {
+    public Gee.ArrayList<Objects.Track?> get_all_tracks_order_by (int item, bool is_reverse) {
         Sqlite.Statement stmt;
         string sql;
         int res;
         string order_mode = "tracks.title";
-        string invested_mode = "DESC";
+        string reverse_mode = "DESC";
         
         if (item == 0) {
             order_mode = "tracks.title";
@@ -467,15 +534,15 @@ public class Services.Database : GLib.Object {
             order_mode = "tracks.added_date";
         }
 
-        if (is_invested == false) {
-            invested_mode = "";
+        if (is_reverse == false) {
+            reverse_mode = "";
         }
 
         sql = """
             SELECT  tracks.id, tracks.path, tracks.title, tracks.duration, tracks.is_favorite, tracks.added_date, tracks.album_id, albums.title, artists.name FROM tracks 
             INNER JOIN albums ON tracks.album_id = albums.id
             INNER JOIN artists ON albums.artist_id = artists.id ORDER BY %s %s;
-        """.printf (order_mode, invested_mode);
+        """.printf (order_mode, reverse_mode);
 
         res = db.prepare_v2 (sql, -1, out stmt);
         assert (res == Sqlite.OK);
@@ -494,6 +561,43 @@ public class Services.Database : GLib.Object {
             track.album_id = stmt.column_int (6);
             track.album_title = stmt.column_text (7);
             track.artist_name = stmt.column_text (8);
+            
+            all.add (track);
+        }
+
+        return all;
+    }
+
+    public Gee.ArrayList<Objects.Track?> get_all_tracks_by_album (int id) {
+        Sqlite.Statement stmt;
+        string sql;
+        int res;
+
+        sql = """
+            SELECT  tracks.id, tracks.path, tracks.title, tracks.duration, tracks.is_favorite, 
+            tracks.track, tracks.added_date, tracks.album_id, albums.title, artists.name FROM tracks 
+            INNER JOIN albums ON tracks.album_id = albums.id
+            INNER JOIN artists ON albums.artist_id = artists.id WHERE tracks.album_id = %i ORDER BY tracks.track;
+        """.printf (id);
+
+        res = db.prepare_v2 (sql, -1, out stmt);
+        assert (res == Sqlite.OK);
+
+        var all = new Gee.ArrayList<Objects.Track?> ();
+
+        while ((res = stmt.step()) == Sqlite.ROW) {
+            var track = new Objects.Track ();
+
+            track.id = stmt.column_int (0);
+            track.path = stmt.column_text (1);
+            track.title = stmt.column_text (2);
+            track.duration = stmt.column_int64 (3);
+            track.is_favorite = stmt.column_int (4);
+            track.track = stmt.column_int (5);
+            track.added_date = stmt.column_text (6);
+            track.album_id = stmt.column_int (7);
+            track.album_title = stmt.column_text (8);
+            track.artist_name = stmt.column_text (9);
             
             all.add (track);
         }
@@ -640,5 +744,85 @@ public class Services.Database : GLib.Object {
         }
 
         return all;
+    }
+
+    public Gee.ArrayList<Objects.Playlist?> get_all_playlists () {
+        Sqlite.Statement stmt;
+        string sql;
+        int res;
+
+        sql = """
+            SELECT * FROM playlists;
+        """;
+
+        res = db.prepare_v2 (sql, -1, out stmt);
+        assert (res == Sqlite.OK);
+
+        var all = new Gee.ArrayList<Objects.Playlist?> ();
+
+        while ((res = stmt.step ()) == Sqlite.ROW) {
+            var playlist = new Objects.Playlist ();
+
+            playlist.id = stmt.column_int (0);
+            playlist.title = stmt.column_text (1);
+            playlist.note = stmt.column_text (2);
+            playlist.added_date = stmt.column_text (3);
+            playlist.updated_date = stmt.column_text (4);
+            
+            all.add (playlist);
+        }
+
+        return all;
+    }
+
+    public void insert_playlist (Objects.Playlist playlist) {
+        Sqlite.Statement stmt;
+        string sql;
+        int res;
+
+        sql = """
+            INSERT OR IGNORE INTO playlists (title, note, added_date, updated_date)
+            VALUES (?, ?, ?, ?);
+        """;
+
+        res = db.prepare_v2 (sql, -1, out stmt);
+        assert (res == Sqlite.OK);
+
+        res = stmt.bind_text (1, playlist.title);
+        assert (res == Sqlite.OK);
+        
+        res = stmt.bind_text (2, playlist.note);
+        assert (res == Sqlite.OK);
+
+        res = stmt.bind_text (3, playlist.added_date);
+        assert (res == Sqlite.OK);
+
+        res = stmt.bind_text (4, playlist.updated_date);
+        assert (res == Sqlite.OK);
+
+        if (stmt.step () != Sqlite.DONE) {
+            warning ("Error: %d: %s", db.errcode (), db.errmsg ());
+        }
+        stmt.reset ();
+
+        sql = """
+            SELECT id FROM playlists WHERE added_date = ?;
+        """;
+
+        res = db.prepare_v2 (sql, -1, out stmt);
+        assert (res == Sqlite.OK);
+
+        res = stmt.bind_text (1, playlist.added_date);
+        assert (res == Sqlite.OK);
+
+        if (stmt.step () == Sqlite.ROW) {
+            playlist.id = stmt.column_int (0);
+            stdout.printf ("Playlist ID: %d - %s\n", playlist.id, playlist.title);
+            adden_new_playlist (playlist);
+        } else {
+            warning ("Error: %d: %s", db.errcode (), db.errmsg ());
+        }
+
+        stmt.reset ();
     }
 }

@@ -1,5 +1,6 @@
 public class Utils : GLib.Object {
     public Gee.ArrayList<Objects.Track?> queue_playlist { set; get; }
+    public Gee.ArrayList<Objects.Track?> queue_original_playlist { set; get; }
 
     public signal void play_items (Gee.ArrayList<Objects.Track?> items, Objects.Track? track);
     public signal void update_next_track ();
@@ -13,6 +14,7 @@ public class Utils : GLib.Object {
     
     public void set_items (Gee.ArrayList<Objects.Track?> all_items, bool shuffle_mode, Objects.Track? track) {
         queue_playlist = all_items;
+        queue_original_playlist = all_items;
 
         if (shuffle_mode) {
             queue_playlist = generate_shuffle (queue_playlist);
@@ -61,10 +63,10 @@ public class Utils : GLib.Object {
         
         if (index >= queue_playlist.size) {
             var repeat_mode = Byte.settings.get_enum ("repeat-mode");
+
             if (repeat_mode == 0) {
                 return null;
-            }
-            if (repeat_mode == 1) {
+            } else if (repeat_mode == 1) {
                 index = 0;
             }
         }

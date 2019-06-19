@@ -20,30 +20,54 @@
 */
 
 public class Widgets.Popovers.Sort : Gtk.Popover {
-    private Gtk.RadioButton title_radio;
-    private Gtk.RadioButton artist_radio;
-    private Gtk.RadioButton album_radio;
-    private Gtk.RadioButton added_radio;
+    private Gtk.RadioButton radio_01;
+    private Gtk.RadioButton radio_02;
+    private Gtk.RadioButton radio_03;
+    private Gtk.RadioButton radio_04;
     private Gtk.CheckButton order_reverse_button;
     public signal void mode_changed (int index);
     public signal void order_reverse (bool mode);
+
     public int selected {
         set {
             if (value == 0) {
-                title_radio.active = true;
+                radio_01.active = true;
             } else if (value == 1) {
-                artist_radio.active = true;
+                radio_02.active = true;
             } else if (value == 2) {
-                album_radio.active = true;
+                radio_03.active = true;
             } else if (value == 3) {
-                added_radio.active = true;
+                radio_04.active = true;
             }
         }
     }
-
     public bool reverse {
         set {
             order_reverse_button.active = value;
+        }
+    }
+
+    public string radio_01_label {
+        set {
+            radio_01.label = value;
+        }
+    }
+
+    public string radio_02_label {
+        set {
+            radio_02.label = value;
+        }
+    }
+
+    public string radio_03_label {
+        set {
+            radio_03.label = value;
+        }
+    }
+
+    public string radio_04_label {
+        set {
+            radio_04.label = value;
         }
     }
 
@@ -59,54 +83,66 @@ public class Widgets.Popovers.Sort : Gtk.Popover {
         get_style_context ().add_class (Gtk.STYLE_CLASS_VIEW);
         
         var sort_label = new Granite.HeaderLabel (_("Sort by"));
-        var desc_label = new Granite.HeaderLabel (_("Desc"));
+        sort_label.margin_start = 12;
+        sort_label.margin_top = 6;
 
-        title_radio = new Gtk.RadioButton.with_label_from_widget (null, _("Title"));
-        title_radio.get_style_context ().add_class ("planner-radio");
-        title_radio.get_style_context ().add_class ("h3");
+        //radio_01 = new Gtk.RadioButton.with_label_from_widget (null, _("Title"));
+        radio_01 = new Gtk.RadioButton.with_label_from_widget (null, null);
+        radio_01.get_style_context ().add_class ("planner-radio");
+        radio_01.get_style_context ().add_class ("h3");
+        radio_01.margin_start = 12;
 
-        artist_radio = new Gtk.RadioButton.with_label_from_widget (title_radio, _("Artist"));
-        artist_radio.get_style_context ().add_class ("planner-radio");
-        artist_radio.get_style_context ().add_class ("h3");
+        //radio_02 = new Gtk.RadioButton.with_label_from_widget (radio_01, _("Artist"));
+        radio_02 = new Gtk.RadioButton.with_label_from_widget (radio_01, null);
+        radio_02.get_style_context ().add_class ("planner-radio");
+        radio_02.get_style_context ().add_class ("h3");
+        radio_02.margin_start = 12;
 
-        album_radio = new Gtk.RadioButton.with_label_from_widget (title_radio, _("Album"));
-        album_radio.get_style_context ().add_class ("planner-radio");
-        album_radio.get_style_context ().add_class ("h3");
+        //radio_03 = new Gtk.RadioButton.with_label_from_widget (radio_01, _("Album"));
+        radio_03 = new Gtk.RadioButton.with_label_from_widget (radio_01, null);
+        radio_03.get_style_context ().add_class ("planner-radio");
+        radio_03.get_style_context ().add_class ("h3");
+        radio_03.margin_start = 12;
 
-        added_radio = new Gtk.RadioButton.with_label_from_widget (title_radio, _("Added date"));
-        added_radio.get_style_context ().add_class ("planner-radio");
-        added_radio.get_style_context ().add_class ("h3");
+        //radio_04 = new Gtk.RadioButton.with_label_from_widget (radio_01, _("Added date"));
+        radio_04 = new Gtk.RadioButton.with_label_from_widget (radio_01, null);
+        radio_04.get_style_context ().add_class ("planner-radio");
+        radio_04.get_style_context ().add_class ("h3");
+        radio_04.margin_start = 12;
+        radio_04.margin_bottom = 3;
 
         order_reverse_button = new Gtk.CheckButton.with_label (_("Reversed order"));
         order_reverse_button.get_style_context ().add_class ("planner-check");
         order_reverse_button.get_style_context ().add_class ("h3");
-        
+        order_reverse_button.margin_start = 12;
+        order_reverse_button.margin_top = 3;
+        order_reverse_button.margin_bottom = 6;
+        order_reverse_button.margin_end = 12;
+
         var main_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 3);
-        main_box.margin = 12;
-        main_box.margin_top = 6;
         main_box.pack_start (sort_label, false, false, 0);
-        main_box.pack_start (title_radio, false, false, 0);
-        main_box.pack_start (artist_radio, false, false, 0);
-        main_box.pack_start (album_radio, false, false, 0);
-        main_box.pack_start (added_radio, false, false, 0);
-        main_box.pack_start (desc_label, false, false, 0);
+        main_box.pack_start (radio_01, false, false, 0);
+        main_box.pack_start (radio_02, false, false, 0);
+        main_box.pack_start (radio_03, false, false, 0);
+        main_box.pack_start (radio_04, false, false, 0);
+        main_box.pack_start (new Gtk.Separator (Gtk.Orientation.HORIZONTAL), false, false, 0);
         main_box.pack_start (order_reverse_button, false, false, 0);
 
         add (main_box);
 
-        title_radio.toggled.connect (() => {
+        radio_01.toggled.connect (() => {
             mode_changed (0);
         });
 
-        artist_radio.toggled.connect (() => {
+        radio_02.toggled.connect (() => {
             mode_changed (1);
         });
 
-        album_radio.toggled.connect (() => {
+        radio_03.toggled.connect (() => {
             mode_changed (2);
         });
 
-        added_radio.toggled.connect (() => {
+        radio_04.toggled.connect (() => {
             mode_changed (3);
         });
 

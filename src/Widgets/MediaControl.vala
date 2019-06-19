@@ -73,12 +73,9 @@ public class Widgets.MediaControl : Gtk.Revealer {
         var image_cover = new Widgets.Cover ();
 
         var header_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 0);
-        header_box.margin = 3;
-        header_box.margin_bottom = 6;
-        header_box.margin_top = 6;
-        header_box.margin_start = 7;
-        header_box.margin_end = 6;
-        
+        header_box.margin = 3;  
+        header_box.margin_start = 6;
+        header_box.margin_end = 6;      
         
         header_box.pack_start (image_cover, false, false, 0);
         header_box.set_center_widget (metainfo_box);
@@ -117,7 +114,7 @@ public class Widgets.MediaControl : Gtk.Revealer {
             subtitle_label.label = "%s - %s".printf (track.artist_name, track.album_title);
 
             string cover_path = GLib.Path.build_filename (Byte.utils.COVER_FOLDER, ("album-%i.jpg").printf (track.album_id));
-            image_cover.set_from_file (cover_path, 38, "track");
+            image_cover.set_from_file (cover_path, 32, "track");
         });
 
         Byte.player.current_radio_changed.connect ((radio) => {

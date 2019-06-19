@@ -1,23 +1,20 @@
-public class Views.Albums : Gtk.EventBox {
+public class Views.Playlists : Gtk.EventBox {
     private Gtk.ListBox listbox;
+    private Widgets.NewPlaylist new_playlist;
     public signal void go_back ();
-    public signal void go_album (Objects.Album album);
 
     private int item_index;
     private int item_max;
 
-    private Gee.ArrayList<Objects.Album?> all_items;
+    private Gee.ArrayList<Objects.Playlist?> all_items;
 
-    public Albums () {} 
+    public Playlists () {} 
 
     construct {
         item_index = 0;
         item_max = 25;
 
-        all_items = Byte.database.get_all_albums_order_by (
-            Byte.settings.get_enum ("album-sort"), 
-            Byte.settings.get_boolean ("album-order-reverse")
-        );
+        all_items = Byte.database.get_all_playlists ();
 
         get_style_context ().add_class (Gtk.STYLE_CLASS_VIEW);
         get_style_context ().add_class ("w-round");
@@ -29,7 +26,7 @@ public class Views.Albums : Gtk.EventBox {
         back_button.get_style_context ().add_class ("planner-back-button");
 
         var search_button = new Gtk.Button.from_icon_name ("edit-find-symbolic", Gtk.IconSize.MENU);
-        search_button.label = _("Albums");
+        search_button.label = _("Playlists");
         search_button.can_focus = false;
         search_button.image_position = Gtk.PositionType.LEFT;
         search_button.valign = Gtk.Align.CENTER;
@@ -55,41 +52,29 @@ public class Views.Albums : Gtk.EventBox {
         
         center_stack.visible_child_name = "search_button";
 
-        var sort_button = new Gtk.ToggleButton ();
-        sort_button.margin = 6;
-        sort_button.can_focus = false;
-        sort_button.add (new Gtk.Image.from_icon_name ("planner-sort-symbolic", Gtk.IconSize.MENU));
-        sort_button.tooltip_text = _("Sort");
-        sort_button.get_style_context ().add_class (Gtk.STYLE_CLASS_FLAT);
-        sort_button.get_style_context ().add_class ("sort-button");
-
         var header_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 0);
         header_box.pack_start (back_button, false, false, 0);
         header_box.set_center_widget (center_stack);
-        header_box.pack_end (sort_button, false, false, 0);
 
-        var sort_popover = new Widgets.Popovers.Sort (sort_button);
-        sort_popover.selected = Byte.settings.get_enum ("album-sort");
-        sort_popover.reverse = Byte.settings.get_boolean ("album-order-reverse");
-        sort_popover.radio_01_label = _("Title");
-        sort_popover.radio_02_label = _("Artist");
-        sort_popover.radio_03_label = _("Year");
-        sort_popover.radio_04_label = _("Genre");
+        new_playlist = new Widgets.NewPlaylist ();
 
         listbox = new Gtk.ListBox (); 
         listbox.expand = true;
+
+        var box = new Gtk.Box (Gtk.Orientation.VERTICAL, 0);
+        box.pack_start (new_playlist, false, false);
+        box.pack_start (listbox, true, true, 0);
 
         var scrolled = new Gtk.ScrolledWindow (null, null);
         scrolled.margin_top = 3;
         scrolled.hscrollbar_policy = Gtk.PolicyType.NEVER;
         scrolled.expand = true;
-        scrolled.add (listbox);
+        scrolled.add (box);
 
         var main_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 0);
         main_box.margin_bottom = 3;
         main_box.expand = true;
         main_box.pack_start (header_box, false, false, 0);
-        //main_box.pack_start (new Gtk.Separator (Gtk.Orientation.HORIZONTAL), false, false);
         main_box.pack_start (scrolled, true, true, 0);
         
         add (main_box);
@@ -128,57 +113,17 @@ public class Views.Albums : Gtk.EventBox {
             */
         });
 
-        sort_button.toggled.connect (() => {
-            if (sort_button.active) {
-                sort_popover.show_all ();
-            }
-        });
 
-        sort_popover.closed.connect (() => {
-            sort_button.active = false;
-        });
-
-        sort_popover.mode_changed.connect ((mode) => {
-            Byte.settings.set_enum ("album-sort", mode);
-
-            item_index = 0;
-            item_max = 100;
-            
-            listbox.foreach ((widget) => {
-                widget.destroy (); 
-            });
-
-            all_items = Byte.database.get_all_albums_order_by (mode, Byte.settings.get_boolean ("album-order-reverse"));
-
-            add_all_items ();
-        });
-
-        sort_popover.order_reverse.connect ((reverse) => {
-            Byte.settings.set_boolean ("album-order-reverse", reverse); 
-
-            item_index = 0;
-            item_max = 100;
-            
-            listbox.foreach ((widget) => {
-                widget.destroy (); 
-            });
-
-            all_items = Byte.database.get_all_albums_order_by (
-                Byte.settings.get_enum ("album-sort"), 
-                Byte.settings.get_boolean ("album-order-reverse")
-            );
-
-            add_all_items ();
-        });
-        
         listbox.row_activated.connect ((row) => {
+            /*
             var item = row as Widgets.AlbumRow;
             go_album (item.album);
+            */
         });
 
-        Byte.database.added_new_album.connect ((track) => {
+        Byte.database.adden_new_playlist.connect ((playlist) => {
             Idle.add (() => {
-                add_item (track);
+                add_item (playlist);
 
                 return false;
             });
@@ -188,21 +133,21 @@ public class Views.Albums : Gtk.EventBox {
             if (pos == Gtk.PositionType.BOTTOM) {
                 
                 item_index = item_max;
-                item_max = item_max + 200;
+                item_max = item_max + 100;
 
                 if (item_max > all_items.size) {
                     item_max = all_items.size;
                 }
 
-                add_all_items ();
+                //add_all_items ();
             }
         });
     }
 
-    private void add_item (Objects.Album album) {
-        var row = new Widgets.AlbumRow (album);
+    private void add_item (Objects.Playlist playlist) {
+        var row = new Widgets.PlaylistRow (playlist);
         
-        all_items.add (album);
+        all_items.add (playlist);
         listbox.add (row);
         listbox.show_all ();
     }
@@ -213,7 +158,7 @@ public class Views.Albums : Gtk.EventBox {
         }
 
         for (int i = item_index; i < item_max; i++) {
-            var row = new Widgets.AlbumRow (all_items [i]);
+            var row = new Widgets.PlaylistRow (all_items [i]);
 
             listbox.add (row);
             listbox.show_all ();

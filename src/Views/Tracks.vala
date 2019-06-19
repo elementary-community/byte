@@ -16,8 +16,8 @@ public class Views.Tracks : Gtk.EventBox {
         item_max = 25;
 
         all_tracks = Byte.database.get_all_tracks_order_by (
-            Byte.settings.get_enum ("tracks-sort"), 
-            Byte.settings.get_boolean ("tracks-order-reverse")
+            Byte.settings.get_enum ("track-sort"), 
+            Byte.settings.get_boolean ("track-order-reverse")
         );
 
         get_style_context ().add_class (Gtk.STYLE_CLASS_VIEW);
@@ -29,12 +29,7 @@ public class Views.Tracks : Gtk.EventBox {
         back_button.get_style_context ().add_class (Gtk.STYLE_CLASS_FLAT);
         back_button.get_style_context ().add_class ("planner-back-button");
 
-        var title_label = new Gtk.Label ("<b>%s</b>".printf (_("Tracks")));
-        title_label.use_markup = true;
-        title_label.valign = Gtk.Align.CENTER;
-        title_label.get_style_context ().add_class ("h3");
-
-        var search_button = new Gtk.Button.from_icon_name ("edit-find-symbolic", Gtk.IconSize.MENU);
+        var search_button = new Gtk.Button.from_icon_name ("media-playlist-shuffle-symbolic", Gtk.IconSize.MENU);
         search_button.label = _("Songs");
         search_button.can_focus = false;
         search_button.image_position = Gtk.PositionType.LEFT;
@@ -52,6 +47,7 @@ public class Views.Tracks : Gtk.EventBox {
         search_entry.get_style_context ().add_class (Gtk.STYLE_CLASS_FLAT);
         search_entry.placeholder_text = _("Your library");
 
+        /*
         var center_stack = new Gtk.Stack ();
         center_stack.hexpand = true;
         center_stack.transition_type = Gtk.StackTransitionType.CROSSFADE;
@@ -60,6 +56,7 @@ public class Views.Tracks : Gtk.EventBox {
         center_stack.add_named (search_entry, "search_entry");
         
         center_stack.visible_child_name = "search_button";
+        */
 
         var sort_button = new Gtk.ToggleButton ();
         sort_button.margin = 6;
@@ -71,12 +68,16 @@ public class Views.Tracks : Gtk.EventBox {
 
         var header_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 0);
         header_box.pack_start (back_button, false, false, 0);
-        header_box.set_center_widget (center_stack);
+        header_box.set_center_widget (search_button);
         header_box.pack_end (sort_button, false, false, 0);
 
         var sort_popover = new Widgets.Popovers.Sort (sort_button);
-        sort_popover.selected = Byte.settings.get_enum ("tracks-sort");
-        sort_popover.reverse = Byte.settings.get_boolean ("tracks-order-reverse");
+        sort_popover.selected = Byte.settings.get_enum ("track-sort");
+        sort_popover.reverse = Byte.settings.get_boolean ("track-order-reverse");
+        sort_popover.radio_01_label = _("Title");
+        sort_popover.radio_02_label = _("Artist");
+        sort_popover.radio_03_label = _("Album");
+        sort_popover.radio_04_label = _("Added date");
 
         listbox = new Gtk.ListBox (); 
         listbox.expand = true;
@@ -113,9 +114,9 @@ public class Views.Tracks : Gtk.EventBox {
         main_box.margin_bottom = 3;
         main_box.expand = true;
         main_box.pack_start (header_box, false, false, 0);
-        main_box.pack_start (new Gtk.Separator (Gtk.Orientation.HORIZONTAL), false, false);
-        main_box.pack_start (grid, false, false);
-        main_box.pack_start (new Gtk.Separator (Gtk.Orientation.HORIZONTAL), false, false);
+        //main_box.pack_start (new Gtk.Separator (Gtk.Orientation.HORIZONTAL), false, false);
+        //main_box.pack_start (grid, false, false);
+        //main_box.pack_start (new Gtk.Separator (Gtk.Orientation.HORIZONTAL), false, false);
         main_box.pack_start (scrolled, true, true, 0);
         
         add (main_box);
@@ -127,10 +128,14 @@ public class Views.Tracks : Gtk.EventBox {
         });
 
         search_button.clicked.connect (() => {
-            center_stack.visible_child_name = "search_entry";
-            search_entry.grab_focus ();
+            Byte.utils.set_items (
+                all_tracks,
+                true,
+                null
+            );
         });
 
+        /*
         search_entry.key_release_event.connect ((key) => {
             if (key.keyval == 65307) {
                 center_stack.visible_child_name = "search_button";
@@ -152,7 +157,7 @@ public class Views.Tracks : Gtk.EventBox {
                     search_entry.text.down () in item.track.album_title.down ();
             });
         });
-
+        */
         sort_button.toggled.connect (() => {
             if (sort_button.active) {
                 sort_popover.show_all ();
@@ -164,7 +169,7 @@ public class Views.Tracks : Gtk.EventBox {
         });
 
         sort_popover.mode_changed.connect ((mode) => {
-            Byte.settings.set_enum ("tracks-sort", mode);
+            Byte.settings.set_enum ("track-sort", mode);
 
             item_index = 0;
             item_max = 100;
@@ -173,13 +178,13 @@ public class Views.Tracks : Gtk.EventBox {
                 widget.destroy (); 
             });
 
-            all_tracks = Byte.database.get_all_tracks_order_by (mode, Byte.settings.get_boolean ("tracks-order-reverse"));
+            all_tracks = Byte.database.get_all_tracks_order_by (mode, Byte.settings.get_boolean ("track-order-reverse"));
 
             add_all_tracks ();
         });
 
         sort_popover.order_reverse.connect ((reverse) => {
-            Byte.settings.set_boolean ("tracks-order-reverse", reverse); 
+            Byte.settings.set_boolean ("track-order-reverse", reverse); 
 
             item_index = 0;
             item_max = 100;
@@ -189,8 +194,8 @@ public class Views.Tracks : Gtk.EventBox {
             });
 
             all_tracks = Byte.database.get_all_tracks_order_by (
-                Byte.settings.get_enum ("tracks-sort"), 
-                Byte.settings.get_boolean ("tracks-order-reverse")
+                Byte.settings.get_enum ("track-sort"), 
+                Byte.settings.get_boolean ("track-order-reverse")
             );
 
             add_all_tracks ();

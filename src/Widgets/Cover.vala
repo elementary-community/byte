@@ -135,8 +135,11 @@ public class Widgets.Cover : Gtk.EventBox {
         } else if (type == "radio") {
             DEFAULT_ICON = "/usr/share/com.github.alainm23.byte/radio-default-cover.svg";
             get_style_context ().add_class ("album-cover");
-        } else {
+        } else if (type == "track") {
             DEFAULT_ICON = "/usr/share/com.github.alainm23.byte/track-default-cover.svg";
+            get_style_context ().add_class ("album-cover");
+        } else {
+            DEFAULT_ICON = "/usr/share/com.github.alainm23.byte/playlist-default-cover.svg";
             get_style_context ().add_class ("album-cover");
         }
     }

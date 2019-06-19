@@ -47,7 +47,6 @@ executable(
     'src/Widgets/TrackQueueRow.vala',
     'src/Widgets/ArtistRow.vala',
     'src/Widgets/AlbumRow.vala',
-    'src/Widgets/ModelButton.vala',
     'src/Widgets/MediaControl.vala',
     'src/Widgets/Cover.vala',
     'src/Widgets/QuickFind.vala',
@@ -55,21 +54,26 @@ executable(
     'src/Widgets/HomeButton.vala',
     'src/Widgets/RadioSearchRow.vala',
     'src/Widgets/RadioRow.vala',
+    'src/Widgets/TrackAlbumRow.vala',
+    'src/Widgets/NewPlaylist.vala',
+    'src/Widgets/PlaylistRow.vala',
     
-    'src/Widgets/Popovers/Menu.vala',
     'src/Widgets/Popovers/Sort.vala',
-
+    'src/Widgets/Popovers/TrackOptions.vala',
+    
     'src/Views/Home.vala',
     'src/Views/Albums.vala',
     'src/Views/Album.vala',
     'src/Views/Tracks.vala',
     'src/Views/Artists.vala',
     'src/Views/Radios.vala',
+    'src/Views/Playlists.vala',
     
     'src/Objects/Track.vala',
     'src/Objects/Album.vala',
     'src/Objects/Artist.vala',
     'src/Objects/Radio.vala',
+    'src/Objects/Playlist.vala',
     dependencies: [
         dependency('gee-0.8'),
         dependency('gobject-2.0'),
