@@ -41,19 +41,19 @@ public class Views.Albums : Gtk.EventBox {
 
         var search_entry = new Gtk.SearchEntry ();
         search_entry.valign = Gtk.Align.CENTER;
-        search_entry.width_request = 250;
+        search_entry.hexpand = true;
+        search_entry.margin = 6;
         search_entry.get_style_context ().add_class ("search-entry");
-        search_entry.get_style_context ().add_class (Gtk.STYLE_CLASS_FLAT);
         search_entry.placeholder_text = _("Your library");
 
-        var center_stack = new Gtk.Stack ();
-        center_stack.hexpand = true;
-        center_stack.transition_type = Gtk.StackTransitionType.CROSSFADE;
+        var search_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 0);
+        search_box.add (search_entry);
+        search_box.add (new Gtk.Separator (Gtk.Orientation.HORIZONTAL));
 
-        center_stack.add_named (search_button, "search_button");
-        center_stack.add_named (search_entry, "search_entry");
-        
-        center_stack.visible_child_name = "search_button";
+        var search_revealer = new Gtk.Revealer ();
+        search_revealer.transition_type = Gtk.RevealerTransitionType.SLIDE_UP;
+        search_revealer.add (search_box);
+        search_revealer.reveal_child = false;
 
         var sort_button = new Gtk.ToggleButton ();
         sort_button.margin = 6;
@@ -65,7 +65,7 @@ public class Views.Albums : Gtk.EventBox {
 
         var header_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 0);
         header_box.pack_start (back_button, false, false, 0);
-        header_box.set_center_widget (center_stack);
+        header_box.set_center_widget (search_button);
         header_box.pack_end (sort_button, false, false, 0);
 
         var sort_popover = new Widgets.Popovers.Sort (sort_button);
@@ -89,7 +89,8 @@ public class Views.Albums : Gtk.EventBox {
         main_box.margin_bottom = 3;
         main_box.expand = true;
         main_box.pack_start (header_box, false, false, 0);
-        //main_box.pack_start (new Gtk.Separator (Gtk.Orientation.HORIZONTAL), false, false);
+        main_box.pack_start (new Gtk.Separator (Gtk.Orientation.HORIZONTAL), false, false);
+        main_box.pack_start (search_revealer, false, false, 0);
         main_box.pack_start (scrolled, true, true, 0);
         
         add (main_box);
@@ -100,32 +101,51 @@ public class Views.Albums : Gtk.EventBox {
         });
 
         search_button.clicked.connect (() => {
-            center_stack.visible_child_name = "search_entry";
-            search_entry.grab_focus ();
+            if (search_revealer.reveal_child) {
+                search_revealer.reveal_child = false;
+                search_entry.text = "";
+            } else {
+                search_revealer.reveal_child = true;
+                search_entry.grab_focus ();
+            }            
         });
 
         search_entry.key_release_event.connect ((key) => {
             if (key.keyval == 65307) {
-                center_stack.visible_child_name = "search_button";
+                search_revealer.reveal_child = false;
+                search_entry.text = "";
             }
 
             return false;
         });
-
-        search_entry.focus_out_event.connect (() => {
-            center_stack.visible_child_name = "search_button";
-            return false;
-        });
-
+        
         search_entry.search_changed.connect (() => {
-            /*
-            listbox.set_filter_func ((row) => {
-                var item = row as Widgets.TrackRow;
-                return search_entry.text.down () in item.track.title.down () ||
-                    search_entry.text.down () in item.track.artist_name.down () ||
-                    search_entry.text.down () in item.track.album_title.down ();
-            });
-            */
+            if (search_entry.text != "") {
+                item_index = 0;
+                item_max = 100;
+                
+                listbox.foreach ((widget) => {
+                    widget.destroy (); 
+                });
+
+                all_items = Byte.database.get_all_albums_search (search_entry.text.down ());
+
+                add_all_items ();
+            } else {
+                item_index = 0;
+                item_max = 100;
+                
+                listbox.foreach ((widget) => {
+                    widget.destroy (); 
+                });
+
+                all_items = Byte.database.get_all_albums_order_by (
+                    Byte.settings.get_enum ("album-sort"), 
+                    Byte.settings.get_boolean ("album-order-reverse")
+                );
+
+                add_all_items ();
+            }
         });
 
         sort_button.toggled.connect (() => {
@@ -176,9 +196,9 @@ public class Views.Albums : Gtk.EventBox {
             go_album (item.album);
         });
 
-        Byte.database.added_new_album.connect ((track) => {
+        Byte.database.added_new_album.connect ((album) => {
             Idle.add (() => {
-                add_item (track);
+                add_item (album);
 
                 return false;
             });
@@ -200,11 +220,13 @@ public class Views.Albums : Gtk.EventBox {
     }
 
     private void add_item (Objects.Album album) {
-        var row = new Widgets.AlbumRow (album);
+        if (album.id != 0) {
+            var row = new Widgets.AlbumRow (album);
         
-        all_items.add (album);
-        listbox.add (row);
-        listbox.show_all ();
+            all_items.add (album);
+            listbox.add (row);
+            listbox.show_all ();
+        }
     }
 
     public void add_all_items () {

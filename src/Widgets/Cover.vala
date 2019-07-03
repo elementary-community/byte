@@ -137,7 +137,7 @@ public class Widgets.Cover : Gtk.EventBox {
             get_style_context ().add_class ("album-cover");
         } else if (type == "track") {
             DEFAULT_ICON = "/usr/share/com.github.alainm23.byte/track-default-cover.svg";
-            get_style_context ().add_class ("album-cover");
+            get_style_context ().add_class ("track-cover");
         } else {
             DEFAULT_ICON = "/usr/share/com.github.alainm23.byte/playlist-default-cover.svg";
             get_style_context ().add_class ("album-cover");

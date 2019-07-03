@@ -27,7 +27,7 @@ public class Widgets.Popovers.Sort : Gtk.Popover {
     private Gtk.CheckButton order_reverse_button;
     public signal void mode_changed (int index);
     public signal void order_reverse (bool mode);
-
+    
     public int selected {
         set {
             if (value == 0) {
@@ -81,11 +81,11 @@ public class Widgets.Popovers.Sort : Gtk.Popover {
 
     construct {
         get_style_context ().add_class (Gtk.STYLE_CLASS_VIEW);
-        
+
         var sort_label = new Granite.HeaderLabel (_("Sort by"));
         sort_label.margin_start = 12;
         sort_label.margin_top = 6;
-
+        
         //radio_01 = new Gtk.RadioButton.with_label_from_widget (null, _("Title"));
         radio_01 = new Gtk.RadioButton.with_label_from_widget (null, null);
         radio_01.get_style_context ().add_class ("planner-radio");

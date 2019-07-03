@@ -1,9 +1,10 @@
 public class Utils : GLib.Object {
     public Gee.ArrayList<Objects.Track?> queue_playlist { set; get; }
-    public Gee.ArrayList<Objects.Track?> queue_original_playlist { set; get; }
 
     public signal void play_items (Gee.ArrayList<Objects.Track?> items, Objects.Track? track);
     public signal void update_next_track ();
+    public signal void add_next_track (Objects.Track? track, int index);
+    public signal void add_last_track (Objects.Track? track);
 
     public string MAIN_FOLDER;
     public string COVER_FOLDER;
@@ -12,12 +13,28 @@ public class Utils : GLib.Object {
         COVER_FOLDER = GLib.Path.build_filename (MAIN_FOLDER, "covers");
     }
     
-    public void set_items (Gee.ArrayList<Objects.Track?> all_items, bool shuffle_mode, Objects.Track? track) {
-        queue_playlist = all_items;
-        queue_original_playlist = all_items;
+    public void shuffle_changed (bool shuffle_mode) {
+        if (queue_playlist != null) {
+            if (shuffle_mode) {
+                queue_playlist = generate_shuffle (queue_playlist);
 
+                if (Byte.player.current_track != null) {
+                    int index = get_track_index_by_id (Byte.player.current_track.id, queue_playlist);
+                    queue_playlist.remove_at (index);
+                    queue_playlist.insert (0, Byte.player.current_track);
+                }
+            } else {
+                queue_playlist = playlist_order (queue_playlist);
+            }
+    
+            play_items (queue_playlist, Byte.player.current_track);
+            update_next_track ();
+        }
+    }
+
+    public void set_items (Gee.ArrayList<Objects.Track?> all_items, bool shuffle_mode, Objects.Track? track) {
         if (shuffle_mode) {
-            queue_playlist = generate_shuffle (queue_playlist);
+            queue_playlist = generate_shuffle (all_items);
 
             if (track != null) {
                 int index = get_track_index_by_id (track.id, queue_playlist);
@@ -27,9 +44,15 @@ public class Utils : GLib.Object {
 
             Byte.settings.set_boolean ("shuffle-mode", true);
         } else {
+            queue_playlist = playlist_order (all_items);
             Byte.settings.set_boolean ("shuffle-mode", false);
         }
         
+        foreach (var item in queue_playlist) {
+            print ("Track: %i - %s\n".printf (item._id, item.title));
+        }
+        print ("--------------------\n");
+
         play_items (queue_playlist, track);
     }
 
@@ -53,6 +76,20 @@ public class Utils : GLib.Object {
             var tmp_track = items [random_index];
             items [random_index] = items [i];
             items [i] = tmp_track;
+        }
+
+        return items;
+    }
+
+    public Gee.ArrayList<Objects.Track?> playlist_order (Gee.ArrayList<Objects.Track?> items) {
+        for (int j = 0; j < items.size; j++) {
+            for (int i = 0; i < items.size - 1; i++) {
+                if (items [i]._id > items [i + 1]._id) {
+                    var tmp_track = items [i + 1];
+                    items [i + 1] = items [i];
+                    items [i] = tmp_track;
+                }
+            }
         }
 
         return items;
@@ -89,6 +126,18 @@ public class Utils : GLib.Object {
         queue_playlist.remove_at (index);
 
         update_next_track ();
+    }
+
+    public void set_next_track (Objects.Track track) {
+        int index = get_track_index_by_id (Byte.player.current_track.id, queue_playlist) + 1;
+        queue_playlist.insert (index, track);
+
+        add_next_track (track, index);
+    }
+
+    public void set_last_track (Objects.Track track) {
+        queue_playlist.add (track);
+        add_last_track (track);
     }
 
     public void download_image (string type, int id, string url) {

@@ -34,13 +34,11 @@ public class Widgets.MediaControl : Gtk.Revealer {
         title_label.ellipsize = Pango.EllipsizeMode.END;
         title_label.halign = Gtk.Align.CENTER;
         title_label.selectable = true;
-        title_label.can_focus = false;
 
         subtitle_label = new Gtk.Label (null);
         subtitle_label.halign = Gtk.Align.CENTER;
         subtitle_label.ellipsize = Pango.EllipsizeMode.END;
         subtitle_label.selectable = true;
-        subtitle_label.can_focus = false;
 
         favorite_button = new Gtk.Button ();
         favorite_button.get_style_context ().add_class (Gtk.STYLE_CLASS_FLAT);
@@ -66,6 +64,8 @@ public class Widgets.MediaControl : Gtk.Revealer {
         lyric_revealer.reveal_child = false;
 
         var metainfo_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 0);
+        metainfo_box.margin_start = 6;
+        metainfo_box.margin_end = 6;
         metainfo_box.valign = Gtk.Align.CENTER;
         metainfo_box.add (title_label);
         metainfo_box.add (subtitle_label);
@@ -76,11 +76,8 @@ public class Widgets.MediaControl : Gtk.Revealer {
         header_box.margin = 3;  
         header_box.margin_start = 6;
         header_box.margin_end = 6;      
-        
         header_box.pack_start (image_cover, false, false, 0);
         header_box.set_center_widget (metainfo_box);
-        //header_box.pack_start (metainfo_box, false, false, 0);
-        //header_box.pack_end (lyric_revealer, false, false, 0);
         header_box.pack_end (favorite_revealer, false, false, 0);
 
         var main_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 0);
@@ -93,8 +90,26 @@ public class Widgets.MediaControl : Gtk.Revealer {
         favorite_button.clicked.connect (() => {
             if (favorite_button.image == icon_favorite) {
                 favorite_button.image = icon_no_favorite;
+                
+                if (Byte.player.current_track != null) {
+                    Byte.database.set_track_favorite (Byte.player.current_track, 0);
+                }
             } else {
                 favorite_button.image = icon_favorite;
+
+                if (Byte.player.current_track != null) {
+                    Byte.database.set_track_favorite (Byte.player.current_track, 1);
+                }
+            }
+        });
+
+        Byte.database.updated_track_favorite.connect ((track, favorite) => {
+            if (Byte.player.current_track != null && track.id == Byte.player.current_track.id) {
+                if (favorite == 0) {
+                    favorite_button.image = icon_no_favorite;
+                } else {
+                    favorite_button.image = icon_favorite;
+                }
             }
         });
 
@@ -115,6 +130,12 @@ public class Widgets.MediaControl : Gtk.Revealer {
 
             string cover_path = GLib.Path.build_filename (Byte.utils.COVER_FOLDER, ("album-%i.jpg").printf (track.album_id));
             image_cover.set_from_file (cover_path, 32, "track");
+
+            if (track.is_favorite == 0) {
+                favorite_button.image = icon_no_favorite;
+            } else {
+                favorite_button.image = icon_favorite;
+            }
         });
 
         Byte.player.current_radio_changed.connect ((radio) => {
@@ -149,9 +170,22 @@ public class Widgets.MediaControl : Gtk.Revealer {
 
         Byte.lastfm_service.radio_cover_track_found.connect ((track_url) => {
             print ("URL: %s\n".printf (track_url));
-            image_cover.set_from_url_async (track_url, 32, true, "radio");
+            image_cover.set_from_url_async (track_url, 32, true, "track");
         });
 
+        Byte.database.updated_album_cover.connect ((album_id) => {
+            if (Byte.player.current_track != null && album_id == Byte.player.current_track.album_id) {
+                try {
+                    image_cover.pixbuf = new Gdk.Pixbuf.from_file_at_size (
+                        GLib.Path.build_filename (Byte.utils.COVER_FOLDER, ("album-%i.jpg").printf (album_id)), 
+                        32, 
+                        32);
+                } catch (Error e) {
+                    stderr.printf ("Error setting default avatar icon: %s ", e.message);
+                }
+            }
+        });
+        
         timeline.scale.change_value.connect ((scroll, new_value) => {
             Byte.player.seek_to_progress (new_value);
             return true;

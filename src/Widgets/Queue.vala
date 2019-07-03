@@ -1,6 +1,6 @@
 public class Widgets.Queue : Gtk.Revealer {
     private Widgets.Cover image_cover;
-    private Gtk.ListBox queue_listbox;
+    private Gtk.ListBox listbox;
     private Gee.ArrayList<Objects.Track?> items;
     private int item_index;
     private int item_max;
@@ -78,8 +78,8 @@ public class Widgets.Queue : Gtk.Revealer {
         title_revealer.add (title_eventbox);
         title_revealer.reveal_child = false;
 
-        queue_listbox = new Gtk.ListBox (); 
-        queue_listbox.expand = true;
+        listbox = new Gtk.ListBox (); 
+        listbox.expand = true;
 
         var queue_scrolled = new Gtk.ScrolledWindow (null, null);
         queue_scrolled.margin_bottom = 6;
@@ -87,7 +87,7 @@ public class Widgets.Queue : Gtk.Revealer {
         queue_scrolled.height_request = 275;
         queue_scrolled.hscrollbar_policy = Gtk.PolicyType.NEVER;
         queue_scrolled.expand = true;
-        queue_scrolled.add (queue_listbox);
+        queue_scrolled.add (listbox);
 
         var tracks_revealer = new Gtk.Revealer ();
         tracks_revealer.transition_type = Gtk.RevealerTransitionType.SLIDE_UP;
@@ -106,14 +106,14 @@ public class Widgets.Queue : Gtk.Revealer {
         add (main_box);
 
         Byte.utils.play_items.connect ((_items, _track) => {
-            queue_listbox.foreach ((widget) => {
+            listbox.foreach ((widget) => {
                 widget.destroy (); 
             });
 
             items = _items;
 
             item_index = 0;
-            item_max = 100;
+            item_max = 50;
 
             if (item_max > items.size) {
                 item_max = items.size;
@@ -125,13 +125,21 @@ public class Widgets.Queue : Gtk.Revealer {
                 Byte.player.set_track (items [0]);
             } else {
                 Byte.player.set_track (_track);
+
+                int current_index = Byte.utils.get_track_index_by_id (_track.id, items);
+
+                listbox.set_filter_func ((row) => {
+                    var index = row.get_index ();
+
+                    return index >= current_index; 
+                });
             }
         });
 
         Byte.player.current_track_changed.connect ((track) => {
             int current_index = Byte.utils.get_track_index_by_id (track.id, items);
 
-            queue_listbox.set_filter_func ((row) => {
+            listbox.set_filter_func ((row) => {
                 var index = row.get_index ();
 
                 return index >= current_index; 
@@ -185,11 +193,45 @@ public class Widgets.Queue : Gtk.Revealer {
             }
         });
 
+        Byte.utils.add_next_track.connect ((track, index) => {
+            var row = new Widgets.TrackQueueRow (track);
+
+            row.remove_track.connect ((id) => {
+                Byte.utils.remove_track (id);
+
+                GLib.Timeout.add (250, () => {
+                    row.destroy ();
+                    return GLib.Source.REMOVE;
+                });
+            });
+            
+            listbox.insert (row, index);
+            listbox.show_all ();
+
+            Byte.utils.update_next_track ();
+        });
+
+        Byte.utils.add_last_track.connect ((track) => {
+            var row = new Widgets.TrackQueueRow (track);
+
+            row.remove_track.connect ((id) => {
+                Byte.utils.remove_track (id);
+
+                GLib.Timeout.add (250, () => {
+                    row.destroy ();
+                    return GLib.Source.REMOVE;
+                });
+            });
+            
+            listbox.add (row);
+            listbox.show_all ();
+        });
+
         queue_scrolled.edge_reached.connect((pos)=> {
             if (pos == Gtk.PositionType.BOTTOM) {
                 
                 item_index = item_max;
-                item_max = item_max + 100;
+                item_max = item_max + 50;
 
                 if (item_max > items.size) {
                     item_max = items.size;
@@ -232,6 +274,19 @@ public class Widgets.Queue : Gtk.Revealer {
 
             return false;
         });
+
+        listbox.row_activated.connect ((row) => {
+            var item = row as Widgets.TrackQueueRow;
+            
+            Byte.player.set_track (item.track);
+            int current_index = Byte.utils.get_track_index_by_id (item.track.id, items);
+
+            listbox.set_filter_func ((row) => {
+                var index = row.get_index ();
+
+                return index >= current_index; 
+            });
+        });
     }
 
     private void add_all_items (Gee.ArrayList<Objects.Track?> items) {
@@ -247,8 +302,8 @@ public class Widgets.Queue : Gtk.Revealer {
                 });
             });
 
-            queue_listbox.add (row);
-            queue_listbox.show_all ();
+            listbox.add (row);
+            listbox.show_all ();
         }
     }
 }

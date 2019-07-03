@@ -87,7 +87,7 @@ public class Widgets.HeaderBar : Gtk.HeaderBar {
         repeat_button.get_style_context ().add_class (Gtk.STYLE_CLASS_FLAT);
         repeat_button.can_focus = false;
 
-        search_button = new Gtk.Button.from_icon_name ("edit-find-symbolic", Gtk.IconSize.MENU);
+        search_button = new Gtk.Button.from_icon_name ("preferences-system-symbolic", Gtk.IconSize.MENU);
         search_button.valign = Gtk.Align.CENTER;
         search_button.can_focus = false;
         search_button.get_style_context ().add_class (Gtk.STYLE_CLASS_FLAT);
@@ -119,6 +119,7 @@ public class Widgets.HeaderBar : Gtk.HeaderBar {
 
         shuffle_button.clicked.connect (() => {
             Byte.settings.set_boolean ("shuffle-mode", !Byte.settings.get_boolean ("shuffle-mode"));
+            Byte.utils.shuffle_changed (Byte.settings.get_boolean ("shuffle-mode"));
         });
 
         repeat_button.clicked.connect (() => {
@@ -147,7 +148,7 @@ public class Widgets.HeaderBar : Gtk.HeaderBar {
             } else if (key == "repeat-mode") {
                 check_repeat_button ();
             }   
-        });
+        }); 
 
         Byte.player.toggle_playing.connect (() => {
             toggle_playing ();

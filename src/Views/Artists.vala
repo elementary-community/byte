@@ -76,10 +76,12 @@ public class Views.Artists : Gtk.EventBox {
     }
 
     private void add_artist (Objects.Artist artist) {
-        var row = new Widgets.ArtistRow (artist);
-        listbox.add (row);
+        if (artist.id != 0) {
+            var row = new Widgets.ArtistRow (artist);
+            listbox.add (row);
         
-        listbox.show_all ();
+            listbox.show_all ();
+        }
     }
 
     public void get_all_artists () {

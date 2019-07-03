@@ -19,7 +19,7 @@ public class Widgets.ArtistRow : Gtk.ListBoxRow {
         //name_label.max_width_chars = 36;
 
         cover_path = GLib.Path.build_filename (Byte.utils.COVER_FOLDER, ("artist-%i.jpg").printf (artist.id));
-        image_cover = new Widgets.Cover.from_file (cover_path, 32, "artist");
+        image_cover = new Widgets.Cover.from_file (cover_path, 48, "artist");
         image_cover.halign = Gtk.Align.START;
         image_cover.valign = Gtk.Align.START;
 

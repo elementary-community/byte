@@ -8,7 +8,6 @@ public class Widgets.TrackQueueRow : Gtk.ListBoxRow {
     private Gtk.Button remove_button;
 
     private Widgets.Cover image_cover;
-    private string cover_path;
     private bool is_current_track;
     public TrackQueueRow (Objects.Track track) {
         Object (
@@ -45,8 +44,10 @@ public class Widgets.TrackQueueRow : Gtk.ListBoxRow {
         artist_album_label.max_width_chars = 45;
         artist_album_label.ellipsize = Pango.EllipsizeMode.END;
 
-        cover_path = GLib.Path.build_filename (Byte.utils.COVER_FOLDER, ("album-%i.jpg").printf (track.album_id));
-        image_cover = new Widgets.Cover.from_file (cover_path, 38, "track");
+        image_cover = new Widgets.Cover.from_file (
+            GLib.Path.build_filename (Byte.utils.COVER_FOLDER, ("album-%i.jpg").printf (track.album_id)), 
+            38, 
+            "track");
         image_cover.halign = Gtk.Align.START;
         image_cover.valign = Gtk.Align.START;
 
@@ -116,10 +117,19 @@ public class Widgets.TrackQueueRow : Gtk.ListBoxRow {
             if (current_track.id == track.id) {
                 is_current_track = true;
                 playing_revealer.reveal_child =  true;
+
+                main_grid.get_style_context ().add_class ("label-color-primary");
+                grab_focus ();
             } else {
                 is_current_track = false;
                 playing_revealer.reveal_child =  false;
+                main_grid.get_style_context ().remove_class ("label-color-primary");
             }
         });
+
+        if (Byte.player.current_track != null && track.id == Byte.player.current_track.id) {
+            playing_revealer.reveal_child = true;
+            main_grid.get_style_context ().add_class ("label-color-primary");
+        }
     }
 }

@@ -57,9 +57,9 @@ executable(
     'src/Widgets/TrackAlbumRow.vala',
     'src/Widgets/NewPlaylist.vala',
     'src/Widgets/PlaylistRow.vala',
+    'src/Widgets/ModelButton.vala',
     
     'src/Widgets/Popovers/Sort.vala',
-    'src/Widgets/Popovers/TrackOptions.vala',
     
     'src/Views/Home.vala',
     'src/Views/Albums.vala',
@@ -68,6 +68,7 @@ executable(
     'src/Views/Artists.vala',
     'src/Views/Radios.vala',
     'src/Views/Playlists.vala',
+    'src/Views/Favorites.vala',
     
     'src/Objects/Track.vala',
     'src/Objects/Album.vala',

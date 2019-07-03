@@ -67,6 +67,12 @@ public class Services.Player : GLib.Object {
                     break;
             }
         });
+
+        current_track_changed.connect ((track) => {
+            if (track != null) {
+                Byte.database.add_track_count (track);
+            }
+        });
     }
     
     public void set_radio (Objects.Radio radio) {
@@ -236,6 +242,8 @@ public class Services.Player : GLib.Object {
         } else {
             stop ();
             play ();
+
+            current_track_changed (current_track);
         }
     }
 

@@ -5,6 +5,7 @@ public class Views.Home : Gtk.EventBox {
     public signal void go_artists_view ();
     public signal void go_radios_view ();
     public signal void go_playlists_view ();
+    public signal void go_favorites_view ();
 
     private Gee.ArrayList<Objects.Track?> all_tracks;
 
@@ -117,6 +118,10 @@ public class Views.Home : Gtk.EventBox {
             go_playlists_view ();
         });
 
+        favorites_button.clicked.connect (() => {
+            go_favorites_view ();
+        });
+
         tracks_listbox.row_activated.connect ((row) => {
             var item = row as Widgets.TrackRow;
             
@@ -133,6 +138,14 @@ public class Views.Home : Gtk.EventBox {
                 tracks_listbox.insert (row, 0);
                 all_tracks.insert (0, track);
                 tracks_listbox.show_all ();
+
+                print ("Size: %i\n".printf (all_tracks.size));
+
+                if (all_tracks.size > 100) {
+                    all_tracks.remove_at (100);
+                    var _row = tracks_listbox.get_row_at_index (100);
+                    _row.destroy ();
+                }
 
                 return false;
             });

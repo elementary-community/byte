@@ -3,7 +3,7 @@ public class Views.Album : Gtk.EventBox {
     private Gtk.Label artist_label;
     private Gtk.Label genre_label;
     private Gtk.Label year_label;
-    
+        
     private Gtk.ListBox listbox;
 
     private Gtk.Button shuffle_button;
@@ -85,13 +85,14 @@ public class Views.Album : Gtk.EventBox {
         );
         image_cover.halign = Gtk.Align.START;
         image_cover.valign = Gtk.Align.START;
-
+ 
         title_label = new Gtk.Label (null);
         title_label.wrap = true;
         title_label.wrap_mode = Pango.WrapMode.CHAR; 
         title_label.justify = Gtk.Justification.FILL;
         title_label.get_style_context ().add_class ("font-bold");
         title_label.halign = Gtk.Align.START;
+        title_label.selectable = true;
         
         artist_label = new Gtk.Label (null);
         artist_label.get_style_context ().add_class ("font-album-artist");
@@ -99,24 +100,44 @@ public class Views.Album : Gtk.EventBox {
         artist_label.justify = Gtk.Justification.FILL;
         artist_label.wrap_mode = Pango.WrapMode.CHAR;
         artist_label.halign = Gtk.Align.START;
+        artist_label.selectable = true;
 
         genre_label = new Gtk.Label (null);
+        genre_label.wrap = true;
+        genre_label.wrap_mode = Pango.WrapMode.CHAR; 
+        genre_label.justify = Gtk.Justification.FILL;
         genre_label.halign = Gtk.Align.START;
         genre_label.ellipsize = Pango.EllipsizeMode.END;
         genre_label.get_style_context ().add_class (Gtk.STYLE_CLASS_DIM_LABEL);
+        genre_label.selectable = true;
 
         year_label = new Gtk.Label (null);
         year_label.halign = Gtk.Align.START;
         year_label.ellipsize = Pango.EllipsizeMode.END;
         year_label.get_style_context ().add_class (Gtk.STYLE_CLASS_DIM_LABEL);
+        year_label.selectable = true;
 
-        shuffle_button = new Gtk.Button.from_icon_name ("media-playlist-shuffle-symbolic", Gtk.IconSize.BUTTON);
-        shuffle_button.label = (_("Shuffle"));
-        shuffle_button.margin_bottom = 3;
-        shuffle_button.valign = Gtk.Align.CENTER;
+        var play_button = new Gtk.Button.from_icon_name ("media-playback-start-symbolic", Gtk.IconSize.MENU);
+        play_button.always_show_image = true;
+        play_button.label = _("Play");
+        play_button.hexpand = true;
+        play_button.get_style_context ().add_class ("home-button");
+        play_button.get_style_context ().add_class (Gtk.STYLE_CLASS_FLAT);
+
+        var shuffle_button = new Gtk.Button.from_icon_name ("media-playlist-shuffle-symbolic", Gtk.IconSize.MENU);
         shuffle_button.always_show_image = true;
-        shuffle_button.width_request = 150;
-        shuffle_button.get_style_context ().add_class ("shuffle-button");
+        shuffle_button.label = _("Shuffle");
+        shuffle_button.hexpand = true;
+        shuffle_button.get_style_context ().add_class ("home-button");
+        shuffle_button.get_style_context ().add_class (Gtk.STYLE_CLASS_FLAT);
+
+        var action_grid = new Gtk.Grid ();
+        action_grid.margin = 6;
+        action_grid.margin_start = 12;
+        action_grid.margin_end = 12;
+        action_grid.column_spacing = 12;
+        action_grid.add (play_button);
+        action_grid.add (shuffle_button);
 
         var detail_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 0);
         detail_box.get_style_context ().add_class (Granite.STYLE_CLASS_WELCOME);
@@ -129,6 +150,7 @@ public class Views.Album : Gtk.EventBox {
         var album_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 6);
         album_box.hexpand = true;
         album_box.margin = 12;
+        album_box.margin_bottom = 6;
         album_box.margin_top = 0;
         album_box.pack_start (image_cover, false, false, 0);
         album_box.pack_start (detail_box, false, false, 0);
@@ -146,9 +168,11 @@ public class Views.Album : Gtk.EventBox {
         scrolled_box.expand = true;
         scrolled_box.pack_start (album_box, false, false, 0);
         scrolled_box.pack_start (separator, false, false, 0);
+        scrolled_box.pack_start (action_grid, false, false, 0);
         scrolled_box.pack_start (listbox, true, true, 0);
         
         var main_scrolled = new Gtk.ScrolledWindow (null, null);
+        main_scrolled.margin_bottom = 48;
         main_scrolled.hscrollbar_policy = Gtk.PolicyType.NEVER;
         main_scrolled.expand = true;
         main_scrolled.add (scrolled_box);
@@ -172,6 +196,35 @@ public class Views.Album : Gtk.EventBox {
                 Byte.settings.get_boolean ("shuffle-mode"),
                 item.track
             );
+        });
+
+        play_button.clicked.connect (() => {
+            Byte.utils.set_items (
+                all_tracks,
+                false,
+                null
+            );
+        });
+
+        shuffle_button.clicked.connect (() => {
+            Byte.utils.set_items (
+                all_tracks,
+                true,
+                null
+            );
+        });
+
+        Byte.database.updated_album_cover.connect ((album_id) => {
+            if (_album != null && album_id == _album.id) {
+                try {
+                    image_cover.pixbuf = new Gdk.Pixbuf.from_file_at_size (
+                        GLib.Path.build_filename (Byte.utils.COVER_FOLDER, ("album-%i.jpg").printf (album_id)), 
+                        128, 
+                        128);
+                } catch (Error e) {
+                    stderr.printf ("Error setting default avatar icon: %s ", e.message);
+                }
+            }
         });
     }
 }

@@ -1,4 +1,4 @@
-public class Views.Tracks : Gtk.EventBox {
+public class Views.Favorites : Gtk.EventBox {
     private Gtk.ListBox listbox;
     private Gtk.Label time_label;
     public signal void go_back ();
@@ -6,16 +6,13 @@ public class Views.Tracks : Gtk.EventBox {
     private int item_max;
     private Gee.ArrayList<Objects.Track?> all_tracks;
 
-    private int tracks_number = 0;
-    private uint64 tracks_time = 0;
-
-    public Tracks () {} 
+    public Favorites () {} 
 
     construct {
         item_index = 0;
         item_max = 25;
 
-        all_tracks = Byte.database.get_all_tracks_order_by (
+        all_tracks = Byte.database.get_all_tracks_favorites (
             Byte.settings.get_enum ("track-sort"), 
             Byte.settings.get_boolean ("track-order-reverse")
         );
@@ -30,7 +27,7 @@ public class Views.Tracks : Gtk.EventBox {
         back_button.get_style_context ().add_class ("planner-back-button");
 
         var search_button = new Gtk.Button.from_icon_name ("edit-find-symbolic", Gtk.IconSize.MENU);
-        search_button.label = _("Songs");
+        search_button.label = _("Favorites");
         search_button.can_focus = false;
         search_button.image_position = Gtk.PositionType.LEFT;
         search_button.valign = Gtk.Align.CENTER;
@@ -121,7 +118,6 @@ public class Views.Tracks : Gtk.EventBox {
         
         add (main_box);
         add_all_tracks ();
-        get_realtive_time ();
 
         back_button.clicked.connect (() => {
             go_back ();
@@ -155,7 +151,7 @@ public class Views.Tracks : Gtk.EventBox {
                     widget.destroy (); 
                 });
 
-                all_tracks = Byte.database.get_all_tracks_search (search_entry.text.down ());
+                all_tracks = Byte.database.get_all_tracks_favorites_search (search_entry.text.down ());
 
                 add_all_tracks ();
             } else {
@@ -166,7 +162,7 @@ public class Views.Tracks : Gtk.EventBox {
                     widget.destroy (); 
                 });
 
-                all_tracks = Byte.database.get_all_tracks_order_by (
+                all_tracks = Byte.database.get_all_tracks_favorites (
                     Byte.settings.get_enum ("track-sort"), 
                     Byte.settings.get_boolean ("track-order-reverse")
                 );
@@ -184,7 +180,7 @@ public class Views.Tracks : Gtk.EventBox {
                     widget.destroy (); 
                 });
 
-                all_tracks = Byte.database.get_all_tracks_search (search_entry.text);
+                all_tracks = Byte.database.get_all_tracks_favorites_search (search_entry.text);
 
                 add_all_tracks ();
             } else {
@@ -195,7 +191,7 @@ public class Views.Tracks : Gtk.EventBox {
                     widget.destroy (); 
                 });
 
-                all_tracks = Byte.database.get_all_tracks_order_by (
+                all_tracks = Byte.database.get_all_tracks_favorites (
                     Byte.settings.get_enum ("track-sort"), 
                     Byte.settings.get_boolean ("track-order-reverse")
                 );
@@ -224,7 +220,7 @@ public class Views.Tracks : Gtk.EventBox {
                 widget.destroy (); 
             });
 
-            all_tracks = Byte.database.get_all_tracks_order_by (mode, Byte.settings.get_boolean ("track-order-reverse"));
+            all_tracks = Byte.database.get_all_tracks_favorites (mode, Byte.settings.get_boolean ("track-order-reverse"));
 
             add_all_tracks ();
         });
@@ -239,7 +235,7 @@ public class Views.Tracks : Gtk.EventBox {
                 widget.destroy (); 
             });
 
-            all_tracks = Byte.database.get_all_tracks_order_by (
+            all_tracks = Byte.database.get_all_tracks_favorites (
                 Byte.settings.get_enum ("track-sort"), 
                 Byte.settings.get_boolean ("track-order-reverse")
             );
@@ -273,14 +269,6 @@ public class Views.Tracks : Gtk.EventBox {
             );
         });
 
-        Byte.database.adden_new_track.connect ((track) => {
-            Idle.add (() => {
-                add_track (track);
-
-                return false;
-            });
-        });
-
         scrolled.edge_reached.connect((pos)=> {
             if (pos == Gtk.PositionType.BOTTOM) {
                 
@@ -294,18 +282,36 @@ public class Views.Tracks : Gtk.EventBox {
                 add_all_tracks ();
             }
         });
-    }
 
-    private void add_track (Objects.Track track) {
-        if (track.id != 0) {
-            var row = new Widgets.TrackRow (track);
-        
-            all_tracks.add (track);
-            listbox.add (row);
-            listbox.show_all ();
+        Byte.database.updated_track_favorite.connect ((track, favorite) => {
+            if (track_exists (track) == false) {
+                if (favorite == 1) {
+                    track._id = all_tracks.size + 1;
+                    all_tracks.add (track);
+                }
+            } else {
+                if (favorite == 0) {
+                    listbox.foreach ((widget) => {
+                        var item = widget as Widgets.TrackRow;
+                        if (item.track.id == track.id) {
+                            widget.destroy (); 
+                            all_tracks.remove (track);
+                        }
+                    });
+                }
+            }
+        });
+    }
+    
+    private bool track_exists (Objects.Track track) {
+        foreach (var item in all_tracks) {
+            if (item.id == track.id) {
+                return true;
+            }
         }
-    }
 
+        return false;
+    }
     public void add_all_tracks () {
         if (item_max > all_tracks.size) {
             item_max = all_tracks.size;
@@ -317,20 +323,5 @@ public class Views.Tracks : Gtk.EventBox {
             listbox.add (row);
             listbox.show_all ();
         }   
-    }
-
-    private void get_realtive_time () {
-        /* 
-        tracks_number = all_tracks.size;
-
-        foreach (var item in all_tracks) {
-            tracks_time = tracks_time + item.duration;
-        }
-
-        time_label.label = "%i Tracks - %s".printf (tracks_number, Byte.utils.get_relative_duration (tracks_time));
-
-        print ("tracks_time: %s\n".printf (Byte.utils.get_relative_duration (tracks_time)));
-        print ("size: %s\n".printf (tracks_number.to_string ()));
-        */
     }
 }
