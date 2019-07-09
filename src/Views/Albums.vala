@@ -26,7 +26,7 @@ public class Views.Albums : Gtk.EventBox {
         back_button.can_focus = false;
         back_button.margin = 6;
         back_button.get_style_context ().add_class (Gtk.STYLE_CLASS_FLAT);
-        back_button.get_style_context ().add_class ("planner-back-button");
+        back_button.get_style_context ().add_class ("label-color-primary");
 
         var search_button = new Gtk.Button.from_icon_name ("edit-find-symbolic", Gtk.IconSize.MENU);
         search_button.label = _("Albums");
@@ -38,6 +38,7 @@ public class Views.Albums : Gtk.EventBox {
         search_button.get_style_context ().add_class ("h3");
         search_button.get_style_context ().add_class ("search-title");
         search_button.always_show_image = true;
+        search_button.tooltip_text = _("Search by title, artist, genre and year");
 
         var search_entry = new Gtk.SearchEntry ();
         search_entry.valign = Gtk.Align.CENTER;
@@ -45,6 +46,8 @@ public class Views.Albums : Gtk.EventBox {
         search_entry.margin = 6;
         search_entry.get_style_context ().add_class ("search-entry");
         search_entry.placeholder_text = _("Your library");
+        search_entry.tooltip_text = _("Search by title, artist, genre and year");
+        search_entry.placeholder_text = _("Search by title, artist, genre and year");
 
         var search_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 0);
         search_box.add (search_entry);
@@ -71,10 +74,12 @@ public class Views.Albums : Gtk.EventBox {
         var sort_popover = new Widgets.Popovers.Sort (sort_button);
         sort_popover.selected = Byte.settings.get_enum ("album-sort");
         sort_popover.reverse = Byte.settings.get_boolean ("album-order-reverse");
-        sort_popover.radio_01_label = _("Title");
+        sort_popover.radio_01_label = _("Name");
         sort_popover.radio_02_label = _("Artist");
         sort_popover.radio_03_label = _("Year");
         sort_popover.radio_04_label = _("Genre");
+        
+        sort_popover.radio_05_visible = false;
 
         listbox = new Gtk.ListBox (); 
         listbox.expand = true;

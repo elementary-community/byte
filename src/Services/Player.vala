@@ -49,6 +49,7 @@ public class Services.Player : GLib.Object {
         bus.enable_sync_message_emission ();
 
         state_changed.connect ((state) => {
+            player_state = state;
             stop_progress_signal ();
 
             if (state != Gst.State.NULL) {
@@ -69,7 +70,7 @@ public class Services.Player : GLib.Object {
         });
 
         current_track_changed.connect ((track) => {
-            if (track != null) {
+            if (track != null && Byte.scan_service.is_sync == false) {
                 Byte.database.add_track_count (track);
             }
         });
@@ -203,14 +204,13 @@ public class Services.Player : GLib.Object {
     }
 
     public void next () {
-        var repeat_mode = Byte.settings.get_enum ("repeat-mode");
-
         if (current_track == null) {
             return;
         }
 
         Objects.Track? next_track = null;
 
+        var repeat_mode = Byte.settings.get_enum ("repeat-mode");
         if (repeat_mode == 2) {
             next_track = current_track;
             current_track = null;

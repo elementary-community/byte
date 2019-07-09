@@ -74,7 +74,7 @@ public class Widgets.MediaControl : Gtk.Revealer {
 
         var header_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 0);
         header_box.margin = 3;  
-        header_box.margin_start = 6;
+        header_box.margin_start = 4;
         header_box.margin_end = 6;      
         header_box.pack_start (image_cover, false, false, 0);
         header_box.set_center_widget (metainfo_box);
@@ -140,6 +140,7 @@ public class Widgets.MediaControl : Gtk.Revealer {
 
         Byte.player.current_radio_changed.connect ((radio) => {
             title_label.label = radio.name;
+            reveal_child = true;
         });
 
         Byte.player.current_radio_title_changed.connect ((title) => {
@@ -150,7 +151,9 @@ public class Widgets.MediaControl : Gtk.Revealer {
 
         Byte.player.state_changed.connect ((state) => {
             if (state == Gst.State.PLAYING) {
-                reveal_child = true;
+                if (Byte.player.current_track != null) {
+                    reveal_child = true;
+                }
             } else if (state == Gst.State.NULL) {
                 reveal_child = false;
             }
@@ -163,8 +166,11 @@ public class Widgets.MediaControl : Gtk.Revealer {
                 lyric_revealer.reveal_child = false;
             } else {
                 timeline_revealer.reveal_child = true;
-                favorite_revealer.reveal_child = true;
                 lyric_revealer.reveal_child = true;
+
+                if (Byte.scan_service.is_sync == false) {
+                    favorite_revealer.reveal_child = true;
+                }
             }
         });
 
@@ -189,6 +195,14 @@ public class Widgets.MediaControl : Gtk.Revealer {
         timeline.scale.change_value.connect ((scroll, new_value) => {
             Byte.player.seek_to_progress (new_value);
             return true;
+        });
+
+        Byte.scan_service.sync_started.connect (() => {
+            favorite_revealer.reveal_child = false;
+        });
+
+        Byte.scan_service.sync_finished.connect (() => {
+            favorite_revealer.reveal_child = true;
         });
     }
 }

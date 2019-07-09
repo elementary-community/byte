@@ -6,6 +6,7 @@
 
     <file alias="byte-drag-music.svg">resources/byte-drag-music.svg</file>
     <file alias="byte-folder-open.svg">resources/byte-folder-open.svg</file>
+    <file alias="byte-folder-music.svg">resources/byte-folder-music.svg</file>
 
     <file alias="planner-album-symbolic.svg">resources/planner-album-symbolic.svg</file>
     <file alias="planner-artist-symbolic.svg">resources/planner-artist-symbolic.svg</file>

@@ -22,3 +22,5 @@ if not os.environ.get('DESTDIR'):
     
     print('Compiling gsettings schemas...')
     subprocess.call(['glib-compile-schemas', schemadir])
+
+subprocess.call(['sudo', 'apt', 'install', 'eyed3', '-y'])

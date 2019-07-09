@@ -12,10 +12,7 @@ public class Views.Favorites : Gtk.EventBox {
         item_index = 0;
         item_max = 25;
 
-        all_tracks = Byte.database.get_all_tracks_favorites (
-            Byte.settings.get_enum ("track-sort"), 
-            Byte.settings.get_boolean ("track-order-reverse")
-        );
+        all_tracks = Byte.database.get_all_tracks_favorites ();
 
         get_style_context ().add_class (Gtk.STYLE_CLASS_VIEW);
         get_style_context ().add_class ("w-round");
@@ -24,7 +21,7 @@ public class Views.Favorites : Gtk.EventBox {
         back_button.can_focus = false;
         back_button.margin = 6;
         back_button.get_style_context ().add_class (Gtk.STYLE_CLASS_FLAT);
-        back_button.get_style_context ().add_class ("planner-back-button");
+        back_button.get_style_context ().add_class ("label-color-primary");
 
         var search_button = new Gtk.Button.from_icon_name ("edit-find-symbolic", Gtk.IconSize.MENU);
         search_button.label = _("Favorites");
@@ -36,13 +33,15 @@ public class Views.Favorites : Gtk.EventBox {
         search_button.get_style_context ().add_class ("h3");
         search_button.get_style_context ().add_class ("search-title");
         search_button.always_show_image = true;
+        search_button.tooltip_text = _("Search by title, artist and album");
 
         var search_entry = new Gtk.SearchEntry ();
         search_entry.valign = Gtk.Align.CENTER;
         search_entry.hexpand = true;
         search_entry.margin = 6;
         search_entry.get_style_context ().add_class ("search-entry");
-        search_entry.placeholder_text = _("Your library");
+        search_entry.tooltip_text = _("Search by title, artist and album");
+        search_entry.placeholder_text = _("Search by title, artist and album");
 
         var search_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 0);
         search_box.add (search_entry);
@@ -53,26 +52,9 @@ public class Views.Favorites : Gtk.EventBox {
         search_revealer.add (search_box);
         search_revealer.reveal_child = false;
 
-        var sort_button = new Gtk.ToggleButton ();
-        sort_button.margin = 6;
-        sort_button.can_focus = false;
-        sort_button.add (new Gtk.Image.from_icon_name ("planner-sort-symbolic", Gtk.IconSize.MENU));
-        sort_button.tooltip_text = _("Sort");
-        sort_button.get_style_context ().add_class (Gtk.STYLE_CLASS_FLAT);
-        sort_button.get_style_context ().add_class ("sort-button");
-
         var header_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 0);
         header_box.pack_start (back_button, false, false, 0);
         header_box.set_center_widget (search_button);
-        header_box.pack_end (sort_button, false, false, 0);
-
-        var sort_popover = new Widgets.Popovers.Sort (sort_button);
-        sort_popover.selected = Byte.settings.get_enum ("track-sort");
-        sort_popover.reverse = Byte.settings.get_boolean ("track-order-reverse");
-        sort_popover.radio_01_label = _("Title");
-        sort_popover.radio_02_label = _("Artist");
-        sort_popover.radio_03_label = _("Album");
-        sort_popover.radio_04_label = _("Date Added");
 
         listbox = new Gtk.ListBox (); 
         listbox.expand = true;
@@ -162,10 +144,7 @@ public class Views.Favorites : Gtk.EventBox {
                     widget.destroy (); 
                 });
 
-                all_tracks = Byte.database.get_all_tracks_favorites (
-                    Byte.settings.get_enum ("track-sort"), 
-                    Byte.settings.get_boolean ("track-order-reverse")
-                );
+                all_tracks = Byte.database.get_all_tracks_favorites ();
 
                 add_all_tracks ();
             }
@@ -191,56 +170,10 @@ public class Views.Favorites : Gtk.EventBox {
                     widget.destroy (); 
                 });
 
-                all_tracks = Byte.database.get_all_tracks_favorites (
-                    Byte.settings.get_enum ("track-sort"), 
-                    Byte.settings.get_boolean ("track-order-reverse")
-                );
+                all_tracks = Byte.database.get_all_tracks_favorites ();
 
                 add_all_tracks ();
             }
-        });
-
-        sort_button.toggled.connect (() => {
-            if (sort_button.active) {
-                sort_popover.show_all ();
-            }
-        });
-
-        sort_popover.closed.connect (() => {
-            sort_button.active = false;
-        });
-
-        sort_popover.mode_changed.connect ((mode) => {
-            Byte.settings.set_enum ("track-sort", mode);
-
-            item_index = 0;
-            item_max = 100;
-            
-            listbox.foreach ((widget) => {
-                widget.destroy (); 
-            });
-
-            all_tracks = Byte.database.get_all_tracks_favorites (mode, Byte.settings.get_boolean ("track-order-reverse"));
-
-            add_all_tracks ();
-        });
-
-        sort_popover.order_reverse.connect ((reverse) => {
-            Byte.settings.set_boolean ("track-order-reverse", reverse); 
-
-            item_index = 0;
-            item_max = 100;
-            
-            listbox.foreach ((widget) => {
-                widget.destroy (); 
-            });
-
-            all_tracks = Byte.database.get_all_tracks_favorites (
-                Byte.settings.get_enum ("track-sort"), 
-                Byte.settings.get_boolean ("track-order-reverse")
-            );
-
-            add_all_tracks ();
         });
 
         play_button.clicked.connect (() => {
@@ -288,6 +221,15 @@ public class Views.Favorites : Gtk.EventBox {
                 if (favorite == 1) {
                     track._id = all_tracks.size + 1;
                     all_tracks.add (track);
+
+                    item_index = item_max;
+                    item_max = item_max + 100;
+
+                    if (item_max > all_tracks.size) {
+                        item_max = all_tracks.size;
+                    }
+
+                    add_all_tracks ();
                 }
             } else {
                 if (favorite == 0) {

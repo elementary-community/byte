@@ -87,6 +87,7 @@ public class Widgets.TrackAlbumRow : Gtk.ListBoxRow {
             });
         }
 
+        /*
         Byte.player.current_track_changed.connect ((current_track) => {
             if (track.id == current_track.id) {
                 playing_stack.visible_child_name = "playing_icon";
@@ -98,7 +99,8 @@ public class Widgets.TrackAlbumRow : Gtk.ListBoxRow {
                 duration_label.get_style_context ().remove_class ("label-color-primary");
             }
         });
-
+        */
+        
         Byte.database.updated_track_favorite.connect ((_track, favorite) => {
             if (track.id == _track.id) {
                 track.is_favorite = favorite;

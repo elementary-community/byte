@@ -1,7 +1,7 @@
-/*@define-color colorPrimary #fe2851;*/
-@define-color colorPrimary #f8362d;
+@define-color colorPrimary #fe2851;
+/*@define-color colorPrimary #f8362d;*/
 @define-color textColorPrimary #ffffff;
-@define-color colorAccent #f8362d;
+@define-color colorAccent #fe2851;
 
 .titlebar {
     padding: 6px 6px;
@@ -92,8 +92,8 @@
                 0.97
             )
         );
-    border-radius: 4px;
     color: @colorPrimary;
+    border-radius: 4px;
 }
 
 .search-entry image.left {
@@ -114,6 +114,17 @@
 
 .artist-cover {
     border-radius: 50%;
+    border: 1px solid alpha (#000, 0.35);
+    box-shadow:
+        inset 0 0 0 1px alpha (#fff, 0.05),
+        inset 0 1px 0 0 alpha (#fff, 0.45),
+        inset 0 -1px 0 0 alpha (#fff, 0.15),
+        0 1px 3px alpha (#fff, 0.12),
+        0 1px 2px alpha (#000, 0.24);
+}
+
+.playlist-cover {
+    border-radius: 6px;
     border: 1px solid alpha (#000, 0.35);
     box-shadow:
         inset 0 0 0 1px alpha (#fff, 0.05),
@@ -250,10 +261,6 @@ selection {
     background-color: @colorPrimary;
     color: #ffffff;
     border: 1px solid @colorPrimary;
-}
-
-.planner-back-button {
-    color: @colorPrimary;
 }
 
 .search-title {
@@ -431,4 +438,24 @@ overshoot.left {
 
 .label-color-primary {
     color: @colorPrimary;
+}
+
+.mode-button image {
+    color: @colorPrimary;
+}
+
+.label-white {
+    color: #fff;
+}
+
+.byte-textview text {
+    background-color: @bg_color;
+}
+
+.playlist-entry {
+    background-color: @bg_color;
+}
+
+.no-padding {
+    padding: 0px;
 }

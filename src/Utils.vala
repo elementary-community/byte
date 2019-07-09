@@ -2,9 +2,10 @@ public class Utils : GLib.Object {
     public Gee.ArrayList<Objects.Track?> queue_playlist { set; get; }
 
     public signal void play_items (Gee.ArrayList<Objects.Track?> items, Objects.Track? track);
+
     public signal void update_next_track ();
-    public signal void add_next_track (Objects.Track? track, int index);
-    public signal void add_last_track (Objects.Track? track);
+    public signal void add_next_track (Gee.ArrayList<Objects.Track?> items);
+    public signal void add_last_track (Gee.ArrayList<Objects.Track?> items);
 
     public string MAIN_FOLDER;
     public string COVER_FOLDER;
@@ -12,7 +13,34 @@ public class Utils : GLib.Object {
         MAIN_FOLDER = Environment.get_home_dir () + "/.local/share/com.github.alainm23.byte";
         COVER_FOLDER = GLib.Path.build_filename (MAIN_FOLDER, "covers");
     }
+
+    public void set_items (Gee.ArrayList<Objects.Track?> all_items, bool shuffle_mode, Objects.Track? track) {        
+        /*
+        print ("-------------------\n");
+        foreach (var item in queue_playlist) {
+            print ("Track: %s\n".printf (item.title));
+        }
+        print ("--------------------\n");
+        */
+
+        if (shuffle_mode) {
+            queue_playlist = generate_shuffle (all_items);
+            
+            if (track != null) {
+                int index = get_track_index_by_id (track.id, queue_playlist);
+                queue_playlist.remove_at (index);
+                queue_playlist.insert (0, track);
+            }
     
+            Byte.settings.set_boolean ("shuffle-mode", true);
+        } else {
+            queue_playlist = playlist_order (all_items);
+            Byte.settings.set_boolean ("shuffle-mode", false);
+        }
+
+        play_items (queue_playlist, track);
+    }
+
     public void shuffle_changed (bool shuffle_mode) {
         if (queue_playlist != null) {
             if (shuffle_mode) {
@@ -32,30 +60,6 @@ public class Utils : GLib.Object {
         }
     }
 
-    public void set_items (Gee.ArrayList<Objects.Track?> all_items, bool shuffle_mode, Objects.Track? track) {
-        if (shuffle_mode) {
-            queue_playlist = generate_shuffle (all_items);
-
-            if (track != null) {
-                int index = get_track_index_by_id (track.id, queue_playlist);
-                queue_playlist.remove_at (index);
-                queue_playlist.insert (0, track);
-            }
-
-            Byte.settings.set_boolean ("shuffle-mode", true);
-        } else {
-            queue_playlist = playlist_order (all_items);
-            Byte.settings.set_boolean ("shuffle-mode", false);
-        }
-        
-        foreach (var item in queue_playlist) {
-            print ("Track: %i - %s\n".printf (item._id, item.title));
-        }
-        print ("--------------------\n");
-
-        play_items (queue_playlist, track);
-    }
-
     public int get_track_index_by_id (int id, Gee.ArrayList<Objects.Track?> queue_playlist) {
         int index = 0;
         foreach (var item in queue_playlist) {
@@ -67,6 +71,16 @@ public class Utils : GLib.Object {
         }
 
         return index;
+    }
+
+    private bool track_exists (int id, Gee.ArrayList<Objects.Track?> queue_playlist) {
+        foreach (var item in queue_playlist) {
+            if (item.id == id) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public Gee.ArrayList<Objects.Track?> generate_shuffle (Gee.ArrayList<Objects.Track?> items) {
@@ -95,7 +109,7 @@ public class Utils : GLib.Object {
         return items;
     }
 
-    public Objects.Track get_next_track (Objects.Track current_track) {
+    public Objects.Track? get_next_track (Objects.Track current_track) {
         int index = get_track_index_by_id (current_track.id, queue_playlist) + 1;
         
         if (index >= queue_playlist.size) {
@@ -129,15 +143,35 @@ public class Utils : GLib.Object {
     }
 
     public void set_next_track (Objects.Track track) {
-        int index = get_track_index_by_id (Byte.player.current_track.id, queue_playlist) + 1;
-        queue_playlist.insert (index, track);
+        if (track.id != Byte.player.current_track.id) {
+            bool track_exists = track_exists (track.id, queue_playlist);
+            if (track_exists) {
+                int remove_index = get_track_index_by_id (track.id, queue_playlist);
+                queue_playlist.remove_at (remove_index);
+            }
 
-        add_next_track (track, index);
+            int index = get_track_index_by_id (Byte.player.current_track.id, queue_playlist) + 1;
+            
+            track._id = index;
+            queue_playlist.insert (index, track);
+            
+            add_next_track (queue_playlist);
+        }
     }
 
     public void set_last_track (Objects.Track track) {
-        queue_playlist.add (track);
-        add_last_track (track);
+        if (track.id != Byte.player.current_track.id) {
+            bool track_exists = track_exists (track.id, queue_playlist);
+
+            if (track_exists) {
+                int remove_index = get_track_index_by_id (track.id, queue_playlist);
+                queue_playlist.remove_at (remove_index);
+            }
+
+            track._id = queue_playlist.size + 1;
+            queue_playlist.add (track); 
+            add_last_track (queue_playlist);
+        }
     }
 
     public void download_image (string type, int id, string url) {
@@ -235,5 +269,64 @@ public class Utils : GLib.Object {
         }
 
         return "file:///usr/share/com.github.alainm23.byte/radio-default-cover.svg";
+    }
+
+    public string? choose_new_cover () {
+        string? return_value = null;
+        var chooser = new Gtk.FileChooserDialog (
+            _ ("Choose an image…"), Byte.instance.main_window,
+            Gtk.FileChooserAction.OPEN,
+            _ ("_Cancel"), Gtk.ResponseType.CANCEL,
+            _ ("_Open"), Gtk.ResponseType.ACCEPT);
+
+        var filter = new Gtk.FileFilter ();
+        filter.set_filter_name (_ ("Images"));
+        filter.add_mime_type ("image/*");
+
+        chooser.add_filter (filter);
+
+        Gtk.Image preview_area = new Gtk.Image ();
+        chooser.set_preview_widget (preview_area);
+        chooser.set_use_preview_label (false);
+        chooser.set_select_multiple (false);
+
+        chooser.update_preview.connect (() => {
+            string filename = chooser.get_preview_filename ();
+            if (filename != null) {
+                try {
+                    Gdk.Pixbuf pixbuf = new Gdk.Pixbuf.from_file_at_scale (filename, 150, 150, true);
+                    preview_area.set_from_pixbuf (pixbuf);
+                    preview_area.show ();
+                } catch (Error e) {
+                    preview_area.hide ();
+                }
+            } else {
+                preview_area.hide ();
+            }
+        });
+
+        if (chooser.run () == Gtk.ResponseType.ACCEPT) {
+            return_value = chooser.get_filename ();
+        }
+
+        chooser.destroy ();
+        return return_value;
+    }
+
+    public Gdk.Pixbuf? align_and_scale_pixbuf (Gdk.Pixbuf p, int size) {
+        Gdk.Pixbuf ? pixbuf = p;
+        if (pixbuf.width != pixbuf.height) {
+            if (pixbuf.width > pixbuf.height) {
+                int dif = (pixbuf.width - pixbuf.height) / 2;
+                pixbuf = new Gdk.Pixbuf.subpixbuf (pixbuf, dif, 0, pixbuf.height, pixbuf.height);
+            } else {
+                int dif = (pixbuf.height - pixbuf.width) / 2;
+                pixbuf = new Gdk.Pixbuf.subpixbuf (pixbuf, 0, dif, pixbuf.width, pixbuf.width);
+            }
+        }
+
+        pixbuf = pixbuf.scale_simple (size, size, Gdk.InterpType.BILINEAR);
+
+        return pixbuf;
     }
 }

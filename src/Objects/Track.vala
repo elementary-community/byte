@@ -10,6 +10,8 @@ public class Objects.Track : GLib.Object {
     public int is_favorite;
     public uint64 duration;
     public string date_added;
+    public string favorite_added;
+    public string last_played;
     public string album_title;
     public string artist_name;
 
@@ -18,12 +20,14 @@ public class Objects.Track : GLib.Object {
                   int album_id = 0,
                   string path = "",
                   string title = "",
-                  int track = 0, 
+                  int track = 0,  
                   int disc = 0,
                   int play_count = 0,
                   int is_favorite = 0,
                   uint64 duration = 0,
                   string date_added = new GLib.DateTime.now_local ().to_string (),
+                  string favorite_added = "",
+                  string last_played = "",
                   string album_title = "",
                   string artist_name = "") {
         this._id = _id;
@@ -37,6 +41,8 @@ public class Objects.Track : GLib.Object {
         this.is_favorite = is_favorite;
         this.duration = duration;
         this.date_added = date_added;
+        this.favorite_added = favorite_added;
+        this.last_played = last_played;
         this.album_title = album_title;
         this.artist_name = artist_name;
     }

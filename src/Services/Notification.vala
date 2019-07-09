@@ -1,7 +1,7 @@
 public class Services.Notification : GLib.Object {
     public Notification () {
         Byte.player.current_track_changed.connect ((track) => {
-            send_notification (track);
+            send_track_notification (track);
         });
 
         Byte.player.current_radio_title_changed.connect ((title) => {
@@ -9,19 +9,28 @@ public class Services.Notification : GLib.Object {
         });
     }
 
-    public void send_notification (Objects.Track track) {
+    public void send_track_notification (Objects.Track track) {
         try {
             var notification = new GLib.Notification (track.title);
             notification.set_body (track.artist_name);
             notification.set_icon (GLib.Icon.new_for_string (Byte.utils.get_cover_file (track.album_id)));
             notification.set_priority (GLib.NotificationPriority.LOW);
 
-            Byte.instance.send_notification ("com.github.alainm23.byte", notification);
+            Byte.instance.send_notification (Byte.instance.application_id, notification);
         } catch (Error e) {
             stderr.printf ("Error setting default avatar icon: %s ", e.message);
         }
     }
 
+    public void send_notification (string title, string body) {
+        var notification = new GLib.Notification (title);
+        notification.set_body (body);
+        notification.set_icon (new ThemedIcon (Byte.instance.application_id));
+        notification.set_priority (GLib.NotificationPriority.NORMAL);
+
+        Byte.instance.send_notification (Byte.instance.application_id, notification);
+    }
+    
     public void send_radio_notification (string title) {
         try {
             if (title != null) {
@@ -39,7 +48,7 @@ public class Services.Notification : GLib.Object {
                     notification.set_icon (GLib.Icon.new_for_string (Byte.utils.get_cover_radio_file (Byte.player.current_radio.id)));
                     notification.set_priority (GLib.NotificationPriority.LOW);
 
-                    Byte.instance.send_notification ("com.github.alainm23.byte", notification);
+                    Byte.instance.send_notification (Byte.instance.application_id, notification);
                 }
             }
         } catch (Error e) {

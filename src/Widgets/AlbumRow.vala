@@ -34,20 +34,24 @@ public class Widgets.AlbumRow : Gtk.ListBoxRow {
         string _year = album.year.to_string ();
         string _genre = album.genre;
 
-        if (_artist_name == "")
+        if (_artist_name == "") {
             _artist_name = unknown;
+        }
 
-        if (_title == "")
+        if (_title == "") {
             _title = unknown;
+        }
 
-        if (_year == "" || _year == "0")
+        if (_year == "" || _year == "0") {
             _year = unknown;
+        }
 
-        if (_genre == "")
+        if (_genre == "") {
             _genre = unknown;
+        }
 
         if (_value == 0) {
-            secondary_label.label = "%s - %s".printf (_artist_name, _title);
+            secondary_label.label = "%s".printf (_artist_name);
         } else if (_value == 1) {
             secondary_label.label = "%s - %s".printf (_artist_name, _title);
         } else if (_value == 2) {

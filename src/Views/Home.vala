@@ -18,25 +18,6 @@ public class Views.Home : Gtk.EventBox {
 
         all_tracks = Byte.database.get_tracks_recently_added ();
 
-        // Spinner loading
-        var loading_spinner = new Gtk.Spinner ();
-        loading_spinner.active = true;
-        loading_spinner.start ();
-
-        var loading_label = new Gtk.Label (_("Sync library…"));
-
-        var loading_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 6);
-        loading_box.halign = Gtk.Align.CENTER;
-        loading_box.hexpand = true;
-        loading_box.margin = 6;
-        loading_box.add (loading_spinner);
-        loading_box.add (loading_label);
-
-        var loading_revealer = new Gtk.Revealer ();
-        loading_revealer.transition_type = Gtk.RevealerTransitionType.SLIDE_UP;
-        loading_revealer.add (loading_box);
-        loading_revealer.reveal_child = false;
-
         var library_label = new Gtk.Label ("<b>%s</b>".printf (_("Library")));
         library_label.get_style_context ().add_class ("font-bold");
         library_label.get_style_context ().add_class ("h3");
@@ -45,8 +26,8 @@ public class Views.Home : Gtk.EventBox {
         library_label.halign =Gtk.Align.START;
         library_label.use_markup = true;
         
-        var recently_added_label = new Gtk.Label ("<b>%s</b>".printf (_("Recently added")));
-        recently_added_label.get_style_context ().add_class ("font-bold");
+        var recently_added_label = new Gtk.Label ("<b>%s</b> <small>(last 100)</small>".printf (_("Recently added")));
+        //recently_added_label.get_style_context ().add_class ("font-bold");
         recently_added_label.get_style_context ().add_class ("h3");
         recently_added_label.margin_start = 12;
         recently_added_label.halign =Gtk.Align.START;
@@ -71,9 +52,9 @@ public class Views.Home : Gtk.EventBox {
         tracks_scrolled.add (tracks_listbox);
 
         var items_grid = new Gtk.Grid ();
-        items_grid.row_spacing = 12;
-        items_grid.column_spacing = 12;
-        items_grid.margin = 12;
+        items_grid.row_spacing = 6;
+        items_grid.column_spacing = 6;
+        items_grid.margin = 6;
         items_grid.column_homogeneous = true;
         items_grid.row_homogeneous = true;
         items_grid.attach (songs_button,     0, 0, 1, 1);
@@ -86,7 +67,6 @@ public class Views.Home : Gtk.EventBox {
         var library_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 0);
         library_box.vexpand = true;
         library_box.hexpand = false;
-        library_box.pack_start (loading_revealer, false, false, 0);
         library_box.pack_start (library_label, false, false, 0);
         library_box.pack_start (items_grid, false, false, 0);
         library_box.pack_start (recently_added_label, false, false, 0);
@@ -138,8 +118,6 @@ public class Views.Home : Gtk.EventBox {
                 tracks_listbox.insert (row, 0);
                 all_tracks.insert (0, track);
                 tracks_listbox.show_all ();
-
-                print ("Size: %i\n".printf (all_tracks.size));
 
                 if (all_tracks.size > 100) {
                     all_tracks.remove_at (100);

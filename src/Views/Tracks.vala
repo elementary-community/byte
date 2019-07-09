@@ -1,14 +1,17 @@
 public class Views.Tracks : Gtk.EventBox {
+    private Gtk.SearchEntry search_entry;
     private Gtk.ListBox listbox;
+    private Gtk.Stack stack;
+    private Widgets.AlertView alert_view;
     private Gtk.Label time_label;
+
     public signal void go_back ();
+
     private int item_index;
     private int item_max;
     private Gee.ArrayList<Objects.Track?> all_tracks;
-
     private int tracks_number = 0;
     private uint64 tracks_time = 0;
-
     public Tracks () {} 
 
     construct {
@@ -22,12 +25,22 @@ public class Views.Tracks : Gtk.EventBox {
 
         get_style_context ().add_class (Gtk.STYLE_CLASS_VIEW);
         get_style_context ().add_class ("w-round");
-        
+
+        /*
+            Alert View
+        */
+
+        alert_view = new Widgets.AlertView (
+            _("No Results"),
+            _("asssssssssssssss"),
+            "edit-find-symbolic"
+        );
+
         var back_button = new Gtk.Button.from_icon_name ("planner-arrow-back-symbolic", Gtk.IconSize.MENU);
         back_button.can_focus = false;
         back_button.margin = 6;
         back_button.get_style_context ().add_class (Gtk.STYLE_CLASS_FLAT);
-        back_button.get_style_context ().add_class ("planner-back-button");
+        back_button.get_style_context ().add_class ("label-color-primary");
 
         var search_button = new Gtk.Button.from_icon_name ("edit-find-symbolic", Gtk.IconSize.MENU);
         search_button.label = _("Songs");
@@ -39,13 +52,15 @@ public class Views.Tracks : Gtk.EventBox {
         search_button.get_style_context ().add_class ("h3");
         search_button.get_style_context ().add_class ("search-title");
         search_button.always_show_image = true;
+        search_button.tooltip_text = _("Search by title, artist and album");
 
-        var search_entry = new Gtk.SearchEntry ();
+        search_entry = new Gtk.SearchEntry ();
+        search_entry.margin = 6;
         search_entry.valign = Gtk.Align.CENTER;
         search_entry.hexpand = true;
-        search_entry.margin = 6;
         search_entry.get_style_context ().add_class ("search-entry");
-        search_entry.placeholder_text = _("Your library");
+        search_entry.tooltip_text = _("Search by title, artist and album");
+        search_entry.placeholder_text = _("Search by title, artist and album");
 
         var search_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 0);
         search_box.add (search_entry);
@@ -72,10 +87,11 @@ public class Views.Tracks : Gtk.EventBox {
         var sort_popover = new Widgets.Popovers.Sort (sort_button);
         sort_popover.selected = Byte.settings.get_enum ("track-sort");
         sort_popover.reverse = Byte.settings.get_boolean ("track-order-reverse");
-        sort_popover.radio_01_label = _("Title");
+        sort_popover.radio_01_label = _("Name");
         sort_popover.radio_02_label = _("Artist");
         sort_popover.radio_03_label = _("Album");
         sort_popover.radio_04_label = _("Date Added");
+        sort_popover.radio_05_label = _("Play Count");
 
         listbox = new Gtk.ListBox (); 
         listbox.expand = true;
@@ -100,10 +116,17 @@ public class Views.Tracks : Gtk.EventBox {
         action_grid.add (play_button);
         action_grid.add (shuffle_button);
 
-        var scrolled = new Gtk.ScrolledWindow (null, null);
-        scrolled.hscrollbar_policy = Gtk.PolicyType.NEVER;
-        scrolled.expand = true;
-        scrolled.add (listbox);
+        var listbox_scrolled = new Gtk.ScrolledWindow (null, null);
+        listbox_scrolled.hscrollbar_policy = Gtk.PolicyType.NEVER;
+        listbox_scrolled.expand = true;
+        listbox_scrolled.add (listbox);
+
+        stack = new Gtk.Stack ();
+        stack.expand = true;
+        stack.transition_type = Gtk.StackTransitionType.CROSSFADE;
+
+        stack.add_named (listbox_scrolled, "listbox_scrolled");
+        stack.add_named (alert_view, "alert_view");
 
         var separator = new Gtk.Separator (Gtk.Orientation.HORIZONTAL);
         separator.margin_start = 14;
@@ -117,11 +140,16 @@ public class Views.Tracks : Gtk.EventBox {
         main_box.pack_start (search_revealer, false, false, 0);
         main_box.pack_start (action_grid, false, false);
         main_box.pack_start (new Gtk.Separator (Gtk.Orientation.HORIZONTAL), false, false, 0);
-        main_box.pack_start (scrolled, true, true, 0);
+        main_box.pack_start (stack, true, true, 0);
         
         add (main_box);
         add_all_tracks ();
         get_realtive_time ();
+
+        Timeout.add (200, () => {
+            check_size ();
+            return false;
+        });
 
         back_button.clicked.connect (() => {
             go_back ();
@@ -146,63 +174,9 @@ public class Views.Tracks : Gtk.EventBox {
             return false;
         });
 
-        search_entry.activate.connect (() => {
-            if (search_entry.text != "") {
-                item_index = 0;
-                item_max = 100;
-                
-                listbox.foreach ((widget) => {
-                    widget.destroy (); 
-                });
-
-                all_tracks = Byte.database.get_all_tracks_search (search_entry.text.down ());
-
-                add_all_tracks ();
-            } else {
-                item_index = 0;
-                item_max = 100;
-                
-                listbox.foreach ((widget) => {
-                    widget.destroy (); 
-                });
-
-                all_tracks = Byte.database.get_all_tracks_order_by (
-                    Byte.settings.get_enum ("track-sort"), 
-                    Byte.settings.get_boolean ("track-order-reverse")
-                );
-
-                add_all_tracks ();
-            }
-        });
+        search_entry.activate.connect (start_search);
         
-        search_entry.search_changed.connect (() => {    
-            if (search_entry.text != "") {
-                item_index = 0;
-                item_max = 100;
-                
-                listbox.foreach ((widget) => {
-                    widget.destroy (); 
-                });
-
-                all_tracks = Byte.database.get_all_tracks_search (search_entry.text);
-
-                add_all_tracks ();
-            } else {
-                item_index = 0;
-                item_max = 100;
-                
-                listbox.foreach ((widget) => {
-                    widget.destroy (); 
-                });
-
-                all_tracks = Byte.database.get_all_tracks_order_by (
-                    Byte.settings.get_enum ("track-sort"), 
-                    Byte.settings.get_boolean ("track-order-reverse")
-                );
-
-                add_all_tracks ();
-            }
-        });
+        search_entry.search_changed.connect (start_search);
 
         sort_button.toggled.connect (() => {
             if (sort_button.active) {
@@ -276,12 +250,13 @@ public class Views.Tracks : Gtk.EventBox {
         Byte.database.adden_new_track.connect ((track) => {
             Idle.add (() => {
                 add_track (track);
-
+                stack.visible_child_name = "listbox_scrolled";
+                
                 return false;
             });
         });
 
-        scrolled.edge_reached.connect((pos)=> {
+        listbox_scrolled.edge_reached.connect((pos)=> {
             if (pos == Gtk.PositionType.BOTTOM) {
                 
                 item_index = item_max;
@@ -303,6 +278,62 @@ public class Views.Tracks : Gtk.EventBox {
             all_tracks.add (track);
             listbox.add (row);
             listbox.show_all ();
+        }
+    }
+
+    private void start_search () {
+        if (search_entry.text != "") {
+            item_index = 0;
+            item_max = 100;
+            
+            listbox.foreach ((widget) => {
+                widget.destroy (); 
+            });
+
+            all_tracks = Byte.database.get_all_tracks_search (
+                search_entry.text.down ()
+            );
+
+            if (all_tracks.size > 0) {
+                stack.visible_child_name = "listbox_scrolled";
+            } else {
+                alert_view.description = _(
+                    "No results for '%s' in Tracks. Try again.".printf (
+                        search_entry.text
+                    )
+                );
+                stack.visible_child_name = "alert_view";
+            }
+
+            add_all_tracks ();
+        } else {
+            item_index = 0;
+            item_max = 100;
+            
+            listbox.foreach ((widget) => {
+                widget.destroy (); 
+            });
+
+            all_tracks = Byte.database.get_all_tracks_order_by (
+                Byte.settings.get_enum ("track-sort"), 
+                Byte.settings.get_boolean ("track-order-reverse")
+            );
+
+            check_size ();
+
+            add_all_tracks ();
+        }
+    }
+
+    public void check_size () {
+        if (all_tracks.size > 0) {
+            stack.visible_child_name = "listbox_scrolled";
+        } else {
+            alert_view.title = _("No Songs");
+            alert_view.description = _("Add some tracks to your selected music folder.");
+            alert_view.icon_name = "dialog-information-symbolic";
+
+            stack.visible_child_name = "alert_view";
         }
     }
 

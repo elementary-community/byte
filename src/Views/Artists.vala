@@ -12,9 +12,11 @@ public class Views.Artists : Gtk.EventBox {
         get_style_context ().add_class (Gtk.STYLE_CLASS_VIEW);
         get_style_context ().add_class ("w-round");
 
-        var back_button = new Gtk.Button.with_label (_("Back"));
+        var back_button = new Gtk.Button.from_icon_name ("planner-arrow-back-symbolic", Gtk.IconSize.MENU);
+        back_button.can_focus = false;
         back_button.margin = 6;
-        back_button.get_style_context ().add_class (Granite.STYLE_CLASS_BACK_BUTTON);
+        back_button.get_style_context ().add_class (Gtk.STYLE_CLASS_FLAT);
+        back_button.get_style_context ().add_class ("label-color-primary");
 
         var title_label = new Gtk.Label ("<b>%s</b>".printf (_("Artists")));
         title_label.use_markup = true;

@@ -34,7 +34,23 @@ public class Widgets.TrackRow : Gtk.ListBoxRow {
         primary_label.halign = Gtk.Align.START;
         primary_label.valign = Gtk.Align.END;
 
-        secondary_label = new Gtk.Label ("%s - %s".printf (track.artist_name, track.album_title));
+        /*
+        int sort = Byte.settings.get_enum ("track-sort");
+        string _label = "";
+        if (sort == 0) {
+            _label = track.artist_name;
+        } else if (sort == 1) {
+            _label = track.artist_name;
+        } else if (sort == 2) {
+            _label = "%s - %s".printf (track.artist_name, track.album_title);
+        } else if (sort == 3) {
+            _label = _("%s - Added %s".printf (track.artist_name, Granite.DateTime.get_relative_datetime (new GLib.DateTime.from_iso8601 (track.date_added, new GLib.TimeZone.local ()))));
+        } else {
+            _label = "%s - %i played".printf (track.artist_name, track.play_count);
+        }
+        */
+        
+        secondary_label = new Gtk.Label (track.artist_name);
         secondary_label.halign = Gtk.Align.START;
         secondary_label.valign = Gtk.Align.START;
         secondary_label.max_width_chars = 45;
@@ -239,7 +255,9 @@ public class Widgets.TrackRow : Gtk.ListBoxRow {
         });
 
         favorite_menu.activate.connect (() => {
-            Byte.database.set_track_favorite (track, 1);
+            if (Byte.scan_service.is_sync == false) {
+                Byte.database.set_track_favorite (track, 1);
+            }
         });
     }
 }

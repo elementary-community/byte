@@ -7,14 +7,15 @@
 	</enum>
 
     <enum id="com.github.alainm23.byte.tracks-sort-mode">
-		<value nick="title" value="0" />
+		<value nick="name" value="0" />
 		<value nick="artist" value="1" />
 		<value nick="album" value="2" />
-        <value nick="added date" value="3" />
+        <value nick="date added" value="3" />
+		<value nick="play count" value="4" />
 	</enum>
 
 	<enum id="com.github.alainm23.byte.album-sort-mode">
-		<value nick="title" value="0" />
+		<value nick="name" value="0" />
 		<value nick="artist" value="1" />
 		<value nick="year" value="2" />
 		<value nick="genre" value="3" />
@@ -34,7 +35,7 @@
 		</key>
 
         <key name="track-sort" enum="com.github.alainm23.byte.tracks-sort-mode">
-			<default>"title"</default>
+			<default>"name"</default>
 			<summary>Tracks sort mode</summary>
 			<description>Tracks sort mode</description>
 		</key>
@@ -46,7 +47,7 @@
 		</key>
 
 		<key name="album-sort" enum="com.github.alainm23.byte.album-sort-mode">
-			<default>"title"</default>
+			<default>"name"</default>
 			<summary>Album sort mode</summary>
 			<description>Album sort mode</description>
 		</key>
@@ -80,5 +81,23 @@
             <summary>If the dark Gtk stylesheet should be used</summary>
             <description>If the dark Gtk stylesheet should be used</description>
         </key>
+
+		<key name="sync-files" type="b">
+			<default>true</default>
+			<summary>Look for new music files on start up.</summary>
+			<description>Look for new music files on start up.</description>
+		</key>
+
+		<key name="play-in-background" type="b">
+			<default>false</default>
+			<summary>Play in background if closed.</summary>
+			<description>Play in background if closed.</description>
+		</key>
+
+		<key name="save-id3-tags" type="b">
+			<default>false</default>
+			<summary>Save changes into file.</summary>
+			<description>Save changes into file.</description>
+		</key>
     </schema>
 </schemalist>

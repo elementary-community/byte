@@ -41,15 +41,17 @@ public class Views.Album : Gtk.EventBox {
                 widget.destroy (); 
             });
 
-            all_tracks = new Gee.ArrayList<Objects.Track?> ();
-            all_tracks = Byte.database.get_all_tracks_by_album (_album.id);
-
-            foreach (var item in all_tracks) {
-                var row = new Widgets.TrackAlbumRow (item);
-                listbox.add (row);
+            if (Byte.scan_service.is_sync == false) {
+                all_tracks = new Gee.ArrayList<Objects.Track?> ();
+                all_tracks = Byte.database.get_all_tracks_by_album (_album.id);
+        
+                foreach (var item in all_tracks) {
+                    var row = new Widgets.TrackAlbumRow (item);
+                    listbox.add (row);
+                }
+        
+                listbox.show_all ();
             }
-
-            listbox.show_all ();
         }
         get {
             return _album;
@@ -66,7 +68,7 @@ public class Views.Album : Gtk.EventBox {
         back_button.can_focus = false;
         back_button.margin = 6;
         back_button.get_style_context ().add_class (Gtk.STYLE_CLASS_FLAT);
-        back_button.get_style_context ().add_class ("planner-back-button");
+        back_button.get_style_context ().add_class ("label-color-primary");
 
         var center_label = new Gtk.Label ("<b>%s</b>".printf (_("Album")));
         center_label.use_markup = true;
@@ -212,6 +214,14 @@ public class Views.Album : Gtk.EventBox {
                 true,
                 null
             );
+        });
+
+        Byte.database.adden_new_track.connect ((track) => {
+            if (_album != null && track.album_id == _album.id) {
+                var row = new Widgets.TrackAlbumRow (track);
+                listbox.add (row);
+                listbox.show_all ();
+            }
         });
 
         Byte.database.updated_album_cover.connect ((album_id) => {

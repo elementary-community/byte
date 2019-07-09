@@ -45,12 +45,6 @@ public class Services.CoverImport : GLib.Object {
 
             case Gst.PbUtils.DiscovererResult.MISSING_PLUGINS:
                 warning ("GStreamer could not import '%s': Missing plugins.", uri);
-
-                /**
-                 * TODO: handle this gracefully.
-                 * After the import finishes, show the plugin-not-found
-                 * dialog and rescan the music folder.
-                 */
             break;
         }
 
@@ -127,7 +121,7 @@ public class Services.CoverImport : GLib.Object {
     }
 
     private void save_cover_pixbuf (Gdk.Pixbuf p, int album_id) {
-        Gdk.Pixbuf ? pixbuf = align_and_scale_pixbuf (p, 128);
+        Gdk.Pixbuf ? pixbuf = Byte.utils.align_and_scale_pixbuf (p, 256);
 
         try {
             string cover_path = GLib.Path.build_filename (Byte.utils.COVER_FOLDER, 
@@ -139,22 +133,5 @@ public class Services.CoverImport : GLib.Object {
         } catch (Error err) {
             warning (err.message);
         }
-    }
-
-    private Gdk.Pixbuf? align_and_scale_pixbuf (Gdk.Pixbuf p, int size) {
-        Gdk.Pixbuf ? pixbuf = p;
-        if (pixbuf.width != pixbuf.height) {
-            if (pixbuf.width > pixbuf.height) {
-                int dif = (pixbuf.width - pixbuf.height) / 2;
-                pixbuf = new Gdk.Pixbuf.subpixbuf (pixbuf, dif, 0, pixbuf.height, pixbuf.height);
-            } else {
-                int dif = (pixbuf.height - pixbuf.width) / 2;
-                pixbuf = new Gdk.Pixbuf.subpixbuf (pixbuf, 0, dif, pixbuf.width, pixbuf.width);
-            }
-        }
-
-        pixbuf = pixbuf.scale_simple (size, size, Gdk.InterpType.BILINEAR);
-
-        return pixbuf;
     }
 }

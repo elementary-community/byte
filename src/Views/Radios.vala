@@ -21,7 +21,7 @@ public class Views.Radios : Gtk.EventBox {
         back_button.can_focus = false;
         back_button.margin = 6;
         back_button.get_style_context ().add_class (Gtk.STYLE_CLASS_FLAT);
-        back_button.get_style_context ().add_class ("planner-back-button");
+        back_button.get_style_context ().add_class ("label-color-primary");
 
         var title_label = new Gtk.Label ("<b>%s</b>".printf (_("Radios")));
         title_label.use_markup = true;

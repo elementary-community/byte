@@ -96,20 +96,25 @@ public class MainWindow : Gtk.Window {
 
                 Byte.scan_service.scan_local_files (Byte.settings.get_string ("library-location"));
             }
-
+            
             return false;
         });
 
         welcome_view.selected.connect ((index) => {
+            string folder;
             if (index == 0) {
-                string folder = Byte.scan_service.choose_folder (this);
-                if (folder != null) {
-                    Byte.settings.set_string ("library-location", folder);
-                    Byte.scan_service.scan_local_files (folder);
+                folder = "file://" + GLib.Environment.get_user_special_dir (GLib.UserDirectory.MUSIC); 
+            } else {
+                folder = Byte.scan_service.choose_folder (this);
+            }
 
-                    main_stack.visible_child_name = "library_view";
-                    headerbar.visible_ui = true;
-                }
+            if (folder != null) {
+                headerbar.visible_ui = true;
+                
+                Byte.settings.set_string ("library-location", folder);
+                Byte.scan_service.scan_local_files (folder);
+
+                main_stack.visible_child_name = "library_view";
             }
         });
 
@@ -118,6 +123,8 @@ public class MainWindow : Gtk.Window {
         });
 
         albums_view.go_album.connect ((album) => {
+            print ("Album: %s\n".printf (album.title));
+
             library_stack.visible_child_name = "album_view";
             album_view.album = album;
         });
@@ -175,6 +182,14 @@ public class MainWindow : Gtk.Window {
 
         headerbar.show_quick_find.connect (() => {
             quick_find.reveal = !quick_find.reveal_child;
+        });
+
+        delete_event.connect (() => {
+            if (Byte.player.player_state == Gst.State.PLAYING) {
+                return hide_on_delete ();
+            } else {
+                return false;
+            }
         });
     }
     

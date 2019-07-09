@@ -1,16 +1,48 @@
 public class Services.Scan : GLib.Object {
     public signal void sync_started ();
     public signal void sync_finished ();
-
-    uint finish_timer = 0;
+    public signal void sync_progress (double fraction);
+    
+    public int counter = 0;
+    public int counter_max = 0;
+    public bool is_sync = false;
     construct {
         Byte.tg_manager.discovered_new_item.connect (discovered_new_local_item);
+        
+        Byte.database.adden_new_track.connect ((track) => {
+            counter--;
+            sync_progress (((double) counter_max - (double) counter) / (double) counter_max);
+            if (counter == 0) {
+                sync_finished ();
+                is_sync = false;
+
+                Timeout.add (1 * 1000, () => {
+                    Byte.notification.send_notification (
+                        _("Import Complete"),
+                        _("Your Library Has Been Imported.")
+                    );
+                    
+                    if (counter_max > 1500) {
+                        var message_dialog = new Granite.MessageDialog.with_image_from_icon_name (
+                            _("Wow! your library is very big"),
+                            _("All your library was imported correctly, but for a better experience we recommend you re-open the application."),
+                            "process-completed",
+                            Gtk.ButtonsType.CLOSE
+                        );
+                        
+                        message_dialog.run ();
+                        message_dialog.destroy ();
+                    }
+                    
+                    return false;
+                });
+            }
+        });
     }
 
     public void scan_local_files (string uri) {
         new Thread<void*> ("scan_local_files", () => {
             File directory = File.new_for_uri (uri.replace ("#", "%23"));
-            stdout.printf ("%s\n", directory.get_uri ());
             try {
                 var children = directory.enumerate_children ("standard::*," + FileAttribute.STANDARD_CONTENT_TYPE + "," + FileAttribute.STANDARD_IS_HIDDEN + "," + FileAttribute.STANDARD_IS_SYMLINK + "," + FileAttribute.STANDARD_SYMLINK_TARGET, GLib.FileQueryInfoFlags.NONE);
                 FileInfo file_info = null;
@@ -53,17 +85,10 @@ public class Services.Scan : GLib.Object {
         });
     } 
 
-    public void found_music_file (string uri) { 
-        cancel_finish_timeout ();
+    public void found_music_file (string uri) {
         new Thread<void*> ("found_local_music_file", () => {
             if (Byte.database.music_file_exists (uri) == false) {
-                if (Byte.tg_manager.discover_counter == 0) {
-                    sync_started ();   
-                }
-
                 Byte.tg_manager.add_discover_uri (uri);
-            } else if (Byte.tg_manager.discover_counter == 0) {
-                finish_timeout ();   
             }
             
             return null;
@@ -93,6 +118,14 @@ public class Services.Scan : GLib.Object {
     }
 
     public void discovered_new_local_item (Objects.Artist artist, Objects.Album album, Objects.Track track) {
+        if (counter == 0) {
+            sync_started ();
+            is_sync = true;
+        }
+        
+        counter++;
+        counter_max++;
+
         new Thread<void*> ("discovered_new_local_item", () => {
             album.artist_id = Byte.database.insert_artist_if_not_exists (artist);
             album.artist_name = artist.name;
@@ -108,26 +141,5 @@ public class Services.Scan : GLib.Object {
 
     public static bool is_audio_file (string mime_type) {
         return mime_type.has_prefix ("audio/") && !mime_type.contains ("x-mpegurl") && !mime_type.contains ("x-scpls");
-    }
-
-    private void cancel_finish_timeout () {
-        lock (finish_timer) {
-            if (finish_timer != 0) {
-                Source.remove (finish_timer);
-                finish_timer = 0;
-            }
-        }
-    }
-
-    private void finish_timeout () {
-        lock (finish_timer) {
-            cancel_finish_timeout ();
-
-            finish_timer = Timeout.add (1000, () => {
-                sync_finished ();
-                cancel_finish_timeout ();
-                return false;
-            });
-        }
     }
 }

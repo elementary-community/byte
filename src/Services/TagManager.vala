@@ -1,10 +1,6 @@
 public class Services.TagManager : GLib.Object {
-    public signal void discovered_new_item (Objects.Artist artist, Objects.Album album, Objects.Track track);
-    public signal void discover_started ();
-    public signal void discover_finished ();
-    
+    public signal void discovered_new_item (Objects.Artist artist, Objects.Album album, Objects.Track track);    
     private Gst.PbUtils.Discoverer discoverer;
-    public int discover_counter { get; private set; default = 0; }
     string unknown = _("Unknown");
      
     construct {
@@ -104,11 +100,6 @@ public class Services.TagManager : GLib.Object {
 
                     discovered_new_item (artist, album, track);
                 }
-            } 
-
-            discover_counter--;
-            if (discover_counter == 0) {
-                discover_finished ();
             }
 
             info.dispose ();
@@ -117,11 +108,6 @@ public class Services.TagManager : GLib.Object {
     }
 
     public void add_discover_uri (string uri) {
-        if (discover_counter == 0) {
-            discover_started ();
-        }
-        discover_counter++;
-
         discoverer.discover_uri_async (uri);
     }
 }

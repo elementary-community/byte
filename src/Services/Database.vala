@@ -62,6 +62,8 @@ public class Services.Database : GLib.Object {
             "path           TEXT    NOT NULL," +
             "title          TEXT    NOT NULL," +
             "date_added     TEXT    NOT NULL," +
+            "favorite_added TEXT    NOT NULL," +
+            "last_played    TEXT    NOT NULL," +
             "track          INT     NOT NULL," +
             "disc           INT     NOT NULL," +
             "play_count     INT     NOT NULL," +
@@ -87,8 +89,7 @@ public class Services.Database : GLib.Object {
             "title        TEXT," +
             "note         TEXT," +
             "date_added   TEXT," +
-            "updated_date TEXT," +
-            "CONSTRAINT unique_title UNIQUE (title))", null, null);
+            "date_updated TEXT)", null, null);
         debug ("Table playlists created");
 
         rc = db.exec ("CREATE TABLE IF NOT EXISTS playlist_tracks (" +
@@ -300,7 +301,7 @@ public class Services.Database : GLib.Object {
             }
 
             album.id = get_id_if_album_exists (album);
-            stdout.printf ("Album ID: %d - %s\n", album.id, album.title);
+            //stdout.printf ("Album ID: %d - %s\n", album.id, album.title);
 
             added_new_album (album);
             return album.id;
@@ -315,8 +316,9 @@ public class Services.Database : GLib.Object {
         int res;
 
         sql = """
-            INSERT OR IGNORE INTO tracks (album_id, path, title, track, disc, duration, is_favorite, date_added, play_count)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);
+            INSERT OR IGNORE INTO tracks (album_id, path, title, track, disc, 
+            duration, is_favorite, date_added, play_count, favorite_added, last_played)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
         """;
 
         res = db.prepare_v2 (sql, -1, out stmt);
@@ -349,6 +351,12 @@ public class Services.Database : GLib.Object {
         res = stmt.bind_int (9, track.play_count);
         assert (res == Sqlite.OK);
 
+        res = stmt.bind_text (10, track.favorite_added);
+        assert (res == Sqlite.OK);
+
+        res = stmt.bind_text (11, track.last_played);
+        assert (res == Sqlite.OK);
+
         if (stmt.step () != Sqlite.DONE) {
             warning ("Error: %d: %s", db.errcode (), db.errmsg ());
         }
@@ -366,7 +374,7 @@ public class Services.Database : GLib.Object {
 
         if (stmt.step () == Sqlite.ROW) {
             track.id = stmt.column_int (0);
-            stdout.printf ("Track ID: %d - %s\n", track.id, track.title);
+            //stdout.printf ("Track ID: %d - %s\n", track.id, track.title);
 
             Byte.cover_import.import (track);
             
@@ -460,11 +468,16 @@ public class Services.Database : GLib.Object {
         Sqlite.Statement stmt;
         string sql;
         int res;
+        string _search_text = "%" + search_text + "%";
 
         sql = """
             SELECT albums.id, albums.artist_id, albums.year, albums.title, albums.genre, artists.name from albums
-            INNER JOIN artists ON artists.id = albums.artist_id WHERE albums.title LIKE '%s';
-        """.printf ("%" + search_text + "%");
+            INNER JOIN artists ON artists.id = albums.artist_id
+            WHERE albums.title LIKE '%s' OR
+            artists.name LIKE '%s' OR
+            albums.genre LIKE '%s' OR 
+            albums.year LIKE '%s';
+        """.printf (_search_text, _search_text, _search_text, _search_text);
 
         res = db.prepare_v2 (sql, -1, out stmt);
         assert (res == Sqlite.OK);
@@ -493,7 +506,8 @@ public class Services.Database : GLib.Object {
         int res;
 
         sql = """
-            SELECT tracks.id, tracks.path, tracks.title, tracks.duration, tracks.is_favorite, tracks.date_added, tracks.album_id, albums.title, artists.name FROM tracks 
+            SELECT tracks.id, tracks.path, tracks.title, tracks.duration, tracks.is_favorite, tracks.date_added, 
+            tracks.album_id, albums.title, artists.name, tracks.favorite_added, tracks.last_played FROM tracks 
             INNER JOIN albums ON tracks.album_id = albums.id
             INNER JOIN artists ON albums.artist_id = artists.id ORDER BY tracks.date_added DESC LIMIT 100;
         """;
@@ -517,6 +531,8 @@ public class Services.Database : GLib.Object {
             track.album_id = stmt.column_int (6);
             track.album_title = stmt.column_text (7);
             track.artist_name = stmt.column_text (8);
+            track.favorite_added = stmt.column_text (9);
+            track.last_played = stmt.column_text (10);
             
             all.add (track);
             index = index + 1;
@@ -538,9 +554,10 @@ public class Services.Database : GLib.Object {
             order_mode = "artists.name";
         } else if (item == 2) {
             order_mode = "albums.title";
-            //order_mode = "tracks.album_id";
         } else if (item == 3) {
             order_mode = "tracks.date_added";
+        } else {
+            order_mode = "tracks.play_count";
         }
 
         if (is_reverse == false) {
@@ -548,8 +565,8 @@ public class Services.Database : GLib.Object {
         }
 
         sql = """
-            SELECT  tracks.id, tracks.path, tracks.title, tracks.duration, tracks.is_favorite,
-            tracks.date_added, tracks.play_count, tracks.album_id, albums.title, artists.name FROM tracks 
+            SELECT  tracks.id, tracks.path, tracks.title, tracks.duration, tracks.is_favorite,tracks.date_added, tracks.play_count, 
+            tracks.album_id, albums.title, artists.name, tracks.favorite_added, tracks.last_played FROM tracks 
             INNER JOIN albums ON tracks.album_id = albums.id
             INNER JOIN artists ON albums.artist_id = artists.id ORDER BY %s %s;
         """.printf (order_mode, reverse_mode);
@@ -574,6 +591,8 @@ public class Services.Database : GLib.Object {
             track.album_id = stmt.column_int (7);
             track.album_title = stmt.column_text (8);
             track.artist_name = stmt.column_text (9);
+            track.favorite_added = stmt.column_text (10);
+            track.last_played = stmt.column_text (11);
             
             all.add (track);
             index = index + 1;
@@ -582,35 +601,20 @@ public class Services.Database : GLib.Object {
         return all;
     }
 
-    public Gee.ArrayList<Objects.Track?> get_all_tracks_favorites (int item, bool is_reverse) {
+    public Gee.ArrayList<Objects.Track?> get_all_tracks_favorites () {
         Sqlite.Statement stmt;
         string sql;
         int res;
         string order_mode = "tracks.title";
         string reverse_mode = "DESC";
         
-        if (item == 0) {
-            order_mode = "tracks.title";
-        } else if (item == 1) {
-            order_mode = "artists.name";
-        } else if (item == 2) {
-            order_mode = "albums.title";
-            //order_mode = "tracks.album_id";
-        } else if (item == 3) {
-            order_mode = "tracks.date_added";
-        }
-
-        if (is_reverse == false) {
-            reverse_mode = "ASC";
-        }
-
         sql = """
-            SELECT  tracks.id, tracks.path, tracks.title, tracks.duration, tracks.is_favorite, 
-            tracks.date_added, tracks.play_count, tracks.album_id, albums.title, artists.name FROM tracks 
+            SELECT  tracks.id, tracks.path, tracks.title, tracks.duration, tracks.is_favorite, tracks.date_added, tracks.play_count, 
+            tracks.album_id, albums.title, artists.name, tracks.favorite_added, tracks.last_played FROM tracks 
             INNER JOIN albums ON tracks.album_id = albums.id
             INNER JOIN artists ON albums.artist_id = artists.id 
-            WHERE tracks.is_favorite = 1 ORDER BY %s %s;
-        """.printf (order_mode, reverse_mode);
+            WHERE tracks.is_favorite = 1 ORDER BY tracks.favorite_added;
+        """;
 
         res = db.prepare_v2 (sql, -1, out stmt);
         assert (res == Sqlite.OK);
@@ -632,7 +636,9 @@ public class Services.Database : GLib.Object {
             track.album_id = stmt.column_int (7);
             track.album_title = stmt.column_text (8);
             track.artist_name = stmt.column_text (9);
-            
+            track.favorite_added = stmt.column_text (10);
+            track.last_played = stmt.column_text (11);
+
             all.add (track);
             index = index + 1;
         }
@@ -644,14 +650,18 @@ public class Services.Database : GLib.Object {
         Sqlite.Statement stmt;
         string sql;
         int res;
+        string _search_text = "%" + search_text + "%";
 
         sql = """
             SELECT  tracks.id, tracks.path, tracks.title, tracks.duration, tracks.is_favorite, tracks.date_added, 
-            tracks.play_count, tracks.album_id, albums.title, artists.name FROM tracks 
+            tracks.play_count, tracks.album_id, albums.title, artists.name, tracks.favorite_added, tracks.last_played FROM tracks 
             INNER JOIN albums ON tracks.album_id = albums.id
-            INNER JOIN artists ON albums.artist_id = artists.id 
-            WHERE tracks.title LIKE '%s' AND tracks.is_favorite = 1;
-        """.printf ("%" + search_text + "%");
+            INNER JOIN artists ON albums.artist_id = artists.id
+            WHERE (tracks.title LIKE '%s' OR 
+            artists.name LIKE '%s' OR 
+            albums.title LIKE '%s') 
+            AND tracks.is_favorite = 1;
+        """.printf (_search_text, _search_text, _search_text);
 
         res = db.prepare_v2 (sql, -1, out stmt);
         assert (res == Sqlite.OK);
@@ -672,6 +682,8 @@ public class Services.Database : GLib.Object {
             track.album_id = stmt.column_int (7);
             track.album_title = stmt.column_text (8);
             track.artist_name = stmt.column_text (9);
+            track.favorite_added = stmt.column_text (10);
+            track.last_played = stmt.column_text (11);
             
             all.add (track);
             index = index + 1;
@@ -684,13 +696,17 @@ public class Services.Database : GLib.Object {
         Sqlite.Statement stmt;
         string sql;
         int res;
+        string _search_text = "%" + search_text + "%";
 
         sql = """
-            SELECT  tracks.id, tracks.path, tracks.title, tracks.duration, tracks.is_favorite, tracks.date_added, 
-            tracks.play_count, tracks.album_id, albums.title, artists.name FROM tracks 
+            SELECT  tracks.id, tracks.path, tracks.title, tracks.duration, tracks.is_favorite, tracks.date_added, tracks.play_count, 
+            tracks.album_id, albums.title, artists.name, tracks.favorite_added, tracks.last_played FROM tracks 
             INNER JOIN albums ON tracks.album_id = albums.id
-            INNER JOIN artists ON albums.artist_id = artists.id WHERE tracks.title LIKE '%s';
-        """.printf ("%" + search_text + "%");
+            INNER JOIN artists ON albums.artist_id = artists.id
+            WHERE tracks.title LIKE '%s' OR 
+            artists.name LIKE '%s' OR 
+            albums.title LIKE '%s';
+        """.printf (_search_text, _search_text, _search_text);
 
         res = db.prepare_v2 (sql, -1, out stmt);
         assert (res == Sqlite.OK);
@@ -711,6 +727,8 @@ public class Services.Database : GLib.Object {
             track.album_id = stmt.column_int (7);
             track.album_title = stmt.column_text (8);
             track.artist_name = stmt.column_text (9);
+            track.favorite_added = stmt.column_text (10);
+            track.last_played = stmt.column_text (11);
             
             all.add (track);
             index = index + 1;
@@ -725,8 +743,8 @@ public class Services.Database : GLib.Object {
         int res;
 
         sql = """
-            SELECT  tracks.id, tracks.path, tracks.title, tracks.duration, tracks.is_favorite, 
-            tracks.track, tracks.date_added, tracks.play_count, tracks.album_id, albums.title, artists.name FROM tracks 
+            SELECT  tracks.id, tracks.path, tracks.title, tracks.duration, tracks.is_favorite, tracks.track, tracks.date_added, tracks.play_count, 
+            tracks.album_id, albums.title, artists.name, tracks.favorite_added, tracks.last_played FROM tracks
             INNER JOIN albums ON tracks.album_id = albums.id
             INNER JOIN artists ON albums.artist_id = artists.id WHERE tracks.album_id = %i ORDER BY tracks.track;
         """.printf (id);
@@ -752,6 +770,8 @@ public class Services.Database : GLib.Object {
             track.album_id = stmt.column_int (8);
             track.album_title = stmt.column_text (9);
             track.artist_name = stmt.column_text (10);
+            track.favorite_added = stmt.column_text (11);
+            track.last_played = stmt.column_text (12);
             
             all.add (track);
             index  = index + 1;
@@ -856,7 +876,7 @@ public class Services.Database : GLib.Object {
 
         if (stmt.step () == Sqlite.ROW) {
             radio.id = stmt.column_int (0);
-            stdout.printf ("Radio ID: %d - %s\n", radio.id, radio.name);
+            //stdout.printf ("Radio ID: %d - %s\n", radio.id, radio.name);
 
             //Byte.cover_import.import (track);
             Byte.utils.download_image ("radio", radio.id, radio.favicon);
@@ -922,7 +942,7 @@ public class Services.Database : GLib.Object {
             playlist.title = stmt.column_text (1);
             playlist.note = stmt.column_text (2);
             playlist.date_added = stmt.column_text (3);
-            playlist.updated_date = stmt.column_text (4);
+            playlist.date_updated = stmt.column_text (4);
             
             all.add (playlist);
         }
@@ -930,13 +950,13 @@ public class Services.Database : GLib.Object {
         return all;
     }
 
-    public void insert_playlist (Objects.Playlist playlist) {
+    public int insert_playlist (Objects.Playlist playlist) {
         Sqlite.Statement stmt;
         string sql;
         int res;
 
         sql = """
-            INSERT OR IGNORE INTO playlists (title, note, date_added, updated_date)
+            INSERT OR IGNORE INTO playlists (title, note, date_added, date_updated)
             VALUES (?, ?, ?, ?);
         """;
 
@@ -952,12 +972,13 @@ public class Services.Database : GLib.Object {
         res = stmt.bind_text (3, playlist.date_added);
         assert (res == Sqlite.OK);
 
-        res = stmt.bind_text (4, playlist.updated_date);
+        res = stmt.bind_text (4, playlist.date_updated);
         assert (res == Sqlite.OK);
 
         if (stmt.step () != Sqlite.DONE) {
             warning ("Error: %d: %s", db.errcode (), db.errmsg ());
         }
+
         stmt.reset ();
 
         sql = """
@@ -974,11 +995,11 @@ public class Services.Database : GLib.Object {
             playlist.id = stmt.column_int (0);
             stdout.printf ("Playlist ID: %d - %s\n", playlist.id, playlist.title);
             adden_new_playlist (playlist);
+            return playlist.id;
         } else {
             warning ("Error: %d: %s", db.errcode (), db.errmsg ());
+            return 0;
         }
-
-        stmt.reset ();
     }
 
     public void add_track_count (Objects.Track track) {
@@ -1002,7 +1023,7 @@ public class Services.Database : GLib.Object {
             stmt.reset ();
 
             sql = """
-                UPDATE tracks SET play_count = ? WHERE id = ?;
+                UPDATE tracks SET play_count = ?, last_played = ? WHERE id = ?;
             """;
 
             res = db.prepare_v2 (sql, -1, out stmt);
@@ -1011,7 +1032,10 @@ public class Services.Database : GLib.Object {
             res = stmt.bind_int (1, count);
             assert (res == Sqlite.OK);
 
-            res = stmt.bind_int (2, track.id);
+            res = stmt.bind_text (2, new GLib.DateTime.now_local ().to_string ());
+            assert (res == Sqlite.OK);
+
+            res = stmt.bind_int (3, track.id);
             assert (res == Sqlite.OK);
 
             res = stmt.step ();
@@ -1028,9 +1052,10 @@ public class Services.Database : GLib.Object {
         Sqlite.Statement stmt;
         string sql;
         int res;
+        string favorite_added = "";
 
         sql = """
-            UPDATE tracks SET is_favorite = ? WHERE id = ?;
+            UPDATE tracks SET is_favorite = ?, favorite_added = ? WHERE id = ?;
         """;
 
         res = db.prepare_v2 (sql, -1, out stmt);
@@ -1039,7 +1064,14 @@ public class Services.Database : GLib.Object {
         res = stmt.bind_int (1, favorite);
         assert (res == Sqlite.OK);
 
-        res = stmt.bind_int (2, track.id);
+        if (favorite == 1) {
+            favorite_added = new GLib.DateTime.now_local ().to_string ();
+        }
+
+        res = stmt.bind_text (2, favorite_added);
+        assert (res == Sqlite.OK);
+
+        res = stmt.bind_int (3, track.id);
         assert (res == Sqlite.OK);
 
         res = stmt.step ();

@@ -13,10 +13,12 @@ public class Services.Lastfm : GLib.Object {
         });
 
         Byte.player.current_track_changed.connect ((track) => {
-            var cover_path = File.new_for_path (GLib.Path.build_filename (Byte.utils.COVER_FOLDER, ("album-%i.jpg").printf (track.album_id)));
+            if (Byte.scan_service.is_sync == false) {
+                var cover_path = File.new_for_path (GLib.Path.build_filename (Byte.utils.COVER_FOLDER, ("album-%i.jpg").printf (track.album_id)));
             
-            if (cover_path.query_exists () == false) {
-                get_current_track_cover (track);
+                if (cover_path.query_exists () == false) {
+                    get_current_track_cover (track);
+                }
             }
         });
     }
@@ -81,6 +83,7 @@ public class Services.Lastfm : GLib.Object {
             try {
                 if (file_from_uri.copy_async.end (res)) {
                     print ("Cover %i was downloaded\n".printf (track.album_id));
+                    add_id3_image (track, cover_path);
                     Byte.database.updated_album_cover (track.album_id);
                 }
             } catch (Error e) {
@@ -145,5 +148,22 @@ public class Services.Lastfm : GLib.Object {
                 });
             }
         }
+    }
+
+    private void add_id3_image (Objects.Track track, string cover_path) {
+        string track_path = track.path.substring (7).replace ("%20", " ");
+        string response = "";
+        string command = "eyeD3 --add-image='%s':FRONT_COVER '%s'".printf (cover_path, track_path);
+        
+        GLib.Process.spawn_command_line_sync (command, out response);
+
+        print ("---------------------------------\n");
+        print ("Error: %s\n".printf (response));
+        print ("---------------------------------\n");
+        /*
+        if ("file not found" in response) {
+            print ("Error: %s\n".printf (response));
+        }
+        */
     }
 }

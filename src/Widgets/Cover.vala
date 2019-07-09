@@ -82,8 +82,15 @@ public class Widgets.Cover : Gtk.EventBox {
         }
     }
 
-    public Cover.with_default_icon (int pixel_size) {
-        get_style_context ().add_class ("album-cover");
+    public Cover.with_default_icon (int pixel_size, string type) {
+        set_default (type);
+        
+        show_default (pixel_size);
+        orig_pixel_size = pixel_size;
+    }
+
+    public void set_with_default_icon (int pixel_size, string type) {
+        set_default (type);
         
         show_default (pixel_size);
         orig_pixel_size = pixel_size;
@@ -134,13 +141,13 @@ public class Widgets.Cover : Gtk.EventBox {
             get_style_context ().add_class ("artist-cover");
         } else if (type == "radio") {
             DEFAULT_ICON = "/usr/share/com.github.alainm23.byte/radio-default-cover.svg";
-            get_style_context ().add_class ("album-cover");
+            get_style_context ().add_class ("playlist-cover");
         } else if (type == "track") {
             DEFAULT_ICON = "/usr/share/com.github.alainm23.byte/track-default-cover.svg";
             get_style_context ().add_class ("track-cover");
         } else {
             DEFAULT_ICON = "/usr/share/com.github.alainm23.byte/playlist-default-cover.svg";
-            get_style_context ().add_class ("album-cover");
+            get_style_context ().add_class ("playlist-cover");
         }
     }
 

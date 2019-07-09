@@ -9,9 +9,11 @@ public class Widgets.Welcome : Gtk.EventBox {
     }
 
     construct {
-        welcome = new Granite.Widgets.Welcome (_("Playlist is Empty"), _("Add music to start jamming out"));
-        welcome.append ("byte-folder-open", _("Add from folder"), _("Pick a folder with your music in it"));
-        welcome.append ("byte-drag-music", _("Drag n' Drop"), _("Toss your music here"));
+        welcome = new Granite.Widgets.Welcome (_("Library is Empty"), _("Add music to start jamming out"));
+
+        welcome.append ("byte-folder-music", _("Load Music"), _("load from the user's music directory"));
+        welcome.append ("byte-folder-open", _("Change Music Folder"), _("Load music from folder"));
+        
         welcome.get_style_context ().add_class ("w-round");
 
         add (welcome);

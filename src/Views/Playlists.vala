@@ -7,7 +7,6 @@ public class Views.Playlists : Gtk.EventBox {
     private int item_max;
 
     private Gee.ArrayList<Objects.Playlist?> all_items;
-
     public Playlists () {} 
 
     construct {
@@ -23,7 +22,7 @@ public class Views.Playlists : Gtk.EventBox {
         back_button.can_focus = false;
         back_button.margin = 6;
         back_button.get_style_context ().add_class (Gtk.STYLE_CLASS_FLAT);
-        back_button.get_style_context ().add_class ("planner-back-button");
+        back_button.get_style_context ().add_class ("label-color-primary");
 
         var search_button = new Gtk.Button.from_icon_name ("edit-find-symbolic", Gtk.IconSize.MENU);
         search_button.label = _("Playlists");
@@ -36,6 +35,18 @@ public class Views.Playlists : Gtk.EventBox {
         search_button.get_style_context ().add_class ("search-title");
         search_button.always_show_image = true;
 
+        var add_button = new Gtk.ToggleButton ();
+        add_button.can_focus = false;
+        add_button.valign = Gtk.Align.CENTER;
+        add_button.halign = Gtk.Align.CENTER;
+        add_button.margin = 6;
+        add_button.get_style_context ().add_class (Gtk.STYLE_CLASS_FLAT);
+        add_button.get_style_context ().add_class ("label-color-primary");
+        add_button.tooltip_text = _("Add New Playlist");
+        add_button.add (new Gtk.Image.from_icon_name ("list-add-symbolic", Gtk.IconSize.SMALL_TOOLBAR));
+
+        var add_popover = new Widgets.Popovers.NewPlaylist (add_button);
+
         var search_entry = new Gtk.SearchEntry ();
         search_entry.valign = Gtk.Align.CENTER;
         search_entry.width_request = 250;
@@ -43,38 +54,25 @@ public class Views.Playlists : Gtk.EventBox {
         search_entry.get_style_context ().add_class (Gtk.STYLE_CLASS_FLAT);
         search_entry.placeholder_text = _("Your library");
 
-        var center_stack = new Gtk.Stack ();
-        center_stack.hexpand = true;
-        center_stack.transition_type = Gtk.StackTransitionType.CROSSFADE;
-
-        center_stack.add_named (search_button, "search_button");
-        center_stack.add_named (search_entry, "search_entry");
-        
-        center_stack.visible_child_name = "search_button";
-
         var header_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 0);
         header_box.pack_start (back_button, false, false, 0);
-        header_box.set_center_widget (center_stack);
-
-        new_playlist = new Widgets.NewPlaylist ();
+        header_box.set_center_widget (search_button);
+        header_box.pack_end (add_button, false, false, 0);
 
         listbox = new Gtk.ListBox (); 
         listbox.expand = true;
-
-        var box = new Gtk.Box (Gtk.Orientation.VERTICAL, 0);
-        box.pack_start (new_playlist, false, false);
-        box.pack_start (listbox, true, true, 0);
 
         var scrolled = new Gtk.ScrolledWindow (null, null);
         scrolled.margin_top = 3;
         scrolled.hscrollbar_policy = Gtk.PolicyType.NEVER;
         scrolled.expand = true;
-        scrolled.add (box);
+        scrolled.add (listbox);
 
         var main_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 0);
         main_box.margin_bottom = 3;
         main_box.expand = true;
         main_box.pack_start (header_box, false, false, 0);
+        main_box.pack_start (new Gtk.Separator (Gtk.Orientation.HORIZONTAL), false, false, 0);
         main_box.pack_start (scrolled, true, true, 0);
         
         add (main_box);
@@ -84,22 +82,15 @@ public class Views.Playlists : Gtk.EventBox {
             go_back ();
         });
 
-        search_button.clicked.connect (() => {
-            center_stack.visible_child_name = "search_entry";
-            search_entry.grab_focus ();
-        });
-
-        search_entry.key_release_event.connect ((key) => {
-            if (key.keyval == 65307) {
-                center_stack.visible_child_name = "search_button";
+        add_button.toggled.connect (() => {
+            if (add_button.active) {
+                add_popover.show_all ();
+                add_popover.title_entry.grab_focus ();
             }
-
-            return false;
         });
-
-        search_entry.focus_out_event.connect (() => {
-            center_stack.visible_child_name = "search_button";
-            return false;
+  
+        add_popover.closed.connect (() => {
+            add_button.active = false;
         });
 
         search_entry.search_changed.connect (() => {

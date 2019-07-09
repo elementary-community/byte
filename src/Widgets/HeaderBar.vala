@@ -1,5 +1,5 @@
 public class Widgets.HeaderBar : Gtk.HeaderBar {
-    private Gtk.Box main_box;
+    private Gtk.Stack stack;
 
     private Gtk.Button shuffle_button;
     private Gtk.Button repeat_button;
@@ -21,11 +21,11 @@ public class Widgets.HeaderBar : Gtk.HeaderBar {
     public signal void show_quick_find ();
     public bool visible_ui {
         set {
-            main_box.visible = value;
+            stack.visible = value;
             search_button.visible = value;
 
             if (value) {
-                custom_title = main_box;
+                custom_title = stack;
             } else {
                 custom_title = null;
             }
@@ -92,14 +92,30 @@ public class Widgets.HeaderBar : Gtk.HeaderBar {
         search_button.can_focus = false;
         search_button.get_style_context ().add_class (Gtk.STYLE_CLASS_FLAT);
 
-        main_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 6);
+        var main_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 6);
+        main_box.halign = Gtk.Align.CENTER;
         main_box.pack_start (repeat_button, false, false, 24);
         main_box.pack_start (previous_button, false, false, 0);
         main_box.pack_start (play_button, false, false, 0);
         main_box.pack_start (next_button, false, false, 0);
         main_box.pack_start (shuffle_button, false, false, 24);
         
-        custom_title = main_box;
+        // ProgressBar
+        var loading_progressbar = new Gtk.ProgressBar ();
+        loading_progressbar.margin_start = 6;
+        loading_progressbar.margin_end = 6;
+        loading_progressbar.show_text = true;
+        loading_progressbar.text = _("Sync Library…");
+        loading_progressbar.get_style_context ().add_class ("label-white");
+                
+        stack = new Gtk.Stack ();
+        stack.expand = true;
+        stack.transition_type = Gtk.StackTransitionType.CROSSFADE;
+
+        stack.add_named (main_box, "main_box");
+        stack.add_named (loading_progressbar, "loading_progressbar");
+
+        custom_title = stack;
         pack_end (search_button);
 
         check_shuffle_button ();
@@ -170,6 +186,18 @@ public class Widgets.HeaderBar : Gtk.HeaderBar {
 
         search_button.clicked.connect (() => {
             show_quick_find ();
+        });
+
+        Byte.scan_service.sync_started.connect (() => {
+            stack.visible_child_name = "loading_progressbar";
+        });
+
+        Byte.scan_service.sync_finished.connect (() => {
+            stack.visible_child_name = "main_box";
+        });
+
+        Byte.scan_service.sync_progress.connect ((fraction) => {
+            loading_progressbar.fraction = fraction;
         });
     }
 

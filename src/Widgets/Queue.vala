@@ -13,8 +13,8 @@ public class Widgets.Queue : Gtk.Revealer {
 
     construct {
         items = new Gee.ArrayList<Objects.Track?> ();
-
-        image_cover = new Widgets.Cover.with_default_icon (24);
+ 
+        image_cover = new Widgets.Cover.with_default_icon (24, "track");
 
         var next_track_label = new Gtk.Label ("<small>%s</small>".printf (_("Next track")));
         next_track_label.valign = Gtk.Align.END;
@@ -55,7 +55,7 @@ public class Widgets.Queue : Gtk.Revealer {
         top_revealer.add (top_eventbox);
         top_revealer.reveal_child = true;
 
-        var title_label = new Gtk.Label ("Queue");
+        var title_label = new Gtk.Label ("Up Next");
         title_label.halign = Gtk.Align.START;
 
         var hide_button = new Gtk.Button.with_label (_("Hide"));
@@ -135,16 +135,15 @@ public class Widgets.Queue : Gtk.Revealer {
                 });
             }
         });
-
+        
         Byte.player.current_track_changed.connect ((track) => {
             int current_index = Byte.utils.get_track_index_by_id (track.id, items);
 
             listbox.set_filter_func ((row) => {
                 var index = row.get_index ();
-
                 return index >= current_index; 
             });
-            
+                
             var next_track = Byte.utils.get_next_track (track);
 
             if (next_track != null) {
@@ -152,7 +151,7 @@ public class Widgets.Queue : Gtk.Revealer {
 
                 next_track_name.label = "%s <b>by</b> %s".printf (next_track.title, next_track.artist_name);
                 next_track_grid.tooltip_text = _("%s - %s".printf (next_track.artist_name, next_track.title));
-                
+                    
                 try {
                     var cover_path = GLib.Path.build_filename (Byte.utils.COVER_FOLDER, ("album-%i.jpg").printf (next_track.album_id));
                     image_cover.pixbuf = new Gdk.Pixbuf.from_file_at_size (cover_path, 27, 27);
@@ -193,38 +192,42 @@ public class Widgets.Queue : Gtk.Revealer {
             }
         });
 
-        Byte.utils.add_next_track.connect ((track, index) => {
-            var row = new Widgets.TrackQueueRow (track);
-
-            row.remove_track.connect ((id) => {
-                Byte.utils.remove_track (id);
-
-                GLib.Timeout.add (250, () => {
-                    row.destroy ();
-                    return GLib.Source.REMOVE;
-                });
+        Byte.utils.add_next_track.connect ((_items) => {
+            listbox.foreach ((widget) => {
+                widget.destroy (); 
             });
+
+            items = _items;
+
+            item_index = 0;
+            item_max = 50;
+
+            if (item_max > items.size) {
+                item_max = items.size;
+            }
             
-            listbox.insert (row, index);
-            listbox.show_all ();
+            add_all_items (items);
 
             Byte.utils.update_next_track ();
         });
 
-        Byte.utils.add_last_track.connect ((track) => {
-            var row = new Widgets.TrackQueueRow (track);
-
-            row.remove_track.connect ((id) => {
-                Byte.utils.remove_track (id);
-
-                GLib.Timeout.add (250, () => {
-                    row.destroy ();
-                    return GLib.Source.REMOVE;
-                });
+        Byte.utils.add_last_track.connect ((_items) => {
+            listbox.foreach ((widget) => {
+                widget.destroy (); 
             });
+
+            items = _items;
+
+            item_index = 0;
+            item_max = 50;
+
+            if (item_max > items.size) {
+                item_max = items.size;
+            }
             
-            listbox.add (row);
-            listbox.show_all ();
+            add_all_items (items);
+
+            Byte.utils.update_next_track ();
         });
 
         queue_scrolled.edge_reached.connect((pos)=> {
@@ -236,8 +239,6 @@ public class Widgets.Queue : Gtk.Revealer {
                 if (item_max > items.size) {
                     item_max = items.size;
                 }
-
-                print ("all: %i\n".printf (items.size));
 
                 add_all_items (items);
             }
