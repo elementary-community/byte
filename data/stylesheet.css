@@ -1,6 +1,7 @@
 @define-color colorPrimary #fe2851;
-/*@define-color colorPrimary #f8362d;*/
 @define-color textColorPrimary #ffffff;
+@define-color bg_color shade (@base_color, 0.98);
+
 @define-color colorAccent #fe2851;
 
 .titlebar {
@@ -17,31 +18,34 @@
 }
 
 .byte-seekbar highlight {
-    background-color: @colorPrimary;
+    background-color: @colorAccent;
 }
 
 .track-row {
     background-color: transparent;
 }
 
-.track-row:selected {
+.track-row:hover {
+    background-color: @colorAccent;
+    color: #fff;
+}
+
+.track-row:hover label {
+    color: #fff;
+}
+
+.track-row:hover button {
     background-color: transparent;
-    color: @text_color;
-}
-
-.track-row button {
-    background-color: @base_color;
-    color: @colorPrimary;
-}
-
-.track-row:focus button image {
-    background-color: @base_color;
-    color: @colorPrimary;
+    color: #fff;
 }
 
 .track-queue-row:selected {
     background-color: transparent;
     color: @text_color;
+}
+
+.track-row:selected:hover label {
+    color: #fff;
 }
 
 .slider-button {
@@ -51,11 +55,11 @@
 }
 
 .slider-button.active {
-    color: @colorPrimary;
+    color: @colorAccent;
 }
 
 .header-label {
-    color: @colorPrimary;
+    color: @colorAccent;
 }
 
 .sub-header-label {
@@ -63,7 +67,7 @@
 }
 
 .button-color {
-    color: @colorPrimary;
+    color: @colorAccent;
 }
 
 .w-round {
@@ -74,34 +78,8 @@
     font-weight: bold;
 }
 
-.search-entry:focus {
-    border-color: alpha (@colorPrimary, 0.8);
-}
-
 .search-entry {
-    border-color: alpha (@colorPrimary, 0.8);
-    background-image:
-        linear-gradient(
-            to bottom,
-            shade (
-                @base_color,
-                0.93
-            ),
-            shade (
-                @base_color,
-                0.97
-            )
-        );
-    color: @colorPrimary;
     border-radius: 4px;
-}
-
-.search-entry image.left {
-    color: @colorPrimary;
-}
-
-.search-entry image.right {
-    color: @colorPrimary;
 }
 
 .track-cover {
@@ -134,11 +112,11 @@
         0 1px 2px alpha (#000, 0.24);
 }
 
-.album-child {
+.album-row {
     background-color: transparent;
 }
 
-.album-child:focus {
+.album-row:focus {
     background-color: transparent;
     color: @text_color;
 }
@@ -157,34 +135,34 @@
 }
 
 .quick-find-entry:focus {
-    border-color: alpha (@colorPrimary, 0.8);
+    border-color: alpha (@colorAccent, 0.8);
 }
 
 .quick-find-entry {
-    border-color: alpha (@colorPrimary, 0.8);
+    border-color: alpha (@colorAccent, 0.8);
     box-shadow: none;
     background-image: none;
     background: #F6F8FB;
     border-radius: 4px;
-    color: @colorPrimary;
+    color: @colorAccent;
 }
 
 .quick-find-entry image.left {
-    color: @colorPrimary;
+    color: @colorAccent;
 }
 
 .quick-find-entry image.right {
-    color: @colorPrimary;
+    color: @colorAccent;
 }
 
 selection {
-    background-color: alpha (@colorPrimary, 0.75);
+    background-color: alpha (@colorAccent, 0.75);
     color: @selected_fg_color;
     text-shadow: none;
 }
 
 .quick-find-cancel {
-    color: @colorPrimary;
+    color: @colorAccent;
     font-weight: bold;
 }
 
@@ -197,7 +175,7 @@ selection {
 }
 
 .queue-title {
-    background-color: @colorPrimary;
+    background-color: @colorAccent;
     border-radius: 4px 4px 0px 0px;
     border: 1px solid @colorPrimary;
     color: #fff;
@@ -212,15 +190,15 @@ selection {
 
 .font-album-artist {
     font-weight: 600;
-    color: @colorPrimary;
+    color: @colorAccent;
 }
 
 .home-button {
-    background-color: #f7f7f7;
-    color: @colorPrimary;
+    color: @text_color;
+    background-color:@base_color;
     border-radius: 6px;
     font-weight: 600;
-    border: 1px solid shade (#f7f7f7, 0.95);
+    border: 1px solid shade (@menu_separator, 0.9);
 }
 
 .media-control {
@@ -228,20 +206,20 @@ selection {
 }
 
 .quick-find-modebutton button {
-    border: 1px solid @colorPrimary;
+    border: 1px solid @colorAccent;
     color: @colorPrimary;
     background-image: none;
 }
 
 .quick-find-modebutton button:checked {
-    background-color: @colorPrimary;
+    background-color: @colorAccent;
     color: #ffffff;
 }
 
 .quick-find-modebutton button:first-child {
-    border-left: 1px solid @colorPrimary;
-    border-top: 1px solid @colorPrimary;
-    border-bottom: 1px solid @colorPrimary;
+    border-left: 1px solid @colorAccent;
+    border-top: 1px solid @colorAccent;
+    border-bottom: 1px solid @colorAccent;
     border-right: none;
     border-radius: 4px 0px 0px 4px;
 }
@@ -249,117 +227,41 @@ selection {
 
 .quick-find-modebutton button:last-child {
     border-left: none;
-    border-top: 1px solid @colorPrimary;
-    border-bottom: 1px solid @colorPrimary;
-    border-right: 1px solid @colorPrimary;
+    border-top: 1px solid @colorAccent;
+    border-bottom: 1px solid @colorAccent;
+    border-right: 1px solid @colorAccent;
     border-radius: 0px 4px 4px 0px;
 }
 
 .quick-find-add-radio {
     border-radius: 50%;
     padding: 0px;
-    background-color: @colorPrimary;
+    background-color: @colorAccent;
     color: #ffffff;
-    border: 1px solid @colorPrimary;
-}
-
-.search-title {
-    color: @colorPrimary;
-}
-
-.planner-radio radio:checked {
-    background-image:
-         linear-gradient(
-             to bottom,
-             shade (
-                 @colorPrimary,
-                 1.2
-             ),
-             @colorPrimary
-         );
-    border-color: shade (@colorPrimary, 0.9);
-    box-shadow:
-        inset 0 0 0 1px shade (@colorPrimary, 1.15),
-        inset 0 1px 0 0 shade (@colorPrimary, 1.3),
-        0 1px 1px 0 shade (@bg_color, 0.85);
-    -gtk-icon-shadow: 0 1px 1px shade (@colorPrimary, 0.85);
-}
-
-.planner-radio radio:focus {
-    border-color: @colorPrimary;
-    box-shadow:
-        inset 0 1px 0 0 alpha (@inset_dark_color, 0.7),
-        inset 0 0 0 1px alpha (@inset_dark_color, 0.3),
-        0 0 2px 1px alpha (@colorPrimary, 0.5);
-    transition: all 100ms ease-out;
-}
-
-.planner-radio radio:checked:focus {
-    border-color: shade (@colorPrimary, 0.8);
-    box-shadow:
-        inset 0 0 0 1px shade (@colorPrimary, 1.15),
-        inset 0 1px 0 0 shade (@colorPrimary, 1.3),
-        0 0 2px 1px alpha (@colorPrimary, 0.5),
-        0 1px 1px 0 shade (@bg_color, 0.85);
-}
-
-.planner-check check:checked {
-    background-image:
-         linear-gradient(
-             to bottom,
-             shade (
-                 @colorPrimary,
-                 1.2
-             ),
-             @colorPrimary
-         );
-    border-color: shade (@colorPrimary, 0.9);
-    box-shadow:
-        inset 0 0 0 1px shade (@colorPrimary, 1.15),
-        inset 0 1px 0 0 shade (@colorPrimary, 1.3),
-        0 1px 1px 0 shade (@bg_color, 0.85);
-    -gtk-icon-shadow: 0 1px 1px shade (@colorPrimary, 0.85);
-}
-
-.planner-check check:focus {
-    border-color: @colorPrimary;
-    box-shadow:
-        inset 0 1px 0 0 alpha (@inset_dark_color, 0.7),
-        inset 0 0 0 1px alpha (@inset_dark_color, 0.3),
-        0 0 2px 1px alpha (@colorPrimary, 0.5);
-    transition: all 100ms ease-out;
-}
-
-.planner-check check:checked:focus {
-    border-color: shade (@colorPrimary, 0.8);
-    box-shadow:
-        inset 0 0 0 1px shade (@colorPrimary, 1.15),
-        inset 0 1px 0 0 shade (@colorPrimary, 1.3),
-        0 0 2px 1px alpha (@colorPrimary, 0.5),
-        0 1px 1px 0 shade (@bg_color, 0.85);
+    border: 1px solid @colorAccent;
 }
 
 .sort-button {
-    color: @colorPrimary;
+    color: @colorAccent;
     border-radius: 6px;
 }
 
 .playing-ani-color {
     background-color: #fff;
-    color: @colorPrimary;
+    color: @colorAccent;
     border-radius: 50px;
     padding: 3px;
-    border: 1px solid @colorPrimary;
+    border: 1px solid @colorAccent;
 }
 
 .options-button {
-    color: @colorPrimary;
+    color: @colorAccent;
     border-radius: 4px;
     padding: 2px;
 }
 
 .remove-button {
-    background-color: @colorPrimary;
+    background-color: @colorAccent;
     color: #ffffff;
     border-radius: 50%;
     padding: 0px;
@@ -374,25 +276,25 @@ selection {
 }
 
 .add-playlist {
-    background-color: @colorPrimary;
+    background-color: @colorAccent;
     color: #fff;
     border-radius: 4px;
 }
 
 .add-playlist-entry {
-    border-color: alpha (@colorPrimary, 0.8);
+    border-color: alpha (@colorAccent, 0.8);
     box-shadow: none;
     background-image: none;
     background: #F6F8FB;
-    color: @colorPrimary;
+    color: @colorAccent;
 }
 
 .icon-color-primary {
-    color: @colorPrimary;
+    color: @colorAccent;
 }
 
 .track-options:hover {
-    background-color: @colorPrimary;
+    background-color: @colorAccent;
     color: #ffffff;
 }
 
@@ -404,8 +306,8 @@ overshoot.top {
     background:
         linear-gradient(
             to top,
-            alpha(@colorPrimary, 0) 80%,
-            alpha(@colorPrimary, 0.25) 100%
+            alpha(@colorAccent, 0) 80%,
+            alpha(@colorAccent, 0.25) 100%
         );
 }
 
@@ -413,8 +315,8 @@ overshoot.right {
     background:
         linear-gradient(
             to right,
-            alpha(@colorPrimary, 0) 80%,
-            alpha(@colorPrimary, 0.25) 100%
+            alpha(@colorAccent, 0) 80%,
+            alpha(@colorAccent, 0.25) 100%
         );
 }
 
@@ -422,8 +324,8 @@ overshoot.bottom {
     background:
         linear-gradient(
             to bottom,
-            alpha(@colorPrimary, 0) 80%,
-            alpha(@colorPrimary, 0.25) 100%
+            alpha(@colorAccent, 0) 80%,
+            alpha(@colorAccent, 0.25) 100%
         );
 }
 
@@ -431,17 +333,22 @@ overshoot.left {
     background:
         linear-gradient(
             to left,
-            alpha(@colorPrimary, 0) 80%,
-            alpha(@colorPrimary, 0.25) 100%
+            alpha(@colorAccent, 0) 80%,
+            alpha(@colorAccent, 0.25) 100%
         );
 }
 
 .label-color-primary {
-    color: @colorPrimary;
+    color: @colorAccent;
 }
 
-.mode-button image {
-    color: @colorPrimary;
+.mode-button {
+    background-color: @base_color;
+    border-radius: 3px;
+}
+
+.mode-button button {
+    color: @text_color;
 }
 
 .label-white {
@@ -458,4 +365,33 @@ overshoot.left {
 
 .no-padding {
     padding: 0px;
+}
+
+.secondary_label {
+    font-weight: 400;
+}
+
+.editor-titlebar headerbar {
+    padding: 0px;
+}
+
+.editor-textview text {
+    background-color: @bg_color;
+}
+
+.settings-icon {
+    background-color: @colorAccent;
+    color: #fff;
+    border-radius: 3px;
+    padding: 3px;
+}
+
+.active-switch slider {
+    min-height: 16px;
+    min-width: 16px;
+}
+
+.sync-image {
+    animation: spin 1000ms linear infinite;
+    color: @colorAccent
 }

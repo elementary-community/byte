@@ -20,7 +20,7 @@ public class Widgets.Queue : Gtk.Revealer {
         next_track_label.valign = Gtk.Align.END;
         next_track_label.halign = Gtk.Align.START;
         next_track_label.use_markup = true;
-        next_track_label.get_style_context ().add_class ("search-title");
+        next_track_label.get_style_context ().add_class ("label-color-primary");
         next_track_label.get_style_context ().add_class ("font-bold");
 
         var next_track_name = new Gtk.Label (null);
@@ -29,30 +29,68 @@ public class Widgets.Queue : Gtk.Revealer {
         next_track_name.use_markup = true;
         next_track_name.max_width_chars = 31;
         next_track_name.ellipsize = Pango.EllipsizeMode.END;
+        
+        var view_button = new Gtk.Button.with_label (_("View all"));
+        view_button.hexpand = true;
+        view_button.halign = Gtk.Align.END;
+        view_button.get_style_context ().add_class (Gtk.STYLE_CLASS_FLAT);
+        view_button.get_style_context ().add_class ("button-color");
+        view_button.can_focus = false;
+        view_button.valign = Gtk.Align.CENTER;
 
         var next_track_grid = new Gtk.Grid ();
         next_track_grid.column_spacing = 3;
         next_track_grid.attach (image_cover, 0, 0, 1, 2);
         next_track_grid.attach (next_track_label, 1, 0, 1, 1);
         next_track_grid.attach (next_track_name, 1, 1, 1, 1);
-
-        var view_button = new Gtk.Button.with_label (_("View all"));
-        view_button.get_style_context ().add_class (Gtk.STYLE_CLASS_FLAT);
-        view_button.get_style_context ().add_class ("button-color");
-        view_button.can_focus = false;
-        view_button.valign = Gtk.Align.CENTER;
-
-        var top_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 0);
-        top_box.pack_start (next_track_grid, false, true, 0);
-        top_box.pack_end (view_button, false, false, 0);
+        next_track_grid.attach (view_button, 2, 0, 2, 2);
 
         var top_eventbox = new Gtk.EventBox ();
-        top_eventbox.add (top_box);
+        top_eventbox.add (next_track_grid);
+
+        // Sync
+
+        var sync_image = new Gtk.Image ();
+        sync_image.gicon = new ThemedIcon ("emblem-synchronizing-symbolic");
+        sync_image.pixel_size = 24;
+        sync_image.margin_top = 1;
+        sync_image.valign = Gtk.Align.CENTER;
+        sync_image.halign = Gtk.Align.CENTER;
+        sync_image.get_style_context ().add_class ("sync-image");
+
+        var sync_label = new Gtk.Label ("<small>%s</small>".printf (_("Sync Library…")));
+        sync_label.valign = Gtk.Align.END;
+        sync_label.halign = Gtk.Align.START;
+        sync_label.use_markup = true;
+        sync_label.get_style_context ().add_class ("search-title");
+        sync_label.get_style_context ().add_class ("font-bold");
+
+        var sync_progressbar = new Gtk.ProgressBar ();
+        sync_progressbar.valign = Gtk.Align.START;
+        sync_progressbar.hexpand = true;
+        sync_progressbar.get_style_context ().add_class ("label-white");
+
+        var sync_grid = new Gtk.Grid ();
+        sync_grid.valign = Gtk.Align.CENTER;
+        sync_grid.row_spacing = 3;
+        sync_grid.column_spacing = 6;
+        sync_grid.margin_start = 6;
+        sync_grid.margin_end = 6;
+        sync_grid.attach (sync_image, 0, 0, 1, 2);
+        sync_grid.attach (sync_label, 1, 0, 1, 1);
+        sync_grid.attach (sync_progressbar, 1, 1, 1, 1);
+
+        var top_stack = new Gtk.Stack ();
+        top_stack.expand = true;
+        top_stack.transition_type = Gtk.StackTransitionType.CROSSFADE;
+
+        top_stack.add_named (top_eventbox, "top_eventbox");
+        top_stack.add_named (sync_grid, "sync_grid");
 
         var top_revealer = new Gtk.Revealer ();
         top_revealer.transition_type = Gtk.RevealerTransitionType.SLIDE_DOWN;
         top_revealer.expand = true;
-        top_revealer.add (top_eventbox);
+        top_revealer.add (top_stack);
         top_revealer.reveal_child = true;
 
         var title_label = new Gtk.Label ("Up Next");
@@ -64,9 +102,17 @@ public class Widgets.Queue : Gtk.Revealer {
         hide_button.valign = Gtk.Align.CENTER;
         hide_button.get_style_context ().add_class (Gtk.STYLE_CLASS_FLAT);
 
+        var mode_button = new Granite.Widgets.ModeButton ();
+        mode_button.get_style_context ().add_class ("mode-button");
+        mode_button.margin = 3;
+        mode_button.append_text (_("Up Next"));
+        //mode_button.append_text (_("History"));
+        mode_button.append_text (_("Lyrics"));
+        mode_button.selected = 0;
+ 
         var title_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 0);
         title_box.get_style_context ().add_class ("queue-title");
-        title_box.pack_start (title_label, false, false, 0);
+        title_box.set_center_widget (mode_button);
         title_box.pack_end (hide_button, false, false, 0);
 
         var title_eventbox = new Gtk.EventBox ();
@@ -134,6 +180,12 @@ public class Widgets.Queue : Gtk.Revealer {
                     return index >= current_index; 
                 });
             }
+
+            if (Byte.scan_service.is_sync) {
+                top_stack.visible_child_name = "sync_grid";
+            } else {
+                top_stack.visible_child_name = "top_eventbox";
+            }
         });
         
         Byte.player.current_track_changed.connect ((track) => {
@@ -153,15 +205,12 @@ public class Widgets.Queue : Gtk.Revealer {
                 next_track_grid.tooltip_text = _("%s - %s".printf (next_track.artist_name, next_track.title));
                     
                 try {
-                    var cover_path = GLib.Path.build_filename (Byte.utils.COVER_FOLDER, ("album-%i.jpg").printf (next_track.album_id));
+                    var cover_path = GLib.Path.build_filename (Byte.utils.COVER_FOLDER, ("track-%i.jpg").printf (next_track.id));
                     image_cover.pixbuf = new Gdk.Pixbuf.from_file_at_size (cover_path, 27, 27);
                 } catch (Error e) {
                     image_cover.pixbuf = new Gdk.Pixbuf.from_file_at_size ("/usr/share/com.github.alainm23.byte/track-default-cover.svg", 27, 27);
                     stderr.printf ("Error setting default avatar icon: %s ", e.message);
                 }
-            } else {
-                print ("Se ejecuto aqui\n");
-                reveal_child = false;
             }
         });
 
@@ -173,7 +222,7 @@ public class Widgets.Queue : Gtk.Revealer {
                 next_track_grid.tooltip_text = _("%s - %s".printf (next_track.artist_name, next_track.title));
                 
                 try {
-                    var cover_path = GLib.Path.build_filename (Byte.utils.COVER_FOLDER, ("album-%i.jpg").printf (next_track.album_id));
+                    var cover_path = GLib.Path.build_filename (Byte.utils.COVER_FOLDER, ("track-%i.jpg").printf (next_track.id));
                     image_cover.pixbuf = new Gdk.Pixbuf.from_file_at_size (cover_path, 27, 27);
                 } catch (Error e) {
                     image_cover.pixbuf = new Gdk.Pixbuf.from_file_at_size ("/usr/share/com.github.alainm23.byte/track-default-cover.svg", 27, 27);
@@ -287,6 +336,41 @@ public class Widgets.Queue : Gtk.Revealer {
 
                 return index >= current_index; 
             });
+        });
+
+        /*
+        Byte.database.updated_track_favorite.connect ((track, favorite) => {
+            if (favorite == 1) {
+                string old_text = next_track_name.label;
+
+                next_track_label.label = _("Add Favorite");
+                next_track_name.label = track.title;
+
+                Timeout.add (1000, () => {
+                    next_track_label.label = _("Next track");
+                    next_track_name.label = old_text;
+
+                    return false;
+                });
+            }
+        });
+        */
+
+        Byte.scan_service.sync_started.connect (() => {
+            top_stack.visible_child_name = "sync_grid";
+            reveal_child = true;
+        });
+
+        Byte.scan_service.sync_finished.connect (() => {
+            if (Byte.player.current_track != null) {
+                top_stack.visible_child_name = "top_eventbox";
+            } else {
+                reveal_child = false;
+            }
+        });
+
+        Byte.scan_service.sync_progress.connect ((fraction) => {
+            sync_progressbar.fraction = fraction;
         });
     }
 

@@ -98,7 +98,7 @@ public class Utils : GLib.Object {
     public Gee.ArrayList<Objects.Track?> playlist_order (Gee.ArrayList<Objects.Track?> items) {
         for (int j = 0; j < items.size; j++) {
             for (int i = 0; i < items.size - 1; i++) {
-                if (items [i]._id > items [i + 1]._id) {
+                if (items [i].track_order > items [i + 1].track_order) {
                     var tmp_track = items [i + 1];
                     items [i + 1] = items [i];
                     items [i] = tmp_track;
@@ -152,7 +152,7 @@ public class Utils : GLib.Object {
 
             int index = get_track_index_by_id (Byte.player.current_track.id, queue_playlist) + 1;
             
-            track._id = index;
+            track.track_order = index;
             queue_playlist.insert (index, track);
             
             add_next_track (queue_playlist);
@@ -168,7 +168,7 @@ public class Utils : GLib.Object {
                 queue_playlist.remove_at (remove_index);
             }
 
-            track._id = queue_playlist.size + 1;
+            track.track_order = queue_playlist.size + 1;
             queue_playlist.add (track); 
             add_last_track (queue_playlist);
         }
@@ -227,6 +227,12 @@ public class Utils : GLib.Object {
         return "%u:%02u:%02u".printf (hours, minutes, seconds);
     } 
 
+    public string get_relative_datetime (string date) {
+        return Granite.DateTime.get_relative_datetime (
+            new GLib.DateTime.from_iso8601 (date, new GLib.TimeZone.local ())
+        );
+    }
+
     public string get_relative_duration (uint64 duration) {
         uint temp_sec = (uint) (duration / 1000000000);
         uint sec = (uint) temp_sec % 60;
@@ -253,8 +259,8 @@ public class Utils : GLib.Object {
         }
     }
 
-    public string get_cover_file (int album_id) {
-        var cover_path = GLib.Path.build_filename (Byte.utils.COVER_FOLDER, ("album-%i.jpg").printf (album_id));
+    public string get_cover_file (int track_id) {
+        var cover_path = GLib.Path.build_filename (Byte.utils.COVER_FOLDER, ("track-%i.jpg").printf (track_id));
         if (File.new_for_path (cover_path).query_exists ()) {
             return "file://" + cover_path;
         }

@@ -13,13 +13,15 @@ public class Services.CoverImport : GLib.Object {
     public void import (Objects.Track track) {
         try {
             var info = discoverer.discover_uri (track.path);
-            read_info (info, track.album_id);
+            read_info (info, track);
         } catch (Error err) {
-            critical ("Error while importing .. ");
+            critical ("%s - %s, Error while importing ...".printf (
+                track.artist_name, track.title
+            ));
         }
     }
 
-    private void read_info (Gst.PbUtils.DiscovererInfo info, int album_id) {
+    private void read_info (Gst.PbUtils.DiscovererInfo info, Objects.Track track) {
         string uri = info.get_uri ();
         bool gstreamer_discovery_successful = false;
         switch (info.get_result ()) {
@@ -64,7 +66,7 @@ public class Services.CoverImport : GLib.Object {
                     if (buffer != null) {
                         pixbuf = get_pixbuf_from_buffer (buffer);
                         if (pixbuf != null) {
-                            save_cover_pixbuf (pixbuf, album_id);
+                            save_cover_pixbuf (pixbuf, track);
                         }
                     }
 
@@ -120,15 +122,22 @@ public class Services.CoverImport : GLib.Object {
         return pix;
     }
 
-    private void save_cover_pixbuf (Gdk.Pixbuf p, int album_id) {
+    private void save_cover_pixbuf (Gdk.Pixbuf p, Objects.Track track) {
         Gdk.Pixbuf ? pixbuf = Byte.utils.align_and_scale_pixbuf (p, 256);
 
         try {
-            string cover_path = GLib.Path.build_filename (Byte.utils.COVER_FOLDER, 
-                ("album-%i.jpg").printf (album_id));
+            string album_path = GLib.Path.build_filename (Byte.utils.COVER_FOLDER, 
+                ("album-%i.jpg").printf (track.album_id));
 
-            if (pixbuf.save (cover_path, "jpeg", "quality", "100")) {
-                Byte.database.updated_album_cover (album_id);
+            string track_path = GLib.Path.build_filename (Byte.utils.COVER_FOLDER, 
+                ("track-%i.jpg").printf (track.id));
+
+            if (pixbuf.save (album_path, "jpeg", "quality", "100")) {
+                Byte.database.updated_album_cover (track.album_id);
+            }
+
+            if (pixbuf.save (track_path, "jpeg", "quality", "100")) {
+                Byte.database.updated_track_cover (track.id);
             }
         } catch (Error err) {
             warning (err.message);

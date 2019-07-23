@@ -1,7 +1,9 @@
 public class Views.Playlists : Gtk.EventBox {
     private Gtk.ListBox listbox;
     private Widgets.NewPlaylist new_playlist;
+
     public signal void go_back ();
+    public signal void go_playlist (Objects.Playlist playlist);
 
     private int item_index;
     private int item_max;
@@ -32,7 +34,7 @@ public class Views.Playlists : Gtk.EventBox {
         search_button.halign = Gtk.Align.CENTER;
         search_button.get_style_context ().add_class (Gtk.STYLE_CLASS_FLAT);
         search_button.get_style_context ().add_class ("h3");
-        search_button.get_style_context ().add_class ("search-title");
+        search_button.get_style_context ().add_class ("label-color-primary");
         search_button.always_show_image = true;
 
         var add_button = new Gtk.ToggleButton ();
@@ -106,10 +108,8 @@ public class Views.Playlists : Gtk.EventBox {
 
 
         listbox.row_activated.connect ((row) => {
-            /*
-            var item = row as Widgets.AlbumRow;
-            go_album (item.album);
-            */
+            var item = row as Widgets.PlaylistRow;
+            go_playlist (item.playlist);
         });
 
         Byte.database.adden_new_playlist.connect ((playlist) => {

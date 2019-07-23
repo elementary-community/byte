@@ -76,7 +76,7 @@
             <description>Most recent window position (x, y)</description>
         </key>
 
-        <key name="prefer-dark-style" type="b">
+        <key name="dark-mode" type="b">
             <default>false</default>
             <summary>If the dark Gtk stylesheet should be used</summary>
             <description>If the dark Gtk stylesheet should be used</description>
@@ -98,6 +98,18 @@
 			<default>false</default>
 			<summary>Save changes into file.</summary>
 			<description>Save changes into file.</description>
+		</key>
+
+		<key name="notifications-enabled" type="b">
+			<default>true</default>
+			<summary>Show notifications.</summary>
+			<description>Show notifications.</description>
+		</key>
+		
+		<key name="auto-download-covers" type="b">
+			<default>false</default>
+			<summary>Auto download covers</summary>
+			<description>Auto download covers</description>
 		</key>
     </schema>
 </schemalist>

@@ -1,11 +1,15 @@
 public class Services.Notification : GLib.Object {
     public Notification () {
         Byte.player.current_track_changed.connect ((track) => {
-            send_track_notification (track);
+            if (Byte.settings.get_boolean ("notifications-enabled")) {
+                send_track_notification (track);
+            }
         });
-
+    
         Byte.player.current_radio_title_changed.connect ((title) => {
-            send_radio_notification (title);
+            if (Byte.settings.get_boolean ("notifications-enabled")) {
+                send_radio_notification (title);
+            }     
         });
     }
 
@@ -13,7 +17,7 @@ public class Services.Notification : GLib.Object {
         try {
             var notification = new GLib.Notification (track.title);
             notification.set_body (track.artist_name);
-            notification.set_icon (GLib.Icon.new_for_string (Byte.utils.get_cover_file (track.album_id)));
+            notification.set_icon (GLib.Icon.new_for_string (Byte.utils.get_cover_file (track.id)));
             notification.set_priority (GLib.NotificationPriority.LOW);
 
             Byte.instance.send_notification (Byte.instance.application_id, notification);

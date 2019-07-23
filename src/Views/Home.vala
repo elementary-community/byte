@@ -13,7 +13,6 @@ public class Views.Home : Gtk.EventBox {
 
     construct {
         get_style_context ().add_class (Gtk.STYLE_CLASS_VIEW);
-        get_style_context ().add_class (Granite.STYLE_CLASS_WELCOME);
         get_style_context ().add_class ("w-round");
 
         all_tracks = Byte.database.get_tracks_recently_added ();
@@ -21,15 +20,16 @@ public class Views.Home : Gtk.EventBox {
         var library_label = new Gtk.Label ("<b>%s</b>".printf (_("Library")));
         library_label.get_style_context ().add_class ("font-bold");
         library_label.get_style_context ().add_class ("h3");
-        library_label.margin_start = 12;
-        library_label.margin_top = 9;
+        library_label.get_style_context ().add_class ("label-color-primary");
+        library_label.margin_start = 9;
+        library_label.margin_top = 6;
         library_label.halign =Gtk.Align.START;
         library_label.use_markup = true;
         
         var recently_added_label = new Gtk.Label ("<b>%s</b> <small>(last 100)</small>".printf (_("Recently added")));
-        //recently_added_label.get_style_context ().add_class ("font-bold");
+        recently_added_label.get_style_context ().add_class ("label-color-primary");
         recently_added_label.get_style_context ().add_class ("h3");
-        recently_added_label.margin_start = 12;
+        recently_added_label.margin_start = 9;
         recently_added_label.halign =Gtk.Align.START;
         recently_added_label.use_markup = true;
 
@@ -45,10 +45,9 @@ public class Views.Home : Gtk.EventBox {
 
         var tracks_scrolled = new Gtk.ScrolledWindow (null, null);
         tracks_scrolled.hscrollbar_policy = Gtk.PolicyType.NEVER;
-        tracks_scrolled.expand = true;
-        tracks_scrolled.margin_start = 6;
         tracks_scrolled.margin_top = 6;
         tracks_scrolled.margin_bottom = 3;
+        tracks_scrolled.expand = true;
         tracks_scrolled.add (tracks_listbox);
 
         var items_grid = new Gtk.Grid ();
@@ -57,6 +56,7 @@ public class Views.Home : Gtk.EventBox {
         items_grid.margin = 6;
         items_grid.column_homogeneous = true;
         items_grid.row_homogeneous = true;
+        items_grid.get_style_context ().add_class (Granite.STYLE_CLASS_WELCOME);
         items_grid.attach (songs_button,     0, 0, 1, 1);
         items_grid.attach (playlists_button,    1, 0, 1, 1);
         items_grid.attach (albums_button, 0, 1, 1, 1);

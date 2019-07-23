@@ -12,7 +12,7 @@ public class Widgets.TrackAlbumRow : Gtk.ListBoxRow {
     }
 
     construct {
-        get_style_context ().add_class ("track-row");
+        get_style_context ().add_class ("album-row");
         
         track_label = new Gtk.Label ("%i".printf (track.track));
         track_label.get_style_context ().add_class ("label-color-primary");
@@ -87,7 +87,6 @@ public class Widgets.TrackAlbumRow : Gtk.ListBoxRow {
             });
         }
 
-        /*
         Byte.player.current_track_changed.connect ((current_track) => {
             if (track.id == current_track.id) {
                 playing_stack.visible_child_name = "playing_icon";
@@ -99,7 +98,6 @@ public class Widgets.TrackAlbumRow : Gtk.ListBoxRow {
                 duration_label.get_style_context ().remove_class ("label-color-primary");
             }
         });
-        */
         
         Byte.database.updated_track_favorite.connect ((_track, favorite) => {
             if (track.id == _track.id) {

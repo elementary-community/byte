@@ -72,7 +72,7 @@ public class SoundIndicatorPlayer : GLib.Object {
                 var metadata = new HashTable<string, Variant> (null, null);
 
                 if (track != null) {
-                    metadata.insert ("mpris:artUrl", Byte.utils.get_cover_file (track.album_id));
+                    metadata.insert ("mpris:artUrl", Byte.utils.get_cover_file (track.id));
                     metadata.insert ("xesam:title", track.title);
                     metadata.insert ("xesam:artist", get_simple_string_array (track.artist_name));
                 }

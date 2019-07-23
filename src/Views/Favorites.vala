@@ -31,7 +31,7 @@ public class Views.Favorites : Gtk.EventBox {
         search_button.halign = Gtk.Align.CENTER;
         search_button.get_style_context ().add_class (Gtk.STYLE_CLASS_FLAT);
         search_button.get_style_context ().add_class ("h3");
-        search_button.get_style_context ().add_class ("search-title");
+        search_button.get_style_context ().add_class ("label-color-primary");
         search_button.always_show_image = true;
         search_button.tooltip_text = _("Search by title, artist and album");
 
@@ -44,6 +44,7 @@ public class Views.Favorites : Gtk.EventBox {
         search_entry.placeholder_text = _("Search by title, artist and album");
 
         var search_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 0);
+        search_box.get_style_context ().add_class (Gtk.STYLE_CLASS_BACKGROUND);
         search_box.add (search_entry);
         search_box.add (new Gtk.Separator (Gtk.Orientation.HORIZONTAL));
 
@@ -53,6 +54,7 @@ public class Views.Favorites : Gtk.EventBox {
         search_revealer.reveal_child = false;
 
         var header_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 0);
+        header_box.get_style_context ().add_class (Gtk.STYLE_CLASS_BACKGROUND);
         header_box.pack_start (back_button, false, false, 0);
         header_box.set_center_widget (search_button);
 
@@ -63,6 +65,8 @@ public class Views.Favorites : Gtk.EventBox {
         play_button.always_show_image = true;
         play_button.label = _("Play");
         play_button.hexpand = true;
+        play_button.margin = 6;
+        play_button.margin_end = 0;
         play_button.get_style_context ().add_class ("home-button");
         play_button.get_style_context ().add_class (Gtk.STYLE_CLASS_FLAT);
 
@@ -70,12 +74,14 @@ public class Views.Favorites : Gtk.EventBox {
         shuffle_button.always_show_image = true;
         shuffle_button.label = _("Shuffle");
         shuffle_button.hexpand = true;
+        shuffle_button.margin = 6;
+        shuffle_button.margin_start = 0;
         shuffle_button.get_style_context ().add_class ("home-button");
         shuffle_button.get_style_context ().add_class (Gtk.STYLE_CLASS_FLAT);
 
         var action_grid = new Gtk.Grid ();
-        action_grid.margin = 6;
-        action_grid.column_spacing = 12;
+        action_grid.get_style_context ().add_class (Gtk.STYLE_CLASS_BACKGROUND);
+        action_grid.column_spacing = 6;
         action_grid.add (play_button);
         action_grid.add (shuffle_button);
 
@@ -93,9 +99,9 @@ public class Views.Favorites : Gtk.EventBox {
         main_box.expand = true;
         main_box.pack_start (header_box, false, false, 0);
         main_box.pack_start (new Gtk.Separator (Gtk.Orientation.HORIZONTAL), false, false, 0);
-        main_box.pack_start (search_revealer, false, false, 0);
         main_box.pack_start (action_grid, false, false);
         main_box.pack_start (new Gtk.Separator (Gtk.Orientation.HORIZONTAL), false, false, 0);
+        main_box.pack_start (search_revealer, false, false, 0);
         main_box.pack_start (scrolled, true, true, 0);
         
         add (main_box);
@@ -219,7 +225,7 @@ public class Views.Favorites : Gtk.EventBox {
         Byte.database.updated_track_favorite.connect ((track, favorite) => {
             if (track_exists (track) == false) {
                 if (favorite == 1) {
-                    track._id = all_tracks.size + 1;
+                    track.track_order = all_tracks.size + 1;
                     all_tracks.add (track);
 
                     item_index = item_max;

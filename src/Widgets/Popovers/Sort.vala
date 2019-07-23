@@ -133,36 +133,36 @@ public class Widgets.Popovers.Sort : Gtk.Popover {
         
         //radio_01 = new Gtk.RadioButton.with_label_from_widget (null, _("Title"));
         radio_01 = new Gtk.RadioButton.with_label_from_widget (null, null);
-        radio_01.get_style_context ().add_class ("planner-radio");
+        //radio_01.get_style_context ().add_class ("planner-radio");
         radio_01.get_style_context ().add_class ("h3");
         radio_01.margin_start = 12;
 
         //radio_02 = new Gtk.RadioButton.with_label_from_widget (radio_01, _("Artist"));
         radio_02 = new Gtk.RadioButton.with_label_from_widget (radio_01, null);
-        radio_02.get_style_context ().add_class ("planner-radio");
+        //radio_02.get_style_context ().add_class ("planner-radio");
         radio_02.get_style_context ().add_class ("h3");
         radio_02.margin_start = 12;
 
         //radio_03 = new Gtk.RadioButton.with_label_from_widget (radio_01, _("Album"));
         radio_03 = new Gtk.RadioButton.with_label_from_widget (radio_01, null);
-        radio_03.get_style_context ().add_class ("planner-radio");
+        //radio_03.get_style_context ().add_class ("planner-radio");
         radio_03.get_style_context ().add_class ("h3");
         radio_03.margin_start = 12;
 
         
         //radio_04 = new Gtk.RadioButton.with_label_from_widget (radio_01, _("Added date"));
         radio_04 = new Gtk.RadioButton.with_label_from_widget (radio_01, null);
-        radio_04.get_style_context ().add_class ("planner-radio");
+        //radio_04.get_style_context ().add_class ("planner-radio");
         radio_04.get_style_context ().add_class ("h3");
         radio_04.margin_start = 12;
 
         radio_05 = new Gtk.RadioButton.with_label_from_widget (radio_01, null);
-        radio_05.get_style_context ().add_class ("planner-radio");
+        //radio_05.get_style_context ().add_class ("planner-radio");
         radio_05.get_style_context ().add_class ("h3");
         radio_05.margin_start = 12;
 
         order_reverse_button = new Gtk.CheckButton.with_label (_("Reversed order"));
-        order_reverse_button.get_style_context ().add_class ("planner-check");
+        //order_reverse_button.get_style_context ().add_class ("planner-check");
         order_reverse_button.get_style_context ().add_class ("h3");
         order_reverse_button.margin_start = 12;
         order_reverse_button.margin_top = 3;

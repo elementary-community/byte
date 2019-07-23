@@ -10,7 +10,7 @@ public class Objects.Playlist : GLib.Object {
                      string title = "",
                      string note = "",
                      string date_added = new GLib.DateTime.now_local ().to_string (),
-                     string date_updated = "",
+                     string date_updated = new GLib.DateTime.now_local ().to_string (),
                      int num_tracks = 0) {
         this.id = id;
         this.title = title;

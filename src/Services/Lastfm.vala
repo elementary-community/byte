@@ -14,10 +14,12 @@ public class Services.Lastfm : GLib.Object {
 
         Byte.player.current_track_changed.connect ((track) => {
             if (Byte.scan_service.is_sync == false) {
-                var cover_path = File.new_for_path (GLib.Path.build_filename (Byte.utils.COVER_FOLDER, ("album-%i.jpg").printf (track.album_id)));
+                var cover_path = File.new_for_path (GLib.Path.build_filename (Byte.utils.COVER_FOLDER, ("track-%i.jpg").printf (track.id)));
             
                 if (cover_path.query_exists () == false) {
-                    get_current_track_cover (track);
+                    if (Byte.settings.get_boolean ("auto-download-covers")) {
+                        get_current_track_cover (track);
+                    }
                 }
             }
         });
@@ -69,7 +71,7 @@ public class Services.Lastfm : GLib.Object {
     }
 
     private void download_cover (Objects.Track track, string uri) {
-        var cover_path = GLib.Path.build_filename (Byte.utils.COVER_FOLDER, ("album-%i.jpg").printf (track.album_id));
+        var cover_path = GLib.Path.build_filename (Byte.utils.COVER_FOLDER, ("track-%i.jpg").printf (track.id));
 
         var file_path = File.new_for_path (cover_path);
         var file_from_uri = File.new_for_uri (uri);
@@ -82,9 +84,12 @@ public class Services.Lastfm : GLib.Object {
         }, (obj, res) => {
             try {
                 if (file_from_uri.copy_async.end (res)) {
-                    print ("Cover %i was downloaded\n".printf (track.album_id));
-                    add_id3_image (track, cover_path);
-                    Byte.database.updated_album_cover (track.album_id);
+                    print ("Cover %s was downloaded\n".printf (track.title));
+                    Byte.database.updated_track_cover (track.id);
+
+                    if (Byte.settings.get_boolean ("save-id3-tags")) {
+                        add_id3_image (track, cover_path);
+                    }
                 }
             } catch (Error e) {
                 print ("Error: %s\n", e.message);
@@ -154,12 +159,16 @@ public class Services.Lastfm : GLib.Object {
         string track_path = track.path.substring (7).replace ("%20", " ");
         string response = "";
         string command = "eyeD3 --add-image='%s':FRONT_COVER '%s'".printf (cover_path, track_path);
-        
-        GLib.Process.spawn_command_line_sync (command, out response);
 
-        print ("---------------------------------\n");
-        print ("Error: %s\n".printf (response));
-        print ("---------------------------------\n");
+        try {
+            GLib.Process.spawn_command_line_sync (command, out response);
+
+            print ("---------------------------------\n");
+            print ("Error: %s\n".printf (response));
+            print ("---------------------------------\n");
+        } catch (SpawnError e) {
+		    print ("Error: %s\n", e.message);
+	    }
         /*
         if ("file not found" in response) {
             print ("Error: %s\n".printf (response));

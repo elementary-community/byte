@@ -36,7 +36,7 @@ public class Views.Albums : Gtk.EventBox {
         search_button.halign = Gtk.Align.CENTER;
         search_button.get_style_context ().add_class (Gtk.STYLE_CLASS_FLAT);
         search_button.get_style_context ().add_class ("h3");
-        search_button.get_style_context ().add_class ("search-title");
+        search_button.get_style_context ().add_class ("label-color-primary");
         search_button.always_show_image = true;
         search_button.tooltip_text = _("Search by title, artist, genre and year");
 
@@ -50,6 +50,7 @@ public class Views.Albums : Gtk.EventBox {
         search_entry.placeholder_text = _("Search by title, artist, genre and year");
 
         var search_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 0);
+        search_box.get_style_context ().add_class (Gtk.STYLE_CLASS_BACKGROUND);
         search_box.add (search_entry);
         search_box.add (new Gtk.Separator (Gtk.Orientation.HORIZONTAL));
 
@@ -67,6 +68,7 @@ public class Views.Albums : Gtk.EventBox {
         sort_button.get_style_context ().add_class ("sort-button");
 
         var header_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 0);
+        header_box.get_style_context ().add_class (Gtk.STYLE_CLASS_BACKGROUND);
         header_box.pack_start (back_button, false, false, 0);
         header_box.set_center_widget (search_button);
         header_box.pack_end (sort_button, false, false, 0);
@@ -227,8 +229,7 @@ public class Views.Albums : Gtk.EventBox {
     private void add_item (Objects.Album album) {
         if (album.id != 0) {
             var row = new Widgets.AlbumRow (album);
-        
-            all_items.add (album);
+            
             listbox.add (row);
             listbox.show_all ();
         }

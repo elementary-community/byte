@@ -1,3 +1,4 @@
+
 [DBus (name = "org.gnome.SettingsDaemon.MediaKeys")]
 public interface GnomeMediaKeys : GLib.Object {
     public abstract void GrabMediaPlayerKeys (string application, uint32 time) throws Error;
@@ -43,4 +44,3 @@ public class Services.MediaKey : GLib.Object {
         }
     }
 }
-

@@ -9,6 +9,7 @@ public class Services.Database : GLib.Object {
     public signal void adden_new_playlist (Objects.Playlist playlist);
     
     public signal void updated_album_cover (int album_id);
+    public signal void updated_track_cover (int track_id);
     public signal void updated_track_favorite (Objects.Track track, int favorite);
 
     public Database (bool skip_tables = false) {
@@ -59,16 +60,28 @@ public class Services.Database : GLib.Object {
         rc = db.exec ("CREATE TABLE IF NOT EXISTS tracks (" +
             "id             INTEGER PRIMARY KEY AUTOINCREMENT," +
             "album_id       INT     NOT NULL," +
-            "path           TEXT    NOT NULL," +
-            "title          TEXT    NOT NULL," +
-            "date_added     TEXT    NOT NULL," +
-            "favorite_added TEXT    NOT NULL," +
-            "last_played    TEXT    NOT NULL," +
             "track          INT     NOT NULL," +
             "disc           INT     NOT NULL," +
             "play_count     INT     NOT NULL," +
             "is_favorite    INT     NOT NULL," +
             "duration       INT     NOT NULL," +
+            "samplerate     INT     NOT NULL," +    
+            "channels       INT     NOT NULL," +    
+            "bitrate        INT     NOT NULL," +
+            "bpm            INT     NOT NULL," +
+            "rating         INT     NOT NULL," +
+            "year           INT     NOT NULL," +
+            "path           TEXT    NOT NULL," +
+            "title          TEXT    NOT NULL," +
+            "date_added     TEXT    NOT NULL," +
+            "favorite_added TEXT    NOT NULL," +
+            "last_played    TEXT    NOT NULL," +
+            "composer       TEXT    NOT NULL," +
+            "grouping       TEXT    NOT NULL," +
+            "comment        TEXT    NOT NULL," +
+            "lyrics         TEXT    NOT NULL," +
+            "genre          TEXT    NOT NULL," +
+            "album_artist   TEXT    NOT NULL," +
             "CONSTRAINT unique_track UNIQUE (path)," +
             "FOREIGN KEY (album_id) REFERENCES albums (id) ON DELETE CASCADE)", null, null);
         debug ("Table trackS created");
@@ -316,9 +329,11 @@ public class Services.Database : GLib.Object {
         int res;
 
         sql = """
-            INSERT OR IGNORE INTO tracks (album_id, path, title, track, disc, 
-            duration, is_favorite, date_added, play_count, favorite_added, last_played)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+            INSERT OR IGNORE INTO tracks (album_id, track, disc, play_count, is_favorite,
+                bitrate, bpm, rating, samplerate, channels, year, duration,
+                path, title, favorite_added, last_played, composer, grouping, 
+                comment, lyrics, genre, album_artist, date_added)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?); 
         """;
 
         res = db.prepare_v2 (sql, -1, out stmt);
@@ -327,39 +342,76 @@ public class Services.Database : GLib.Object {
         res = stmt.bind_int (1, track.album_id);
         assert (res == Sqlite.OK);
         
-        res = stmt.bind_text (2, track.path);
+        res = stmt.bind_int (2, track.track);
         assert (res == Sqlite.OK);
 
-        res = stmt.bind_text (3, track.title);
+        res = stmt.bind_int (3, track.disc);
         assert (res == Sqlite.OK);
 
-        res = stmt.bind_int (4, track.track);
+        res = stmt.bind_int (4, track.play_count);
         assert (res == Sqlite.OK);
 
-        res = stmt.bind_int (5, track.disc);
+        res = stmt.bind_int (5, track.is_favorite);
         assert (res == Sqlite.OK);
 
-        res = stmt.bind_int64 (6, (int64) track.duration);
+        res = stmt.bind_int (6, track.bitrate);
         assert (res == Sqlite.OK);
 
-        res = stmt.bind_int (7, track.is_favorite);
+        res = stmt.bind_int (7, track.bpm);
         assert (res == Sqlite.OK);
 
-        res = stmt.bind_text (8, track.date_added);
+        res = stmt.bind_int (8, track.rating);
         assert (res == Sqlite.OK);
 
-        res = stmt.bind_int (9, track.play_count);
+        res = stmt.bind_int (9, track.samplerate);
         assert (res == Sqlite.OK);
 
-        res = stmt.bind_text (10, track.favorite_added);
+        res = stmt.bind_int (10, track.channels);
         assert (res == Sqlite.OK);
 
-        res = stmt.bind_text (11, track.last_played);
+        res = stmt.bind_int (11, track.year);
+        assert (res == Sqlite.OK);
+
+        res = stmt.bind_int64 (12, (int64) track.duration);
+        assert (res == Sqlite.OK);
+
+        res = stmt.bind_text (13, track.path);
+        assert (res == Sqlite.OK);
+
+        res = stmt.bind_text (14, track.title);
+        assert (res == Sqlite.OK);
+
+        res = stmt.bind_text (15, track.favorite_added);
+        assert (res == Sqlite.OK);
+
+        res = stmt.bind_text (16, track.last_played);
+        assert (res == Sqlite.OK);
+
+        res = stmt.bind_text (17, track.composer);
+        assert (res == Sqlite.OK);
+
+        res = stmt.bind_text (18, track.grouping);
+        assert (res == Sqlite.OK);
+
+        res = stmt.bind_text (19, track.comment);
+        assert (res == Sqlite.OK);
+
+        res = stmt.bind_text (20, track.lyrics);
+        assert (res == Sqlite.OK);
+
+        res = stmt.bind_text (21, track.genre);
+        assert (res == Sqlite.OK);
+
+        res = stmt.bind_text (22, track.album_artist);
+        assert (res == Sqlite.OK);
+
+        res = stmt.bind_text (23, track.date_added);
         assert (res == Sqlite.OK);
 
         if (stmt.step () != Sqlite.DONE) {
             warning ("Error: %d: %s", db.errcode (), db.errmsg ());
         }
+
         stmt.reset ();
 
         sql = """
@@ -374,10 +426,8 @@ public class Services.Database : GLib.Object {
 
         if (stmt.step () == Sqlite.ROW) {
             track.id = stmt.column_int (0);
-            //stdout.printf ("Track ID: %d - %s\n", track.id, track.title);
-
+            stdout.printf ("Track ID: %d - %s\n", track.id, track.title);
             Byte.cover_import.import (track);
-            
             adden_new_track (track);
         } else {
             warning ("Error: %d: %s", db.errcode (), db.errmsg ());
@@ -521,7 +571,7 @@ public class Services.Database : GLib.Object {
         while ((res = stmt.step()) == Sqlite.ROW) {
             var track = new Objects.Track ();
 
-            track._id = index;
+            track.track_order = index;
             track.id = stmt.column_int (0);
             track.path = stmt.column_text (1);
             track.title = stmt.column_text (2);
@@ -580,7 +630,7 @@ public class Services.Database : GLib.Object {
         while ((res = stmt.step()) == Sqlite.ROW) {
             var track = new Objects.Track ();
 
-            track._id = index;
+            track.track_order = index;
             track.id = stmt.column_int (0);
             track.path = stmt.column_text (1);
             track.title = stmt.column_text (2);
@@ -625,7 +675,7 @@ public class Services.Database : GLib.Object {
         while ((res = stmt.step()) == Sqlite.ROW) {
             var track = new Objects.Track ();
 
-            track._id = index;
+            track.track_order = index;
             track.id = stmt.column_int (0);
             track.path = stmt.column_text (1);
             track.title = stmt.column_text (2);
@@ -671,7 +721,7 @@ public class Services.Database : GLib.Object {
         while ((res = stmt.step()) == Sqlite.ROW) {
             var track = new Objects.Track ();
 
-            track._id = index;
+            track.track_order = index;
             track.id = stmt.column_int (0);
             track.path = stmt.column_text (1);
             track.title = stmt.column_text (2);
@@ -716,7 +766,7 @@ public class Services.Database : GLib.Object {
         while ((res = stmt.step()) == Sqlite.ROW) {
             var track = new Objects.Track ();
 
-            track._id = index;
+            track.track_order = index;
             track.id = stmt.column_int (0);
             track.path = stmt.column_text (1);
             track.title = stmt.column_text (2);
@@ -758,7 +808,7 @@ public class Services.Database : GLib.Object {
         while ((res = stmt.step()) == Sqlite.ROW) {
             var track = new Objects.Track ();
 
-            track._id = index;
+            track.track_order = index;
             track.id = stmt.column_int (0);
             track.path = stmt.column_text (1);
             track.title = stmt.column_text (2);

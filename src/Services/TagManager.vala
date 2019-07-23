@@ -30,6 +30,7 @@ public class Services.TagManager : GLib.Object {
                     GLib.Date? d; 
                     Gst.DateTime? dt;
                     uint u;
+                    double dou;
 
                     // TRACK OBJECT
                     var track = new Objects.Track ();
@@ -51,7 +52,34 @@ public class Services.TagManager : GLib.Object {
                     if (tags.get_uint (Gst.Tags.ALBUM_VOLUME_NUMBER, out u)) {
                         track.disc = (int)u;
                     }
+
+                    if (tags.get_string (Gst.Tags.COMPOSER, out o)) {
+                        track.composer = o; 
+                    }
                     
+                    if (tags.get_string (Gst.Tags.GROUPING, out o)) {
+                        track.grouping = o;
+                    }
+                    
+                    if (tags.get_string (Gst.Tags.LYRICS, out o)) {
+                        track.lyrics = o;
+                    }
+
+                    // BITRATE
+                    var file = new TagLib.File (File.new_for_uri (uri).get_path ());
+                    track.bitrate = file.audioproperties.bitrate;
+                    track.samplerate = file.audioproperties.samplerate;
+                    track.channels = file.audioproperties.channels;
+                    
+                    if (tags.get_uint (Gst.Tags.USER_RATING, out u)) {
+                        print ("USER_RATING: %s\n".printf (u.to_string ()));
+                        track.rating = (int) u;
+                    }
+
+                    if (tags.get_double (Gst.Tags.BEATS_PER_MINUTE, out dou)) {
+                        track.bpm = (int) dou.clamp (0, dou);
+                    }
+    
                     // ALBUM OBJECT
                     var album = new Objects.Album ();
                     if (tags.get_string (Gst.Tags.ALBUM, out o)) {
@@ -70,21 +98,25 @@ public class Services.TagManager : GLib.Object {
                     if (tags.get_date_time (Gst.Tags.DATE_TIME, out dt)) {
                         if (dt != null) {
                             album.year = dt.get_year ();
+                            track.year = dt.get_year ();
                         } else if (tags.get_date (Gst.Tags.DATE, out d)) {
                             if (d != null) {
                                 album.year = dt.get_year ();
+                                track.year = dt.get_year ();
                             }
                         }
                     }
 
                     if (tags.get_string (Gst.Tags.GENRE, out o)) {
                         album.genre = o;
+                        track.genre = o;
                     }
 
                     // ARTIST OBJECT
                     var artist = new Objects.Artist ();
                     if (tags.get_string (Gst.Tags.ALBUM_ARTIST, out o)) {
                         artist.name = o;
+                        track.album_artist = o;
                     } else if (tags.get_string (Gst.Tags.ARTIST, out o)) {
                         artist.name = o;
                     }

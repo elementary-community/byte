@@ -4,6 +4,7 @@ public class Widgets.TrackRow : Gtk.ListBoxRow {
     private Gtk.Label primary_label;
     private Gtk.Label secondary_label;
     private Gtk.Label duration_label; 
+    private Gtk.Button favorite_button;
     private Gtk.Menu menu = null;
     private Widgets.Cover image_cover;
     public TrackRow (Objects.Track track) {
@@ -13,6 +14,11 @@ public class Widgets.TrackRow : Gtk.ListBoxRow {
     }
 
     construct {
+        /*
+        var hand_cursor = new Gdk.Cursor.for_display (Gdk.Display.get_default (), Gdk.CursorType.HAND2);
+        var arrow_cursor = new Gdk.Cursor.for_display (Gdk.Display.get_default (), Gdk.CursorType.ARROW);
+        var root_window = Gdk.Screen.get_default ().get_root_window ();
+        */
         get_style_context ().add_class ("track-row");
         
         var playing_icon = new Gtk.Image ();
@@ -51,25 +57,22 @@ public class Widgets.TrackRow : Gtk.ListBoxRow {
         */
         
         secondary_label = new Gtk.Label (track.artist_name);
+        secondary_label.get_style_context ().add_class ("secondary_label");
         secondary_label.halign = Gtk.Align.START;
         secondary_label.valign = Gtk.Align.START;
         secondary_label.max_width_chars = 45;
         secondary_label.ellipsize = Pango.EllipsizeMode.END;
         
         image_cover = new Widgets.Cover.from_file (
-            GLib.Path.build_filename (Byte.utils.COVER_FOLDER, ("album-%i.jpg").printf (track.album_id)), 
+            GLib.Path.build_filename (Byte.utils.COVER_FOLDER, ("track-%i.jpg").printf (track.id)), 
             32, "track");
         image_cover.halign = Gtk.Align.START;
         image_cover.valign = Gtk.Align.START;
 
         duration_label = new Gtk.Label (Byte.utils.get_formated_duration (track.duration));
-        duration_label.halign = Gtk.Align.END;
-        duration_label.hexpand = true;
 
         var options_button = new Gtk.Button.from_icon_name ("view-more-horizontal-symbolic", Gtk.IconSize.MENU);
         options_button.valign = Gtk.Align.CENTER;
-        options_button.halign = Gtk.Align.END;
-        options_button.hexpand = true;
         options_button.can_focus = false;
         options_button.tooltip_text = _("Options");
         options_button.get_style_context ().add_class (Gtk.STYLE_CLASS_FLAT);
@@ -82,24 +85,60 @@ public class Widgets.TrackRow : Gtk.ListBoxRow {
         options_stack.add_named (duration_label, "duration_label");
         options_stack.add_named (options_button, "options_button");
 
+        var icon_favorite = new Gtk.Image.from_icon_name ("planner-favorite-symbolic", Gtk.IconSize.MENU);
+        var icon_no_favorite = new Gtk.Image.from_icon_name ("planner-no-favorite-symbolic", Gtk.IconSize.MENU);
+
+        favorite_button = new Gtk.Button ();
+        favorite_button.get_style_context ().add_class (Gtk.STYLE_CLASS_FLAT);
+        favorite_button.get_style_context ().add_class ("button-color");
+        favorite_button.can_focus = false;
+        favorite_button.valign = Gtk.Align.CENTER;
+
+        if (track.is_favorite == 0) {
+            favorite_button.image = icon_no_favorite;
+        } else {
+            favorite_button.image = icon_favorite;
+        }
+
+        var right_grid = new Gtk.Grid ();
+        right_grid.halign = Gtk.Align.END;
+        right_grid.valign = Gtk.Align.CENTER;
+        right_grid.hexpand = true;
+        right_grid.column_spacing = 6;
+        right_grid.orientation = Gtk.Orientation.HORIZONTAL;
+        //right_grid.add (favorite_button);
+        right_grid.add (options_stack);
+
         var overlay = new Gtk.Overlay ();
         overlay.halign = Gtk.Align.START;
         overlay.valign = Gtk.Align.START;
+        overlay.margin_top = 1;
         overlay.add_overlay (playing_revealer);
         overlay.add (image_cover); 
 
         var main_grid = new Gtk.Grid ();
+        main_grid.margin_top = 1;
         main_grid.margin_start = 3;
         main_grid.margin_end = 9;
-        main_grid.column_spacing = 6;
+        main_grid.column_spacing = 3; 
         main_grid.attach (overlay, 0, 0, 1, 2);
         main_grid.attach (primary_label, 1, 0, 1, 1);
         main_grid.attach (secondary_label, 1, 1, 1, 1);
-        main_grid.attach (options_stack, 2, 0, 2, 2);
+        main_grid.attach (right_grid, 2, 0, 2, 2);
         
+        var separator = new Gtk.Separator (Gtk.Orientation.HORIZONTAL);
+        separator.margin_start = 48;
+        separator.margin_top = 1;
+
+        var grid = new Gtk.Grid ();
+        grid.hexpand = true;
+        grid.orientation = Gtk.Orientation.VERTICAL;
+        grid.add (main_grid);
+        grid.add (separator);
+
         var eventbox = new Gtk.EventBox ();
         eventbox.add_events (Gdk.EventMask.ENTER_NOTIFY_MASK | Gdk.EventMask.LEAVE_NOTIFY_MASK);
-        eventbox.add (main_grid);
+        eventbox.add (grid);
 
         add (eventbox);
 
@@ -120,11 +159,11 @@ public class Widgets.TrackRow : Gtk.ListBoxRow {
             }
         });
 
-        Byte.database.updated_album_cover.connect ((album_id) => {
-            if (album_id == track.album_id) {
+        Byte.database.updated_track_cover.connect ((track_id) => {
+            if (track_id == track.id) {
                 try {
                     image_cover.pixbuf = new Gdk.Pixbuf.from_file_at_size (
-                        GLib.Path.build_filename (Byte.utils.COVER_FOLDER, ("album-%i.jpg").printf (album_id)), 
+                        GLib.Path.build_filename (Byte.utils.COVER_FOLDER, ("track-%i.jpg").printf (track_id)), 
                         32, 
                         32);
                 } catch (Error e) {
@@ -140,6 +179,7 @@ public class Widgets.TrackRow : Gtk.ListBoxRow {
         });
 
         eventbox.enter_notify_event.connect ((event) => {
+            //root_window.cursor = hand_cursor;
             options_stack.visible_child_name = "options_button";
             return false;
         });
@@ -148,7 +188,7 @@ public class Widgets.TrackRow : Gtk.ListBoxRow {
             if (event.detail == Gdk.NotifyType.INFERIOR) {
                 return false;
             }
-            
+            //root_window.cursor = arrow_cursor;
             options_stack.visible_child_name = "duration_label";
             return false;
         });
@@ -171,6 +211,16 @@ public class Widgets.TrackRow : Gtk.ListBoxRow {
 
             menu.popup_at_pointer (null);
         });
+
+        favorite_button.clicked.connect (() => {
+            if (favorite_button.image == icon_favorite) {
+                favorite_button.image = icon_no_favorite;
+                Byte.database.set_track_favorite (track, 0);
+            } else {
+                favorite_button.image = icon_favorite;
+                Byte.database.set_track_favorite (track, 1);
+            }
+        });
     }
 
     private void build_context_menu (Objects.Track track) {
@@ -188,7 +238,7 @@ public class Widgets.TrackRow : Gtk.ListBoxRow {
         secondary_label.max_width_chars = 25;
         secondary_label.ellipsize = Pango.EllipsizeMode.END;
         
-        var cover_path = GLib.Path.build_filename (Byte.utils.COVER_FOLDER, ("album-%i.jpg").printf (track.album_id));
+        var cover_path = GLib.Path.build_filename (Byte.utils.COVER_FOLDER, ("track-%i.jpg").printf (track.id));
         var image_cover = new Gtk.Image ();
         image_cover.halign = Gtk.Align.START;
         image_cover.valign = Gtk.Align.START;
@@ -218,7 +268,7 @@ public class Widgets.TrackRow : Gtk.ListBoxRow {
         var play_next_menu = new Widgets.ModelButton (_("Play Next"), "document-export-symbolic", _("Export project"));
         var play_last_menu = new Widgets.ModelButton (_("Play Later"), "emblem-shared-symbolic", _("Share project"));
         var add_playlist_menu = new Widgets.ModelButton (_("Add to Playlist"), "zoom-in-symbolic", _("Change project name"));
-        var edit_menu = new Widgets.ModelButton (_("Edit"), "edit-symbolic", _("Share project"));
+        var edit_menu = new Widgets.ModelButton (_("Edit Song Info..."), "edit-symbolic", _("Share project"));
         var favorite_menu = new Widgets.ModelButton (_("Favorite"), "planner-favorite-symbolic", _("Share project"));
         var remove_db_menu = new Widgets.ModelButton (_("Delete from database"), "zoom-out-symbolic", _("Share project"));
         var remove_file_menu = new Widgets.ModelButton (_("Delete from file"), "user-trash-symbolic", _("Share project"));
@@ -258,6 +308,12 @@ public class Widgets.TrackRow : Gtk.ListBoxRow {
             if (Byte.scan_service.is_sync == false) {
                 Byte.database.set_track_favorite (track, 1);
             }
+        });
+
+        edit_menu.activate.connect (() => {
+            var editor_dialog = new Dialogs.TrackEditor (track);
+            //preferences_dialog.destroy.connect (Gtk.main_quit);
+            editor_dialog.show_all ();
         });
     }
 }

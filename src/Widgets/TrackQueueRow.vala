@@ -45,7 +45,7 @@ public class Widgets.TrackQueueRow : Gtk.ListBoxRow {
         artist_album_label.ellipsize = Pango.EllipsizeMode.END;
 
         image_cover = new Widgets.Cover.from_file (
-            GLib.Path.build_filename (Byte.utils.COVER_FOLDER, ("album-%i.jpg").printf (track.album_id)), 
+            GLib.Path.build_filename (Byte.utils.COVER_FOLDER, ("track-%i.jpg").printf (track.id)), 
             38, 
             "track");
         image_cover.halign = Gtk.Align.START;

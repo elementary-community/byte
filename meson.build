@@ -71,12 +71,16 @@ executable(
     'src/Views/Radios.vala',
     'src/Views/Playlists.vala',
     'src/Views/Favorites.vala',
+    'src/Views/Playlist.vala',
     
     'src/Objects/Track.vala',
     'src/Objects/Album.vala',
     'src/Objects/Artist.vala',
     'src/Objects/Radio.vala',
     'src/Objects/Playlist.vala',
+
+    'src/Dialogs/TrackEditor.vala',
+    'src/Dialogs/Settings.vala',
     dependencies: [
         dependency('gee-0.8'),
         dependency('gobject-2.0'),
@@ -88,6 +92,7 @@ executable(
         dependency('json-glib-1.0'),
         dependency('gstreamer-pbutils-1.0'),
         dependency('gstreamer-tag-1.0'),
+        dependency('taglib_c'), 
         meson.get_compiler('c').find_library('m', required : false)
     ],
     install: true

@@ -94,6 +94,24 @@ public class Byte : Gtk.Application {
         provider.load_from_resource ("/com/github/alainm23/byte/stylesheet.css");
         Gtk.StyleContext.add_provider_for_screen (Gdk.Screen.get_default (), provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
 
+        Gtk.Settings.get_default ().gtk_application_prefer_dark_theme = settings.get_boolean ("dark-mode");
+
+        if (settings.get_boolean ("dark-mode")) {
+            var dark_mode_provider = new Gtk.CssProvider ();
+            var colored_css = """
+                @define-color colorPrimary %s;
+                @define-color textColorPrimary %s;
+            """.printf ("@base_color", "#fe2851");
+
+            try {
+                dark_mode_provider.load_from_data (colored_css, colored_css.length);
+
+                Gtk.StyleContext.add_provider_for_screen (Gdk.Screen.get_default (), dark_mode_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
+            } catch (GLib.Error e) {
+                return;
+            }
+        }
+
         // Default Icon Theme
         weak Gtk.IconTheme default_theme = Gtk.IconTheme.get_default ();
         default_theme.add_resource_path ("/com/github/alainm23/byte");

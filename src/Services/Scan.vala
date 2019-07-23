@@ -32,6 +32,8 @@ public class Services.Scan : GLib.Object {
                         
                         message_dialog.run ();
                         message_dialog.destroy ();
+
+                        counter_max = 0;
                     }
                     
                     return false;

@@ -1,6 +1,4 @@
 public class Widgets.HeaderBar : Gtk.HeaderBar {
-    private Gtk.Stack stack;
-
     private Gtk.Button shuffle_button;
     private Gtk.Button repeat_button;
     private Gtk.Button play_button;
@@ -10,22 +8,24 @@ public class Widgets.HeaderBar : Gtk.HeaderBar {
 
     private Gtk.Image icon_play;
     private Gtk.Image icon_pause;
-
+ 
     private Gtk.Image icon_shuffle_on;
     private Gtk.Image icon_shuffle_off;
 
     private Gtk.Image icon_repeat_one;
     private Gtk.Image icon_repeat_all;
     private Gtk.Image icon_repeat_off;
+    
+    private Gtk.Box main_box;
 
     public signal void show_quick_find ();
     public bool visible_ui {
         set {
-            stack.visible = value;
+            main_box.visible = value;
             search_button.visible = value;
 
             if (value) {
-                custom_title = stack;
+                custom_title = main_box;
             } else {
                 custom_title = null;
             }
@@ -49,7 +49,7 @@ public class Widgets.HeaderBar : Gtk.HeaderBar {
         icon_repeat_all = new Gtk.Image.from_icon_name ("media-playlist-repeat-symbolic", Gtk.IconSize.BUTTON);
         icon_repeat_off = new Gtk.Image.from_icon_name ("media-playlist-no-repeat-symbolic", Gtk.IconSize.BUTTON);
 
-        get_style_context ().add_class ("default-decoration");
+        //get_style_context ().add_class ("default-decoration");
         decoration_layout = "close:menu";
 
         // Shuffle Button
@@ -92,7 +92,50 @@ public class Widgets.HeaderBar : Gtk.HeaderBar {
         search_button.can_focus = false;
         search_button.get_style_context ().add_class (Gtk.STYLE_CLASS_FLAT);
 
-        var main_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 6);
+        /*
+            Menu
+        */
+
+        var search_menuitem = new Gtk.ModelButton ();
+        search_menuitem.text = _("Search");
+
+        var import_menuitem = new Gtk.ModelButton ();
+        import_menuitem.text = _("Import Music");
+
+        var resync_menuitem = new Gtk.ModelButton ();
+        resync_menuitem.text = _("Resync Libray");
+        
+        var preferences_menuitem = new Gtk.ModelButton ();
+        preferences_menuitem.text = _("Preferences");
+
+        var menu_grid = new Gtk.Grid ();
+        menu_grid.margin_top = 6;
+        menu_grid.margin_bottom = 6;
+        menu_grid.orientation = Gtk.Orientation.VERTICAL;
+        //menu_grid.width_request = 250;
+ 
+        menu_grid.add (search_menuitem);
+        menu_grid.add (import_menuitem);
+        menu_grid.add (resync_menuitem);
+        menu_grid.add (preferences_menuitem);
+        menu_grid.show_all ();
+
+        var menu_popover = new Gtk.Popover (null);
+        menu_popover.add (menu_grid);
+
+        var app_menu = new Gtk.MenuButton ();
+        //app_menu.border_width = 6;
+        app_menu.valign = Gtk.Align.CENTER;
+        app_menu.tooltip_text = _("Menu");
+        app_menu.popover = menu_popover;
+
+        var menu_icon = new Gtk.Image ();
+        menu_icon.gicon = new ThemedIcon ("open-menu-symbolic");
+        menu_icon.pixel_size = 16;
+
+        app_menu.image = menu_icon;
+
+        main_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 6);
         main_box.halign = Gtk.Align.CENTER;
         main_box.pack_start (repeat_button, false, false, 24);
         main_box.pack_start (previous_button, false, false, 0);
@@ -100,6 +143,7 @@ public class Widgets.HeaderBar : Gtk.HeaderBar {
         main_box.pack_start (next_button, false, false, 0);
         main_box.pack_start (shuffle_button, false, false, 24);
         
+        /*
         // ProgressBar
         var loading_progressbar = new Gtk.ProgressBar ();
         loading_progressbar.margin_start = 6;
@@ -107,16 +151,18 @@ public class Widgets.HeaderBar : Gtk.HeaderBar {
         loading_progressbar.show_text = true;
         loading_progressbar.text = _("Sync Library…");
         loading_progressbar.get_style_context ().add_class ("label-white");
-                
+            
+        /*
         stack = new Gtk.Stack ();
         stack.expand = true;
         stack.transition_type = Gtk.StackTransitionType.CROSSFADE;
 
         stack.add_named (main_box, "main_box");
         stack.add_named (loading_progressbar, "loading_progressbar");
+        */
 
-        custom_title = stack;
-        pack_end (search_button);
+        custom_title = main_box;
+        pack_end (app_menu);
 
         check_shuffle_button ();
         check_repeat_button ();
@@ -184,20 +230,21 @@ public class Widgets.HeaderBar : Gtk.HeaderBar {
             }
         });
 
-        search_button.clicked.connect (() => {
-            show_quick_find ();
+        preferences_menuitem.clicked.connect (() => {
+            var editor_dialog = new Dialogs.Settings ();
+            editor_dialog.show_all ();
         });
 
-        Byte.scan_service.sync_started.connect (() => {
-            stack.visible_child_name = "loading_progressbar";
+        import_menuitem.clicked.connect (() => {
+            string folder = Byte.scan_service.choose_folder (Byte.instance.main_window);
+
+            if (folder != null) {                
+                Byte.scan_service.scan_local_files (folder);
+            }
         });
 
-        Byte.scan_service.sync_finished.connect (() => {
-            stack.visible_child_name = "main_box";
-        });
-
-        Byte.scan_service.sync_progress.connect ((fraction) => {
-            loading_progressbar.fraction = fraction;
+        resync_menuitem.clicked.connect (() => {
+            Byte.scan_service.scan_local_files (Byte.settings.get_string ("library-location"));
         });
     }
 

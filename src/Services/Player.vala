@@ -74,6 +74,21 @@ public class Services.Player : GLib.Object {
                 Byte.database.add_track_count (track);
             }
         });
+
+        var simple_command = new Granite.Services.SimpleCommand (
+            "/usr/bin/",
+            "acpi_listen"
+        );
+
+        simple_command.run ();
+
+        simple_command.output_changed.connect ((text) => {
+            if ("unplug" in text) {
+                Byte.player.state_changed (Gst.State.PAUSED);
+            } else {
+                Byte.player.state_changed (Gst.State.PLAYING);
+            }
+        });
     }
     
     public void set_radio (Objects.Radio radio) {
@@ -254,6 +269,9 @@ public class Services.Player : GLib.Object {
                 string debug;
                 message.parse_error (out err, out debug);
                 warning ("Error: %s\n%s\n", err.message, debug);
+
+                // Check
+                next ();
                 break;
             case Gst.MessageType.EOS:
                 next ();

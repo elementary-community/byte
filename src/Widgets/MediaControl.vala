@@ -81,7 +81,6 @@ public class Widgets.MediaControl : Gtk.Revealer {
         header_box.pack_end (favorite_revealer, false, false, 0);
 
         var main_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 0);
-        main_box.get_style_context ().add_class ("media-control");
         main_box.pack_start (timeline_revealer, false, false, 0);
         main_box.pack_start (header_box, false, false, 0);
         
@@ -128,7 +127,7 @@ public class Widgets.MediaControl : Gtk.Revealer {
             title_label.label = track.title;
             subtitle_label.label = "%s - %s".printf (track.artist_name, track.album_title);
 
-            string cover_path = GLib.Path.build_filename (Byte.utils.COVER_FOLDER, ("album-%i.jpg").printf (track.album_id));
+            string cover_path = GLib.Path.build_filename (Byte.utils.COVER_FOLDER, ("track-%i.jpg").printf (track.id));
             image_cover.set_from_file (cover_path, 32, "track");
 
             if (track.is_favorite == 0) {
@@ -177,13 +176,13 @@ public class Widgets.MediaControl : Gtk.Revealer {
         Byte.lastfm_service.radio_cover_track_found.connect ((track_url) => {
             print ("URL: %s\n".printf (track_url));
             image_cover.set_from_url_async (track_url, 32, true, "track");
-        });
+        }); 
 
-        Byte.database.updated_album_cover.connect ((album_id) => {
-            if (Byte.player.current_track != null && album_id == Byte.player.current_track.album_id) {
+        Byte.database.updated_track_cover.connect ((track_id) => {
+            if (Byte.player.current_track != null && track_id == Byte.player.current_track.id) {
                 try {
                     image_cover.pixbuf = new Gdk.Pixbuf.from_file_at_size (
-                        GLib.Path.build_filename (Byte.utils.COVER_FOLDER, ("album-%i.jpg").printf (album_id)), 
+                        GLib.Path.build_filename (Byte.utils.COVER_FOLDER, ("track-%i.jpg").printf (track_id)), 
                         32, 
                         32);
                 } catch (Error e) {

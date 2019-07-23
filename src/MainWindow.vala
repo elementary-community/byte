@@ -10,6 +10,7 @@ public class MainWindow : Gtk.Window {
     private Views.Radios radios_view;
     private Views.Playlists playlists_view;
     private Views.Favorites favorites_view;
+    private Views.Playlist playlist_view;
 
     private Views.Album album_view;
 
@@ -51,6 +52,7 @@ public class MainWindow : Gtk.Window {
         radios_view = new Views.Radios ();
         playlists_view = new Views.Playlists ();
         favorites_view = new Views.Favorites ();
+        playlist_view = new Views.Playlist ();
 
         library_stack.add_named (home_view, "home_view");
         library_stack.add_named (albums_view, "albums_view");
@@ -60,6 +62,7 @@ public class MainWindow : Gtk.Window {
         library_stack.add_named (radios_view, "radios_view");
         library_stack.add_named (playlists_view, "playlists_view");
         library_stack.add_named (favorites_view, "favorites_view");
+        library_stack.add_named (playlist_view, "playlist_view");
 
         var library_view = new Gtk.Box (Gtk.Orientation.VERTICAL, 0);
         library_view.pack_start (media_control, false, false, 0);
@@ -94,7 +97,9 @@ public class MainWindow : Gtk.Window {
                 main_stack.visible_child_name = "library_view";
                 headerbar.visible_ui = true;
 
-                Byte.scan_service.scan_local_files (Byte.settings.get_string ("library-location"));
+                if (Byte.settings.get_boolean ("sync-files")) {
+                    Byte.scan_service.scan_local_files (Byte.settings.get_string ("library-location"));
+                }
             }
             
             return false;
@@ -149,6 +154,17 @@ public class MainWindow : Gtk.Window {
             library_stack.visible_child_name = "home_view";
         });
 
+        playlists_view.go_playlist.connect ((playlist) => {
+            print ("playlist: %s\n".printf (playlist.title));
+
+            library_stack.visible_child_name = "playlist_view";
+            playlist_view.playlist = playlist;
+        });
+
+        playlist_view.go_back.connect (() => {
+            library_stack.visible_child_name = "playlists_view";
+        });
+
         favorites_view.go_back.connect (() => {
             library_stack.visible_child_name = "home_view";
         });
@@ -185,8 +201,12 @@ public class MainWindow : Gtk.Window {
         });
 
         delete_event.connect (() => {
-            if (Byte.player.player_state == Gst.State.PLAYING) {
-                return hide_on_delete ();
+            if (Byte.settings.get_boolean ("play-in-background")) {
+                if (Byte.player.player_state == Gst.State.PLAYING) {
+                    return hide_on_delete ();
+                } else {
+                    return false;
+                }
             } else {
                 return false;
             }

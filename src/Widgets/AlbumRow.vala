@@ -14,7 +14,7 @@ public class Widgets.AlbumRow : Gtk.ListBoxRow {
 
     construct {
         tooltip_text = album.title;
-        get_style_context ().add_class ("album-child");
+        get_style_context ().add_class ("album-row");
 
         primary_label = new Gtk.Label (album.title);
         primary_label.get_style_context ().add_class ("font-bold");
