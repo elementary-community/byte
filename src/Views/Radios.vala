@@ -79,6 +79,12 @@ public class Views.Radios : Gtk.EventBox {
                 add_all_tracks ();
             }
         });
+
+        Byte.database.reset_library.connect (() => {
+            listbox.foreach ((widget) => {
+                widget.destroy (); 
+            });
+        });
     }
 
     private void add_radio (Objects.Radio radio) {

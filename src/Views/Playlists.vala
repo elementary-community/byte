@@ -133,6 +133,12 @@ public class Views.Playlists : Gtk.EventBox {
                 //add_all_items ();
             }
         });
+
+        Byte.database.reset_library.connect (() => {
+            listbox.foreach ((widget) => {
+                widget.destroy (); 
+            });
+        });
     }
 
     private void add_item (Objects.Playlist playlist) {

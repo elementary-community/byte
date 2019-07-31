@@ -1,5 +1,5 @@
 public class Views.Home : Gtk.EventBox {
-    private Gtk.ListBox tracks_listbox;
+    private Gtk.ListBox listbox;
     public signal void go_albums_view ();
     public signal void go_tracks_view ();
     public signal void go_artists_view ();
@@ -40,15 +40,15 @@ public class Views.Home : Gtk.EventBox {
         var radios_button = new Widgets.HomeButton ("Radios", "planner-radio-symbolic");
         var favorites_button = new Widgets.HomeButton ("Favorites", "planner-favorite-symbolic");
 
-        tracks_listbox = new Gtk.ListBox ();
-        tracks_listbox.expand = true;
+        listbox = new Gtk.ListBox ();
+        listbox.expand = true;
 
         var tracks_scrolled = new Gtk.ScrolledWindow (null, null);
         tracks_scrolled.hscrollbar_policy = Gtk.PolicyType.NEVER;
         tracks_scrolled.margin_top = 6;
         tracks_scrolled.margin_bottom = 3;
         tracks_scrolled.expand = true;
-        tracks_scrolled.add (tracks_listbox);
+        tracks_scrolled.add (listbox);
 
         var items_grid = new Gtk.Grid ();
         items_grid.row_spacing = 6;
@@ -102,7 +102,7 @@ public class Views.Home : Gtk.EventBox {
             go_favorites_view ();
         });
 
-        tracks_listbox.row_activated.connect ((row) => {
+        listbox.row_activated.connect ((row) => {
             var item = row as Widgets.TrackRow;
             
             Byte.utils.set_items (
@@ -115,17 +115,23 @@ public class Views.Home : Gtk.EventBox {
         Byte.database.adden_new_track.connect ((track) => {
             Idle.add (() => {
                 var row = new Widgets.TrackRow (track);
-                tracks_listbox.insert (row, 0);
+                listbox.insert (row, 0);
                 all_tracks.insert (0, track);
-                tracks_listbox.show_all ();
+                listbox.show_all ();
 
                 if (all_tracks.size > 100) {
                     all_tracks.remove_at (100);
-                    var _row = tracks_listbox.get_row_at_index (100);
+                    var _row = listbox.get_row_at_index (100);
                     _row.destroy ();
                 }
 
                 return false;
+            });
+        });
+
+        Byte.database.reset_library.connect (() => {
+            listbox.foreach ((widget) => {
+                widget.destroy (); 
             });
         });
     }
@@ -134,8 +140,8 @@ public class Views.Home : Gtk.EventBox {
         foreach (var track in all_tracks) {
             var row = new Widgets.TrackRow (track);
 
-            tracks_listbox.add (row);
-            tracks_listbox.show_all ();
+            listbox.add (row);
+            listbox.show_all ();
         }
     }
 }

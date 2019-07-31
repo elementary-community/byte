@@ -75,6 +75,12 @@ public class Views.Artists : Gtk.EventBox {
                 return false;
             });
         });
+
+        Byte.database.reset_library.connect (() => {
+            listbox.foreach ((widget) => {
+                widget.destroy (); 
+            });
+        });
     }
 
     private void add_artist (Objects.Artist artist) {

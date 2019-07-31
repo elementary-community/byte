@@ -127,31 +127,10 @@ public class Dialogs.Settings : Gtk.Dialog {
         var settings_04_label = new Gtk.Label (_("Music folder location"));
         
         var library_filechooser = new Gtk.FileChooserButton (_("Select Music Folder…"), Gtk.FileChooserAction.SELECT_FOLDER);
-        library_filechooser.set_current_folder (
-            Byte.settings.get_string ("library-location").substring (7).replace ("%20", " ")
-        );
-        library_filechooser.file_set.connect (() => {
-            var message_dialog = new Granite.MessageDialog.with_image_from_icon_name (
-                "Set Music Folder?",
-                "Are you sure you want to set the music folder to <b>%s</b>?".printf (library_filechooser.get_filename ()),
-                "dialog-warning",
-                Gtk.ButtonsType.CANCEL
-            );
-
-            var set_button = new Gtk.Button.with_label (_("Set Music Folder"));
-            set_button.get_style_context ().add_class (Gtk.STYLE_CLASS_DESTRUCTIVE_ACTION);
-            message_dialog.add_action_widget (set_button, Gtk.ResponseType.ACCEPT);
-            
-            message_dialog.show_all ();
-
-            if (message_dialog.run () == Gtk.ResponseType.ACCEPT) {
-                Byte.settings.set_string ("library-location", library_filechooser.get_uri ());
-                Byte.scan_service.scan_local_files (library_filechooser.get_uri ());
-            }
-
-            message_dialog.destroy ();
-        });
         
+        File library_path = File.new_for_uri (Byte.settings.get_string ("library-location"));
+        library_filechooser.set_current_folder (library_path.get_path ());
+
         var settings_04_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 0);
         settings_04_box.hexpand = true;
         settings_04_box.margin = 6;
@@ -245,11 +224,45 @@ public class Dialogs.Settings : Gtk.Dialog {
         library_grid.add (settings_07_box);
         library_grid.add (new Gtk.Separator (Gtk.Orientation.HORIZONTAL));
 
+        /*
+            Reset
+        */
+
+        var settings_08_icon = new Gtk.Image ();
+        settings_08_icon.gicon = new ThemedIcon ("user-trash-symbolic");
+        settings_08_icon.pixel_size = 16;
+        settings_08_icon.get_style_context ().add_class ("settings-icon");
+        settings_08_icon.valign = Gtk.Align.CENTER;
+
+        var settings_08_label = new Gtk.Label (_("Reset all library"));
+        
+        var settings_08_button = new Gtk.Button.with_label ("Reset");
+        settings_08_button.valign = Gtk.Align.CENTER;
+        
+        var settings_08_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 0);
+        settings_08_box.hexpand = true;
+        settings_08_box.margin = 6;
+        settings_08_box.margin_top = 3;
+        settings_08_box.margin_bottom = 3;
+        settings_08_box.pack_start (settings_08_icon, false, false, 0);
+        settings_08_box.pack_start (settings_08_label, false, false, 6);
+        settings_08_box.pack_end (settings_08_button, false, false, 0);
+
+        var settings_08_grid = new Gtk.Grid ();
+        settings_08_grid.margin_top = 12;
+        settings_08_grid.get_style_context ().add_class ("view");
+        settings_08_grid.orientation = Gtk.Orientation.VERTICAL;
+        settings_08_grid.row_spacing = 3;
+        settings_08_grid.add (new Gtk.Separator (Gtk.Orientation.HORIZONTAL));
+        settings_08_grid.add (settings_08_box);
+        settings_08_grid.add (new Gtk.Separator (Gtk.Orientation.HORIZONTAL));
+
         var main_grid = new Gtk.Grid ();
         main_grid.attach (general_label, 0, 0, 1, 1);
         main_grid.attach (general_grid, 0, 1, 1, 1);
         main_grid.attach (library_label, 0, 2, 1, 1);
         main_grid.attach (library_grid, 0, 3, 1, 1);
+        main_grid.attach (settings_08_grid, 0, 4, 1, 1);
 
         get_content_area ().add (main_grid);
 
@@ -305,6 +318,50 @@ public class Dialogs.Settings : Gtk.Dialog {
 
         settings_07_switch.notify["active"].connect (() => {
             Byte.settings.set_boolean ("save-id3-tags", settings_07_switch.active);
+        });
+
+        library_filechooser.file_set.connect (() => {
+            var message_dialog = new Granite.MessageDialog.with_image_from_icon_name (
+                "Set Music Folder?",
+                "Are you sure you want to set the music folder to <b>%s</b>?".printf (library_filechooser.get_filename ()),
+                "dialog-warning",
+                Gtk.ButtonsType.CANCEL
+            );
+
+            var set_button = new Gtk.Button.with_label (_("Set Music Folder"));
+            set_button.get_style_context ().add_class (Gtk.STYLE_CLASS_DESTRUCTIVE_ACTION);
+            message_dialog.add_action_widget (set_button, Gtk.ResponseType.ACCEPT);
+            
+            message_dialog.show_all ();
+
+            if (message_dialog.run () == Gtk.ResponseType.ACCEPT) {
+                Byte.settings.set_string ("library-location", library_filechooser.get_uri ());
+                Byte.scan_service.scan_local_files (library_filechooser.get_uri ());
+            }
+
+            message_dialog.destroy ();
+        });
+
+        settings_08_button.clicked.connect (() => {
+            var message_dialog = new Granite.MessageDialog.with_image_from_icon_name (
+                _("Are you sure you want to mark as completed this project?"),
+                _("This project contains incomplete tasks"),
+                "dialog-warning",
+                Gtk.ButtonsType.CANCEL
+            );
+
+            var remove_button = new Gtk.Button.with_label (_("Mark as Completed"));
+            remove_button.get_style_context ().add_class (Gtk.STYLE_CLASS_DESTRUCTIVE_ACTION);
+            message_dialog.add_action_widget (remove_button, Gtk.ResponseType.ACCEPT);
+
+            message_dialog.show_all ();
+
+            if (message_dialog.run () == Gtk.ResponseType.ACCEPT) {
+                Byte.database.reset_all_library ();
+                destroy ();
+            }
+
+            message_dialog.destroy ();
         });
     }
 }

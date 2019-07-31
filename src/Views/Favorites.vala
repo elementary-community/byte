@@ -249,6 +249,12 @@ public class Views.Favorites : Gtk.EventBox {
                 }
             }
         });
+
+        Byte.database.reset_library.connect (() => {
+            listbox.foreach ((widget) => {
+                widget.destroy (); 
+            });
+        });
     }
     
     private bool track_exists (Objects.Track track) {

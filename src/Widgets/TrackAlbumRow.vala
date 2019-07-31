@@ -120,5 +120,11 @@ public class Widgets.TrackAlbumRow : Gtk.ListBoxRow {
 
             return false;
         });
+
+        Byte.database.removed_track.connect ((track_id) => {
+            if (track_id == track.id) {
+                destroy ();
+            }
+        });
     }
 }

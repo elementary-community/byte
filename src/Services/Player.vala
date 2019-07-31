@@ -75,6 +75,7 @@ public class Services.Player : GLib.Object {
             }
         });
 
+        /*
         var simple_command = new Granite.Services.SimpleCommand (
             "/usr/bin/",
             "acpi_listen"
@@ -83,12 +84,15 @@ public class Services.Player : GLib.Object {
         simple_command.run ();
 
         simple_command.output_changed.connect ((text) => {
+            print ("%s\n".printf (text));
+
             if ("unplug" in text) {
                 Byte.player.state_changed (Gst.State.PAUSED);
-            } else {
+            } else if ("plug" in text) {
                 Byte.player.state_changed (Gst.State.PLAYING);
             }
         });
+        */
     }
     
     public void set_radio (Objects.Radio radio) {

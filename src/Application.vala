@@ -7,7 +7,6 @@ public class Byte : Gtk.Application {
     public static Services.TagManager tg_manager;
     public static Services.CoverImport cover_import;
     public static Services.Indicator indicator;
-    public static Services.MediaKey media_keys;
     public static Services.Notification notification;
     public static Services.Scan scan_service;
     public static Services.RadioBrowser radio_browser;
@@ -76,8 +75,8 @@ public class Byte : Gtk.Application {
         indicator.initialize ();
 
         // Media Keys
-        media_keys = new Services.MediaKey ();
-        
+        Services.MediaKey.listen ();
+
         var quit_action = new SimpleAction ("quit", null);
 
         add_action (quit_action);

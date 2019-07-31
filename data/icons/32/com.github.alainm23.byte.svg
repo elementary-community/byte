@@ -8,8 +8,8 @@
    xmlns:xlink="http://www.w3.org/1999/xlink"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   height="64"
-   width="64"
+   height="32"
+   width="32"
    version="1.1"
    id="svg50"
    sodipodi:docname="com.github.alainm23.byte.svg"
@@ -40,9 +40,9 @@
      id="namedview52"
      showgrid="false"
      showguides="false"
-     inkscape:zoom="4.25"
-     inkscape:cx="38.707444"
-     inkscape:cy="12.546227"
+     inkscape:zoom="6.0104076"
+     inkscape:cx="15.898744"
+     inkscape:cy="8.595858"
      inkscape:window-x="0"
      inkscape:window-y="30"
      inkscape:window-maximized="1"
@@ -662,7 +662,7 @@
   </defs>
   <g
      id="g942"
-     transform="matrix(0.52244193,0,0,0.53534782,-1.2875216,-1.9725808)">
+     transform="matrix(0.25528797,0,0,0.26159435,-0.17272271,-1.0800835)">
     <path
        d="m 106.62556,105.87194 a 43.074587,13.458186 0 1 1 -86.149169,0 43.074587,13.458186 0 1 1 86.149169,0 z"
        id="path34"

@@ -224,6 +224,12 @@ public class Views.Albums : Gtk.EventBox {
                 add_all_items ();
             }
         });
+
+        Byte.database.reset_library.connect (() => {
+            listbox.foreach ((widget) => {
+                widget.destroy (); 
+            });
+        });
     }
 
     private void add_item (Objects.Album album) {

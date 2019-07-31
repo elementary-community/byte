@@ -8,9 +8,13 @@ public class Services.Database : GLib.Object {
     public signal void adden_new_radio (Objects.Radio radio);
     public signal void adden_new_playlist (Objects.Playlist playlist);
     
+    public signal void removed_track (int id); 
+
     public signal void updated_album_cover (int album_id);
     public signal void updated_track_cover (int track_id);
     public signal void updated_track_favorite (Objects.Track track, int favorite);
+
+    public signal void reset_library ();
 
     public Database (bool skip_tables = false) {
         int rc = 0;
@@ -109,10 +113,16 @@ public class Services.Database : GLib.Object {
             "id           INTEGER PRIMARY KEY AUTOINCREMENT," +
             "playlist_id  INT," +
             "track_id     INT," +
+            "date_added   TEXT," +
             "CONSTRAINT unique_track UNIQUE (playlist_id, track_id)," +
             "FOREIGN KEY (track_id) REFERENCES tracks (id) ON DELETE CASCADE," +
             "FOREIGN KEY (playlist_id) REFERENCES playlists (id) ON DELETE CASCADE)", null, null);
         debug ("Table playlist_tracks created");
+
+        rc = db.exec ("CREATE TABLE IF NOT EXISTS blacklist (" +
+            "id     INTEGER PRIMARY KEY AUTOINCREMENT," +
+            "path   TEXT NOT NULL)", null, null);
+        debug ("Table blacklist created");
 
         rc = db.exec ("PRAGMA foreign_keys = ON;");
 
@@ -124,6 +134,23 @@ public class Services.Database : GLib.Object {
         Sqlite.Statement stmt;
 
         int res = db.prepare_v2 ("SELECT COUNT (*) FROM tracks WHERE path = ?", -1, out stmt);
+        assert (res == Sqlite.OK);
+
+        res = stmt.bind_text (1, uri);
+        assert (res == Sqlite.OK);
+
+        if (stmt.step () == Sqlite.ROW) {
+            file_exists = stmt.column_int (0) > 0;
+        }
+
+        return file_exists;
+    }
+
+    public bool music_blacklist_exists (string uri) {
+        bool file_exists = false;
+        Sqlite.Statement stmt;
+
+        int res = db.prepare_v2 ("SELECT COUNT (*) FROM blacklist WHERE path = ?", -1, out stmt);
         assert (res == Sqlite.OK);
 
         res = stmt.bind_text (1, uri);
@@ -434,6 +461,45 @@ public class Services.Database : GLib.Object {
         }
 
         stmt.reset ();
+    }
+
+    public Objects.Track? get_track_by_id (int id) {
+        Objects.Track? return_value = null;
+        Sqlite.Statement stmt;
+        int res;
+
+        string sql = """
+            SELECT tracks.id, tracks.path, tracks.title, tracks.duration, tracks.is_favorite, tracks.date_added, 
+            tracks.album_id, albums.title, artists.name, tracks.favorite_added, tracks.last_played FROM tracks 
+            INNER JOIN albums ON tracks.album_id = albums.id
+            INNER JOIN artists ON albums.artist_id = artists.id WHERE id = ?;
+        """;
+
+        res = db.prepare_v2 (sql, -1, out stmt);
+        assert (res == Sqlite.OK);
+
+        res = stmt.bind_int (1, id);
+        assert (res == Sqlite.OK);
+
+        var track = new Objects.Track ();
+
+        if (stmt.step () == Sqlite.ROW) {
+            track.id = stmt.column_int (0);
+            track.path = stmt.column_text (1);
+            track.title = stmt.column_text (2);
+            track.duration = stmt.column_int64 (3);
+            track.is_favorite = stmt.column_int (4);
+            track.track = stmt.column_int (5);
+            track.date_added = stmt.column_text (6);
+            track.play_count = stmt.column_int (7);
+            track.album_id = stmt.column_int (8);
+            track.album_title = stmt.column_text (9);
+            track.artist_name = stmt.column_text (10);
+            track.favorite_added = stmt.column_text (11);
+            track.last_played = stmt.column_text (12);
+        }
+
+        return track;
     }
 
     public Gee.ArrayList<Objects.Album?> get_all_albums () {
@@ -793,13 +859,77 @@ public class Services.Database : GLib.Object {
         int res;
 
         sql = """
-            SELECT  tracks.id, tracks.path, tracks.title, tracks.duration, tracks.is_favorite, tracks.track, tracks.date_added, tracks.play_count, 
+            SELECT tracks.id, tracks.path, tracks.title, tracks.duration, tracks.is_favorite, tracks.track, tracks.date_added, tracks.play_count, 
             tracks.album_id, albums.title, artists.name, tracks.favorite_added, tracks.last_played FROM tracks
             INNER JOIN albums ON tracks.album_id = albums.id
             INNER JOIN artists ON albums.artist_id = artists.id WHERE tracks.album_id = %i ORDER BY tracks.track;
         """.printf (id);
 
         res = db.prepare_v2 (sql, -1, out stmt);
+        assert (res == Sqlite.OK);
+
+        var all = new Gee.ArrayList<Objects.Track?> ();
+        int index = 0;
+
+        while ((res = stmt.step()) == Sqlite.ROW) {
+            var track = new Objects.Track ();
+
+            track.track_order = index;
+            track.id = stmt.column_int (0);
+            track.path = stmt.column_text (1);
+            track.title = stmt.column_text (2);
+            track.duration = stmt.column_int64 (3);
+            track.is_favorite = stmt.column_int (4);
+            track.track = stmt.column_int (5);
+            track.date_added = stmt.column_text (6);
+            track.play_count = stmt.column_int (7);
+            track.album_id = stmt.column_int (8);
+            track.album_title = stmt.column_text (9);
+            track.artist_name = stmt.column_text (10);
+            track.favorite_added = stmt.column_text (11);
+            track.last_played = stmt.column_text (12);
+            
+            all.add (track);
+            index  = index + 1;
+        }
+
+        return all;
+    }
+
+    public Gee.ArrayList<Objects.Track?> get_all_tracks_by_playlist (int id, int sort, bool is_reverse) {
+        Sqlite.Statement stmt;
+        string sql;
+        int res;
+        string order_mode = "tracks.title";
+        string reverse_mode = "DESC";
+        
+        if (sort == 0) {
+            order_mode = "tracks.title";
+        } else if (sort == 1) {
+            order_mode = "artists.name";
+        } else if (sort == 2) {
+            order_mode = "albums.title";
+        } else if (sort == 3) {
+            order_mode = "playlist_tracks.date_added";
+        } else {
+            order_mode = "tracks.play_count";
+        }
+
+        if (is_reverse == false) {
+            reverse_mode = "ASC";
+        }
+
+        sql = """
+            SELECT tracks.id, tracks.path, tracks.title, tracks.duration, tracks.is_favorite, tracks.track, tracks.date_added, tracks.play_count, tracks.album_id, albums.title, artists.name, tracks.favorite_added, tracks.last_played, playlist_tracks.date_added FROM playlist_tracks 
+            LEFT JOIN tracks ON playlist_tracks.track_id = tracks.id
+            LEFT JOIN albums ON tracks.album_id = albums.id
+            LEFT JOIN artists ON albums.artist_id = artists.id WHERE playlist_tracks.playlist_id = ? ORDER BY %s %s;
+        """.printf (order_mode, reverse_mode);
+
+        res = db.prepare_v2 (sql, -1, out stmt);
+        assert (res == Sqlite.OK);
+
+        res = stmt.bind_int (1, id);
         assert (res == Sqlite.OK);
 
         var all = new Gee.ArrayList<Objects.Track?> ();
@@ -1051,6 +1181,32 @@ public class Services.Database : GLib.Object {
             return 0;
         }
     }
+    
+    public void insert_track_into_playlist (Objects.Playlist playlist, int track_id) {
+        Sqlite.Statement stmt;
+        string sql;
+        int res;
+
+        sql = """
+            INSERT INTO playlist_tracks (playlist_id, track_id, date_added) VALUES (?, ?, ?);
+        """;
+
+        res = db.prepare_v2 (sql, -1, out stmt);
+        assert (res == Sqlite.OK);
+
+        res = stmt.bind_int (1, playlist.id);
+        assert (res == Sqlite.OK);
+
+        res = stmt.bind_int (2, track_id);
+        assert (res == Sqlite.OK);
+
+        res = stmt.bind_text (3, new GLib.DateTime.now_local ().to_string ());
+        assert (res == Sqlite.OK);
+
+        if (stmt.step () == Sqlite.DONE) {
+            print ("Track: %i agregado \n".printf (track_id));
+        }
+    }
 
     public void add_track_count (Objects.Track track) {
         Sqlite.Statement stmt;
@@ -1152,5 +1308,73 @@ public class Services.Database : GLib.Object {
         } else {
             return 0;
         }
+    }
+
+    /*
+        Remove 
+    */
+
+    public void remove_from_library (Objects.Track track) {
+        Sqlite.Statement stmt;
+        string sql;
+        int res;
+
+        sql = """
+            DELETE FROM tracks where id = ?;
+        """;
+
+        res = db.prepare_v2 (sql, -1, out stmt);
+        assert (res == Sqlite.OK);
+
+        res = stmt.bind_int (1, track.id);
+        assert (res == Sqlite.OK);
+
+        if (stmt.step () == Sqlite.DONE) {
+            stmt.reset ();
+
+            sql = """
+                INSERT INTO blacklist (path) VALUES (?);
+            """;
+
+            res = db.prepare_v2 (sql, -1, out stmt);
+            assert (res == Sqlite.OK);
+
+            res = stmt.bind_text (1, track.path);
+            assert (res == Sqlite.OK);
+            
+            if (stmt.step () == Sqlite.DONE) {
+                removed_track (track.id);
+            } else {
+                warning ("Error: %d: %s", db.errcode (), db.errmsg ());
+            }
+        }
+    }
+
+    public void reset_all_library () {
+        File db_path = File.new_for_path (db_path);
+        try {
+            db_path.delete ();
+        } catch (Error err) {
+            warning (err.message);
+        }
+
+        create_tables ();
+        reset_library ();
+
+        File directory = File.new_for_path (Byte.utils.COVER_FOLDER);
+        try {
+            var children = directory.enumerate_children ("", 0);
+            FileInfo file_info;
+            while ((file_info = children.next_file ()) != null) {
+                FileUtils.remove (GLib.Path.build_filename (Byte.utils.COVER_FOLDER, file_info.get_name ()));
+            }
+        
+            children.close ();
+            children.dispose ();
+        } catch (Error err) {
+            warning (err.message);
+        }
+        
+        directory.dispose ();
     }
 }

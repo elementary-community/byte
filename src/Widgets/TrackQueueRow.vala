@@ -38,15 +38,16 @@ public class Widgets.TrackQueueRow : Gtk.ListBoxRow {
         track_title_label.halign = Gtk.Align.START;
         track_title_label.valign = Gtk.Align.END;
 
-        artist_album_label = new Gtk.Label (track.artist_name);
+        artist_album_label = new Gtk.Label ("<small>%s</small>".printf (track.artist_name));
         artist_album_label.halign = Gtk.Align.START;
+        artist_album_label.use_markup = true;
         artist_album_label.valign = Gtk.Align.START;
         artist_album_label.max_width_chars = 45;
         artist_album_label.ellipsize = Pango.EllipsizeMode.END;
 
         image_cover = new Widgets.Cover.from_file (
             GLib.Path.build_filename (Byte.utils.COVER_FOLDER, ("track-%i.jpg").printf (track.id)), 
-            38, 
+            27, 
             "track");
         image_cover.halign = Gtk.Align.START;
         image_cover.valign = Gtk.Align.START;
@@ -75,7 +76,7 @@ public class Widgets.TrackQueueRow : Gtk.ListBoxRow {
         var main_grid = new Gtk.Grid ();
         main_grid.margin_start = 3;
         main_grid.margin_end = 9;
-        main_grid.column_spacing = 6;
+        main_grid.column_spacing = 3;
         main_grid.attach (overlay, 0, 0, 1, 2);
         main_grid.attach (track_title_label, 1, 0, 1, 1);
         main_grid.attach (artist_album_label, 1, 1, 1, 1);
@@ -131,5 +132,11 @@ public class Widgets.TrackQueueRow : Gtk.ListBoxRow {
             playing_revealer.reveal_child = true;
             main_grid.get_style_context ().add_class ("label-color-primary");
         }
+
+        Byte.database.removed_track.connect ((track_id) => {
+            if (track_id == track.id) {
+                destroy ();
+            }
+        });
     }
 }

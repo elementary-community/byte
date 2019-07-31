@@ -10,9 +10,9 @@ public class Widgets.PlaylistRow : Gtk.ListBoxRow {
         );
     }
 
-    construct {
+    construct { 
         tooltip_text = playlist.title;
-        get_style_context ().add_class ("album-child");
+        get_style_context ().add_class ("album-row");
 
         title_label = new Gtk.Label (playlist.title);
         title_label.get_style_context ().add_class ("font-bold");

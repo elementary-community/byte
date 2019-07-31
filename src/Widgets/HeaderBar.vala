@@ -1,13 +1,14 @@
 public class Widgets.HeaderBar : Gtk.HeaderBar {
     private Gtk.Button shuffle_button;
     private Gtk.Button repeat_button;
-    private Gtk.Button play_button;
+    public Gtk.Button play_button;
     private Gtk.Button next_button;
     private Gtk.Button previous_button;
     private Gtk.Button search_button;
+    private Gtk.MenuButton app_menu;  
 
-    private Gtk.Image icon_play;
-    private Gtk.Image icon_pause;
+    public Gtk.Image icon_play;
+    public Gtk.Image icon_pause;
  
     private Gtk.Image icon_shuffle_on;
     private Gtk.Image icon_shuffle_off;
@@ -23,6 +24,7 @@ public class Widgets.HeaderBar : Gtk.HeaderBar {
         set {
             main_box.visible = value;
             search_button.visible = value;
+            app_menu.visible = value;
 
             if (value) {
                 custom_title = main_box;
@@ -123,7 +125,7 @@ public class Widgets.HeaderBar : Gtk.HeaderBar {
         var menu_popover = new Gtk.Popover (null);
         menu_popover.add (menu_grid);
 
-        var app_menu = new Gtk.MenuButton ();
+        app_menu = new Gtk.MenuButton ();
         //app_menu.border_width = 6;
         app_menu.valign = Gtk.Align.CENTER;
         app_menu.tooltip_text = _("Menu");
@@ -171,6 +173,8 @@ public class Widgets.HeaderBar : Gtk.HeaderBar {
             toggle_playing ();
         });
 
+        Byte.player.toggle_playing.connect (toggle_playing);
+
         Byte.player.state_changed.connect ((state) => {
             if (state == Gst.State.PLAYING) {
                 play_button.image = icon_pause;
@@ -210,12 +214,8 @@ public class Widgets.HeaderBar : Gtk.HeaderBar {
             } else if (key == "repeat-mode") {
                 check_repeat_button ();
             }   
-        }); 
-
-        Byte.player.toggle_playing.connect (() => {
-            toggle_playing ();
         });
-
+        
         Byte.player.mode_changed.connect ((mode) => {
             if (mode == "radio") {
                 shuffle_button.visible = false;
@@ -247,7 +247,7 @@ public class Widgets.HeaderBar : Gtk.HeaderBar {
             Byte.scan_service.scan_local_files (Byte.settings.get_string ("library-location"));
         });
     }
-
+    
     public void toggle_playing () {
         if (play_button.image == icon_play) {
             play_button.image = icon_pause;

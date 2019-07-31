@@ -1,10 +1,11 @@
 public class Widgets.TrackRow : Gtk.ListBoxRow {
     public Objects.Track track { get; construct; }
-
+    
     private Gtk.Label primary_label;
     private Gtk.Label secondary_label;
     private Gtk.Label duration_label; 
     private Gtk.Button favorite_button;
+    Gtk.Menu playlists;
     private Gtk.Menu menu = null;
     private Widgets.Cover image_cover;
     public TrackRow (Objects.Track track) {
@@ -40,7 +41,6 @@ public class Widgets.TrackRow : Gtk.ListBoxRow {
         primary_label.halign = Gtk.Align.START;
         primary_label.valign = Gtk.Align.END;
 
-        /*
         int sort = Byte.settings.get_enum ("track-sort");
         string _label = "";
         if (sort == 0) {
@@ -48,16 +48,17 @@ public class Widgets.TrackRow : Gtk.ListBoxRow {
         } else if (sort == 1) {
             _label = track.artist_name;
         } else if (sort == 2) {
-            _label = "%s - %s".printf (track.artist_name, track.album_title);
+            _label = "%s - <small>%s</small>".printf (track.artist_name, track.album_title);
         } else if (sort == 3) {
-            _label = _("%s - Added %s".printf (track.artist_name, Granite.DateTime.get_relative_datetime (new GLib.DateTime.from_iso8601 (track.date_added, new GLib.TimeZone.local ()))));
+            _label = _("%s - <small>Added %s</small>".printf (track.artist_name, Granite.DateTime.get_relative_datetime (new GLib.DateTime.from_iso8601 (track.date_added, new GLib.TimeZone.local ()))));
         } else {
-            _label = "%s - %i played".printf (track.artist_name, track.play_count);
+            _label = "%s - <small>%i played</small>".printf (track.artist_name, track.play_count);
         }
-        */
         
         secondary_label = new Gtk.Label (track.artist_name);
+        //secondary_label = new Gtk.Label (_label);
         secondary_label.get_style_context ().add_class ("secondary_label");
+        secondary_label.use_markup = true;
         secondary_label.halign = Gtk.Align.START;
         secondary_label.valign = Gtk.Align.START;
         secondary_label.max_width_chars = 45;
@@ -195,22 +196,12 @@ public class Widgets.TrackRow : Gtk.ListBoxRow {
 
         eventbox.button_press_event.connect ((sender, evt) => {
             if (evt.type == Gdk.EventType.BUTTON_PRESS && evt.button == 3) {
-                if (menu == null) {
-                    build_context_menu (track);
-                }
-
-                menu.popup_at_pointer (null);
+                activate_menu ();
                 return true;
             }
         });
 
-        options_button.clicked.connect (() => {
-            if (menu == null) {
-                build_context_menu (track);
-            }
-
-            menu.popup_at_pointer (null);
-        });
+        options_button.clicked.connect (activate_menu);
 
         favorite_button.clicked.connect (() => {
             if (favorite_button.image == icon_favorite) {
@@ -221,6 +212,46 @@ public class Widgets.TrackRow : Gtk.ListBoxRow {
                 Byte.database.set_track_favorite (track, 1);
             }
         });
+
+        Byte.database.removed_track.connect ((track_id) => {
+            if (track_id == track.id) {
+                destroy ();
+            }
+        });
+    }
+
+    private void activate_menu () {
+        if (menu == null) {
+            build_context_menu (track);
+        }
+
+        foreach (var child in playlists.get_children ()) {
+            child.destroy ();
+        }
+
+        var all_items = Byte.database.get_all_playlists ();
+
+        var item = new Gtk.MenuItem.with_label (_ ("Create New Playlist"));
+        item.get_style_context ().add_class ("track-options");
+        item.get_style_context ().add_class ("css-item");
+        item.activate.connect (() => {
+            //var new_playlist = library_manager.create_new_playlist ();
+            //library_manager.add_track_into_playlist (new_playlist, track.ID);
+        });
+        playlists.add (item);
+
+        foreach (var playlist in all_items) {
+            item = new Gtk.MenuItem.with_label (playlist.title);
+            item.get_style_context ().add_class ("track-options");
+            item.get_style_context ().add_class ("css-item");
+            item.activate.connect (() => {
+                Byte.database.insert_track_into_playlist (playlist, track.id);
+            });
+            playlists.add (item);
+        }
+        playlists.show_all ();
+
+        menu.popup_at_pointer (null);
     }
 
     private void build_context_menu (Objects.Track track) {
@@ -267,10 +298,15 @@ public class Widgets.TrackRow : Gtk.ListBoxRow {
         var play_menu = new Widgets.ModelButton (_("Play"), "media-playback-start-symbolic", _("Finalize project"));
         var play_next_menu = new Widgets.ModelButton (_("Play Next"), "document-export-symbolic", _("Export project"));
         var play_last_menu = new Widgets.ModelButton (_("Play Later"), "emblem-shared-symbolic", _("Share project"));
+        
         var add_playlist_menu = new Widgets.ModelButton (_("Add to Playlist"), "zoom-in-symbolic", _("Change project name"));
+        playlists = new Gtk.Menu ();
+        playlists.get_style_context ().add_class ("view");
+        add_playlist_menu.set_submenu (playlists);
+
         var edit_menu = new Widgets.ModelButton (_("Edit Song Info..."), "edit-symbolic", _("Share project"));
         var favorite_menu = new Widgets.ModelButton (_("Favorite"), "planner-favorite-symbolic", _("Share project"));
-        var remove_db_menu = new Widgets.ModelButton (_("Delete from database"), "zoom-out-symbolic", _("Share project"));
+        var remove_db_menu = new Widgets.ModelButton (_("Delete from library"), "zoom-out-symbolic", _("Share project"));
         var remove_file_menu = new Widgets.ModelButton (_("Delete from file"), "user-trash-symbolic", _("Share project"));
 
         menu.add (track_menu);
@@ -284,7 +320,7 @@ public class Widgets.TrackRow : Gtk.ListBoxRow {
         menu.add (favorite_menu);
         menu.add (new Gtk.SeparatorMenuItem ());
         menu.add (remove_db_menu);
-        menu.add (remove_file_menu);
+        //menu.add (remove_file_menu);
 
         menu.show_all ();
 
@@ -310,10 +346,22 @@ public class Widgets.TrackRow : Gtk.ListBoxRow {
             }
         });
 
+        add_playlist_menu.activate.connect (() => {
+
+        });
+
         edit_menu.activate.connect (() => {
             var editor_dialog = new Dialogs.TrackEditor (track);
-            //preferences_dialog.destroy.connect (Gtk.main_quit);
+            editor_dialog.destroy.connect (Gtk.main_quit);
             editor_dialog.show_all ();
+        });
+
+        remove_db_menu.activate.connect (() => {
+            Byte.database.remove_from_library (track);
+        });
+
+        remove_file_menu.activate.connect (() => {
+
         });
     }
 }

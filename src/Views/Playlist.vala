@@ -23,8 +23,8 @@ public class Views.Playlist : Gtk.EventBox {
             print ("Title: %s\n".printf (_playlist.title));
 
             title_label.label = _playlist.title;
-            time_label.label = "25 songs - 3h, 2 min";
-            update_relative_label.label = Byte.utils.get_relative_datetime (_playlist.date_updated);
+            //time_label.label = "25 songs - 3h, 2 min";
+            //update_relative_label.label = Byte.utils.get_relative_datetime (_playlist.date_updated);
 
             try {
                 cover_path = GLib.Path.build_filename (Byte.utils.COVER_FOLDER, ("playlist-%i.jpg").printf (_playlist.id));
@@ -35,23 +35,25 @@ public class Views.Playlist : Gtk.EventBox {
                 image_cover.pixbuf = pixbuf;
             }
 
-            /*
             listbox.foreach ((widget) => {
                 widget.destroy (); 
             });
 
             if (Byte.scan_service.is_sync == false) {
                 all_tracks = new Gee.ArrayList<Objects.Track?> ();
-                all_tracks = Byte.database.get_all_tracks_by_album (_album.id);
+                all_tracks = Byte.database.get_all_tracks_by_playlist (
+                    _playlist.id,
+                    Byte.settings.get_enum ("playlist-sort"), 
+                    Byte.settings.get_boolean ("playlist-order-reverse")    
+                );
         
                 foreach (var item in all_tracks) {
-                    var row = new Widgets.TrackAlbumRow (item);
+                    var row = new Widgets.TrackRow (item);
                     listbox.add (row);
                 }
         
                 listbox.show_all ();
             }
-            */
         }
         get {
             return _playlist;
@@ -76,9 +78,27 @@ public class Views.Playlist : Gtk.EventBox {
         center_label.get_style_context ().add_class ("h3");
         center_label.get_style_context ().add_class ("label-color-primary");
 
+        var sort_button = new Gtk.ToggleButton ();
+        sort_button.margin = 6;
+        sort_button.can_focus = false;
+        sort_button.add (new Gtk.Image.from_icon_name ("planner-sort-symbolic", Gtk.IconSize.MENU));
+        sort_button.tooltip_text = _("Sort");
+        sort_button.get_style_context ().add_class (Gtk.STYLE_CLASS_FLAT);
+        sort_button.get_style_context ().add_class ("sort-button");
+
         var header_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 0);
         header_box.pack_start (back_button, false, false, 0);
         header_box.set_center_widget (center_label);
+        header_box.pack_end (sort_button, false, false, 0);
+        
+        var sort_popover = new Widgets.Popovers.Sort (sort_button);
+        sort_popover.selected = Byte.settings.get_enum ("playlist-sort");
+        sort_popover.reverse = Byte.settings.get_boolean ("playlist-order-reverse");
+        sort_popover.radio_01_label = _("Name");
+        sort_popover.radio_02_label = _("Artist");
+        sort_popover.radio_03_label = _("Album");
+        sort_popover.radio_04_label = _("Date Added");
+        sort_popover.radio_05_label = _("Play Count");
 
         //cover_path = GLib.Path.build_filename (Byte.utils.COVER_FOLDER, ("album-%i.jpg").printf (album.id));
         image_cover = new Widgets.Cover.with_default_icon (64, "playlist");
@@ -182,7 +202,7 @@ public class Views.Playlist : Gtk.EventBox {
         });
 
         listbox.row_activated.connect ((row) => {
-            var item = row as Widgets.TrackAlbumRow;
+            var item = row as Widgets.TrackRow;
             
             Byte.utils.set_items (
                 all_tracks,
@@ -205,6 +225,60 @@ public class Views.Playlist : Gtk.EventBox {
                 true,
                 null
             );
+        });
+
+        sort_button.toggled.connect (() => {
+            if (sort_button.active) {
+                sort_popover.show_all ();
+            }
+        });
+
+        sort_popover.closed.connect (() => {
+            sort_button.active = false;
+        });
+
+        sort_popover.mode_changed.connect ((mode) => {
+            Byte.settings.set_enum ("playlist-sort", mode);
+
+            listbox.foreach ((widget) => {
+                widget.destroy (); 
+            });
+            
+            all_tracks = new Gee.ArrayList<Objects.Track?> ();
+            all_tracks = Byte.database.get_all_tracks_by_playlist (
+                _playlist.id,
+                Byte.settings.get_enum ("playlist-sort"), 
+                Byte.settings.get_boolean ("playlist-order-reverse")    
+            );
+        
+            foreach (var item in all_tracks) {
+                var row = new Widgets.TrackRow (item);
+                listbox.add (row);
+            }
+        
+            listbox.show_all ();
+        });
+
+        sort_popover.order_reverse.connect ((reverse) => {
+            Byte.settings.set_boolean ("playlist-order-reverse", reverse); 
+
+            listbox.foreach ((widget) => {
+                widget.destroy (); 
+            });
+
+            all_tracks = new Gee.ArrayList<Objects.Track?> ();
+            all_tracks = Byte.database.get_all_tracks_by_playlist (
+                _playlist.id,
+                Byte.settings.get_enum ("playlist-sort"), 
+                Byte.settings.get_boolean ("playlist-order-reverse")    
+            );
+        
+            foreach (var item in all_tracks) {
+                var row = new Widgets.TrackRow (item);
+                listbox.add (row);
+            }
+        
+            listbox.show_all ();
         });
 
         /*

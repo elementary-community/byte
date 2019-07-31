@@ -237,5 +237,11 @@ public class Views.Album : Gtk.EventBox {
                 }
             }
         });
+
+        Byte.database.reset_library.connect (() => {
+            listbox.foreach ((widget) => {
+                widget.destroy (); 
+            });
+        });
     }
 }

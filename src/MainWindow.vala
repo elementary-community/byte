@@ -211,6 +211,11 @@ public class MainWindow : Gtk.Window {
                 return false;
             }
         });
+
+        Byte.database.reset_library.connect (() => {
+            main_stack.visible_child_name = "welcome_view";
+            headerbar.visible_ui = false;
+        });
     }
     
     public override bool configure_event (Gdk.EventConfigure event) {

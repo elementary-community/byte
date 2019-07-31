@@ -14,6 +14,14 @@
 		<value nick="play count" value="4" />
 	</enum>
 
+	<enum id="com.github.alainm23.byte.playlist-sort-mode">
+		<value nick="name" value="0" />
+		<value nick="artist" value="1" />
+		<value nick="album" value="2" />
+        <value nick="date added" value="3" />
+		<value nick="play count" value="4" />
+	</enum>
+
 	<enum id="com.github.alainm23.byte.album-sort-mode">
 		<value nick="name" value="0" />
 		<value nick="artist" value="1" />
@@ -40,7 +48,19 @@
 			<description>Tracks sort mode</description>
 		</key>
 
+		<key name="playlist-sort" enum="com.github.alainm23.byte.playlist-sort-mode">
+			<default>"name"</default>
+			<summary>Tracks sort mode</summary>
+			<description>Tracks sort mode</description>
+		</key>
+
 		<key name="track-order-reverse" type="b">
+			<default>false</default>
+			<summary>Track order reverse</summary>
+			<description>Track order reverse</description>
+		</key>
+
+		<key name="playlist-order-reverse" type="b">
 			<default>false</default>
 			<summary>Track order reverse</summary>
 			<description>Track order reverse</description>

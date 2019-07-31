@@ -275,6 +275,12 @@ public class Views.Tracks : Gtk.EventBox {
                 add_all_tracks ();
             }
         });
+
+        Byte.database.reset_library.connect (() => {
+            listbox.foreach ((widget) => {
+                widget.destroy (); 
+            });
+        });
     }
 
     private void add_track (Objects.Track track) {
