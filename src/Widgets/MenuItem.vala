@@ -1,4 +1,4 @@
-public class Widgets.ModelButton : Gtk.Button {
+public class Widgets.MenuItem : Gtk.MenuItem {
     private Gtk.Label _label;
     private Gtk.Image _image;
 
@@ -12,26 +12,24 @@ public class Widgets.ModelButton : Gtk.Button {
             tooltip_text = value;
         }
     }
-    public string text { 
+    public string text {
         set {
             _label.label = value;
         }
     }
     
 
-    public ModelButton (string text, string icon, string tooltip) {
+    public MenuItem (string _text, string _icon, string _tooltip) {
         Object (
-            icon: icon,
-            text: text,
-            tooltip: tooltip,
+            icon: _icon,
+            text: _text,
+            tooltip: _tooltip,
             expand: true
         );
     }
 
     construct {
-        can_focus = false;
-        get_style_context ().add_class ("menuitem");
-        get_style_context ().add_class ("flat");
+        get_style_context ().add_class ("track-options");
 
         _label = new Gtk.Label (null);
 

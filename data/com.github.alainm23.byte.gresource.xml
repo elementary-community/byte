@@ -8,14 +8,14 @@
     <file alias="byte-folder-open.svg">resources/byte-folder-open.svg</file>
     <file alias="byte-folder-music.svg">resources/byte-folder-music.svg</file>
 
-    <file alias="planner-album-symbolic.svg">resources/planner-album-symbolic.svg</file>
-    <file alias="planner-artist-symbolic.svg">resources/planner-artist-symbolic.svg</file>
-    <file alias="planner-favorite-symbolic.svg">resources/planner-favorite-symbolic.svg</file>
-    <file alias="planner-no-favorite-symbolic.svg">resources/planner-no-favorite-symbolic.svg</file>
-    <file alias="planner-playlist-symbolic.svg">resources/planner-playlist-symbolic.svg</file>
-    <file alias="planner-radio-symbolic.svg">resources/planner-radio-symbolic.svg</file>
-    <file alias="planner-track-symbolic.svg">resources/planner-track-symbolic.svg</file>
-    <file alias="planner-arrow-back-symbolic.svg">resources/planner-arrow-back-symbolic.svg</file>
-    <file alias="planner-sort-symbolic.svg">resources/planner-sort-symbolic.svg</file>
+    <file alias="byte-album-symbolic.svg">resources/byte-album-symbolic.svg</file>
+    <file alias="byte-artist-symbolic.svg">resources/byte-artist-symbolic.svg</file>
+    <file alias="byte-favorite-symbolic.svg">resources/byte-favorite-symbolic.svg</file>
+    <file alias="byte-no-favorite-symbolic.svg">resources/byte-no-favorite-symbolic.svg</file>
+    <file alias="byte-radio-symbolic.svg">resources/byte-radio-symbolic.svg</file>
+    <file alias="byte-arrow-back-symbolic.svg">resources/byte-arrow-back-symbolic.svg</file>
+    <file alias="byte-sort-symbolic.svg">resources/byte-sort-symbolic.svg</file>
+    <file alias="byte-play-later-symbolic.svg">resources/byte-play-later-symbolic.svg</file>
+    <file alias="byte-play-next-symbolic.svg">resources/byte-play-next-symbolic.svg</file>
   </gresource>
 </gresources>

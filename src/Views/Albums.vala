@@ -22,7 +22,7 @@ public class Views.Albums : Gtk.EventBox {
         get_style_context ().add_class (Gtk.STYLE_CLASS_VIEW);
         get_style_context ().add_class ("w-round");
         
-        var back_button = new Gtk.Button.from_icon_name ("planner-arrow-back-symbolic", Gtk.IconSize.MENU);
+        var back_button = new Gtk.Button.from_icon_name ("byte-arrow-back-symbolic", Gtk.IconSize.MENU);
         back_button.can_focus = false;
         back_button.margin = 6;
         back_button.get_style_context ().add_class (Gtk.STYLE_CLASS_FLAT);
@@ -62,7 +62,7 @@ public class Views.Albums : Gtk.EventBox {
         var sort_button = new Gtk.ToggleButton ();
         sort_button.margin = 6;
         sort_button.can_focus = false;
-        sort_button.add (new Gtk.Image.from_icon_name ("planner-sort-symbolic", Gtk.IconSize.MENU));
+        sort_button.add (new Gtk.Image.from_icon_name ("byte-sort-symbolic", Gtk.IconSize.MENU));
         sort_button.tooltip_text = _("Sort");
         sort_button.get_style_context ().add_class (Gtk.STYLE_CLASS_FLAT);
         sort_button.get_style_context ().add_class ("sort-button");

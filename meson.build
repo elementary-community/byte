@@ -58,6 +58,7 @@ executable(
     'src/Widgets/NewPlaylist.vala',
     'src/Widgets/PlaylistRow.vala',
     'src/Widgets/ModelButton.vala',
+    'src/Widgets/MenuItem.vala',
     'src/Widgets/AlertView.vala',
     
     'src/Widgets/Popovers/Sort.vala',

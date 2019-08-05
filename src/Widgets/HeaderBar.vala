@@ -98,24 +98,16 @@ public class Widgets.HeaderBar : Gtk.HeaderBar {
             Menu
         */
 
-        var search_menuitem = new Gtk.ModelButton ();
-        search_menuitem.text = _("Search");
-
-        var import_menuitem = new Gtk.ModelButton ();
-        import_menuitem.text = _("Import Music");
-
-        var resync_menuitem = new Gtk.ModelButton ();
-        resync_menuitem.text = _("Resync Libray");
-        
-        var preferences_menuitem = new Gtk.ModelButton ();
-        preferences_menuitem.text = _("Preferences");
+        var search_menuitem = new Widgets.ModelButton (_("Search"), "edit-find-symbolic", _("Search"));
+        var import_menuitem = new Widgets.ModelButton (_("Import Music"), "document-import-symbolic", _("Import Music"));
+        var resync_menuitem = new Widgets.ModelButton (_("Resync Libray"), "emblem-synchronizing-symbolic", _("Resync Libray"));        
+        var preferences_menuitem = new Widgets.ModelButton (_("Preferences"), "preferences-system-symbolic", _("Preferences"));
 
         var menu_grid = new Gtk.Grid ();
         menu_grid.margin_top = 6;
         menu_grid.margin_bottom = 6;
         menu_grid.orientation = Gtk.Orientation.VERTICAL;
-        //menu_grid.width_request = 250;
- 
+        menu_grid.width_request = 165;
         menu_grid.add (search_menuitem);
         menu_grid.add (import_menuitem);
         menu_grid.add (resync_menuitem);

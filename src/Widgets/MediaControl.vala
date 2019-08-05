@@ -14,8 +14,8 @@ public class Widgets.MediaControl : Gtk.Revealer {
     }
     
     construct {
-        icon_favorite = new Gtk.Image.from_icon_name ("planner-favorite-symbolic", Gtk.IconSize.MENU);
-        icon_no_favorite = new Gtk.Image.from_icon_name ("planner-no-favorite-symbolic", Gtk.IconSize.MENU);
+        icon_favorite = new Gtk.Image.from_icon_name ("byte-favorite-symbolic", Gtk.IconSize.MENU);
+        icon_no_favorite = new Gtk.Image.from_icon_name ("byte-no-favorite-symbolic", Gtk.IconSize.MENU);
 
         timeline = new Granite.SeekBar (0);
         timeline.margin_start = 6;

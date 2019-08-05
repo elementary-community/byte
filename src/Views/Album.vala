@@ -64,19 +64,20 @@ public class Views.Album : Gtk.EventBox {
         get_style_context ().add_class (Gtk.STYLE_CLASS_VIEW);
         get_style_context ().add_class ("w-round");
 
-        var back_button = new Gtk.Button.from_icon_name ("planner-arrow-back-symbolic", Gtk.IconSize.MENU);
+        var back_button = new Gtk.Button.from_icon_name ("byte-arrow-back-symbolic", Gtk.IconSize.MENU);
         back_button.can_focus = false;
         back_button.margin = 6;
         back_button.get_style_context ().add_class (Gtk.STYLE_CLASS_FLAT);
         back_button.get_style_context ().add_class ("label-color-primary");
 
-        var center_label = new Gtk.Label ("<b>%s</b>".printf (_("Album")));
+        var center_label = new Gtk.Label (_("Album"));
         center_label.use_markup = true;
         center_label.valign = Gtk.Align.CENTER;
         center_label.get_style_context ().add_class ("h3");
         center_label.get_style_context ().add_class ("label-color-primary");
 
         var header_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 0);
+        header_box.get_style_context ().add_class (Gtk.STYLE_CLASS_BACKGROUND);
         header_box.pack_start (back_button, false, false, 0);
         header_box.set_center_widget (center_label);
 
@@ -154,7 +155,7 @@ public class Views.Album : Gtk.EventBox {
         album_box.hexpand = true;
         album_box.margin = 12;
         album_box.margin_bottom = 6;
-        album_box.margin_top = 0;
+        album_box.margin_top = 12;
         album_box.pack_start (image_cover, false, false, 0);
         album_box.pack_start (detail_box, false, false, 0);
 
@@ -183,6 +184,7 @@ public class Views.Album : Gtk.EventBox {
         var main_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 0);
         main_box.expand = true;
         main_box.pack_start (header_box, false, false, 0);
+        main_box.pack_start (new Gtk.Separator (Gtk.Orientation.HORIZONTAL), false, false, 0);
         main_box.pack_start (main_scrolled, true, true, 0);
 
         add (main_box);

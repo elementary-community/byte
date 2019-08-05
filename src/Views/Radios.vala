@@ -4,7 +4,7 @@ public class Views.Radios : Gtk.EventBox {
     private int item_index;
     private int item_max;
     private Gee.ArrayList<Objects.Radio?> all_radios;
-
+    public signal void show_quick_find ();
     public Radios () {}
 
     construct {
@@ -17,20 +17,33 @@ public class Views.Radios : Gtk.EventBox {
         get_style_context ().add_class (Gtk.STYLE_CLASS_VIEW);
         get_style_context ().add_class ("w-round");
         
-        var back_button = new Gtk.Button.from_icon_name ("planner-arrow-back-symbolic", Gtk.IconSize.MENU);
+        var back_button = new Gtk.Button.from_icon_name ("byte-arrow-back-symbolic", Gtk.IconSize.MENU);
         back_button.can_focus = false;
         back_button.margin = 6;
         back_button.get_style_context ().add_class (Gtk.STYLE_CLASS_FLAT);
-        back_button.get_style_context ().add_class ("label-color-primary");
+        back_button.get_style_context ().add_class ("label-color-primary"); 
 
         var title_label = new Gtk.Label ("<b>%s</b>".printf (_("Radios")));
         title_label.use_markup = true;
         title_label.valign = Gtk.Align.CENTER;
         title_label.get_style_context ().add_class ("h3");
 
+        var internet_radio_button = new Gtk.Button.from_icon_name ("internet-radio-symbolic", Gtk.IconSize.MENU);
+        internet_radio_button.can_focus = false;
+        internet_radio_button.tooltip_text = _("Search radio on internet");
+        internet_radio_button.margin = 6;
+        internet_radio_button.get_style_context ().add_class (Gtk.STYLE_CLASS_FLAT);
+        internet_radio_button.get_style_context ().add_class ("label-color-primary");
+
+        internet_radio_button.clicked.connect (() => {
+            show_quick_find ();
+        });
+
         var header_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 0);
+        header_box.get_style_context ().add_class (Gtk.STYLE_CLASS_BACKGROUND);
         header_box.pack_start (back_button, false, false, 0);
         header_box.set_center_widget (title_label);
+        header_box.pack_end (internet_radio_button, false, false, 0);
 
         listbox = new Gtk.ListBox (); 
         listbox.expand = true;
@@ -44,6 +57,7 @@ public class Views.Radios : Gtk.EventBox {
         main_box.margin_bottom = 3;
         main_box.expand = true;
         main_box.pack_start (header_box, false, false, 0);
+        main_box.pack_start (new Gtk.Separator (Gtk.Orientation.HORIZONTAL), false, false, 0);
         main_box.pack_start (scrolled, true, true, 0);
         
         add (main_box);

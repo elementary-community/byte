@@ -34,11 +34,11 @@ public class Views.Home : Gtk.EventBox {
         recently_added_label.use_markup = true;
 
         var playlists_button = new Widgets.HomeButton (_("Playlists"), "playlist-symbolic");
-        var albums_button = new Widgets.HomeButton (_("Albums"), "planner-album-symbolic");
-        var songs_button = new Widgets.HomeButton (_("Songs"), "planner-track-symbolic");
-        var artists_button = new Widgets.HomeButton ("Artists", "planner-artist-symbolic");
-        var radios_button = new Widgets.HomeButton ("Radios", "planner-radio-symbolic");
-        var favorites_button = new Widgets.HomeButton ("Favorites", "planner-favorite-symbolic");
+        var albums_button = new Widgets.HomeButton (_("Albums"), "byte-album-symbolic");
+        var songs_button = new Widgets.HomeButton (_("Songs"), "folder-music-symbolic");
+        var artists_button = new Widgets.HomeButton ("Artists", "byte-artist-symbolic");
+        var radios_button = new Widgets.HomeButton ("Radios", "byte-radio-symbolic");
+        var favorites_button = new Widgets.HomeButton ("Favorites", "byte-favorite-symbolic");
 
         listbox = new Gtk.ListBox ();
         listbox.expand = true;

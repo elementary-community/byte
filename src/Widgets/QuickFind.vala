@@ -25,7 +25,7 @@ public class Widgets.QuickFind : Gtk.Revealer {
         var toast = new Granite.Widgets.Toast (_("The radio station was added correctly"));
 
         search_entry = new Gtk.SearchEntry ();
-        search_entry.get_style_context ().add_class ("quick-find-entry");
+        search_entry.get_style_context ().add_class ("search-entry");
         search_entry.placeholder_text = _("Quick find");
 
         var cancel_button = new Gtk.Button.with_label (_("Cancel"));
@@ -59,25 +59,20 @@ public class Widgets.QuickFind : Gtk.Revealer {
         radios_spinner.active = true;
         radios_spinner.start ();
 
-        var radio_title_label = new Gtk.Label (_("No result"));
-        var radio_subtitule_label = new Gtk.Label (_("Try "));
-
-        var radio_alert_grid = new Gtk.Grid ();
-        radio_alert_grid.orientation = Gtk.Orientation.VERTICAL;
-        radio_alert_grid.halign = Gtk.Align.CENTER;
-        radio_alert_grid.expand = true;
-        radio_alert_grid.valign = Gtk.Align.CENTER;
-        radio_alert_grid.add (radio_title_label);
-        radio_alert_grid.add (radio_subtitule_label);
+        var alert_view = new Widgets.AlertView (
+            _("No Results"),
+            _("lorem"),
+            "edit-find-symbolic"
+        );
 
         var radio_stack = new Gtk.Stack ();
         radio_stack.expand = true;
         radio_stack.transition_type = Gtk.StackTransitionType.CROSSFADE;
 
+        radio_stack.add_named (alert_view, "radio_alert_grid");
         radio_stack.add_named (radios_spinner, "radios_spinner");
         radio_stack.add_named (radios_listbox, "radios_listbox");
-        radio_stack.add_named (radio_alert_grid, "radio_alert_grid");
-
+        
         var radio_scrolled = new Gtk.ScrolledWindow (null, null);
         radio_scrolled.hscrollbar_policy = Gtk.PolicyType.NEVER;
         radio_scrolled.expand = true;
@@ -88,7 +83,7 @@ public class Widgets.QuickFind : Gtk.Revealer {
         main_box.width_request = 325;
         main_box.get_style_context ().add_class ("quick-find");
         main_box.pack_start (top_box, false, false, 0);
-        main_box.pack_start (mode_button, false, false, 0);
+        //main_box.pack_start (mode_button, false, false, 0);
         main_box.pack_start (radio_scrolled, true, true, 0);
         main_box.pack_end (toast, false, false, 0);
 

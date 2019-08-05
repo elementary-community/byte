@@ -11,7 +11,8 @@ public class Objects.Track : GLib.Object {
     public int rating;            
     public int samplerate;        
     public int channels;          
-    public int year;              
+    public int year;     
+    public int playlist;         
     public uint64 duration;       
     public string path;           
     public string title;          
@@ -40,6 +41,7 @@ public class Objects.Track : GLib.Object {
                   int samplerate = 0,
                   int channels = 0,
                   int year = 0,
+                  int playlist = 0,
                   uint64 duration = 0,
                   string path = "",
                   string title = "",

@@ -952,6 +952,7 @@ public class Services.Database : GLib.Object {
             track.artist_name = stmt.column_text (10);
             track.favorite_added = stmt.column_text (11);
             track.last_played = stmt.column_text (12);
+            track.playlist = id;
             
             all.add (track);
             index  = index + 1;

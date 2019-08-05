@@ -20,22 +20,17 @@ public class Views.Playlists : Gtk.EventBox {
         get_style_context ().add_class (Gtk.STYLE_CLASS_VIEW);
         get_style_context ().add_class ("w-round");
         
-        var back_button = new Gtk.Button.from_icon_name ("planner-arrow-back-symbolic", Gtk.IconSize.MENU);
+        var back_button = new Gtk.Button.from_icon_name ("byte-arrow-back-symbolic", Gtk.IconSize.MENU);
         back_button.can_focus = false;
         back_button.margin = 6;
         back_button.get_style_context ().add_class (Gtk.STYLE_CLASS_FLAT);
         back_button.get_style_context ().add_class ("label-color-primary");
 
-        var search_button = new Gtk.Button.from_icon_name ("edit-find-symbolic", Gtk.IconSize.MENU);
-        search_button.label = _("Playlists");
-        search_button.can_focus = false;
-        search_button.image_position = Gtk.PositionType.LEFT;
-        search_button.valign = Gtk.Align.CENTER;
-        search_button.halign = Gtk.Align.CENTER;
-        search_button.get_style_context ().add_class (Gtk.STYLE_CLASS_FLAT);
-        search_button.get_style_context ().add_class ("h3");
-        search_button.get_style_context ().add_class ("label-color-primary");
-        search_button.always_show_image = true;
+        var title_label = new Gtk.Label (_("Playlists"));
+        title_label.use_markup = true;
+        title_label.valign = Gtk.Align.CENTER;
+        title_label.get_style_context ().add_class ("h3");
+        title_label.get_style_context ().add_class ("label-color-primary");
 
         var add_button = new Gtk.ToggleButton ();
         add_button.can_focus = false;
@@ -49,16 +44,10 @@ public class Views.Playlists : Gtk.EventBox {
 
         var add_popover = new Widgets.Popovers.NewPlaylist (add_button);
 
-        var search_entry = new Gtk.SearchEntry ();
-        search_entry.valign = Gtk.Align.CENTER;
-        search_entry.width_request = 250;
-        search_entry.get_style_context ().add_class ("search-entry");
-        search_entry.get_style_context ().add_class (Gtk.STYLE_CLASS_FLAT);
-        search_entry.placeholder_text = _("Your library");
-
         var header_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 0);
+        header_box.get_style_context ().add_class (Gtk.STYLE_CLASS_BACKGROUND);
         header_box.pack_start (back_button, false, false, 0);
-        header_box.set_center_widget (search_button);
+        header_box.set_center_widget (title_label);
         header_box.pack_end (add_button, false, false, 0);
 
         listbox = new Gtk.ListBox (); 
@@ -94,18 +83,6 @@ public class Views.Playlists : Gtk.EventBox {
         add_popover.closed.connect (() => {
             add_button.active = false;
         });
-
-        search_entry.search_changed.connect (() => {
-            /*
-            listbox.set_filter_func ((row) => {
-                var item = row as Widgets.TrackRow;
-                return search_entry.text.down () in item.track.title.down () ||
-                    search_entry.text.down () in item.track.artist_name.down () ||
-                    search_entry.text.down () in item.track.album_title.down ();
-            });
-            */
-        });
-
 
         listbox.row_activated.connect ((row) => {
             var item = row as Widgets.PlaylistRow;

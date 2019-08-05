@@ -196,7 +196,7 @@ public class MainWindow : Gtk.Window {
             library_stack.visible_child_name = "favorites_view";
         });
 
-        headerbar.show_quick_find.connect (() => {
+        radios_view.show_quick_find.connect (() => {
             quick_find.reveal = !quick_find.reveal_child;
         });
 

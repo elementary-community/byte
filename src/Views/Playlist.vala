@@ -1,5 +1,6 @@
 public class Views.Playlist : Gtk.EventBox {
     private Gtk.Label title_label;
+    private Gtk.Label note_label;
     private Gtk.Label time_label;
     private Gtk.Label update_relative_label;
         
@@ -23,8 +24,9 @@ public class Views.Playlist : Gtk.EventBox {
             print ("Title: %s\n".printf (_playlist.title));
 
             title_label.label = _playlist.title;
+            note_label.label = _playlist.note;
             //time_label.label = "25 songs - 3h, 2 min";
-            //update_relative_label.label = Byte.utils.get_relative_datetime (_playlist.date_updated);
+            update_relative_label.label = Byte.utils.get_relative_datetime (_playlist.date_updated);
 
             try {
                 cover_path = GLib.Path.build_filename (Byte.utils.COVER_FOLDER, ("playlist-%i.jpg").printf (_playlist.id));
@@ -66,13 +68,13 @@ public class Views.Playlist : Gtk.EventBox {
         get_style_context ().add_class (Gtk.STYLE_CLASS_VIEW);
         get_style_context ().add_class ("w-round");
 
-        var back_button = new Gtk.Button.from_icon_name ("planner-arrow-back-symbolic", Gtk.IconSize.MENU);
+        var back_button = new Gtk.Button.from_icon_name ("byte-arrow-back-symbolic", Gtk.IconSize.MENU);
         back_button.can_focus = false;
         back_button.margin = 6;
         back_button.get_style_context ().add_class (Gtk.STYLE_CLASS_FLAT);
         back_button.get_style_context ().add_class ("label-color-primary");
 
-        var center_label = new Gtk.Label ("<b>%s</b>".printf (_("Playlist")));
+        var center_label = new Gtk.Label (_("Playlist"));
         center_label.use_markup = true;
         center_label.valign = Gtk.Align.CENTER;
         center_label.get_style_context ().add_class ("h3");
@@ -81,12 +83,13 @@ public class Views.Playlist : Gtk.EventBox {
         var sort_button = new Gtk.ToggleButton ();
         sort_button.margin = 6;
         sort_button.can_focus = false;
-        sort_button.add (new Gtk.Image.from_icon_name ("planner-sort-symbolic", Gtk.IconSize.MENU));
+        sort_button.add (new Gtk.Image.from_icon_name ("byte-sort-symbolic", Gtk.IconSize.MENU));
         sort_button.tooltip_text = _("Sort");
         sort_button.get_style_context ().add_class (Gtk.STYLE_CLASS_FLAT);
         sort_button.get_style_context ().add_class ("sort-button");
 
         var header_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 0);
+        header_box.get_style_context ().add_class (Gtk.STYLE_CLASS_BACKGROUND);
         header_box.pack_start (back_button, false, false, 0);
         header_box.set_center_widget (center_label);
         header_box.pack_end (sort_button, false, false, 0);
@@ -112,7 +115,17 @@ public class Views.Playlist : Gtk.EventBox {
         title_label.get_style_context ().add_class ("font-bold");
         title_label.get_style_context ().add_class ("h2");
         title_label.halign = Gtk.Align.START;
-        
+
+        note_label = new Gtk.Label (null);
+        note_label.wrap = true;
+        note_label.margin = 6;
+        note_label.margin_start = 16;
+        note_label.wrap_mode = Pango.WrapMode.CHAR; 
+        note_label.justify = Gtk.Justification.FILL;
+        note_label.get_style_context ().add_class ("dim-label");
+        note_label.halign = Gtk.Align.START;
+        note_label.selectable = true;
+
         time_label = new Gtk.Label (null);
         time_label.get_style_context ().add_class (Gtk.STYLE_CLASS_DIM_LABEL);
         time_label.wrap = true;
@@ -155,8 +168,8 @@ public class Views.Playlist : Gtk.EventBox {
 
         var detail_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 0);
         detail_box.get_style_context ().add_class (Granite.STYLE_CLASS_WELCOME);
-        detail_box.pack_start (title_label, false, false, 3);
-        detail_box.pack_start (time_label, false, false, 0);
+        detail_box.pack_start (title_label, false, false, 0);
+        //detail_box.pack_start (time_label, false, false, 0);
         detail_box.pack_start (update_label, false, false, 0);
         detail_box.pack_start (update_relative_label, false, false, 0);
 
@@ -164,7 +177,7 @@ public class Views.Playlist : Gtk.EventBox {
         album_box.hexpand = true;
         album_box.margin = 12;
         album_box.margin_bottom = 6;
-        album_box.margin_top = 0;
+        album_box.margin_top = 12;
         album_box.pack_start (image_cover, false, false, 0);
         album_box.pack_start (detail_box, false, false, 0);
 
@@ -177,11 +190,17 @@ public class Views.Playlist : Gtk.EventBox {
         separator.margin_start = 14;
         separator.margin_end = 9;
 
+        var separator_2 = new Gtk.Separator (Gtk.Orientation.HORIZONTAL);
+        separator_2.margin_start = 14;
+        separator_2.margin_end = 9;
+
         var scrolled_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 0);
         scrolled_box.expand = true;
         scrolled_box.pack_start (album_box, false, false, 0);
+        //scrolled_box.pack_start (note_label, false, false, 0);
         scrolled_box.pack_start (separator, false, false, 0);
         scrolled_box.pack_start (action_grid, false, false, 0);
+        scrolled_box.pack_start (separator_2, false, false, 0);
         scrolled_box.pack_start (listbox, true, true, 0);
         
         var main_scrolled = new Gtk.ScrolledWindow (null, null);
@@ -193,6 +212,7 @@ public class Views.Playlist : Gtk.EventBox {
         var main_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 0);
         main_box.expand = true;
         main_box.pack_start (header_box, false, false, 0);
+        main_box.pack_start (new Gtk.Separator (Gtk.Orientation.HORIZONTAL), false, false, 0);
         main_box.pack_start (main_scrolled, true, true, 0);
 
         add (main_box);
