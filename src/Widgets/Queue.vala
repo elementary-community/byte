@@ -48,7 +48,44 @@ public class Widgets.Queue : Gtk.Revealer {
         var top_eventbox = new Gtk.EventBox ();
         top_eventbox.add (next_track_grid);
 
-        // Sync
+        /*
+            Notifications
+        */
+
+        var notification_image = new Gtk.Image ();
+        notification_image.gicon = new ThemedIcon ("notification-symbolic");
+        notification_image.pixel_size = 24;
+        notification_image.margin_top = 1;
+        notification_image.valign = Gtk.Align.CENTER;
+        notification_image.halign = Gtk.Align.CENTER;
+        notification_image.get_style_context ().add_class ("label-color-primary");
+
+        var notification_primary_label = new Gtk.Label (null);
+        notification_primary_label.margin_start = 6;
+        notification_primary_label.valign = Gtk.Align.END;
+        notification_primary_label.halign = Gtk.Align.START;
+        notification_primary_label.use_markup = true;
+        notification_primary_label.get_style_context ().add_class ("label-color-primary");
+        notification_primary_label.get_style_context ().add_class ("font-bold");
+
+        var notification_secondary_label = new Gtk.Label (null);
+        notification_secondary_label.margin_start = 6;
+        notification_secondary_label.valign = Gtk.Align.START;
+        notification_secondary_label.halign = Gtk.Align.START;
+        notification_secondary_label.use_markup = true;
+        notification_secondary_label.max_width_chars = 31;
+        notification_secondary_label.ellipsize = Pango.EllipsizeMode.END;
+
+        var notification_grid = new Gtk.Grid ();
+        notification_grid.margin_start = 6;
+        notification_grid.column_spacing = 3;
+        notification_grid.attach (notification_image, 0, 0, 1, 2);
+        notification_grid.attach (notification_primary_label, 1, 0, 1, 1);
+        notification_grid.attach (notification_secondary_label, 1, 1, 1, 1);
+
+        /* 
+            Sync
+        */ 
 
         var sync_image = new Gtk.Image ();
         sync_image.gicon = new ThemedIcon ("emblem-synchronizing-symbolic");
@@ -82,10 +119,11 @@ public class Widgets.Queue : Gtk.Revealer {
 
         var top_stack = new Gtk.Stack ();
         top_stack.expand = true;
-        top_stack.transition_type = Gtk.StackTransitionType.CROSSFADE;
+        top_stack.transition_type = Gtk.StackTransitionType.SLIDE_DOWN;
 
         top_stack.add_named (top_eventbox, "top_eventbox");
         top_stack.add_named (sync_grid, "sync_grid");
+        top_stack.add_named (notification_grid, "notification_grid");
 
         var top_revealer = new Gtk.Revealer ();
         top_revealer.transition_type = Gtk.RevealerTransitionType.SLIDE_DOWN;
@@ -338,23 +376,22 @@ public class Widgets.Queue : Gtk.Revealer {
             });
         });
 
-        /*
         Byte.database.updated_track_favorite.connect ((track, favorite) => {
             if (favorite == 1) {
-                string old_text = next_track_name.label;
+                top_stack.visible_child_name = "notification_grid";
 
-                next_track_label.label = _("Add Favorite");
-                next_track_name.label = track.title;
+                notification_primary_label.label = "<small>Add Favorite</small>";
+                notification_secondary_label.label = track.title;
+                notification_image.get_style_context ().add_class ("active");
 
                 Timeout.add (1000, () => {
-                    next_track_label.label = _("Next track");
-                    next_track_name.label = old_text;
+                    top_stack.visible_child_name = "top_eventbox";
+                    notification_image.get_style_context ().remove_class ("active");
 
                     return false;
                 });
             }
         });
-        */
 
         Byte.scan_service.sync_started.connect (() => {
             top_stack.visible_child_name = "sync_grid";

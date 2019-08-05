@@ -33,10 +33,10 @@
     <screenshot type="default">
       <image>https://raw.githubusercontent.com/alainm23/byte/master/data/screenshot/screenshot-01.png</image>
     </screenshot>
-    <screenshot type="default">
+    <screenshot>
       <image>https://raw.githubusercontent.com/alainm23/byte/master/data/screenshot/screenshot-02.png</image>
     </screenshot>
-    <screenshot type="default">
+    <screenshot>
       <image>https://raw.githubusercontent.com/alainm23/byte/master/data/screenshot/screenshot-03.png</image>
     </screenshot>
   </screenshots>
@@ -75,6 +75,6 @@
   <custom>
     <value key="x-appcenter-color-primary">#333333</value>
     <value key="x-appcenter-color-primary-text">#FE2851</value>
-    <value key="x-appcenter-suggested-price">6</value>
+    <value key="x-appcenter-suggested-price">3</value>
   </custom>
 </component>

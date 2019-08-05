@@ -14,7 +14,7 @@ public class Widgets.RadioRow : Gtk.ListBoxRow {
     }
 
     construct {
-        get_style_context ().add_class ("track-row");
+        get_style_context ().add_class ("album-row");
         tooltip_text = radio.name;
 
         var playing_icon = new Gtk.Image ();

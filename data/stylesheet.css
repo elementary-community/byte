@@ -395,3 +395,21 @@ overshoot.left {
     animation: spin 1000ms linear infinite;
     color: @colorAccent
 }
+
+/*
+    Animations
+*/
+
+@keyframes fancy_turn {
+    0%   { -gtk-icon-transform: rotate(0deg); }
+    20%  { -gtk-icon-transform: rotate(-30deg); }
+    40%  { -gtk-icon-transform: rotate(0deg); }
+    80%  { -gtk-icon-transform: rotate(30deg); }
+    100% { -gtk-icon-transform: rotate(0deg); }
+}
+
+.active {
+  animation-name: fancy_turn;
+  animation-duration: 0.7s;
+  animation-timing-function: ease-in-out;
+}

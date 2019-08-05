@@ -30,7 +30,7 @@ public class Views.Radios : Gtk.EventBox {
 
         var internet_radio_button = new Gtk.Button.from_icon_name ("internet-radio-symbolic", Gtk.IconSize.MENU);
         internet_radio_button.can_focus = false;
-        internet_radio_button.tooltip_text = _("Search radio on internet");
+        internet_radio_button.tooltip_text = _("Search internet radios");
         internet_radio_button.margin = 6;
         internet_radio_button.get_style_context ().add_class (Gtk.STYLE_CLASS_FLAT);
         internet_radio_button.get_style_context ().add_class ("label-color-primary");
