@@ -4,6 +4,8 @@ A music player without the library management. Just toss in your music to the pl
 ![Byte Screenshot](https://github.com/alainm23/byte/raw/master/data/screenshot/screenshot-01.png)
 ![Byte Screenshot](https://github.com/alainm23/byte/raw/master/data/screenshot/screenshot-02.png)
 ![Byte Screenshot](https://github.com/alainm23/byte/raw/master/data/screenshot/screenshot-03.png)
+![Byte Screenshot](https://github.com/alainm23/byte/raw/master/data/screenshot/screenshot-04.png)
+![Byte Screenshot](https://github.com/alainm23/byte/raw/master/data/screenshot/screenshot-05.png)
 
 ## Building and Installation
 

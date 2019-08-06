@@ -99,6 +99,7 @@ public class Widgets.HeaderBar : Gtk.HeaderBar {
         */
 
         var search_menuitem = new Widgets.ModelButton (_("Search"), "edit-find-symbolic", _("Search"));
+        search_menuitem.sensitive = false;
         var import_menuitem = new Widgets.ModelButton (_("Import Music"), "document-import-symbolic", _("Import Music"));
         var resync_menuitem = new Widgets.ModelButton (_("Resync Libray"), "emblem-synchronizing-symbolic", _("Resync Libray"));        
         var preferences_menuitem = new Widgets.ModelButton (_("Preferences"), "preferences-system-symbolic", _("Preferences"));

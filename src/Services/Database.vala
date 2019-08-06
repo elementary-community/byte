@@ -1351,6 +1351,31 @@ public class Services.Database : GLib.Object {
         }
     }
 
+    public bool remove_from_playlist (Objects.Track track) {
+        Sqlite.Statement stmt;
+        string sql;
+        int res;
+
+        sql = """
+            DELETE FROM playlist_tracks where track_id = ? AND playlist_id = ?;
+        """;
+
+        res = db.prepare_v2 (sql, -1, out stmt);
+        assert (res == Sqlite.OK);
+
+        res = stmt.bind_int (1, track.id);
+        assert (res == Sqlite.OK);
+
+        res = stmt.bind_int (2, track.playlist);
+        assert (res == Sqlite.OK);
+
+        if (stmt.step () == Sqlite.DONE) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     public void reset_all_library () {
         File db_path = File.new_for_path (db_path);
         try {

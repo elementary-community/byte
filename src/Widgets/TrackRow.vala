@@ -240,7 +240,7 @@ public class Widgets.TrackRow : Gtk.ListBoxRow {
             //var new_playlist = library_manager.create_new_playlist ();
             //library_manager.add_track_into_playlist (new_playlist, track.ID);
         });
-        playlists.add (item);
+        //playlists.add (item);
 
         foreach (var playlist in all_items) {
             item = new Gtk.MenuItem.with_label (playlist.title);
@@ -319,7 +319,7 @@ public class Widgets.TrackRow : Gtk.ListBoxRow {
         menu.add (play_last_menu);
         menu.add (new Gtk.SeparatorMenuItem ());
         menu.add (add_playlist_menu);
-        menu.add (edit_menu);
+        //menu.add (edit_menu);
         menu.add (favorite_menu);
         menu.add (new Gtk.SeparatorMenuItem ());
         
@@ -372,7 +372,9 @@ public class Widgets.TrackRow : Gtk.ListBoxRow {
         });
 
         remove_playlist_menu.activate.connect (() => {
-            destroy ();
+            if (Byte.database.remove_from_playlist (track)) {
+                destroy ();
+            }
         });
     }
 }

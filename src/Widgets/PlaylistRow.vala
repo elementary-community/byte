@@ -21,11 +21,14 @@ public class Widgets.PlaylistRow : Gtk.ListBoxRow {
         title_label.halign = Gtk.Align.START;
         title_label.valign = Gtk.Align.END;
 
+        /*
         var tracks_label = new Gtk.Label ("Updated %s".printf(
             Granite.DateTime.get_relative_datetime (
                 new GLib.DateTime.from_iso8601 (playlist.date_updated, new GLib.TimeZone.local ())
             ))
         );
+        */
+        var tracks_label = new Gtk.Label (null);
         tracks_label.get_style_context ().add_class ("h3");
         tracks_label.halign = Gtk.Align.START;
         tracks_label.valign = Gtk.Align.START;

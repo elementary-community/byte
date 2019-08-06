@@ -60,8 +60,8 @@ public class Widgets.QuickFind : Gtk.Revealer {
         radios_spinner.start ();
 
         var alert_view = new Widgets.AlertView (
-            _("No Results"),
-            _("lorem"),
+            _("Discovery..."),
+            _("Search your favorite radios"),
             "edit-find-symbolic"
         );
 

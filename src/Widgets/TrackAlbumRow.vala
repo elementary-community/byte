@@ -66,6 +66,7 @@ public class Widgets.TrackAlbumRow : Gtk.ListBoxRow {
 
         var separator = new Gtk.Separator (Gtk.Orientation.HORIZONTAL);
         separator.margin_start = 6;
+        separator.margin_end = 6;
 
         var grid = new Gtk.Grid ();
         grid.hexpand = true;
@@ -157,7 +158,7 @@ public class Widgets.TrackAlbumRow : Gtk.ListBoxRow {
             //var new_playlist = library_manager.create_new_playlist ();
             //library_manager.add_track_into_playlist (new_playlist, track.ID);
         });
-        playlists.add (item);
+        //playlists.add (item);
 
         foreach (var playlist in all_items) {
             item = new Gtk.MenuItem.with_label (playlist.title);
@@ -236,7 +237,7 @@ public class Widgets.TrackAlbumRow : Gtk.ListBoxRow {
         menu.add (play_last_menu);
         menu.add (new Gtk.SeparatorMenuItem ());
         menu.add (add_playlist_menu);
-        menu.add (edit_menu);
+        //menu.add (edit_menu);
         menu.add (favorite_menu);
         menu.add (new Gtk.SeparatorMenuItem ());
         

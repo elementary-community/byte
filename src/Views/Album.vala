@@ -137,8 +137,6 @@ public class Views.Album : Gtk.EventBox {
 
         var action_grid = new Gtk.Grid ();
         action_grid.margin = 6;
-        action_grid.margin_start = 12;
-        action_grid.margin_end = 12;
         action_grid.column_spacing = 12;
         action_grid.add (play_button);
         action_grid.add (shuffle_button);
@@ -153,20 +151,16 @@ public class Views.Album : Gtk.EventBox {
 
         var album_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 6);
         album_box.hexpand = true;
-        album_box.margin = 12;
-        album_box.margin_bottom = 6;
-        album_box.margin_top = 12;
+        album_box.margin = 6;
         album_box.pack_start (image_cover, false, false, 0);
         album_box.pack_start (detail_box, false, false, 0);
 
         listbox = new Gtk.ListBox (); 
         listbox.expand = true; 
-        listbox.margin_start = 9;
-        listbox.margin_end = 9;
 
         var separator = new Gtk.Separator (Gtk.Orientation.HORIZONTAL);
-        separator.margin_start = 14;
-        separator.margin_end = 9;
+        separator.margin_start = 6;
+        separator.margin_end = 6;
 
         var scrolled_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 0);
         scrolled_box.expand = true;

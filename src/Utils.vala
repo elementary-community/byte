@@ -14,31 +14,25 @@ public class Utils : GLib.Object {
         COVER_FOLDER = GLib.Path.build_filename (MAIN_FOLDER, "covers");
     }
 
-    public void set_items (Gee.ArrayList<Objects.Track?> all_items, bool shuffle_mode, Objects.Track? track) {        
-        /*
-        print ("-------------------\n");
-        foreach (var item in queue_playlist) {
-            print ("Track: %s\n".printf (item.title));
-        }
-        print ("--------------------\n");
-        */
-
-        if (shuffle_mode) {
-            queue_playlist = generate_shuffle (all_items);
-            
-            if (track != null) {
-                int index = get_track_index_by_id (track.id, queue_playlist);
-                queue_playlist.remove_at (index);
-                queue_playlist.insert (0, track);
+    public void set_items (Gee.ArrayList<Objects.Track?> all_items, bool shuffle_mode, Objects.Track? track) {
+        if (all_items.size > 0) {
+            if (shuffle_mode) {
+                queue_playlist = generate_shuffle (all_items);
+                
+                if (track != null) {
+                    int index = get_track_index_by_id (track.id, queue_playlist);
+                    queue_playlist.remove_at (index);
+                    queue_playlist.insert (0, track);
+                }
+        
+                Byte.settings.set_boolean ("shuffle-mode", true);
+            } else {
+                queue_playlist = playlist_order (all_items);
+                Byte.settings.set_boolean ("shuffle-mode", false);
             }
     
-            Byte.settings.set_boolean ("shuffle-mode", true);
-        } else {
-            queue_playlist = playlist_order (all_items);
-            Byte.settings.set_boolean ("shuffle-mode", false);
-        }
-
-        play_items (queue_playlist, track);
+            play_items (queue_playlist, track);
+        }     
     }
 
     public void shuffle_changed (bool shuffle_mode) {

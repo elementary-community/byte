@@ -53,8 +53,8 @@ public class Widgets.Queue : Gtk.Revealer {
         */
 
         var notification_image = new Gtk.Image ();
-        notification_image.gicon = new ThemedIcon ("notification-symbolic");
-        notification_image.pixel_size = 24;
+        notification_image.gicon = new ThemedIcon ("byte-favorite-symbolic"); 
+        notification_image.pixel_size = 16;
         notification_image.margin_top = 1;
         notification_image.valign = Gtk.Align.CENTER;
         notification_image.halign = Gtk.Align.CENTER;
@@ -145,7 +145,7 @@ public class Widgets.Queue : Gtk.Revealer {
         mode_button.margin = 3;
         mode_button.append_text (_("Up Next"));
         //mode_button.append_text (_("History"));
-        mode_button.append_text (_("Lyrics"));
+        //mode_button.append_text (_("Lyrics"));
         mode_button.selected = 0;
  
         var title_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 0);
