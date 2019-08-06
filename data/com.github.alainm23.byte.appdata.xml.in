@@ -23,7 +23,7 @@
     <binary>com.github.alainm23.byte</binary>
   </provides>
   ​<releases>
-    <release version="0.1" date="2019-08-05">
+    <release version="0.1.1" date="2019-08-06">
       <description>
         <p>Initial release</p>
       </description>
