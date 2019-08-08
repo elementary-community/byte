@@ -13,7 +13,7 @@ public class Widgets.RadioRow : Gtk.ListBoxRow {
         );
     }
 
-    construct {
+    construct {  
         get_style_context ().add_class ("album-row");
         tooltip_text = radio.name;
 

@@ -53,7 +53,7 @@ public class Widgets.AlbumRow : Gtk.ListBoxRow {
         if (_value == 0) {
             secondary_label.label = "%s".printf (_artist_name);
         } else if (_value == 1) {
-            secondary_label.label = "%s - %s".printf (_artist_name, _title);
+            secondary_label.label = "%s".printf (_artist_name);
         } else if (_value == 2) {
             secondary_label.label = "%s - %s".printf (_artist_name, _year);
         } else if (_value == 3) {

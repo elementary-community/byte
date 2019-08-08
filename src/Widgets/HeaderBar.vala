@@ -138,24 +138,6 @@ public class Widgets.HeaderBar : Gtk.HeaderBar {
         main_box.pack_start (next_button, false, false, 0);
         main_box.pack_start (shuffle_button, false, false, 24);
         
-        /*
-        // ProgressBar
-        var loading_progressbar = new Gtk.ProgressBar ();
-        loading_progressbar.margin_start = 6;
-        loading_progressbar.margin_end = 6;
-        loading_progressbar.show_text = true;
-        loading_progressbar.text = _("Sync Library…");
-        loading_progressbar.get_style_context ().add_class ("label-white");
-            
-        /*
-        stack = new Gtk.Stack ();
-        stack.expand = true;
-        stack.transition_type = Gtk.StackTransitionType.CROSSFADE;
-
-        stack.add_named (main_box, "main_box");
-        stack.add_named (loading_progressbar, "loading_progressbar");
-        */
-
         custom_title = main_box;
         pack_end (app_menu);
 
@@ -224,11 +206,15 @@ public class Widgets.HeaderBar : Gtk.HeaderBar {
         });
 
         preferences_menuitem.clicked.connect (() => {
+            menu_popover.popdown ();
+
             var editor_dialog = new Dialogs.Settings ();
             editor_dialog.show_all ();
         });
 
         import_menuitem.clicked.connect (() => {
+            menu_popover.popdown ();
+            
             string folder = Byte.scan_service.choose_folder (Byte.instance.main_window);
 
             if (folder != null) {                
@@ -237,6 +223,8 @@ public class Widgets.HeaderBar : Gtk.HeaderBar {
         });
 
         resync_menuitem.clicked.connect (() => {
+            menu_popover.popdown ();
+            
             Byte.scan_service.scan_local_files (Byte.settings.get_string ("library-location"));
         });
     }

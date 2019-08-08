@@ -1,6 +1,8 @@
 # Byte
 A music player without the library management. Just toss in your music to the playlist from your meticulously managed music folder.
 
+<a href="https://appcenter.elementary.io/com.github.alainm23.byte"><img src="https://appcenter.elementary.io/badge.svg?new" alt="Get it on AppCenter" /></a>
+
 ![Byte Screenshot](https://github.com/alainm23/byte/raw/master/data/screenshot/screenshot-01.png)
 ![Byte Screenshot](https://github.com/alainm23/byte/raw/master/data/screenshot/screenshot-02.png)
 ![Byte Screenshot](https://github.com/alainm23/byte/raw/master/data/screenshot/screenshot-03.png)

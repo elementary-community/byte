@@ -128,8 +128,6 @@ public class MainWindow : Gtk.Window {
         });
 
         albums_view.go_album.connect ((album) => {
-            print ("Album: %s\n".printf (album.title));
-
             library_stack.visible_child_name = "album_view";
             album_view.album = album;
         });
@@ -148,6 +146,7 @@ public class MainWindow : Gtk.Window {
 
         radios_view.go_back.connect (() => {
             library_stack.visible_child_name = "home_view";
+            quick_find.reveal = false;
         });
 
         playlists_view.go_back.connect (() => {
@@ -155,8 +154,6 @@ public class MainWindow : Gtk.Window {
         });
 
         playlists_view.go_playlist.connect ((playlist) => {
-            print ("playlist: %s\n".printf (playlist.title));
-
             library_stack.visible_child_name = "playlist_view";
             playlist_view.playlist = playlist;
         });
@@ -171,12 +168,10 @@ public class MainWindow : Gtk.Window {
 
         home_view.go_albums_view.connect (() => {
             library_stack.visible_child_name = "albums_view";
-            //albums_view.get_all_albums ();
         });
 
         home_view.go_tracks_view.connect (() => {
             library_stack.visible_child_name = "tracks_view";
-            //tracks_view.add_all_tracks ();
         });
 
         home_view.go_artists_view.connect (() => {
@@ -200,6 +195,13 @@ public class MainWindow : Gtk.Window {
             quick_find.reveal = !quick_find.reveal_child;
         });
 
+
+
+        Byte.database.reset_library.connect (() => {
+            main_stack.visible_child_name = "welcome_view";
+            headerbar.visible_ui = false;
+        });
+
         delete_event.connect (() => {
             if (Byte.settings.get_boolean ("play-in-background")) {
                 if (Byte.player.player_state == Gst.State.PLAYING) {
@@ -210,11 +212,6 @@ public class MainWindow : Gtk.Window {
             } else {
                 return false;
             }
-        });
-
-        Byte.database.reset_library.connect (() => {
-            main_stack.visible_child_name = "welcome_view";
-            headerbar.visible_ui = false;
         });
     }
     

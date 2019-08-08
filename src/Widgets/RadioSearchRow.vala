@@ -14,7 +14,7 @@ public class Widgets.RadioSearchRow : Gtk.ListBoxRow {
     }
 
     construct {
-        get_style_context ().add_class ("radio-search-row");
+        get_style_context ().add_class ("album-row");
         tooltip_text = radio.name;
 
         name_label = new Gtk.Label (radio.name);
