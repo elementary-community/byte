@@ -364,7 +364,24 @@ public class Widgets.TrackRow : Gtk.ListBoxRow {
         });
 
         remove_db_menu.activate.connect (() => {
-            Byte.database.remove_from_library (track);
+            var message_dialog = new Granite.MessageDialog.with_image_from_icon_name (
+                "Delete from library?",
+                "Are you sure you want to delete <b>%s</b> from your library?".printf (track.title),
+                "dialog-warning",
+                Gtk.ButtonsType.CANCEL
+            );
+
+            var set_button = new Gtk.Button.with_label (_("Delete"));
+            set_button.get_style_context ().add_class (Gtk.STYLE_CLASS_DESTRUCTIVE_ACTION);
+            message_dialog.add_action_widget (set_button, Gtk.ResponseType.ACCEPT);
+            
+            message_dialog.show_all ();
+
+            if (message_dialog.run () == Gtk.ResponseType.ACCEPT) {
+                Byte.database.remove_from_library (track);
+            }
+
+            message_dialog.destroy ();
         });
 
         remove_file_menu.activate.connect (() => {

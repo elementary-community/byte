@@ -21,6 +21,20 @@
     background-color: @colorAccent;
 }
 
+.album-row button {
+    color: @colorAccent;
+    background-color: transparent;
+}
+
+.album-row button image {
+    color: @colorAccent;
+}
+
+.album-row {
+    color: @text_color;
+    background-color: transparent;
+}
+
 .track-row {
     background-color: transparent;
 }
@@ -110,15 +124,6 @@
         inset 0 -1px 0 0 alpha (#fff, 0.15),
         0 1px 3px alpha (#fff, 0.12),
         0 1px 2px alpha (#000, 0.24);
-}
-
-.album-row {
-    background-color: transparent;
-}
-
-.album-row:focus {
-    background-color: transparent;
-    color: @text_color;
 }
 
 .radio-search-row:selected {

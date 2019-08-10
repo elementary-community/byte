@@ -119,7 +119,6 @@ public class Widgets.HeaderBar : Gtk.HeaderBar {
         menu_popover.add (menu_grid);
 
         app_menu = new Gtk.MenuButton ();
-        //app_menu.border_width = 6;
         app_menu.valign = Gtk.Align.CENTER;
         app_menu.tooltip_text = _("Menu");
         app_menu.popover = menu_popover;

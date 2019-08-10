@@ -1351,6 +1351,28 @@ public class Services.Database : GLib.Object {
         }
     }
 
+    public bool remove_radio_from_library (Objects.Radio radio) {
+        Sqlite.Statement stmt;
+        string sql;
+        int res;
+
+        sql = """
+            DELETE FROM radios where id = ?;
+        """;
+
+        res = db.prepare_v2 (sql, -1, out stmt);
+        assert (res == Sqlite.OK);
+
+        res = stmt.bind_int (1, radio.id);
+        assert (res == Sqlite.OK);
+
+        if (stmt.step () == Sqlite.DONE) {
+            return true;
+        }
+
+        return false;
+    }
+
     public bool remove_from_playlist (Objects.Track track) {
         Sqlite.Statement stmt;
         string sql;
