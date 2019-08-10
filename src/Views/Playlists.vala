@@ -116,6 +116,14 @@ public class Views.Playlists : Gtk.EventBox {
                 widget.destroy (); 
             });
         });
+
+        Byte.scan_service.sync_started.connect (() => {
+            add_button.sensitive = false;
+        });
+
+        Byte.scan_service.sync_finished.connect (() => {
+            add_button.sensitive = true;
+        });
     }
 
     private void add_item (Objects.Playlist playlist) {

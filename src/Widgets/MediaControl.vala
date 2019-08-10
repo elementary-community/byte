@@ -179,16 +179,20 @@ public class Widgets.MediaControl : Gtk.Revealer {
         }); 
 
         Byte.database.updated_track_cover.connect ((track_id) => {
-            if (Byte.player.current_track != null && track_id == Byte.player.current_track.id) {
-                try {
-                    image_cover.pixbuf = new Gdk.Pixbuf.from_file_at_size (
-                        GLib.Path.build_filename (Byte.utils.COVER_FOLDER, ("track-%i.jpg").printf (track_id)), 
-                        32, 
-                        32);
-                } catch (Error e) {
-                    stderr.printf ("Error setting default avatar icon: %s ", e.message);
+            Idle.add (() => {
+                if (Byte.player.current_track != null && track_id == Byte.player.current_track.id) {
+                    try {
+                        image_cover.pixbuf = new Gdk.Pixbuf.from_file_at_size (
+                            GLib.Path.build_filename (Byte.utils.COVER_FOLDER, ("track-%i.jpg").printf (track_id)), 
+                            32, 
+                            32);
+                    } catch (Error e) {
+                        stderr.printf ("Error setting default avatar icon: %s ", e.message);
+                    }
                 }
-            }
+                
+                return false;
+            });
         });
         
         timeline.scale.change_value.connect ((scroll, new_value) => {

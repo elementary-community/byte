@@ -23,6 +23,11 @@
     <binary>com.github.alainm23.byte</binary>
   </provides>
   ​<releases>
+    <release version="0.1.2" date="2019-08-10">
+      <description>
+        <p>Fix some error and performance improvement</p>
+      </description>
+    </release>
     <release version="0.1.1" date="2019-08-06">
       <description>
         <p>Initial release</p>
@@ -78,6 +83,8 @@
   <developer_name>Alain M.</developer_name>
   <url type="homepage">https://github.com/alainm23/byte</url>
   <url type="bugtracker">https://github.com/alainm23/byte/issues</url>
+  <url type="donation">https://www.patreon.com/alainm23</url>
+  <url type="help">https://www.patreon.com/alainm23</url>
   <custom>
     <value key="x-appcenter-color-primary">#333333</value>
     <value key="x-appcenter-color-primary-text">#FE2851</value>

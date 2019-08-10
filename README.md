@@ -1,5 +1,16 @@
 # Byte
-A music player without the library management. Just toss in your music to the playlist from your meticulously managed music folder.
+Rediscover your music
+
+Interact with your music and fall in love with your library all over again.
+Byte offers a beautiful presentation of your Music Library with loads of powerful features in a minimalistic yet highly customizable UI.
+
+## Handy features:
+* Light and Dark themes.</li>
+* Add up to 100 items under "Recently Added" for songs.
+* Sort individual playlists by album, title, play count or recently added.
+* Advanced Media Details and Artist Info.
+* Group Playlists, Albums, Artists, Songs, etc.
+* Search, add and play your favorite online radio stations.
 
 <a href="https://appcenter.elementary.io/com.github.alainm23.byte"><img src="https://appcenter.elementary.io/badge.svg?new" alt="Get it on AppCenter" /></a>
 
@@ -31,6 +42,6 @@ com.github.alainm23.byte
 ```
 
 ## Donations
-Stripe is not yet available in my country, If you like Planner and you want to support its development, consider donating via [PayPal](https://www.paypal.me/alainm23)
+Stripe is not yet available in my country, If you like Planner and you want to support its development, consider donating via [Patreon](https://www.patreon.com/alainm23)
 
 Made with 💗 in Perú

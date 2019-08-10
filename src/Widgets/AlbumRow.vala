@@ -76,16 +76,20 @@ public class Widgets.AlbumRow : Gtk.ListBoxRow {
         add (main_grid);
 
         Byte.database.updated_album_cover.connect ((album_id) => {
-            if (album_id == album.id) {
-                try {
-                    image_cover.pixbuf = new Gdk.Pixbuf.from_file_at_size (
-                        GLib.Path.build_filename (Byte.utils.COVER_FOLDER, ("album-%i.jpg").printf (album_id)), 
-                        64, 
-                        64);
-                } catch (Error e) {
-                    stderr.printf ("Error setting default avatar icon: %s ", e.message);
+            Idle.add (() => {
+                if (album_id == album.id) {
+                    try {
+                        image_cover.pixbuf = new Gdk.Pixbuf.from_file_at_size (
+                            GLib.Path.build_filename (Byte.utils.COVER_FOLDER, ("album-%i.jpg").printf (album_id)), 
+                            64, 
+                            64);
+                    } catch (Error e) {
+                        stderr.printf ("Error setting default avatar icon: %s ", e.message);
+                    }
                 }
-            }
+                
+                return false;
+            });
         });
     }
 }

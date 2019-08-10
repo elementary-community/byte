@@ -1,5 +1,5 @@
 public class Services.Database : GLib.Object {
-    private Sqlite.Database db;
+    private Sqlite.Database db; 
     private string db_path;
 
     public signal void adden_new_track (Objects.Track track);

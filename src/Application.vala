@@ -31,6 +31,7 @@ public class Byte : Gtk.Application {
             application_id: "com.github.alainm23.byte",
             flags: ApplicationFlags.HANDLES_OPEN
         );
+        
         // Dir to Database
         utils = new Utils ();
         utils.create_dir_with_parents ("/.local/share/com.github.alainm23.byte");

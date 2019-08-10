@@ -163,16 +163,20 @@ public class Widgets.TrackRow : Gtk.ListBoxRow {
         });
 
         Byte.database.updated_track_cover.connect ((track_id) => {
-            if (track_id == track.id) {
-                try {
-                    image_cover.pixbuf = new Gdk.Pixbuf.from_file_at_size (
-                        GLib.Path.build_filename (Byte.utils.COVER_FOLDER, ("track-%i.jpg").printf (track_id)), 
-                        32, 
-                        32);
-                } catch (Error e) {
-                    stderr.printf ("Error setting default avatar icon: %s ", e.message);
+            Idle.add (() => {
+                if (track_id == track.id) {
+                    try {
+                        image_cover.pixbuf = new Gdk.Pixbuf.from_file_at_size (
+                            GLib.Path.build_filename (Byte.utils.COVER_FOLDER, ("track-%i.jpg").printf (track_id)), 
+                            32, 
+                            32);
+                    } catch (Error e) {
+                        stderr.printf ("Error setting default avatar icon: %s ", e.message);
+                    }
                 }
-            }
+                
+                return false;
+            });
         });
 
         Byte.database.updated_track_favorite.connect ((_track, favorite) => {
@@ -231,27 +235,29 @@ public class Widgets.TrackRow : Gtk.ListBoxRow {
             child.destroy ();
         }
 
-        var all_items = Byte.database.get_all_playlists ();
+        if (Byte.scan_service.is_sync == false) {
+            var all_items = Byte.database.get_all_playlists ();
 
-        var item = new Gtk.MenuItem.with_label (_ ("Create New Playlist"));
-        item.get_style_context ().add_class ("track-options");
-        item.get_style_context ().add_class ("css-item");
-        item.activate.connect (() => {
-            //var new_playlist = library_manager.create_new_playlist ();
-            //library_manager.add_track_into_playlist (new_playlist, track.ID);
-        });
-        //playlists.add (item);
-
-        foreach (var playlist in all_items) {
-            item = new Gtk.MenuItem.with_label (playlist.title);
+            var item = new Gtk.MenuItem.with_label (_ ("Create New Playlist"));
             item.get_style_context ().add_class ("track-options");
             item.get_style_context ().add_class ("css-item");
             item.activate.connect (() => {
-                Byte.database.insert_track_into_playlist (playlist, track.id);
+                //var new_playlist = library_manager.create_new_playlist ();
+                //library_manager.add_track_into_playlist (new_playlist, track.ID);
             });
-            playlists.add (item);
+            //playlists.add (item);
+
+            foreach (var playlist in all_items) {
+                item = new Gtk.MenuItem.with_label (playlist.title);
+                item.get_style_context ().add_class ("track-options");
+                item.get_style_context ().add_class ("css-item");
+                item.activate.connect (() => {
+                    Byte.database.insert_track_into_playlist (playlist, track.id);
+                });
+                playlists.add (item);
+            }
+            playlists.show_all ();
         }
-        playlists.show_all ();
 
         menu.popup_at_pointer (null);
     }

@@ -214,24 +214,32 @@ public class Views.Album : Gtk.EventBox {
         });
 
         Byte.database.adden_new_track.connect ((track) => {
-            if (_album != null && track.album_id == _album.id) {
-                var row = new Widgets.TrackAlbumRow (track);
-                listbox.add (row);
-                listbox.show_all ();
-            }
+            Idle.add (() => {
+                if (_album != null && track.album_id == _album.id) {
+                    var row = new Widgets.TrackAlbumRow (track);
+                    listbox.add (row);
+                    listbox.show_all ();
+                }
+
+                return false;
+            });
         });
 
         Byte.database.updated_album_cover.connect ((album_id) => {
-            if (_album != null && album_id == _album.id) {
-                try {
-                    image_cover.pixbuf = new Gdk.Pixbuf.from_file_at_size (
-                        GLib.Path.build_filename (Byte.utils.COVER_FOLDER, ("album-%i.jpg").printf (album_id)), 
-                        128, 
-                        128);
-                } catch (Error e) {
-                    stderr.printf ("Error setting default avatar icon: %s ", e.message);
+            Idle.add (() => {
+                if (_album != null && album_id == _album.id) {
+                    try {
+                        image_cover.pixbuf = new Gdk.Pixbuf.from_file_at_size (
+                            GLib.Path.build_filename (Byte.utils.COVER_FOLDER, ("album-%i.jpg").printf (album_id)), 
+                            128, 
+                            128);
+                    } catch (Error e) {
+                        stderr.printf ("Error setting default avatar icon: %s ", e.message);
+                    }
                 }
-            }
+                
+                return false;
+            });
         });
 
         Byte.database.reset_library.connect (() => {

@@ -10,35 +10,42 @@ public class Services.Scan : GLib.Object {
         Byte.tg_manager.discovered_new_item.connect (discovered_new_local_item);
         
         Byte.database.adden_new_track.connect ((track) => {
-            counter--;
-            sync_progress (((double) counter_max - (double) counter) / (double) counter_max);
-            if (counter == 0) {
-                sync_finished ();
-                is_sync = false;
+            Idle.add (() => {
+                counter--;
+                sync_progress (((double) counter_max - (double) counter) / (double) counter_max);
+                if (counter == 0) {
+                    sync_finished ();
+                    is_sync = false;
+                    counter_max = 0;
 
-                Timeout.add (1 * 1000, () => {
-                    Byte.notification.send_notification (
-                        _("Import Complete"),
-                        _("Your Library Has Been Imported.")
-                    );
-                    
-                    if (counter_max > 1500) {
-                        var message_dialog = new Granite.MessageDialog.with_image_from_icon_name (
-                            _("Wow! your library is very big"),
-                            _("All your library was imported correctly, but for a better experience we recommend you re-open the application."),
-                            "process-completed",
-                            Gtk.ButtonsType.CLOSE
-                        );
-                        
-                        message_dialog.run ();
-                        message_dialog.destroy ();
-
+                    /*
+                    Timeout.add (1 * 1000, () => {
                         counter_max = 0;
-                    }
-                    
-                    return false;
-                });
-            }
+                        
+                        Byte.notification.send_notification (
+                            _("Import Complete"),
+                            _("Your Library Has Been Imported.")
+                        );
+                        /* 
+                        if (counter_max > 1500) {
+                            var message_dialog = new Granite.MessageDialog.with_image_from_icon_name (
+                                _("Wow! your library is very big"),
+                                _("All your library was imported correctly, but for a better experience we recommend you re-open the application."),
+                                "process-completed",
+                                Gtk.ButtonsType.CLOSE
+                            );
+                            
+                            message_dialog.run ();
+                            message_dialog.destroy ();
+                        }
+                        
+                        return false;
+                    });
+                    */
+                }
+                
+                return false;
+            });
         });
     }
 
