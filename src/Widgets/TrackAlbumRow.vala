@@ -224,7 +224,7 @@ public class Widgets.TrackAlbumRow : Gtk.ListBoxRow {
         playlists.get_style_context ().add_class ("view");
         add_playlist_menu.set_submenu (playlists);
 
-        var edit_menu = new Widgets.MenuItem (_("Edit Song Info..."), "edit-symbolic", _("Edit Song Info..."));
+        var edit_menu = new Widgets.MenuItem (_("Edit Song Info…"), "edit-symbolic", _("Edit Song Info…"));
         var favorite_menu = new Widgets.MenuItem (_("Favorite"), "byte-favorite-symbolic", _("Favorite"));
         var remove_db_menu = new Widgets.MenuItem (_("Delete from library"), "user-trash-symbolic", _("Delete from library"));
         var remove_file_menu = new Widgets.MenuItem (_("Delete from file"), "user-trash-symbolic", _("Delete from file"));

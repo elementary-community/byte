@@ -1,0 +1,433 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the com.github.alainm23.byte package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: com.github.alainm23.byte\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2019-08-10 19:40+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: src/Dialogs/Settings.vala:16
+msgid "General"
+msgstr ""
+
+#: src/Dialogs/Settings.vala:33
+msgid "Dark mode"
+msgstr ""
+
+#: src/Dialogs/Settings.vala:61
+msgid "Notifications"
+msgstr ""
+
+#: src/Dialogs/Settings.vala:85
+msgid "Play in background if closed"
+msgstr ""
+
+#: src/Dialogs/Settings.vala:111 src/Views/Home.vala:20
+#: src/Widgets/QuickFind.vala:46
+msgid "Library"
+msgstr ""
+
+#: src/Dialogs/Settings.vala:127
+msgid "Music folder location"
+msgstr ""
+
+#: src/Dialogs/Settings.vala:129
+msgid "Select Music Folder…"
+msgstr ""
+
+#: src/Dialogs/Settings.vala:151
+msgid "Sync library on start up"
+msgstr ""
+
+#: src/Dialogs/Settings.vala:175
+msgid "Automatically download covers"
+msgstr ""
+
+#: src/Dialogs/Settings.vala:199
+msgid "Save changes into ID3-Tag"
+msgstr ""
+
+#: src/Dialogs/Settings.vala:237
+msgid "Reset all library"
+msgstr ""
+
+#: src/Dialogs/Settings.vala:239
+msgid "Reset"
+msgstr ""
+
+#: src/Dialogs/Settings.vala:269 src/Dialogs/TrackEditor.vala:134
+msgid "Close"
+msgstr ""
+
+#: src/Dialogs/Settings.vala:325
+msgid "Set Music Folder?"
+msgstr ""
+
+#: src/Dialogs/Settings.vala:326
+#, c-format
+msgid "Are you sure you want to set the music folder to <b>%s</b>?"
+msgstr ""
+
+#: src/Dialogs/Settings.vala:331
+msgid "Set Music Folder"
+msgstr ""
+
+#: src/Dialogs/TrackEditor.vala:82
+msgid "Title"
+msgstr ""
+
+#: src/Dialogs/TrackEditor.vala:84 src/Views/Albums.vala:80
+#: src/Views/Playlist.vala:101 src/Views/Tracks.vala:93
+msgid "Artist"
+msgstr ""
+
+#: src/Dialogs/TrackEditor.vala:86 src/Views/Album.vala:73
+#: src/Views/Playlist.vala:102 src/Views/Tracks.vala:94
+msgid "Album"
+msgstr ""
+
+#: src/Dialogs/TrackEditor.vala:88 src/Views/Albums.vala:82
+msgid "Genre"
+msgstr ""
+
+#: src/Dialogs/TrackEditor.vala:90 src/Views/Albums.vala:81
+msgid "Year"
+msgstr ""
+
+#: src/Dialogs/TrackEditor.vala:92
+msgid "Track"
+msgstr ""
+
+#. mode_button.append_text (_("History"));
+#: src/Dialogs/TrackEditor.vala:94 src/Widgets/Queue.vala:148
+msgid "Lyrics"
+msgstr ""
+
+#: src/Dialogs/TrackEditor.vala:136
+msgid "Save"
+msgstr ""
+
+#: src/Views/Album.vala:126 src/Views/Favorites.vala:66
+#: src/Views/Playlist.vala:149 src/Views/Tracks.vala:103
+#: src/Widgets/HeaderBar.vala:77 src/Widgets/TrackAlbumRow.vala:218
+#: src/Widgets/TrackRow.vala:300
+msgid "Play"
+msgstr ""
+
+#: src/Views/Album.vala:133 src/Views/Favorites.vala:75
+#: src/Views/Playlist.vala:156 src/Views/Tracks.vala:112
+msgid "Shuffle"
+msgstr ""
+
+#: src/Views/Albums.vala:32 src/Views/Home.vala:37
+msgid "Albums"
+msgstr ""
+
+#: src/Views/Albums.vala:41 src/Views/Albums.vala:49 src/Views/Albums.vala:50
+msgid "Search by title, artist, genre and year"
+msgstr ""
+
+#: src/Views/Albums.vala:48 src/Views/Artists.vala:31
+msgid "Your library"
+msgstr ""
+
+#: src/Views/Albums.vala:66 src/Views/Playlist.vala:87 src/Views/Tracks.vala:79
+msgid "Sort"
+msgstr ""
+
+#: src/Views/Albums.vala:79 src/Views/Playlist.vala:100
+#: src/Views/Tracks.vala:92
+msgid "Name"
+msgstr ""
+
+#: src/Views/Artists.vala:21 src/Views/Home.vala:40
+msgid "Artists"
+msgstr ""
+
+#: src/Views/Favorites.vala:27 src/Views/Home.vala:44
+msgid "Favorites"
+msgstr ""
+
+#: src/Views/Favorites.vala:36 src/Views/Favorites.vala:43
+#: src/Views/Favorites.vala:44 src/Views/Tracks.vala:55
+#: src/Views/Tracks.vala:62 src/Views/Tracks.vala:63
+msgid "Search by title, artist and album"
+msgstr ""
+
+#: src/Views/Home.vala:29
+msgid "Recently added"
+msgstr ""
+
+#: src/Views/Home.vala:29
+msgid "(last 100)"
+msgstr ""
+
+#: src/Views/Home.vala:36 src/Views/Playlists.vala:29
+msgid "Playlists"
+msgstr ""
+
+#: src/Views/Home.vala:38 src/Views/Tracks.vala:46
+msgid "Songs"
+msgstr ""
+
+#: src/Views/Home.vala:43 src/Views/Radios.vala:26
+#: src/Widgets/QuickFind.vala:47
+msgid "Radios"
+msgstr ""
+
+#: src/Views/Playlist.vala:77
+msgid "Playlist"
+msgstr ""
+
+#: src/Views/Playlist.vala:103 src/Views/Tracks.vala:95
+msgid "Date Added"
+msgstr ""
+
+#: src/Views/Playlist.vala:104 src/Views/Tracks.vala:96
+msgid "Play Count"
+msgstr ""
+
+#: src/Views/Playlist.vala:136
+msgid "Updated"
+msgstr ""
+
+#: src/Views/Playlists.vala:42
+msgid "Add New Playlist"
+msgstr ""
+
+#: src/Views/Radios.vala:33
+msgid "Search internet radios"
+msgstr ""
+
+#: src/Views/Tracks.vala:34
+msgid "No Results"
+msgstr ""
+
+#: src/Views/Tracks.vala:35
+msgid "asssssssssssssss"
+msgstr ""
+
+#: src/Views/Tracks.vala:313
+#, c-format
+msgid "No results for '%s' in Tracks. Try again."
+msgstr ""
+
+#: src/Views/Tracks.vala:344
+msgid "No Songs"
+msgstr ""
+
+#: src/Views/Tracks.vala:345
+msgid "Add some tracks to your selected music folder."
+msgstr ""
+
+#. Add
+#: src/Widgets/Popovers/NewPlaylist.vala:19 src/Widgets/NewPlaylist.vala:10
+msgid "New Playlist"
+msgstr ""
+
+#: src/Widgets/Popovers/NewPlaylist.vala:31
+msgid "Add Description"
+msgstr ""
+
+#: src/Widgets/Popovers/NewPlaylist.vala:56
+msgid "Add"
+msgstr ""
+
+#: src/Widgets/Popovers/Sort.vala:130
+msgid "Sort by"
+msgstr ""
+
+#: src/Widgets/Popovers/Sort.vala:164
+msgid "Reversed order"
+msgstr ""
+
+#: src/Widgets/HeaderBar.vala:70
+msgid "Previous"
+msgstr ""
+
+#: src/Widgets/HeaderBar.vala:84
+msgid "Next"
+msgstr ""
+
+#.
+#. Menu
+#.
+#: src/Widgets/HeaderBar.vala:101
+msgid "Search"
+msgstr ""
+
+#: src/Widgets/HeaderBar.vala:103
+msgid "Import Music"
+msgstr ""
+
+#: src/Widgets/HeaderBar.vala:104
+msgid "Resync Libray"
+msgstr ""
+
+#: src/Widgets/HeaderBar.vala:105
+msgid "Preferences"
+msgstr ""
+
+#: src/Widgets/HeaderBar.vala:123
+msgid "Menu"
+msgstr ""
+
+#: src/Widgets/HeaderBar.vala:244
+msgid "Shuffle On"
+msgstr ""
+
+#: src/Widgets/HeaderBar.vala:247
+msgid "Shuffle Off"
+msgstr ""
+
+#: src/Widgets/HeaderBar.vala:256
+msgid "Repeat Off"
+msgstr ""
+
+#: src/Widgets/HeaderBar.vala:259
+msgid "Repeat All"
+msgstr ""
+
+#: src/Widgets/HeaderBar.vala:262
+msgid "Repeat One"
+msgstr ""
+
+#: src/Widgets/NewPlaylist.vala:32
+msgid "Project name"
+msgstr ""
+
+#: src/Widgets/Queue.vala:19
+msgid "Next track"
+msgstr ""
+
+#: src/Widgets/Queue.vala:33
+msgid "View all"
+msgstr ""
+
+#: src/Widgets/Queue.vala:98
+msgid "Syncing Library…"
+msgstr ""
+
+#: src/Widgets/Queue.vala:137
+msgid "Hide"
+msgstr ""
+
+#: src/Widgets/Queue.vala:146
+msgid "Up Next"
+msgstr ""
+
+#: src/Widgets/Queue.vala:243 src/Widgets/Queue.vala:260
+#, c-format
+msgid "%s - %s"
+msgstr ""
+
+#: src/Widgets/Queue.vala:383
+msgid "Add Favorite"
+msgstr ""
+
+#: src/Widgets/QuickFind.vala:25 src/Widgets/QuickFind.vala:138
+msgid "The radio station was added correctly"
+msgstr ""
+
+#: src/Widgets/QuickFind.vala:29
+msgid "Quick find"
+msgstr ""
+
+#: src/Widgets/QuickFind.vala:31
+msgid "Cancel"
+msgstr ""
+
+#: src/Widgets/QuickFind.vala:63
+msgid "Discover…"
+msgstr ""
+
+#: src/Widgets/QuickFind.vala:64
+msgid "Search your favorite radios"
+msgstr ""
+
+#: src/Widgets/QuickFind.vala:107
+msgid "The radio station is already added"
+msgstr ""
+
+#: src/Widgets/RadioRow.vala:59 src/Widgets/TrackQueueRow.vala:60
+msgid "Remove"
+msgstr ""
+
+#: src/Widgets/RadioRow.vala:117 src/Widgets/TrackRow.vala:374
+msgid "Delete"
+msgstr ""
+
+#: src/Widgets/TrackAlbumRow.vala:44 src/Widgets/TrackRow.vala:80
+msgid "Options"
+msgstr ""
+
+#: src/Widgets/TrackAlbumRow.vala:154 src/Widgets/TrackRow.vala:236
+msgid "Create New Playlist"
+msgstr ""
+
+#: src/Widgets/TrackAlbumRow.vala:219 src/Widgets/TrackRow.vala:301
+msgid "Play Next"
+msgstr ""
+
+#: src/Widgets/TrackAlbumRow.vala:220 src/Widgets/TrackRow.vala:302
+msgid "Play Later"
+msgstr ""
+
+#: src/Widgets/TrackAlbumRow.vala:222 src/Widgets/TrackRow.vala:304
+msgid "Add to Playlist"
+msgstr ""
+
+#: src/Widgets/TrackAlbumRow.vala:227 src/Widgets/TrackRow.vala:309
+msgid "Edit Song Info…"
+msgstr ""
+
+#: src/Widgets/TrackAlbumRow.vala:228 src/Widgets/TrackRow.vala:310
+msgid "Favorite"
+msgstr ""
+
+#: src/Widgets/TrackAlbumRow.vala:229 src/Widgets/TrackRow.vala:311
+msgid "Delete from library"
+msgstr ""
+
+#: src/Widgets/TrackAlbumRow.vala:230 src/Widgets/TrackRow.vala:312
+msgid "Delete from file"
+msgstr ""
+
+#: src/Widgets/TrackAlbumRow.vala:231 src/Widgets/TrackRow.vala:313
+msgid "Remove from playlist"
+msgstr ""
+
+#: src/Widgets/Welcome.vala:12
+msgid "Library is Empty"
+msgstr ""
+
+#: src/Widgets/Welcome.vala:12
+msgid "Add music to start jamming out"
+msgstr ""
+
+#: src/Widgets/Welcome.vala:14
+msgid "Load Music"
+msgstr ""
+
+#: src/Widgets/Welcome.vala:14
+msgid "Load from the user's music directory"
+msgstr ""
+
+#: src/Widgets/Welcome.vala:15
+msgid "Change Music Folder"
+msgstr ""
+
+#: src/Widgets/Welcome.vala:15
+msgid "Load music from folder"
+msgstr ""
