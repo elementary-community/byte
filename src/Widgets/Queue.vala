@@ -95,7 +95,7 @@ public class Widgets.Queue : Gtk.Revealer {
         sync_image.halign = Gtk.Align.CENTER;
         sync_image.get_style_context ().add_class ("sync-image");
 
-        var sync_label = new Gtk.Label ("<small>%s</small>".printf (_("Sync Library…")));
+        var sync_label = new Gtk.Label ("<small>%s</small>".printf (_("Syncing Library…")));
         sync_label.valign = Gtk.Align.END;
         sync_label.halign = Gtk.Align.START;
         sync_label.use_markup = true;
@@ -380,7 +380,7 @@ public class Widgets.Queue : Gtk.Revealer {
             if (favorite == 1) {
                 top_stack.visible_child_name = "notification_grid";
 
-                notification_primary_label.label = "<small>Add Favorite</small>";
+                notification_primary_label.label = "<small>"+ _("Add Favorite") + "</small>";
                 notification_secondary_label.label = track.title;
                 notification_image.get_style_context ().add_class ("active");
 

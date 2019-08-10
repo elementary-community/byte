@@ -60,7 +60,7 @@ public class Widgets.QuickFind : Gtk.Revealer {
         radios_spinner.start ();
 
         var alert_view = new Widgets.AlertView (
-            _("Discovery..."),
+            _("Discover…"),
             _("Search your favorite radios"),
             "edit-find-symbolic"
         );
@@ -104,7 +104,7 @@ public class Widgets.QuickFind : Gtk.Revealer {
             var row = new Widgets.RadioSearchRow (item);
 
             row.send_notification_error.connect (() => {
-                toast.title = _("the radio station is already added");
+                toast.title = _("The radio station is already added");
                 toast.send_notification ();
             });
 

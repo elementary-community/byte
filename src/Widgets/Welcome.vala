@@ -11,7 +11,7 @@ public class Widgets.Welcome : Gtk.EventBox {
     construct {
         welcome = new Granite.Widgets.Welcome (_("Library is Empty"), _("Add music to start jamming out"));
 
-        welcome.append ("byte-folder-music", _("Load Music"), _("load from the user's music directory"));
+        welcome.append ("byte-folder-music", _("Load Music"), _("Load from the user's music directory"));
         welcome.append ("byte-folder-open", _("Change Music Folder"), _("Load music from folder"));
         
         welcome.get_style_context ().add_class ("w-round");

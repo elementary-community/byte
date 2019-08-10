@@ -26,7 +26,7 @@ public class Views.Home : Gtk.EventBox {
         library_label.halign =Gtk.Align.START;
         library_label.use_markup = true;
         
-        var recently_added_label = new Gtk.Label ("<b>%s</b> <small>(last 100)</small>".printf (_("Recently added")));
+        var recently_added_label = new Gtk.Label ("<b>%s</b>".printf (_("Recently added")) + " <small>%s</small>".printf (_("(last 100)")));
         recently_added_label.get_style_context ().add_class ("label-color-primary");
         recently_added_label.get_style_context ().add_class ("h3");
         recently_added_label.margin_start = 9;
@@ -37,11 +37,11 @@ public class Views.Home : Gtk.EventBox {
         var albums_button = new Widgets.HomeButton (_("Albums"), "byte-album-symbolic");
         var songs_button = new Widgets.HomeButton (_("Songs"), "folder-music-symbolic");
         
-        var artists_button = new Widgets.HomeButton ("Artists", "byte-artist-symbolic");
+        var artists_button = new Widgets.HomeButton (_("Artists"), "byte-artist-symbolic");
         artists_button.sensitive = false;
         
-        var radios_button = new Widgets.HomeButton ("Radios", "byte-radio-symbolic");
-        var favorites_button = new Widgets.HomeButton ("Favorites", "byte-favorite-symbolic");
+        var radios_button = new Widgets.HomeButton (_("Radios"), "byte-radio-symbolic");
+        var favorites_button = new Widgets.HomeButton (_("Favorites"), "byte-favorite-symbolic");
 
         listbox = new Gtk.ListBox ();
         listbox.expand = true;

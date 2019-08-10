@@ -1,0 +1,88 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the extra package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: extra\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2019-08-10 12:12+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: data/com.github.alainm23.byte.desktop.in:3
+#: data/com.github.alainm23.byte.desktop.in:4
+#: data/com.github.alainm23.byte.appdata.xml.in:7
+msgid "Byte"
+msgstr ""
+
+#: data/com.github.alainm23.byte.desktop.in:5
+msgid "Music"
+msgstr ""
+
+#: data/com.github.alainm23.byte.desktop.in:8
+msgid "com.github.alainm23.byte"
+msgstr ""
+
+#: data/com.github.alainm23.byte.desktop.in:12
+msgid "mp3;music;byte;radio;playlist;"
+msgstr ""
+
+#: data/com.github.alainm23.byte.appdata.xml.in:8
+msgid "Rediscover your music"
+msgstr ""
+
+#: data/com.github.alainm23.byte.appdata.xml.in:10
+msgid ""
+"Interact with your music and fall in love with your library all over again."
+msgstr ""
+
+#: data/com.github.alainm23.byte.appdata.xml.in:11
+msgid ""
+"Byte offers a beautiful presentation of your Music Library with loads of "
+"powerful features in a minimalistic yet highly customizable UI."
+msgstr ""
+
+#: data/com.github.alainm23.byte.appdata.xml.in:12
+msgid "Handy features:"
+msgstr ""
+
+#: data/com.github.alainm23.byte.appdata.xml.in:14
+msgid "Light and Dark themes."
+msgstr ""
+
+#: data/com.github.alainm23.byte.appdata.xml.in:15
+msgid "Add up to 100 items under \"Recently Added\" for songs."
+msgstr ""
+
+#: data/com.github.alainm23.byte.appdata.xml.in:16
+msgid ""
+"Sort individual playlists by album, title, play count or recently added."
+msgstr ""
+
+#: data/com.github.alainm23.byte.appdata.xml.in:17
+msgid "Advanced Media Details and Artist Info."
+msgstr ""
+
+#: data/com.github.alainm23.byte.appdata.xml.in:18
+msgid "Group Playlists, Albums, Artists, Songs, etc."
+msgstr ""
+
+#: data/com.github.alainm23.byte.appdata.xml.in:19
+msgid "Search, add and play your favorite online radio stations."
+msgstr ""
+
+#: data/com.github.alainm23.byte.appdata.xml.in:28
+msgid "Initial release"
+msgstr ""
+
+#: data/com.github.alainm23.byte.appdata.xml.in:78
+msgid "Alain M."
+msgstr ""

@@ -15,7 +15,7 @@ public class Services.CoverImport : GLib.Object {
             var info = discoverer.discover_uri (track.path);
             read_info (info, track);
         } catch (Error err) {
-            critical ("%s - %s, Error while importing ...".printf (
+            critical ("%s - %s, Error while importing …".printf (
                 track.artist_name, track.title
             ));
         }
