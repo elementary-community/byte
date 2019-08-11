@@ -319,7 +319,7 @@ msgstr "Tout voir"
 
 #: src/Widgets/Queue.vala:98
 msgid "Syncing Library…"
-msgstr "Synchronisation la bibliothèque…"
+msgstr "Synchronisation de la bibliothèque…"
 
 #: src/Widgets/Queue.vala:137
 msgid "Hide"
