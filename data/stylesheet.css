@@ -418,3 +418,7 @@ overshoot.left {
   animation-duration: 0.7s;
   animation-timing-function: ease-in-out;
 }
+
+.font-size-small {
+    font-size: 10px;
+}

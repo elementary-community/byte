@@ -1,6 +1,5 @@
 public class Views.Playlists : Gtk.EventBox {
     private Gtk.ListBox listbox;
-    private Widgets.NewPlaylist new_playlist;
 
     public signal void go_back ();
     public signal void go_playlist (Objects.Playlist playlist);

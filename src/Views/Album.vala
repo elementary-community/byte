@@ -5,9 +5,7 @@ public class Views.Album : Gtk.EventBox {
     private Gtk.Label year_label;
         
     private Gtk.ListBox listbox;
-
-    private Gtk.Button shuffle_button;
-
+    
     private string cover_path;
     private Widgets.Cover image_cover;
     

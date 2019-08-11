@@ -221,8 +221,8 @@ public class Dialogs.Settings : Gtk.Dialog {
         library_grid.add (new Gtk.Separator (Gtk.Orientation.HORIZONTAL));
         library_grid.add (settings_06_box);
         library_grid.add (new Gtk.Separator (Gtk.Orientation.HORIZONTAL));
-        library_grid.add (settings_07_box);
-        library_grid.add (new Gtk.Separator (Gtk.Orientation.HORIZONTAL));
+        //library_grid.add (settings_07_box);
+        //library_grid.add (new Gtk.Separator (Gtk.Orientation.HORIZONTAL));
 
         /*
             Reset
@@ -338,6 +338,28 @@ public class Dialogs.Settings : Gtk.Dialog {
                 Byte.settings.set_string ("library-location", library_filechooser.get_uri ());
                 Byte.scan_service.scan_local_files (library_filechooser.get_uri ());
             }
+
+            message_dialog.destroy ();
+        });
+
+        settings_08_button.clicked.connect (() => {
+            var message_dialog = new Granite.MessageDialog.with_image_from_icon_name (	
+                _("Reset your library?"),	
+                _("Are you sure you want to reset all your library?"),	
+                "dialog-warning",	
+                Gtk.ButtonsType.CANCEL	
+            );	
+
+             var remove_button = new Gtk.Button.with_label (_("Reset"));	
+            remove_button.get_style_context ().add_class (Gtk.STYLE_CLASS_DESTRUCTIVE_ACTION);	
+            message_dialog.add_action_widget (remove_button, Gtk.ResponseType.ACCEPT);	
+
+             message_dialog.show_all ();	
+
+             if (message_dialog.run () == Gtk.ResponseType.ACCEPT) {	
+                Byte.database.reset_all_library ();	
+                destroy ();	
+            }	
 
             message_dialog.destroy ();
         });

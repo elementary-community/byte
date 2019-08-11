@@ -99,6 +99,14 @@ public class Views.Radios : Gtk.EventBox {
                 widget.destroy (); 
             });
         });
+
+        Byte.scan_service.sync_started.connect (() => {
+            internet_radio_button.sensitive = false;
+        });
+
+        Byte.scan_service.sync_finished.connect (() => {
+            internet_radio_button.sensitive = true;
+        });
     }
 
     private void add_radio (Objects.Radio radio) {

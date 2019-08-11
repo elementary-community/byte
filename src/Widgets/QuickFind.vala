@@ -1,7 +1,6 @@
 public class Widgets.QuickFind : Gtk.Revealer {
     private Gtk.ListBox radios_listbox;
     public Gtk.SearchEntry search_entry;
-    private Gtk.Stack main_stack;
     public bool reveal {
         set {
             if (value) {

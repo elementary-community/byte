@@ -109,7 +109,7 @@ public class Widgets.HeaderBar : Gtk.HeaderBar {
         menu_grid.margin_bottom = 6;
         menu_grid.orientation = Gtk.Orientation.VERTICAL;
         menu_grid.width_request = 165;
-        menu_grid.add (search_menuitem);
+        //menu_grid.add (search_menuitem);
         menu_grid.add (import_menuitem);
         menu_grid.add (resync_menuitem);
         menu_grid.add (preferences_menuitem);

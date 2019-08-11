@@ -15,7 +15,6 @@ c_args = [
 ]
 
 add_project_arguments('-DGETTEXT_PACKAGE="@0@"'.format(meson.project_name()), language: 'c')
-#add_project_arguments(['--vapidir', join_paths(meson.current_source_dir(), 'vapi')], language: 'vala')
 
 as_resources = gnome.compile_resources (
     'as-resources', 'data/' + meson.project_name() + '.gresource.xml',

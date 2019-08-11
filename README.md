@@ -41,7 +41,7 @@ sudo ninja install
 com.github.alainm23.byte
 ```
 
-## Donations
-Stripe is not yet available in my country, If you like Planner and you want to support its development, consider donating via [Patreon](https://www.patreon.com/alainm23)
+## Support
+Stripe is not yet available in my country, If you like Byte and you want to support its development,consider supporting via [Patreon](https://www.patreon.com/alainm23)
 
 Made with 💗 in Perú

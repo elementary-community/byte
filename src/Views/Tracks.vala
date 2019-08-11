@@ -3,15 +3,12 @@ public class Views.Tracks : Gtk.EventBox {
     private Gtk.ListBox listbox;
     private Gtk.Stack stack;
     private Widgets.AlertView alert_view;
-    private Gtk.Label time_label;
 
     public signal void go_back ();
 
     private int item_index;
     private int item_max;
     private Gee.ArrayList<Objects.Track?> all_tracks;
-    private int tracks_number = 0;
-    private uint64 tracks_time = 0;
     public Tracks () {} 
 
     construct {
@@ -32,7 +29,7 @@ public class Views.Tracks : Gtk.EventBox {
 
         alert_view = new Widgets.AlertView (
             _("No Results"),
-            _("asssssssssssssss"),
+            null,
             "edit-find-symbolic"
         );
 
@@ -280,6 +277,16 @@ public class Views.Tracks : Gtk.EventBox {
             listbox.foreach ((widget) => {
                 widget.destroy (); 
             });
+        });
+
+        Byte.scan_service.sync_started.connect (() => {
+            sort_button.sensitive = false;
+            search_entry.sensitive = false;
+        });
+
+        Byte.scan_service.sync_finished.connect (() => {
+            sort_button.sensitive = true;
+            search_entry.sensitive = true;
         });
     }
 

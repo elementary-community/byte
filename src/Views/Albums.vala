@@ -230,6 +230,16 @@ public class Views.Albums : Gtk.EventBox {
                 widget.destroy (); 
             });
         });
+
+        Byte.scan_service.sync_started.connect (() => {
+            sort_button.sensitive = false;
+            search_entry.sensitive = false;
+        });
+
+        Byte.scan_service.sync_finished.connect (() => {
+            sort_button.sensitive = true;
+            search_entry.sensitive = true;
+        });
     }
 
     private void add_item (Objects.Album album) {

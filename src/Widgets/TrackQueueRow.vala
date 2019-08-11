@@ -38,12 +38,13 @@ public class Widgets.TrackQueueRow : Gtk.ListBoxRow {
         track_title_label.halign = Gtk.Align.START;
         track_title_label.valign = Gtk.Align.END;
 
-        artist_album_label = new Gtk.Label ("<small>%s</small>".printf (track.artist_name));
+        artist_album_label = new Gtk.Label (track.artist_name);
         artist_album_label.halign = Gtk.Align.START;
         artist_album_label.use_markup = true;
         artist_album_label.valign = Gtk.Align.START;
         artist_album_label.max_width_chars = 45;
         artist_album_label.ellipsize = Pango.EllipsizeMode.END;
+        artist_album_label.get_style_context ().add_class ("font-size-small");
 
         image_cover = new Widgets.Cover.from_file (
             GLib.Path.build_filename (Byte.utils.COVER_FOLDER, ("track-%i.jpg").printf (track.id)), 

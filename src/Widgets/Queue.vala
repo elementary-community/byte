@@ -145,7 +145,7 @@ public class Widgets.Queue : Gtk.Revealer {
         mode_button.margin = 3;
         mode_button.append_text (_("Up Next"));
         //mode_button.append_text (_("History"));
-        mode_button.append_text (_("Lyrics"));
+        //mode_button.append_text (_("Lyrics"));
         mode_button.selected = 0;
  
         var title_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 0);
@@ -240,7 +240,7 @@ public class Widgets.Queue : Gtk.Revealer {
                 reveal_child = true;
 
                 next_track_name.label = "%s <b>by</b> %s".printf (next_track.title, next_track.artist_name);
-                next_track_grid.tooltip_text = _("%s - %s".printf (next_track.artist_name, next_track.title));
+                next_track_grid.tooltip_text = "%s - %s".printf (next_track.artist_name, next_track.title);
                     
                 try {
                     var cover_path = GLib.Path.build_filename (Byte.utils.COVER_FOLDER, ("track-%i.jpg").printf (next_track.id));
@@ -256,8 +256,8 @@ public class Widgets.Queue : Gtk.Revealer {
             var next_track = Byte.utils.get_next_track (Byte.player.current_track);
 
             if (next_track != null) {
-                next_track_name.label = "%s <b>by</b> %s".printf (next_track.title, next_track.artist_name);
-                next_track_grid.tooltip_text = _("%s - %s".printf (next_track.artist_name, next_track.title));
+                next_track_name.label = _("%s <b>by</b> %s".printf (next_track.title, next_track.artist_name));
+                next_track_grid.tooltip_text = "%s - %s".printf (next_track.artist_name, next_track.title);
                 
                 try {
                     var cover_path = GLib.Path.build_filename (Byte.utils.COVER_FOLDER, ("track-%i.jpg").printf (next_track.id));

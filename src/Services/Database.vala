@@ -454,8 +454,13 @@ public class Services.Database : GLib.Object {
         if (stmt.step () == Sqlite.ROW) {
             track.id = stmt.column_int (0);
             stdout.printf ("Track ID: %d - %s\n", track.id, track.title);
-            Byte.cover_import.import (track);
+            
             adden_new_track (track);
+            
+            Idle.add (() => {
+                Byte.cover_import.import (track);    
+                return false;
+            });
         } else {
             warning ("Error: %d: %s", db.errcode (), db.errmsg ());
         }
@@ -464,7 +469,6 @@ public class Services.Database : GLib.Object {
     }
 
     public Objects.Track? get_track_by_id (int id) {
-        Objects.Track? return_value = null;
         Sqlite.Statement stmt;
         int res;
 
@@ -721,9 +725,7 @@ public class Services.Database : GLib.Object {
         Sqlite.Statement stmt;
         string sql;
         int res;
-        string order_mode = "tracks.title";
-        string reverse_mode = "DESC";
-        
+
         sql = """
             SELECT  tracks.id, tracks.path, tracks.title, tracks.duration, tracks.is_favorite, tracks.date_added, tracks.play_count, 
             tracks.album_id, albums.title, artists.name, tracks.favorite_added, tracks.last_played FROM tracks 

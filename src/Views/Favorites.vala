@@ -1,6 +1,5 @@
 public class Views.Favorites : Gtk.EventBox {
     private Gtk.ListBox listbox;
-    private Gtk.Label time_label;
     public signal void go_back ();
     private int item_index;
     private int item_max;
@@ -254,6 +253,14 @@ public class Views.Favorites : Gtk.EventBox {
             listbox.foreach ((widget) => {
                 widget.destroy (); 
             });
+        });
+
+        Byte.scan_service.sync_started.connect (() => {
+            search_entry.sensitive = false;
+        });
+
+        Byte.scan_service.sync_finished.connect (() => {
+            search_entry.sensitive = true;
         });
     }
     

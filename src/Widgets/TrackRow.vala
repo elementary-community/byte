@@ -154,8 +154,12 @@ public class Widgets.TrackRow : Gtk.ListBoxRow {
             if (track.id == current_track.id) {
                 playing_revealer.reveal_child = true;
                 main_grid.get_style_context ().add_class ("label-color-primary");
-
-                grab_focus ();
+                
+                try {
+                    grab_focus ();
+                } catch (Error e) {
+                    stderr.printf ("Error setting default avatar icon: %s ", e.message);
+                }
             } else {
                 playing_revealer.reveal_child = false;
                 main_grid.get_style_context ().remove_class ("label-color-primary");
