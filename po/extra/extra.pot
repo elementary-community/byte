@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: extra\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-08-10 12:12+0200\n"
+"POT-Creation-Date: 2019-08-11 18:57+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -80,9 +80,13 @@ msgid "Search, add and play your favorite online radio stations."
 msgstr ""
 
 #: data/com.github.alainm23.byte.appdata.xml.in:28
+msgid "Fix some error and performance improvement"
+msgstr ""
+
+#: data/com.github.alainm23.byte.appdata.xml.in:33
 msgid "Initial release"
 msgstr ""
 
-#: data/com.github.alainm23.byte.appdata.xml.in:78
+#: data/com.github.alainm23.byte.appdata.xml.in:83
 msgid "Alain M."
 msgstr ""
