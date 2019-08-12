@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: extra\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-08-10 12:12+0200\n"
+"POT-Creation-Date: 2019-08-11 18:57+0200\n"
 "PO-Revision-Date: 2019-08-10 12:12+0200\n"
 "Last-Translator: Alain M.\n"
 "Language-Team: none\n"
@@ -43,16 +43,16 @@ msgstr "Redescubre tu música"
 #: data/com.github.alainm23.byte.appdata.xml.in:10
 msgid ""
 "Interact with your music and fall in love with your library all over again."
-msgstr ""
-"Interactúa con tu música y enamórate de tu biblioteca de nuevo."
+msgstr "Interactúa con tu música y enamórate de tu biblioteca de nuevo."
 
 #: data/com.github.alainm23.byte.appdata.xml.in:11
 msgid ""
 "Byte offers a beautiful presentation of your Music Library with loads of "
 "powerful features in a minimalistic yet highly customizable UI."
 msgstr ""
-"Byte ofrece una hermosa presentación de su biblioteca de música con un montón de "
-"potentes funciones en una interfaz de usuario minimalista pero altamente personalizable."
+"Byte ofrece una hermosa presentación de su biblioteca de música con un "
+"montón de potentes funciones en una interfaz de usuario minimalista pero "
+"altamente personalizable."
 
 #: data/com.github.alainm23.byte.appdata.xml.in:12
 msgid "Handy features:"
@@ -64,13 +64,15 @@ msgstr "Temas claros y oscuros."
 
 #: data/com.github.alainm23.byte.appdata.xml.in:15
 msgid "Add up to 100 items under \"Recently Added\" for songs."
-msgstr "Ultimos 100 elementos en \"Recientemente agregado\" para las canciones."
+msgstr ""
+"Ultimos 100 elementos en \"Recientemente agregado\" para las canciones."
 
 #: data/com.github.alainm23.byte.appdata.xml.in:16
 msgid ""
 "Sort individual playlists by album, title, play count or recently added."
 msgstr ""
-"Ordenar playlists individuales por álbum, título, cantidad de reproducciones o agregado recientemente".
+"Ordenar playlists individuales por álbum, título, cantidad de reproducciones "
+"o agregado recientemente"
 
 #: data/com.github.alainm23.byte.appdata.xml.in:17
 msgid "Advanced Media Details and Artist Info."
@@ -85,9 +87,13 @@ msgid "Search, add and play your favorite online radio stations."
 msgstr "Busca, agrega y reproduce tus estaciones de radio en línea favoritas."
 
 #: data/com.github.alainm23.byte.appdata.xml.in:28
+msgid "Fix some error and performance improvement"
+msgstr ""
+
+#: data/com.github.alainm23.byte.appdata.xml.in:33
 msgid "Initial release"
 msgstr "Versión inicial"
 
-#: data/com.github.alainm23.byte.appdata.xml.in:78
+#: data/com.github.alainm23.byte.appdata.xml.in:83
 msgid "Alain M."
 msgstr "Alain M."

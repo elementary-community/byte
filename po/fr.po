@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: com.github.alainm23.byte\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-08-11 11:02-0500\n"
+"POT-Creation-Date: 2019-08-11 18:55+0200\n"
 "PO-Revision-Date: 2019-08-10 12:12+0200\n"
 "Last-Translator: NathanBnm\n"
 "Language-Team: none\n"
@@ -84,14 +84,12 @@ msgid "Set Music Folder"
 msgstr "Définir le dossier de musique"
 
 #: src/Dialogs/Settings.vala:347
-#, fuzzy
 msgid "Reset your library?"
-msgstr "Réinitialiser toute la bibliothèque"
+msgstr "Réinitialiser la bibliothèque ?"
 
 #: src/Dialogs/Settings.vala:348
-#, fuzzy
 msgid "Are you sure you want to reset all your library?"
-msgstr "Êtes-vous sûr de vouloir régler le dossier de musique sur <b>%s</b> ?"
+msgstr "Êtes-vous sûr de vouloir réinitialiser toute votre bibliothèque ?"
 
 #: src/Dialogs/TrackEditor.vala:82
 msgid "Title"
@@ -203,9 +201,8 @@ msgid "Date Added"
 msgstr "Date d'ajout"
 
 #: src/Views/Playlist.vala:102 src/Views/Tracks.vala:93
-#, fuzzy
 msgid "Play Count"
-msgstr "Lire juste après"
+msgstr "Nombre de lectures"
 
 #: src/Views/Playlist.vala:134
 msgid "Updated"
@@ -322,7 +319,7 @@ msgstr "Tout voir"
 
 #: src/Widgets/Queue.vala:98
 msgid "Syncing Library…"
-msgstr "Synchronisation la bibliothèque…"
+msgstr "Synchronisation de la bibliothèque…"
 
 #: src/Widgets/Queue.vala:137
 msgid "Hide"
@@ -335,7 +332,7 @@ msgstr "À suivre"
 #: src/Widgets/Queue.vala:259
 #, c-format
 msgid "%s <b>by</b> %s"
-msgstr ""
+msgstr "%s <b>par</b> %s"
 
 #: src/Widgets/Queue.vala:383
 msgid "Add Favorite"
@@ -435,10 +432,4 @@ msgstr "Modifier le dossier de musique"
 
 #: src/Widgets/Welcome.vala:15
 msgid "Load music from folder"
-msgstr "Charger de la musique depuis un fichier"
-
-#~ msgid "%s - %s"
-#~ msgstr "%s - %s"
-
-#~ msgid "PlaySet Music Folder Count"
-#~ msgstr "Nombre de lectures"
+msgstr "Charger de la musique depuis un dossier"
