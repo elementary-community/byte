@@ -7,6 +7,8 @@ public class Utils : GLib.Object {
     public signal void add_next_track (Gee.ArrayList<Objects.Track?> items);
     public signal void add_last_track (Gee.ArrayList<Objects.Track?> items);
 
+    public signal void radio_image_downloaded (int id);
+
     public string MAIN_FOLDER;
     public string COVER_FOLDER;
     public Utils () {
@@ -105,18 +107,22 @@ public class Utils : GLib.Object {
 
     public Objects.Track? get_next_track (Objects.Track current_track) {
         int index = get_track_index_by_id (current_track.id, queue_playlist) + 1;
-        
-        if (index >= queue_playlist.size) {
-            var repeat_mode = Byte.settings.get_enum ("repeat-mode");
+        Objects.Track? returned = null;
+        var repeat_mode = Byte.settings.get_enum ("repeat-mode");
 
+        if (index >= queue_playlist.size) {
             if (repeat_mode == 0) {
-                return null;
+                returned = null;
             } else if (repeat_mode == 1) {
-                index = 0;
+                returned = queue_playlist [0];
+            } else {
+                returned = null;
             }
+        } else {
+            returned = queue_playlist [index];
         }
 
-        return queue_playlist [index];
+        return returned;
     }
 
     public Objects.Track get_prev_track (Objects.Track current_track) {
@@ -184,6 +190,9 @@ public class Utils : GLib.Object {
             try {
                 if (file_from_uri.copy_async.end (res)) {
                     print ("Image Downloaded\n");
+                    if (type == "radio") {
+                        radio_image_downloaded (id);
+                    }
                 }
             } catch (Error e) {
                 download_image (type, id, url);

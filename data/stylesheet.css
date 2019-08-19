@@ -169,6 +169,7 @@ selection {
 .quick-find-cancel {
     color: @colorAccent;
     font-weight: bold;
+    padding-right: 0px;
 }
 
 .queue {

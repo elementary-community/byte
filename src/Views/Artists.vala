@@ -1,20 +1,32 @@
 public class Views.Artists : Gtk.EventBox {
     private Gtk.ListBox listbox;
-    public signal void go_back ();
+    private Gtk.SearchEntry search_entry;
+    public signal void go_back ();  
+    public signal void go_artist (Objects.Artist artist);
+    
+    private int item_index;
+    private int item_max;
 
-    private bool is_initialized = false;
+    private Gee.ArrayList<Objects.Artist?> all_items;
     
     public Artists () {
 
     }
 
-    construct {
+    construct { 
+        item_index = 0;
+        item_max = 25;
+
+        all_items = Byte.database.get_all_artists ();
+
         get_style_context ().add_class (Gtk.STYLE_CLASS_VIEW);
         get_style_context ().add_class ("w-round");
-
+ 
         var back_button = new Gtk.Button.from_icon_name ("byte-arrow-back-symbolic", Gtk.IconSize.MENU);
         back_button.can_focus = false;
-        back_button.margin = 6;
+        back_button.margin = 3;
+        back_button.margin_bottom = 6;
+        back_button.margin_top = 6;
         back_button.get_style_context ().add_class (Gtk.STYLE_CLASS_FLAT);
         back_button.get_style_context ().add_class ("label-color-primary");
 
@@ -23,29 +35,34 @@ public class Views.Artists : Gtk.EventBox {
         title_label.valign = Gtk.Align.CENTER;
         title_label.get_style_context ().add_class ("h3");
 
-        var search_entry = new Gtk.SearchEntry ();
+        search_entry = new Gtk.SearchEntry ();
+        search_entry.margin = 6;
         search_entry.valign = Gtk.Align.CENTER;
-        search_entry.width_request = 250;
+        search_entry.hexpand = true;
         search_entry.get_style_context ().add_class ("search-entry");
-        search_entry.get_style_context ().add_class (Gtk.STYLE_CLASS_FLAT);
-        search_entry.placeholder_text = _("Your library");
+        search_entry.tooltip_text = _("Search by title, artist and album");
+        search_entry.placeholder_text = _("Search by title, artist and album");
 
-        var center_stack = new Gtk.Stack ();
-        center_stack.hexpand = true;
-        center_stack.transition_type = Gtk.StackTransitionType.CROSSFADE;
+        var search_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 0);
+        search_box.get_style_context ().add_class (Gtk.STYLE_CLASS_BACKGROUND);
+        search_box.add (search_entry);
+        search_box.add (new Gtk.Separator (Gtk.Orientation.HORIZONTAL));
 
-        center_stack.add_named (title_label, "title_label");
-        center_stack.add_named (search_entry, "search_entry");
-        
-        center_stack.visible_child_name = "title_label";
+        var search_revealer = new Gtk.Revealer ();
+        search_revealer.transition_type = Gtk.RevealerTransitionType.SLIDE_UP;
+        search_revealer.add (search_box);
+        search_revealer.reveal_child = false;
 
         var search_button = new Gtk.Button.from_icon_name ("edit-find-symbolic", Gtk.IconSize.MENU);
-        search_button.margin = 6;
+        search_button.margin = 3;
+        search_button.can_focus = false;
+        search_button.get_style_context ().add_class ("label-color-primary");
         search_button.get_style_context ().add_class (Gtk.STYLE_CLASS_FLAT);
 
         var header_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 0);
+        header_box.get_style_context ().add_class (Gtk.STYLE_CLASS_BACKGROUND);
         header_box.pack_start (back_button, false, false, 0);
-        header_box.set_center_widget (center_stack);
+        header_box.set_center_widget (title_label);
         header_box.pack_end (search_button, false, false, 0);
 
         listbox = new Gtk.ListBox ();
@@ -60,17 +77,59 @@ public class Views.Artists : Gtk.EventBox {
         main_box.expand = true;
         main_box.pack_start (header_box, false, false, 0);
         main_box.pack_start (new Gtk.Separator (Gtk.Orientation.HORIZONTAL), false, false, 0);
+        main_box.pack_start (search_revealer, false, false, 0);
         main_box.pack_start (scrolled, true, true, 0);
         
         add (main_box);
+        add_all_items ();
 
         back_button.clicked.connect (() => {
             go_back ();
         });
 
-        Byte.database.added_new_artist.connect ((track) => {
+        scrolled.edge_reached.connect((pos)=> {
+            if (pos == Gtk.PositionType.BOTTOM) {
+                
+                item_index = item_max;
+                item_max = item_max + 100;
+
+                if (item_max > all_items.size) {
+                    item_max = all_items.size;
+                }
+
+                add_all_items ();
+            }
+        });
+
+        search_button.clicked.connect (() => {
+            if (search_revealer.reveal_child) {
+                search_revealer.reveal_child = false;
+            } else {
+                search_revealer.reveal_child = true;
+                search_entry.grab_focus ();
+            }
+        });
+
+        search_entry.key_release_event.connect ((key) => {
+            if (key.keyval == 65307) {
+                search_revealer.reveal_child = false;
+                search_entry.text = "";
+            }
+
+            return false;
+        });
+
+        search_entry.activate.connect (start_search);
+        search_entry.search_changed.connect (start_search);
+
+        listbox.row_activated.connect ((row) => {
+            var item = row as Widgets.ArtistRow;
+            go_artist (item.artist);
+        });
+
+        Byte.database.added_new_artist.connect ((artist) => {
             Idle.add (() => {
-                add_artist (track);
+                add_artist (artist);
 
                 return false;
             });
@@ -83,6 +142,33 @@ public class Views.Artists : Gtk.EventBox {
         });
     }
 
+    private void start_search () {
+        if (search_entry.text != "") {
+            item_index = 0;
+            item_max = 100;
+            
+            listbox.foreach ((widget) => {
+                widget.destroy (); 
+            });
+
+            all_items = Byte.database.get_all_artists_search (
+                search_entry.text.down ()
+            );
+
+            add_all_items ();
+        } else {
+            item_index = 0;
+            item_max = 100;
+            
+            listbox.foreach ((widget) => {
+                widget.destroy (); 
+            });
+
+            all_items = Byte.database.get_all_artists ();
+            add_all_items ();
+        }
+    }
+
     private void add_artist (Objects.Artist artist) {
         if (artist.id != 0) {
             var row = new Widgets.ArtistRow (artist);
@@ -92,27 +178,16 @@ public class Views.Artists : Gtk.EventBox {
         }
     }
 
-    public void get_all_artists () {
-        if (is_initialized == false) {
-            Timeout.add (120, () => {
-                new Thread<void*> ("get_all_artists", () => {
-                    var all_artists = new Gee.ArrayList<Objects.Artist?> ();
-                    all_artists = Byte.database.get_all_artists ();
-        
-                    foreach (var item in all_artists) {
-                        Idle.add (() => {
-                            add_artist (item);
-        
-                            return false;
-                        });    
-                    }
-        
-                    is_initialized = true;
-                    return null;
-                });
-
-                return false;
-            });
+    public void add_all_items () {
+        if (item_max > all_items.size) {
+            item_max = all_items.size;
         }
+
+        for (int i = item_index; i < item_max; i++) {
+            var row = new Widgets.ArtistRow (all_items [i]);
+
+            listbox.add (row);
+            listbox.show_all ();
+        }   
     }
 }

@@ -156,10 +156,10 @@ public class Widgets.TrackAlbumRow : Gtk.ListBoxRow {
             item.get_style_context ().add_class ("track-options");
             item.get_style_context ().add_class ("css-item");
             item.activate.connect (() => {
-                //var new_playlist = library_manager.create_new_playlist ();
-                //library_manager.add_track_into_playlist (new_playlist, track.ID);
+                var new_playlist = Byte.database.create_new_playlist ();
+                Byte.database.insert_track_into_playlist (new_playlist, track.id);
             });
-            //playlists.add (item);
+            playlists.add (item);
 
             foreach (var playlist in all_items) {
                 item = new Gtk.MenuItem.with_label (playlist.title);

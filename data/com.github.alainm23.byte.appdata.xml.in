@@ -23,6 +23,14 @@
     <binary>com.github.alainm23.byte</binary>
   </provides>
   ​<releases>
+    <release version="0.1.3" date="2019-08-10">
+      <description>
+        <p>Fix some error and performance improvement</p>
+        <ul>
+          <li>Now you can update and delete your playlist</li>
+        </ul>
+      </description>
+    </release>
     <release version="0.1.2" date="2019-08-10">
       <description>
         <p>Fix some error and performance improvement</p>

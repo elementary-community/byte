@@ -19,7 +19,9 @@ public class Views.Radios : Gtk.EventBox {
         
         var back_button = new Gtk.Button.from_icon_name ("byte-arrow-back-symbolic", Gtk.IconSize.MENU);
         back_button.can_focus = false;
-        back_button.margin = 6;
+        back_button.margin = 3;
+        back_button.margin_bottom = 6;
+        back_button.margin_top = 6;
         back_button.get_style_context ().add_class (Gtk.STYLE_CLASS_FLAT);
         back_button.get_style_context ().add_class ("label-color-primary"); 
 
@@ -31,7 +33,7 @@ public class Views.Radios : Gtk.EventBox {
         var internet_radio_button = new Gtk.Button.from_icon_name ("internet-radio-symbolic", Gtk.IconSize.MENU);
         internet_radio_button.can_focus = false;
         internet_radio_button.tooltip_text = _("Search internet radios");
-        internet_radio_button.margin = 6;
+        internet_radio_button.margin = 3;
         internet_radio_button.get_style_context ().add_class (Gtk.STYLE_CLASS_FLAT);
         internet_radio_button.get_style_context ().add_class ("label-color-primary");
 

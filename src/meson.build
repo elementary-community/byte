@@ -33,6 +33,7 @@ sources  = files(
     'Widgets/ModelButton.vala',
     'Widgets/MenuItem.vala',
     'Widgets/AlertView.vala',
+    'Widgets/AlbumArtistChild.vala',
     
     'Widgets/Popovers/Sort.vala',
     'Widgets/Popovers/NewPlaylist.vala',
@@ -46,7 +47,8 @@ sources  = files(
     'Views/Playlists.vala',
     'Views/Favorites.vala',
     'Views/Playlist.vala',
-    
+    'Views/Artist.vala',
+
     'Objects/Track.vala',
     'Objects/Album.vala',
     'Objects/Artist.vala',

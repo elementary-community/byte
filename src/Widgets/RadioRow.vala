@@ -3,7 +3,6 @@ public class Widgets.RadioRow : Gtk.ListBoxRow {
 
     private Gtk.Label name_label;
     private Gtk.Label country_state_label;
-    private Widgets.Cover image_cover;
 
     public signal void send_notification_error ();
 
@@ -36,14 +35,14 @@ public class Widgets.RadioRow : Gtk.ListBoxRow {
         name_label.halign = Gtk.Align.START;
         name_label.valign = Gtk.Align.END; 
 
-        country_state_label = new Gtk.Label ("%s - %s".printf (radio.country, radio.state));
+        country_state_label = new Gtk.Label (radio.country);
         country_state_label.halign = Gtk.Align.START;
         country_state_label.valign = Gtk.Align.START;
         country_state_label.max_width_chars = 45;
         country_state_label.ellipsize = Pango.EllipsizeMode.END;
 
         var cover_path = GLib.Path.build_filename (Byte.utils.COVER_FOLDER, ("radio-%i.jpg").printf (radio.id));
-        image_cover = new Widgets.Cover.from_file (cover_path, 48, "radio");
+        var image_cover = new Widgets.Cover.from_file (cover_path, 48, "radio");
         image_cover.halign = Gtk.Align.START;
         image_cover.valign = Gtk.Align.START;
 
@@ -65,7 +64,7 @@ public class Widgets.RadioRow : Gtk.ListBoxRow {
         var remove_revealer = new Gtk.Revealer ();
         remove_revealer.halign = Gtk.Align.END;
         remove_revealer.hexpand = true;
-        remove_revealer.transition_type = Gtk.RevealerTransitionType.SLIDE_LEFT ;
+        remove_revealer.transition_type = Gtk.RevealerTransitionType.SLIDE_LEFT;
         remove_revealer.add (remove_button);
         remove_revealer.reveal_child = false;
 
@@ -127,6 +126,19 @@ public class Widgets.RadioRow : Gtk.ListBoxRow {
             }
 
             message_dialog.destroy ();
+        });
+
+        Byte.utils.radio_image_downloaded.connect ((id) => {
+            if (radio.id == id) {
+                try {
+                    image_cover.pixbuf = new Gdk.Pixbuf.from_file_at_size (
+                        GLib.Path.build_filename (Byte.utils.COVER_FOLDER, ("radio-%i.jpg").printf (id)), 
+                        48, 
+                        48);
+                } catch (Error e) {
+                    stderr.printf ("Error setting default avatar icon: %s ", e.message);
+                }
+            }
         });
     }
 }

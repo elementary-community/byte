@@ -127,6 +127,7 @@ public class Dialogs.Settings : Gtk.Dialog {
         var settings_04_label = new Gtk.Label (_("Music folder location"));
         
         var library_filechooser = new Gtk.FileChooserButton (_("Select Music Folder…"), Gtk.FileChooserAction.SELECT_FOLDER);
+        library_filechooser.valign = Gtk.Align.CENTER;
         
         File library_path = File.new_for_uri (Byte.settings.get_string ("library-location"));
         library_filechooser.set_current_folder (library_path.get_path ());

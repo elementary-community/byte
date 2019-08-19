@@ -139,5 +139,22 @@ public class Widgets.TrackQueueRow : Gtk.ListBoxRow {
                 destroy ();
             }
         });
+
+        Byte.database.updated_track_cover.connect ((track_id) => {
+            Idle.add (() => {
+                if (track_id == track.id) {
+                    try {
+                        image_cover.pixbuf = new Gdk.Pixbuf.from_file_at_size (
+                            GLib.Path.build_filename (Byte.utils.COVER_FOLDER, ("track-%i.jpg").printf (track_id)), 
+                            32, 
+                            32);
+                    } catch (Error e) {
+                        stderr.printf ("Error setting default avatar icon: %s ", e.message);
+                    }
+                }
+                
+                return false;
+            });
+        });
     }
 }

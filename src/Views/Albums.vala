@@ -24,7 +24,9 @@ public class Views.Albums : Gtk.EventBox {
         
         var back_button = new Gtk.Button.from_icon_name ("byte-arrow-back-symbolic", Gtk.IconSize.MENU);
         back_button.can_focus = false;
-        back_button.margin = 6;
+        back_button.margin = 3;
+        back_button.margin_bottom = 6;
+        back_button.margin_top = 6;
         back_button.get_style_context ().add_class (Gtk.STYLE_CLASS_FLAT);
         back_button.get_style_context ().add_class ("label-color-primary");
 
@@ -60,7 +62,7 @@ public class Views.Albums : Gtk.EventBox {
         search_revealer.reveal_child = false;
 
         var sort_button = new Gtk.ToggleButton ();
-        sort_button.margin = 6;
+        sort_button.margin = 3;
         sort_button.can_focus = false;
         sort_button.add (new Gtk.Image.from_icon_name ("byte-sort-symbolic", Gtk.IconSize.MENU));
         sort_button.tooltip_text = _("Sort");

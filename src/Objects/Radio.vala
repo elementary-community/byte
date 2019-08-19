@@ -7,6 +7,7 @@ public class Objects.Radio : GLib.Object {
     public string favicon  { get; set; default = ""; }
     public string country  { get; set; default = ""; }
     public string state    { get; set; default = ""; }
+    public string votes    { get; set; default = ""; }
 
     public Radio () {
     }

@@ -38,7 +38,6 @@ public class Views.Home : Gtk.EventBox {
         var songs_button = new Widgets.HomeButton (_("Songs"), "folder-music-symbolic");
         
         var artists_button = new Widgets.HomeButton (_("Artists"), "byte-artist-symbolic");
-        artists_button.sensitive = false;
         
         var radios_button = new Widgets.HomeButton (_("Radios"), "byte-radio-symbolic");
         var favorites_button = new Widgets.HomeButton (_("Favorites"), "byte-favorite-symbolic");

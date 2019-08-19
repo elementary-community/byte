@@ -12,6 +12,8 @@ public class Widgets.ArtistRow : Gtk.ListBoxRow {
     }
 
     construct {
+        get_style_context ().add_class ("album-row");
+        
         name_label = new Gtk.Label (artist.name);
         name_label.valign = Gtk.Align.CENTER;
         name_label.get_style_context ().add_class ("h3");

@@ -192,15 +192,15 @@ public class Widgets.HeaderBar : Gtk.HeaderBar {
         
         Byte.player.mode_changed.connect ((mode) => {
             if (mode == "radio") {
-                shuffle_button.visible = false;
-                repeat_button.visible = false;
-                next_button.visible = false;
-                previous_button.visible = false;
+                shuffle_button.sensitive = false;
+                repeat_button.sensitive = false;
+                next_button.sensitive = false;
+                previous_button.sensitive = false;
             } else {
-                shuffle_button.visible = true;
-                repeat_button.visible = true;
-                next_button.visible = true;
-                previous_button.visible = true;
+                shuffle_button.sensitive = true;
+                repeat_button.sensitive = true;
+                next_button.sensitive = true;
+                previous_button.sensitive = true;
             }
         });
 

@@ -209,7 +209,7 @@ public class Widgets.Queue : Gtk.Revealer {
                 Byte.player.set_track (items [0]);
             } else {
                 Byte.player.set_track (_track);
-
+                
                 int current_index = Byte.utils.get_track_index_by_id (_track.id, items);
 
                 listbox.set_filter_func ((row) => {
@@ -233,8 +233,8 @@ public class Widgets.Queue : Gtk.Revealer {
                 var index = row.get_index ();
                 return index >= current_index; 
             });
-                
-            var next_track = Byte.utils.get_next_track (track);
+    
+            Objects.Track? next_track = Byte.utils.get_next_track (track);
 
             if (next_track != null) {
                 reveal_child = true;
@@ -249,9 +249,21 @@ public class Widgets.Queue : Gtk.Revealer {
                     image_cover.pixbuf = new Gdk.Pixbuf.from_file_at_size ("/usr/share/com.github.alainm23.byte/track-default-cover.svg", 27, 27);
                     stderr.printf ("Error setting default avatar icon: %s ", e.message);
                 }
+            } else {
+                reveal_child = false;
             }
         });
 
+        Byte.player.state_changed.connect ((state) => {
+            if (state == Gst.State.PLAYING) {
+                if (Byte.player.current_track != null) {
+                    reveal_child = true;
+                }
+            } else if (state == Gst.State.NULL) {
+                reveal_child = false;
+            }
+        });
+        
         Byte.utils.update_next_track.connect (() => {
             var next_track = Byte.utils.get_next_track (Byte.player.current_track);
 
@@ -297,7 +309,7 @@ public class Widgets.Queue : Gtk.Revealer {
 
             Byte.utils.update_next_track ();
         });
-
+        
         Byte.utils.add_last_track.connect ((_items) => {
             listbox.foreach ((widget) => {
                 widget.destroy (); 
