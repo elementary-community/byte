@@ -115,8 +115,8 @@ public class Services.TagManager : GLib.Object {
                     // ARTIST OBJECT
                     var artist = new Objects.Artist ();
                     if (tags.get_string (Gst.Tags.ALBUM_ARTIST, out o)) {
-                        artist.name = o;
                         track.album_artist = o;
+                        artist.name = o;
                     } else if (tags.get_string (Gst.Tags.ARTIST, out o)) {
                         artist.name = o;
                     }

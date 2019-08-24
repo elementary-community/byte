@@ -1,6 +1,6 @@
 public class Widgets.QuickFind : Gtk.Revealer {
     private Gtk.ListBox radios_listbox;
-    public Gtk.SearchEntry search_entry;
+    public Widgets.SearchEntry search_entry;
     public bool reveal {
         set {
             if (value) {
@@ -23,7 +23,8 @@ public class Widgets.QuickFind : Gtk.Revealer {
     construct {
         var toast = new Granite.Widgets.Toast (_("The radio station was added correctly"));
 
-        search_entry = new Gtk.SearchEntry ();
+        search_entry = new Widgets.SearchEntry ();
+        search_entry.margin = 0;
         search_entry.get_style_context ().add_class ("search-entry");
         search_entry.placeholder_text = _("Quick find");
 

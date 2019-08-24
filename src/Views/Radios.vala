@@ -63,7 +63,7 @@ public class Views.Radios : Gtk.EventBox {
         main_box.pack_start (scrolled, true, true, 0);
         
         add (main_box);
-        add_all_tracks ();
+        add_all_items ();
 
         back_button.clicked.connect (() => {
             go_back ();
@@ -92,13 +92,17 @@ public class Views.Radios : Gtk.EventBox {
                     item_max = all_radios.size;
                 }
 
-                add_all_tracks ();
+                add_all_items ();
             }
         });
 
         Byte.database.reset_library.connect (() => {
             listbox.foreach ((widget) => {
-                widget.destroy (); 
+                Idle.add (() => {
+                    widget.destroy (); 
+    
+                    return false;
+                });
             });
         });
 
@@ -118,7 +122,7 @@ public class Views.Radios : Gtk.EventBox {
         listbox.show_all ();
     }
 
-    public void add_all_tracks () {
+    public void add_all_items () {
         if (item_max > all_radios.size) {
             item_max = all_radios.size;
         }

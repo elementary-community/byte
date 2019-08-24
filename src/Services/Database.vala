@@ -2,7 +2,7 @@ public class Services.Database : GLib.Object {
     private Sqlite.Database db; 
     private string db_path;
 
-    public signal void adden_new_track (Objects.Track track);
+    public signal void adden_new_track (Objects.Track? track);
     public signal void added_new_artist (Objects.Artist artist);
     public signal void added_new_album (Objects.Album album);
     public signal void adden_new_radio (Objects.Radio radio);
@@ -467,6 +467,7 @@ public class Services.Database : GLib.Object {
             });
         } else {
             warning ("Error: %d: %s", db.errcode (), db.errmsg ());
+            adden_new_track (null);
         }
 
         stmt.reset ();
@@ -1468,7 +1469,7 @@ public class Services.Database : GLib.Object {
         int res;
 
         sql = """
-            DELETE FROM radios where id = ?;
+            DELETE FROM radios WHERE id = ?;
         """;
 
         res = db.prepare_v2 (sql, -1, out stmt);

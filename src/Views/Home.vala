@@ -116,15 +116,17 @@ public class Views.Home : Gtk.EventBox {
 
         Byte.database.adden_new_track.connect ((track) => {
             Idle.add (() => {
-                var row = new Widgets.TrackRow (track);
-                listbox.insert (row, 0);
-                all_tracks.insert (0, track);
-                listbox.show_all ();
+                if (track != null) {
+                    var row = new Widgets.TrackRow (track);
+                    listbox.insert (row, 0);
+                    all_tracks.insert (0, track);
+                    listbox.show_all ();
 
-                if (all_tracks.size > 100) {
-                    all_tracks.remove_at (100);
-                    var _row = listbox.get_row_at_index (100);
-                    _row.destroy ();
+                    if (all_tracks.size > 100) {
+                        all_tracks.remove_at (100);
+                        var _row = listbox.get_row_at_index (100);
+                        _row.destroy ();
+                    }
                 }
 
                 return false;
@@ -133,7 +135,11 @@ public class Views.Home : Gtk.EventBox {
 
         Byte.database.reset_library.connect (() => {
             listbox.foreach ((widget) => {
-                widget.destroy (); 
+                Idle.add (() => {
+                    widget.destroy (); 
+    
+                    return false;
+                });
             });
         });
     }

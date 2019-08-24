@@ -1,6 +1,6 @@
 public class Views.Artists : Gtk.EventBox {
     private Gtk.ListBox listbox;
-    private Gtk.SearchEntry search_entry;
+    private Widgets.SearchEntry search_entry;
     public signal void go_back ();  
     public signal void go_artist (Objects.Artist artist);
     
@@ -35,11 +35,7 @@ public class Views.Artists : Gtk.EventBox {
         title_label.valign = Gtk.Align.CENTER;
         title_label.get_style_context ().add_class ("h3");
 
-        search_entry = new Gtk.SearchEntry ();
-        search_entry.margin = 6;
-        search_entry.valign = Gtk.Align.CENTER;
-        search_entry.hexpand = true;
-        search_entry.get_style_context ().add_class ("search-entry");
+        search_entry = new Widgets.SearchEntry ();
         search_entry.tooltip_text = _("Search by title, artist and album");
         search_entry.placeholder_text = _("Search by title, artist and album");
 
@@ -137,7 +133,11 @@ public class Views.Artists : Gtk.EventBox {
 
         Byte.database.reset_library.connect (() => {
             listbox.foreach ((widget) => {
-                widget.destroy (); 
+                Idle.add (() => {
+                    widget.destroy (); 
+    
+                    return false;
+                });
             });
         });
     }

@@ -40,6 +40,7 @@ executable(
         dependency('gstreamer-pbutils-1.0'),
         dependency('gstreamer-tag-1.0'),
         dependency('taglib_c'), 
+        dependency('unity'),
         meson.get_compiler('c').find_library('m', required : false)
     ],
     install: true
