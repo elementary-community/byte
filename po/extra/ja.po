@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: extra\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-08-12 12:17+0900\n"
+"POT-Creation-Date: 2019-08-24 01:13+0400\n"
 "PO-Revision-Date: 2019-08-12 13:45+0900\n"
 "Last-Translator: Ryo Nakano <ryonakaknock3@gmail.com>\n"
 "Language-Team: none\n"
@@ -50,8 +50,8 @@ msgid ""
 "Byte offers a beautiful presentation of your Music Library with loads of "
 "powerful features in a minimalistic yet highly customizable UI."
 msgstr ""
-"Byte は、最小限ながらも高度にカスタマイズ可能な UI に、数多くの強力な機能を"
-"提供し、ミュージックライブラリを見やすく表示します。"
+"Byte は、最小限ながらも高度にカスタマイズ可能な UI に、数多くの強力な機能を提"
+"供し、ミュージックライブラリを見やすく表示します。"
 
 #: data/com.github.alainm23.byte.appdata.xml.in:12
 msgid "Handy features:"
@@ -85,13 +85,57 @@ msgid "Search, add and play your favorite online radio stations."
 msgstr "お気に入りのオンラインラジオ曲を、検索、追加、再生できます。"
 
 #: data/com.github.alainm23.byte.appdata.xml.in:28
+msgid ""
+"This update brings improvements in the synchronization of your library as "
+"well as some new features"
+msgstr ""
+
+#: data/com.github.alainm23.byte.appdata.xml.in:30
+msgid "The new Artist view was added."
+msgstr ""
+
+#: data/com.github.alainm23.byte.appdata.xml.in:31
+msgid "Now you can edit and delete your Playlist."
+msgstr ""
+
+#: data/com.github.alainm23.byte.appdata.xml.in:32
+msgid "'New Playlist' Option in 'Add to Playlist' Popover."
+msgstr ""
+
+#: data/com.github.alainm23.byte.appdata.xml.in:33
+msgid "Byte now correctly imports your album covers."
+msgstr ""
+
+#: data/com.github.alainm23.byte.appdata.xml.in:34
+msgid ""
+"Improvements in online radio search. Now the radios are sorted by the number "
+"of positive votes."
+msgstr ""
+
+#: data/com.github.alainm23.byte.appdata.xml.in:36
+msgid "Translations"
+msgstr ""
+
+#: data/com.github.alainm23.byte.appdata.xml.in:38
+msgid "French translation @NathanBnm 🇲🇫️"
+msgstr ""
+
+#: data/com.github.alainm23.byte.appdata.xml.in:39
+msgid "Japanese translation @ryonakano 🇯🇵️"
+msgstr ""
+
+#: data/com.github.alainm23.byte.appdata.xml.in:40
+msgid "Spanish translation @alainm23"
+msgstr ""
+
+#: data/com.github.alainm23.byte.appdata.xml.in:46
 msgid "Fix some error and performance improvement"
 msgstr "エラーを修正し、パフォーマンスを向上しました"
 
-#: data/com.github.alainm23.byte.appdata.xml.in:33
+#: data/com.github.alainm23.byte.appdata.xml.in:51
 msgid "Initial release"
 msgstr "最初のリリース"
 
-#: data/com.github.alainm23.byte.appdata.xml.in:83
+#: data/com.github.alainm23.byte.appdata.xml.in:101
 msgid "Alain M."
 msgstr "Alain M."

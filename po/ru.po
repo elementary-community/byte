@@ -1,4 +1,4 @@
-# Japanese translations for com.github.alainm23.byte package.
+# Russian translations for com.github.alainm23.byte package.
 # Copyright (C) 2019 THE com.github.alainm23.byte'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the com.github.alainm23.byte package.
 # Automatically generated, 2019.
@@ -8,447 +8,448 @@ msgstr ""
 "Project-Id-Version: com.github.alainm23.byte\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-08-24 01:13+0400\n"
-"PO-Revision-Date: 2019-08-12 12:31+0900\n"
-"Last-Translator: Ryo Nakano <ryonakaknock3@gmail.com>\n"
+"PO-Revision-Date: 2019-08-24 02:43+0400\n"
+"Last-Translator: Andrey Kultyapov <camellan@yandex.ru>\n"
 "Language-Team: none\n"
-"Language: ja\n"
+"Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=1; plural=0;\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 "X-Generator: Poedit 2.2.3\n"
 
 #: src/Dialogs/Settings.vala:16
 msgid "General"
-msgstr "一般"
+msgstr "Основные"
 
 #: src/Dialogs/Settings.vala:33
 msgid "Dark mode"
-msgstr "ダークモード"
+msgstr "Темная тема"
 
 #: src/Dialogs/Settings.vala:61
 msgid "Notifications"
-msgstr "通知"
+msgstr "Уведомления"
 
 #: src/Dialogs/Settings.vala:85
 msgid "Play in background if closed"
-msgstr "アプリを閉じてもバックグラウンドで再生"
+msgstr "Играть в фоновом режиме после закрытия"
 
 #: src/Dialogs/Settings.vala:111 src/Views/Home.vala:20
 #: src/Widgets/QuickFind.vala:45
 msgid "Library"
-msgstr "ライブラリ"
+msgstr "Медиатека"
 
 #: src/Dialogs/Settings.vala:127
 msgid "Music folder location"
-msgstr "ミュージックフォルダーの場所"
+msgstr "Расположение папки музыки"
 
 #: src/Dialogs/Settings.vala:129
 msgid "Select Music Folder…"
-msgstr "ミュージックフォルダーを選択…"
+msgstr "Выбор папки музыки..."
 
 #: src/Dialogs/Settings.vala:152
 msgid "Sync library on start up"
-msgstr "アプリの起動時にライブラリを同期"
+msgstr "Обновлять медиатеку при запуске"
 
 #: src/Dialogs/Settings.vala:176
 msgid "Automatically download covers"
-msgstr "アルバムカバーを自動的にダウンロード"
+msgstr "Автоматически загружать обложки"
 
 #: src/Dialogs/Settings.vala:200
 msgid "Save changes into ID3-Tag"
-msgstr "変更を ID3 タグに保存"
+msgstr "Сохранить изменения в ID3-Tag"
 
 #: src/Dialogs/Settings.vala:238
 msgid "Reset all library"
-msgstr "すべてのライブラリをリセット"
+msgstr "Сбросить всю медиатеку"
 
 #: src/Dialogs/Settings.vala:240 src/Dialogs/Settings.vala:354
 msgid "Reset"
-msgstr "リセット"
+msgstr "Сбросить"
 
 #: src/Dialogs/Settings.vala:270 src/Dialogs/TrackEditor.vala:134
 msgid "Close"
-msgstr "閉じる"
+msgstr "Закрыть"
 
 #: src/Dialogs/Settings.vala:326
 msgid "Set Music Folder?"
-msgstr "ミュージックフォルダーを設定しますか？"
+msgstr "Установить папку музыки?"
 
 #: src/Dialogs/Settings.vala:327
 #, c-format
 msgid "Are you sure you want to set the music folder to <b>%s</b>?"
-msgstr "ミュージックフォルダーを <b>%s</b> に設定してもよろしいですか？"
+msgstr "Вы уверены, что хотите установить папку музыки в <b>%s</b>?"
 
 #: src/Dialogs/Settings.vala:332
 msgid "Set Music Folder"
-msgstr "ミュージックフォルダーを設定"
+msgstr "Установка папки музыки"
 
 #: src/Dialogs/Settings.vala:348
 msgid "Reset your library?"
-msgstr "ライブラリをリセットしますか？"
+msgstr "Сбросить вашу медиатеку?"
 
 #: src/Dialogs/Settings.vala:349
 msgid "Are you sure you want to reset all your library?"
-msgstr "すべてのライブラリをリセットしてもよろしいですか？"
+msgstr "Вы уверены, что хотите сбросить всю свою медиатеку?"
 
 #: src/Dialogs/TrackEditor.vala:82
 msgid "Title"
-msgstr "タイトル"
+msgstr "Название"
 
 #: src/Dialogs/TrackEditor.vala:84 src/Views/Albums.vala:82
 #: src/Views/Playlist.vala:117 src/Views/Tracks.vala:92
 msgid "Artist"
-msgstr "アーティスト名"
+msgstr "Исполнитель"
 
 #: src/Dialogs/TrackEditor.vala:86 src/Views/Album.vala:73
 #: src/Views/Playlist.vala:118 src/Views/Tracks.vala:93
 msgid "Album"
-msgstr "アルバム"
+msgstr "Альбом"
 
 #: src/Dialogs/TrackEditor.vala:88 src/Views/Albums.vala:84
 msgid "Genre"
-msgstr "ジャンル"
+msgstr "Жанр"
 
 #: src/Dialogs/TrackEditor.vala:90 src/Views/Albums.vala:83
 msgid "Year"
-msgstr "発表年"
+msgstr "Год"
 
 #: src/Dialogs/TrackEditor.vala:92
 msgid "Track"
-msgstr "トラック"
+msgstr "Трек"
 
 #: src/Dialogs/TrackEditor.vala:94
 msgid "Lyrics"
-msgstr "歌詞"
+msgstr "Текст песни"
 
 #: src/Dialogs/TrackEditor.vala:136 src/Views/Playlist.vala:246
 msgid "Save"
-msgstr "保存"
+msgstr "Сохранить"
 
 #: src/Views/Album.vala:126 src/Views/Favorites.vala:67
 #: src/Views/Playlist.vala:200 src/Views/Tracks.vala:102
 #: src/Widgets/HeaderBar.vala:77 src/Widgets/TrackAlbumRow.vala:220
 #: src/Widgets/TrackRow.vala:309
 msgid "Play"
-msgstr "再生"
+msgstr "Воспроизвести"
 
 #: src/Views/Album.vala:133 src/Views/Favorites.vala:76
 #: src/Views/Playlist.vala:207 src/Views/Tracks.vala:111
 msgid "Shuffle"
-msgstr "シャッフル"
+msgstr "Перемешать"
 
 #: src/Views/Albums.vala:34 src/Views/Home.vala:37
 msgid "Albums"
-msgstr "アルバム"
+msgstr "Альбомы"
 
 #: src/Views/Albums.vala:43 src/Views/Albums.vala:51 src/Views/Albums.vala:52
 msgid "Search by title, artist, genre and year"
-msgstr "タイトル、アーティスト名、ジャンル、発表年で検索"
+msgstr "Поиск по названию, исполнителю, жанру и году"
 
 #: src/Views/Albums.vala:50
 msgid "Your library"
-msgstr "ライブラリ"
+msgstr "Ваша медиатека"
 
 #: src/Views/Albums.vala:68 src/Views/Playlist.vala:103
 #: src/Views/Tracks.vala:78
 msgid "Sort"
-msgstr "並べ替え"
+msgstr "Сортировать"
 
 #: src/Views/Albums.vala:81 src/Views/Playlist.vala:116
 #: src/Views/Tracks.vala:91
 msgid "Name"
-msgstr "名前"
+msgstr "Имя"
 
 #: src/Views/Artists.vala:33 src/Views/Home.vala:40
 msgid "Artists"
-msgstr "アーティスト"
+msgstr "Исполнители"
 
 #: src/Views/Artists.vala:43 src/Views/Artists.vala:44
 #: src/Views/Favorites.vala:37 src/Views/Favorites.vala:44
 #: src/Views/Favorites.vala:45 src/Views/Tracks.vala:54
 #: src/Views/Tracks.vala:61 src/Views/Tracks.vala:62
 msgid "Search by title, artist and album"
-msgstr "タイトル、アーティスト名、アルバム名で検索"
+msgstr "Поиск по названию, исполнителю и альбому"
 
 #: src/Views/Favorites.vala:28 src/Views/Home.vala:43
 msgid "Favorites"
-msgstr "お気に入り"
+msgstr "Избранные"
 
 #: src/Views/Home.vala:29
 msgid "Recently added"
-msgstr "最近追加した項目"
+msgstr "Недавно добавленные"
 
 #: src/Views/Home.vala:29
 msgid "(last 100)"
-msgstr "(最近の 100 曲)"
+msgstr "(последние 100)"
 
 #: src/Views/Home.vala:36 src/Views/Playlists.vala:30
 msgid "Playlists"
-msgstr "プレイリスト"
+msgstr "Плейлисты"
 
 #: src/Views/Home.vala:38 src/Views/Tracks.vala:45
 msgid "Songs"
-msgstr "曲"
+msgstr "Песни"
 
 #: src/Views/Home.vala:42 src/Views/Radios.vala:28
 #: src/Widgets/QuickFind.vala:46
 msgid "Radios"
-msgstr "ラジオ"
+msgstr "Радио"
 
 #: src/Views/Playlist.vala:93
 msgid "Playlist"
-msgstr "プレイリスト"
+msgstr "Плейлист"
 
 #: src/Views/Playlist.vala:119 src/Views/Tracks.vala:94
 msgid "Date Added"
-msgstr "追加された日時"
+msgstr "Дата добавления"
 
 #: src/Views/Playlist.vala:120 src/Views/Tracks.vala:95
 msgid "Play Count"
-msgstr "再生回数"
+msgstr "Количество прослушиваний"
 
 #: src/Views/Playlist.vala:157
 msgid "Edit Name and Appearance"
-msgstr ""
+msgstr "Изменить имя и отображение"
 
 #. Items
 #: src/Views/Playlist.vala:164
 msgid "Edit Details"
-msgstr ""
+msgstr "Редактировать детали"
 
 #: src/Views/Playlist.vala:165
 msgid "Set new Cover"
-msgstr ""
+msgstr "Установить новую обложку"
 
 #: src/Views/Playlist.vala:166 src/Views/Playlist.vala:396
 #: src/Widgets/RadioRow.vala:116 src/Widgets/TrackRow.vala:383
 msgid "Delete"
-msgstr "ファイルを削除"
+msgstr "Удалить"
 
 #: src/Views/Playlist.vala:189
 msgid "Updated"
-msgstr "更新日時"
+msgstr "Обновлено"
 
 #. Add
 #: src/Views/Playlist.vala:229 src/Widgets/Popovers/NewPlaylist.vala:19
 #: src/Widgets/NewPlaylist.vala:10
 msgid "New Playlist"
-msgstr "新しいプレイリスト"
+msgstr "Новый плейлист"
 
 #: src/Views/Playlist.vala:242 src/Widgets/Popovers/NewPlaylist.vala:31
 msgid "Add Description"
-msgstr "説明を追加"
+msgstr "Добавить описание"
 
 #: src/Views/Playlists.vala:43
 msgid "Add New Playlist"
-msgstr "新しいプレイリストを追加"
+msgstr "Добавить новый плейлист"
 
 #: src/Views/Radios.vala:35
 msgid "Search internet radios"
-msgstr "インターネットラジオを検索"
+msgstr "Поиск интернет-радио"
 
 #: src/Views/Tracks.vala:31
 msgid "No Results"
-msgstr "検索結果はありません"
+msgstr "Ничего не найдено"
 
 #: src/Views/Tracks.vala:321
 #, c-format
 msgid "No results for '%s' in Tracks. Try again."
-msgstr "トラックに '%s' の検索結果はありません。もう一度お試しください。"
+msgstr "Нет результатов для '%s' в треках. Попробуйте еще раз."
 
 #: src/Views/Tracks.vala:352
 msgid "No Songs"
-msgstr "曲はありません"
+msgstr "Нет песен"
 
 #: src/Views/Tracks.vala:353
 msgid "Add some tracks to your selected music folder."
-msgstr "選択したミュージックフォルダーにトラックを追加してください。"
+msgstr "Добавьте несколько треков в выбранную папку музыки."
 
 #: src/Widgets/Popovers/NewPlaylist.vala:56
 msgid "Add"
-msgstr "追加"
+msgstr "Добавить"
 
 #: src/Widgets/Popovers/Sort.vala:130
 msgid "Sort by"
-msgstr "並べ替え"
+msgstr "Сортировать по"
 
 #: src/Widgets/Popovers/Sort.vala:154
 msgid "Reversed order"
-msgstr "逆順"
+msgstr "Обратный порядок"
 
 #: src/Widgets/HeaderBar.vala:70
 msgid "Previous"
-msgstr "前へ"
+msgstr "Предыдущий"
 
 #: src/Widgets/HeaderBar.vala:84
 msgid "Next"
-msgstr "次へ"
+msgstr "Следующий"
 
 #.
 #. Menu
 #.
 #: src/Widgets/HeaderBar.vala:101
 msgid "Search"
-msgstr "検索"
+msgstr "Поиск"
 
 #: src/Widgets/HeaderBar.vala:103
 msgid "Import Music"
-msgstr "曲をインポート"
+msgstr "Импорт музыки"
 
 #: src/Widgets/HeaderBar.vala:104
 msgid "Resync Libray"
-msgstr "ライブラリをリセット"
+msgstr "Пересканировать медиатеку"
 
 #: src/Widgets/HeaderBar.vala:105
 msgid "Preferences"
-msgstr "設定"
+msgstr "Настройки"
 
 #: src/Widgets/HeaderBar.vala:123
 msgid "Menu"
-msgstr "メニュー"
+msgstr "Меню"
 
 #: src/Widgets/HeaderBar.vala:244
 msgid "Shuffle On"
-msgstr "シャッフルは有効"
+msgstr "Перемешивание включено"
 
 #: src/Widgets/HeaderBar.vala:247
 msgid "Shuffle Off"
-msgstr "シャッフルは無効"
+msgstr "Перемешивание выключено"
 
 #: src/Widgets/HeaderBar.vala:256
 msgid "Repeat Off"
-msgstr "リピートは無効"
+msgstr "Повтор выключен"
 
 #: src/Widgets/HeaderBar.vala:259
 msgid "Repeat All"
-msgstr "全体をリピート"
+msgstr "Повторять все"
 
 #: src/Widgets/HeaderBar.vala:262
 msgid "Repeat One"
-msgstr "一曲をリピート"
+msgstr "Повторять один"
 
 #: src/Widgets/NewPlaylist.vala:32
 msgid "Project name"
-msgstr "プロジェクト名"
+msgstr "Имя проекта"
 
 #: src/Widgets/Queue.vala:19
 msgid "Next track"
-msgstr "次のトラック"
+msgstr "Следующий трек"
 
 #: src/Widgets/Queue.vala:33
 msgid "View all"
-msgstr "すべて表示"
+msgstr "Показать все"
 
 #: src/Widgets/Queue.vala:98
 msgid "Syncing Library…"
-msgstr "ライブラリを同期しています…"
+msgstr "Синхронизация медиатеки..."
 
 #: src/Widgets/Queue.vala:137
 msgid "Hide"
-msgstr "非表示"
+msgstr "Скрыть"
 
 #: src/Widgets/Queue.vala:146
 msgid "Up Next"
-msgstr "次の曲"
+msgstr "Следующий"
 
 #: src/Widgets/Queue.vala:271
 #, c-format
 msgid "%s <b>by</b> %s"
-msgstr "%s <b>by</b> %s"
+msgstr "%s <b>от</b> %s"
 
 #: src/Widgets/Queue.vala:395
 msgid "Add Favorite"
-msgstr "お気に入りに追加"
+msgstr "Добавить в избранное"
 
 #: src/Widgets/QuickFind.vala:24 src/Widgets/QuickFind.vala:137
 msgid "The radio station was added correctly"
-msgstr "ラジオ局を正常に追加しました"
+msgstr "Радиостанция была добавлена корректно"
 
 #: src/Widgets/QuickFind.vala:28
 msgid "Quick find"
-msgstr "クイック検索"
+msgstr "Быстрый поиск"
 
 #: src/Widgets/QuickFind.vala:30
 msgid "Cancel"
-msgstr "キャンセル"
+msgstr "Отменить"
 
 #: src/Widgets/QuickFind.vala:62
 msgid "Discover…"
-msgstr "見つける…"
+msgstr "Обзор..."
 
 #: src/Widgets/QuickFind.vala:63
 msgid "Search your favorite radios"
-msgstr "お気に入りのラジオを検索"
+msgstr "Поиск ваших любимых радиостанций"
 
 #: src/Widgets/QuickFind.vala:106
 msgid "The radio station is already added"
-msgstr "そのラジオ局はすでに追加されています"
+msgstr "Радиостанция уже была добавлена"
 
 #: src/Widgets/RadioRow.vala:58 src/Widgets/TrackQueueRow.vala:61
 msgid "Remove"
-msgstr "リストから削除"
+msgstr "Удалить"
 
 #: src/Widgets/TrackAlbumRow.vala:44 src/Widgets/TrackRow.vala:80
 msgid "Options"
-msgstr "オプション"
+msgstr "Свойства"
 
 #: src/Widgets/TrackAlbumRow.vala:155 src/Widgets/TrackRow.vala:244
 msgid "Create New Playlist"
-msgstr "新しいプレイリストを作成"
+msgstr "Создать новый плейлист"
 
 #: src/Widgets/TrackAlbumRow.vala:221 src/Widgets/TrackRow.vala:310
 msgid "Play Next"
-msgstr "次を再生"
+msgstr "Воспроизвести следующий"
 
 #: src/Widgets/TrackAlbumRow.vala:222 src/Widgets/TrackRow.vala:311
 msgid "Play Later"
-msgstr "後で再生"
+msgstr "Воспроизвести позже"
 
 #: src/Widgets/TrackAlbumRow.vala:224 src/Widgets/TrackRow.vala:313
 msgid "Add to Playlist"
-msgstr "プレイリストに追加"
+msgstr "Добавить в плейлист"
 
 #: src/Widgets/TrackAlbumRow.vala:229 src/Widgets/TrackRow.vala:318
 msgid "Edit Song Info…"
-msgstr "曲情報を編集…"
+msgstr "Изменить информацию о песне ..."
 
 #: src/Widgets/TrackAlbumRow.vala:230 src/Widgets/TrackRow.vala:319
 msgid "Favorite"
-msgstr "お気に入り"
+msgstr "Избранное"
 
 #: src/Widgets/TrackAlbumRow.vala:231 src/Widgets/TrackRow.vala:320
 msgid "Delete from library"
-msgstr "ライブラリから削除"
+msgstr "Удалить из медиатеки"
 
 #: src/Widgets/TrackAlbumRow.vala:232 src/Widgets/TrackRow.vala:321
 msgid "Delete from file"
-msgstr "ファイルを削除"
+msgstr "Удалить из файла"
 
 #: src/Widgets/TrackAlbumRow.vala:233 src/Widgets/TrackRow.vala:322
 msgid "Remove from playlist"
-msgstr "プレイリストから削除"
+msgstr "Удалить из плейлиста"
 
 #: src/Widgets/Welcome.vala:12
 msgid "Library is Empty"
-msgstr "ライブラリに何もありません"
+msgstr "Медиатека пуста"
 
 #: src/Widgets/Welcome.vala:12
 msgid "Add music to start jamming out"
-msgstr "続行するには曲を追加してください"
+msgstr "Добавьте музыку для начала приглушённого вывода"
 
 #: src/Widgets/Welcome.vala:14
 msgid "Load Music"
-msgstr "曲を読み込む"
+msgstr "Загрузить музыку"
 
 #: src/Widgets/Welcome.vala:14
 msgid "Load from the user's music directory"
-msgstr "ユーザーのミュージックフォルダーから読み込みます"
+msgstr "Загрузка из пользовательского каталога музыки"
 
 #: src/Widgets/Welcome.vala:15
 msgid "Change Music Folder"
-msgstr "ミュージックフォルダーを変更"
+msgstr "Выбрать папку музыки"
 
 #: src/Widgets/Welcome.vala:15
 msgid "Load music from folder"
-msgstr "曲をフォルダーから読み込みます"
+msgstr "Загрузить музыку из папки"

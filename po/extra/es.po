@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: extra\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-08-11 18:57+0200\n"
+"POT-Creation-Date: 2019-08-24 01:13+0400\n"
 "PO-Revision-Date: 2019-08-10 12:12+0200\n"
 "Last-Translator: Alain M.\n"
 "Language-Team: none\n"
@@ -87,13 +87,57 @@ msgid "Search, add and play your favorite online radio stations."
 msgstr "Busca, agrega y reproduce tus estaciones de radio en línea favoritas."
 
 #: data/com.github.alainm23.byte.appdata.xml.in:28
-msgid "Fix some error and performance improvement"
+msgid ""
+"This update brings improvements in the synchronization of your library as "
+"well as some new features"
+msgstr ""
+
+#: data/com.github.alainm23.byte.appdata.xml.in:30
+msgid "The new Artist view was added."
+msgstr ""
+
+#: data/com.github.alainm23.byte.appdata.xml.in:31
+msgid "Now you can edit and delete your Playlist."
+msgstr ""
+
+#: data/com.github.alainm23.byte.appdata.xml.in:32
+msgid "'New Playlist' Option in 'Add to Playlist' Popover."
 msgstr ""
 
 #: data/com.github.alainm23.byte.appdata.xml.in:33
+msgid "Byte now correctly imports your album covers."
+msgstr ""
+
+#: data/com.github.alainm23.byte.appdata.xml.in:34
+msgid ""
+"Improvements in online radio search. Now the radios are sorted by the number "
+"of positive votes."
+msgstr ""
+
+#: data/com.github.alainm23.byte.appdata.xml.in:36
+msgid "Translations"
+msgstr ""
+
+#: data/com.github.alainm23.byte.appdata.xml.in:38
+msgid "French translation @NathanBnm 🇲🇫️"
+msgstr ""
+
+#: data/com.github.alainm23.byte.appdata.xml.in:39
+msgid "Japanese translation @ryonakano 🇯🇵️"
+msgstr ""
+
+#: data/com.github.alainm23.byte.appdata.xml.in:40
+msgid "Spanish translation @alainm23"
+msgstr ""
+
+#: data/com.github.alainm23.byte.appdata.xml.in:46
+msgid "Fix some error and performance improvement"
+msgstr ""
+
+#: data/com.github.alainm23.byte.appdata.xml.in:51
 msgid "Initial release"
 msgstr "Versión inicial"
 
-#: data/com.github.alainm23.byte.appdata.xml.in:83
+#: data/com.github.alainm23.byte.appdata.xml.in:101
 msgid "Alain M."
 msgstr "Alain M."
