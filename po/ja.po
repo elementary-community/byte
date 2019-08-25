@@ -210,21 +210,21 @@ msgstr "再生回数"
 
 #: src/Views/Playlist.vala:157
 msgid "Edit Name and Appearance"
-msgstr ""
+msgstr "名前と画像を変更"
 
 #. Items
 #: src/Views/Playlist.vala:164
 msgid "Edit Details"
-msgstr ""
+msgstr "詳細を編集"
 
 #: src/Views/Playlist.vala:165
 msgid "Set new Cover"
-msgstr ""
+msgstr "新しいカバー画像を設定"
 
 #: src/Views/Playlist.vala:166 src/Views/Playlist.vala:396
 #: src/Widgets/RadioRow.vala:116 src/Widgets/TrackRow.vala:383
 msgid "Delete"
-msgstr "ファイルを削除"
+msgstr "削除"
 
 #: src/Views/Playlist.vala:189
 msgid "Updated"
@@ -298,7 +298,7 @@ msgstr "曲をインポート"
 
 #: src/Widgets/HeaderBar.vala:104
 msgid "Resync Libray"
-msgstr "ライブラリをリセット"
+msgstr "ライブラリを再同期"
 
 #: src/Widgets/HeaderBar.vala:105
 msgid "Preferences"
