@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: com.github.alainm23.byte\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-08-27 22:38+0400\n"
+"POT-Creation-Date: 2019-08-27 15:48-0500\n"
 "PO-Revision-Date: 2019-08-12 12:31+0900\n"
 "Last-Translator: Ryo Nakano <ryonakaknock3@gmail.com>\n"
 "Language-Team: none\n"
@@ -18,281 +18,75 @@ msgstr ""
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Poedit 2.2.3\n"
 
-#: src/Dialogs/Settings.vala:16
-msgid "General"
-msgstr "一般"
+#: src/Utils.vala:286
+msgid "Choose an image…"
+msgstr ""
 
-#: src/Dialogs/Settings.vala:33
-msgid "Dark mode"
-msgstr "ダークモード"
+#: src/Utils.vala:288 src/Services/Scan.vala:88 src/Widgets/QuickFind.vala:31
+msgid "Cancel"
+msgstr "キャンセル"
 
-#: src/Dialogs/Settings.vala:61
-msgid "Notifications"
-msgstr "通知"
+#: src/Utils.vala:289 src/Services/Scan.vala:89
+msgid "Open"
+msgstr ""
 
-#: src/Dialogs/Settings.vala:85
-msgid "Play in background if closed"
-msgstr "アプリを閉じてもバックグラウンドで再生"
-
-#: src/Dialogs/Settings.vala:111 src/Views/Home.vala:20
-#: src/Widgets/QuickFind.vala:46
-msgid "Library"
-msgstr "ライブラリ"
-
-#: src/Dialogs/Settings.vala:127
-msgid "Music folder location"
-msgstr "ミュージックフォルダーの場所"
-
-#: src/Dialogs/Settings.vala:129
-msgid "Select Music Folder…"
-msgstr "ミュージックフォルダーを選択…"
-
-#: src/Dialogs/Settings.vala:152
-msgid "Sync library on start up"
-msgstr "アプリの起動時にライブラリを同期"
-
-#: src/Dialogs/Settings.vala:176
-msgid "Automatically download covers"
-msgstr "アルバムカバーを自動的にダウンロード"
-
-#: src/Dialogs/Settings.vala:200
-msgid "Save changes into ID3-Tag"
-msgstr "変更を ID3 タグに保存"
-
-#: src/Dialogs/Settings.vala:238
-msgid "Reset all library"
-msgstr "すべてのライブラリをリセット"
-
-#: src/Dialogs/Settings.vala:240 src/Dialogs/Settings.vala:354
-msgid "Reset"
-msgstr "リセット"
-
-#: src/Dialogs/Settings.vala:270 src/Dialogs/TrackEditor.vala:134
-msgid "Close"
-msgstr "閉じる"
-
-#: src/Dialogs/Settings.vala:326
-msgid "Set Music Folder?"
-msgstr "ミュージックフォルダーを設定しますか？"
-
-#: src/Dialogs/Settings.vala:327
-#, c-format
-msgid "Are you sure you want to set the music folder to <b>%s</b>?"
-msgstr "ミュージックフォルダーを <b>%s</b> に設定してもよろしいですか？"
-
-#: src/Dialogs/Settings.vala:332
-msgid "Set Music Folder"
-msgstr "ミュージックフォルダーを設定"
-
-#: src/Dialogs/Settings.vala:348
-msgid "Reset your library?"
-msgstr "ライブラリをリセットしますか？"
-
-#: src/Dialogs/Settings.vala:349
-msgid "Are you sure you want to reset all your library?"
-msgstr "すべてのライブラリをリセットしてもよろしいですか？"
-
-#: src/Dialogs/TrackEditor.vala:82
-msgid "Title"
-msgstr "タイトル"
-
-#: src/Dialogs/TrackEditor.vala:84 src/Views/Albums.vala:77
-#: src/Views/Playlist.vala:117 src/Views/Tracks.vala:88
-msgid "Artist"
-msgstr "アーティスト名"
-
-#: src/Dialogs/TrackEditor.vala:86 src/Views/Album.vala:73
-#: src/Views/Playlist.vala:118 src/Views/Tracks.vala:89
-msgid "Album"
-msgstr "アルバム"
-
-#: src/Dialogs/TrackEditor.vala:88 src/Views/Albums.vala:79
-msgid "Genre"
-msgstr "ジャンル"
-
-#: src/Dialogs/TrackEditor.vala:90 src/Views/Albums.vala:78
-msgid "Year"
-msgstr "発表年"
-
-#: src/Dialogs/TrackEditor.vala:92
-msgid "Track"
-msgstr "トラック"
-
-#: src/Dialogs/TrackEditor.vala:94
-msgid "Lyrics"
-msgstr "歌詞"
-
-#: src/Dialogs/TrackEditor.vala:136 src/Views/Playlist.vala:246
-msgid "Save"
-msgstr "保存"
-
-#: src/Views/Album.vala:126 src/Views/Favorites.vala:64
-#: src/Views/Playlist.vala:200 src/Views/Tracks.vala:98
-#: src/Widgets/HeaderBar.vala:77 src/Widgets/TrackAlbumRow.vala:222
-#: src/Widgets/TrackRow.vala:311
-msgid "Play"
-msgstr "再生"
-
-#: src/Views/Album.vala:133 src/Views/Favorites.vala:73
-#: src/Views/Playlist.vala:207 src/Views/Tracks.vala:107
-msgid "Shuffle"
-msgstr "シャッフル"
-
-#: src/Views/Albums.vala:34 src/Views/Home.vala:37
-msgid "Albums"
-msgstr "アルバム"
-
-#: src/Views/Albums.vala:43 src/Views/Albums.vala:46 src/Views/Albums.vala:47
-msgid "Search by title, artist, genre and year"
-msgstr "タイトル、アーティスト名、ジャンル、発表年で検索"
-
-#: src/Views/Albums.vala:63 src/Views/Playlist.vala:103
-#: src/Views/Tracks.vala:74
-msgid "Sort"
-msgstr "並べ替え"
-
-#: src/Views/Albums.vala:76 src/Views/Playlist.vala:116
-#: src/Views/Tracks.vala:87
-msgid "Name"
-msgstr "名前"
-
-#: src/Views/Artists.vala:33 src/Views/Home.vala:40
-msgid "Artists"
-msgstr "アーティスト"
-
-#: src/Views/Artists.vala:39 src/Views/Artists.vala:40
-#: src/Views/Favorites.vala:37 src/Views/Favorites.vala:41
-#: src/Views/Favorites.vala:42 src/Views/Tracks.vala:54
-#: src/Views/Tracks.vala:57 src/Views/Tracks.vala:58
-msgid "Search by title, artist and album"
-msgstr "タイトル、アーティスト名、アルバム名で検索"
-
-#: src/Views/Favorites.vala:28 src/Views/Home.vala:43
-msgid "Favorites"
-msgstr "お気に入り"
-
-#: src/Views/Home.vala:29
-msgid "Recently added"
-msgstr "最近追加した項目"
-
-#: src/Views/Home.vala:29
-msgid "(last 100)"
-msgstr "(最近の 100 曲)"
-
-#: src/Views/Home.vala:36 src/Views/Playlists.vala:30
-msgid "Playlists"
-msgstr "プレイリスト"
-
-#: src/Views/Home.vala:38 src/Views/Tracks.vala:45
-msgid "Songs"
-msgstr "曲"
-
-#: src/Views/Home.vala:42 src/Views/Radios.vala:28
-#: src/Widgets/QuickFind.vala:47
-msgid "Radios"
-msgstr "ラジオ"
-
-#: src/Views/Playlist.vala:73
-#, fuzzy, c-format
-msgid "%i songs"
-msgstr "曲はありません"
-
-#: src/Views/Playlist.vala:93
-msgid "Playlist"
-msgstr "プレイリスト"
-
-#: src/Views/Playlist.vala:119 src/Views/Tracks.vala:90
-msgid "Date Added"
-msgstr "追加された日時"
-
-#: src/Views/Playlist.vala:120 src/Views/Tracks.vala:91
-msgid "Play Count"
-msgstr "再生回数"
-
-#: src/Views/Playlist.vala:157
-msgid "Edit Name and Appearance"
-msgstr "名前と画像を変更"
-
-#. Items
-#: src/Views/Playlist.vala:164
-msgid "Edit Details"
-msgstr "詳細を編集"
-
-#: src/Views/Playlist.vala:165
-msgid "Set new Cover"
-msgstr "新しいカバー画像を設定"
-
-#: src/Views/Playlist.vala:166 src/Views/Playlist.vala:396
-#: src/Widgets/RadioRow.vala:116 src/Widgets/TrackRow.vala:385
-msgid "Delete"
-msgstr "削除"
-
-#: src/Views/Playlist.vala:189
-msgid "Updated"
-msgstr "更新日時"
+#: src/Utils.vala:292
+msgid "Images"
+msgstr ""
 
 #. Add
-#: src/Views/Playlist.vala:229 src/Widgets/Popovers/NewPlaylist.vala:19
-#: src/Widgets/NewPlaylist.vala:10
+#: src/Services/Database.vala:1622 src/Widgets/NewPlaylist.vala:10
+#: src/Widgets/Popovers/NewPlaylist.vala:19 src/Views/Playlist.vala:229
 msgid "New Playlist"
 msgstr "新しいプレイリスト"
 
-#: src/Views/Playlist.vala:242 src/Widgets/Popovers/NewPlaylist.vala:31
-msgid "Add Description"
-msgstr "説明を追加"
+#: src/Services/TagManager.vala:4 src/Widgets/AlbumRow.vala:8
+msgid "Unknown"
+msgstr ""
 
-#: src/Views/Playlist.vala:390 src/Widgets/RadioRow.vala:110
-#: src/Widgets/TrackRow.vala:379
+#: src/Services/Scan.vala:87
 #, fuzzy
-msgid "Delete from library?"
-msgstr "ライブラリから削除"
+msgid "Select a folder."
+msgstr "ミュージックフォルダーを選択…"
 
-#: src/Views/Playlist.vala:391 src/Widgets/RadioRow.vala:111
-#: src/Widgets/TrackRow.vala:380
-#, fuzzy, c-format
-msgid "Are you sure you want to delete <b>%s</b> from your library?"
-msgstr "すべてのライブラリをリセットしてもよろしいですか？"
+#: src/Services/Scan.vala:92
+msgid "Folder"
+msgstr ""
 
-#: src/Views/Playlists.vala:43
-msgid "Add New Playlist"
-msgstr "新しいプレイリストを追加"
+#: src/Widgets/Welcome.vala:12
+msgid "Library is Empty"
+msgstr "ライブラリに何もありません"
 
-#: src/Views/Radios.vala:35
-msgid "Search internet radios"
-msgstr "インターネットラジオを検索"
+#: src/Widgets/Welcome.vala:12
+msgid "Add music to start jamming out"
+msgstr "続行するには曲を追加してください"
 
-#: src/Views/Tracks.vala:31
-msgid "No Results"
-msgstr "検索結果はありません"
+#: src/Widgets/Welcome.vala:14
+msgid "Load Music"
+msgstr "曲を読み込む"
 
-#: src/Views/Tracks.vala:323
-#, c-format
-msgid "No results for '%s' in Tracks. Try again."
-msgstr "トラックに '%s' の検索結果はありません。もう一度お試しください。"
+#: src/Widgets/Welcome.vala:14
+msgid "Load from the user's music directory"
+msgstr "ユーザーのミュージックフォルダーから読み込みます"
 
-#: src/Views/Tracks.vala:354
-msgid "No Songs"
-msgstr "曲はありません"
+#: src/Widgets/Welcome.vala:15
+msgid "Change Music Folder"
+msgstr "ミュージックフォルダーを変更"
 
-#: src/Views/Tracks.vala:355
-msgid "Add some tracks to your selected music folder."
-msgstr "選択したミュージックフォルダーにトラックを追加してください。"
-
-#: src/Widgets/Popovers/NewPlaylist.vala:56
-msgid "Add"
-msgstr "追加"
-
-#: src/Widgets/Popovers/Sort.vala:130
-msgid "Sort by"
-msgstr "並べ替え"
-
-#: src/Widgets/Popovers/Sort.vala:159
-msgid "Reversed order"
-msgstr "逆順"
+#: src/Widgets/Welcome.vala:15
+msgid "Load music from folder"
+msgstr "曲をフォルダーから読み込みます"
 
 #: src/Widgets/HeaderBar.vala:70
 msgid "Previous"
 msgstr "前へ"
+
+#: src/Widgets/HeaderBar.vala:77 src/Widgets/TrackRow.vala:311
+#: src/Widgets/TrackAlbumRow.vala:222 src/Views/Album.vala:126
+#: src/Views/Tracks.vala:98 src/Views/Favorites.vala:64
+#: src/Views/Playlist.vala:200
+msgid "Play"
+msgstr "再生"
 
 #: src/Widgets/HeaderBar.vala:84
 msgid "Next"
@@ -341,9 +135,96 @@ msgstr "全体をリピート"
 msgid "Repeat One"
 msgstr "一曲をリピート"
 
-#: src/Widgets/NewPlaylist.vala:32
-msgid "Project name"
-msgstr "プロジェクト名"
+#: src/Widgets/TrackRow.vala:80 src/Widgets/TrackAlbumRow.vala:44
+msgid "Options"
+msgstr "オプション"
+
+#: src/Widgets/TrackRow.vala:246 src/Widgets/TrackAlbumRow.vala:157
+msgid "Create New Playlist"
+msgstr "新しいプレイリストを作成"
+
+#: src/Widgets/TrackRow.vala:312 src/Widgets/TrackAlbumRow.vala:223
+msgid "Play Next"
+msgstr "次を再生"
+
+#: src/Widgets/TrackRow.vala:313 src/Widgets/TrackAlbumRow.vala:224
+msgid "Play Later"
+msgstr "後で再生"
+
+#: src/Widgets/TrackRow.vala:315 src/Widgets/TrackAlbumRow.vala:226
+msgid "Add to Playlist"
+msgstr "プレイリストに追加"
+
+#: src/Widgets/TrackRow.vala:320 src/Widgets/TrackAlbumRow.vala:231
+msgid "Edit Song Info…"
+msgstr "曲情報を編集…"
+
+#: src/Widgets/TrackRow.vala:321 src/Widgets/TrackAlbumRow.vala:232
+msgid "Favorite"
+msgstr "お気に入り"
+
+#: src/Widgets/TrackRow.vala:322 src/Widgets/TrackAlbumRow.vala:233
+msgid "Delete from library"
+msgstr "ライブラリから削除"
+
+#: src/Widgets/TrackRow.vala:323 src/Widgets/TrackAlbumRow.vala:234
+msgid "Delete from file"
+msgstr "ファイルを削除"
+
+#: src/Widgets/TrackRow.vala:324 src/Widgets/TrackAlbumRow.vala:235
+msgid "Remove from playlist"
+msgstr "プレイリストから削除"
+
+#: src/Widgets/TrackRow.vala:379 src/Widgets/RadioRow.vala:110
+#: src/Views/Playlist.vala:390
+#, fuzzy
+msgid "Delete from library?"
+msgstr "ライブラリから削除"
+
+#: src/Widgets/TrackRow.vala:380 src/Widgets/RadioRow.vala:111
+#: src/Views/Playlist.vala:391
+#, fuzzy, c-format
+msgid "Are you sure you want to delete <b>%s</b> from your library?"
+msgstr "すべてのライブラリをリセットしてもよろしいですか？"
+
+#: src/Widgets/TrackRow.vala:385 src/Widgets/RadioRow.vala:116
+#: src/Views/Playlist.vala:166 src/Views/Playlist.vala:396
+msgid "Delete"
+msgstr "削除"
+
+#: src/Widgets/TrackQueueRow.vala:61 src/Widgets/RadioRow.vala:58
+msgid "Remove"
+msgstr "リストから削除"
+
+#: src/Widgets/QuickFind.vala:24 src/Widgets/QuickFind.vala:138
+msgid "The radio station was added correctly"
+msgstr "ラジオ局を正常に追加しました"
+
+#: src/Widgets/QuickFind.vala:29
+msgid "Quick find"
+msgstr "クイック検索"
+
+#: src/Widgets/QuickFind.vala:46 src/Views/Home.vala:20
+#: src/Dialogs/Settings.vala:111
+msgid "Library"
+msgstr "ライブラリ"
+
+#: src/Widgets/QuickFind.vala:47 src/Views/Home.vala:42
+#: src/Views/Radios.vala:28
+msgid "Radios"
+msgstr "ラジオ"
+
+#: src/Widgets/QuickFind.vala:63
+msgid "Discover…"
+msgstr "見つける…"
+
+#: src/Widgets/QuickFind.vala:64
+msgid "Search your favorite radios"
+msgstr "お気に入りのラジオを検索"
+
+#: src/Widgets/QuickFind.vala:107
+msgid "The radio station is already added"
+msgstr "そのラジオ局はすでに追加されています"
 
 #: src/Widgets/Queue.vala:19
 msgid "Next track"
@@ -374,102 +255,256 @@ msgstr "%s <b>by</b> %s"
 msgid "Add Favorite"
 msgstr "お気に入りに追加"
 
-#: src/Widgets/QuickFind.vala:24 src/Widgets/QuickFind.vala:138
-msgid "The radio station was added correctly"
-msgstr "ラジオ局を正常に追加しました"
-
-#: src/Widgets/QuickFind.vala:29
-msgid "Quick find"
-msgstr "クイック検索"
-
-#: src/Widgets/QuickFind.vala:31
-msgid "Cancel"
-msgstr "キャンセル"
-
-#: src/Widgets/QuickFind.vala:63
-msgid "Discover…"
-msgstr "見つける…"
-
-#: src/Widgets/QuickFind.vala:64
-msgid "Search your favorite radios"
-msgstr "お気に入りのラジオを検索"
-
-#: src/Widgets/QuickFind.vala:107
-msgid "The radio station is already added"
-msgstr "そのラジオ局はすでに追加されています"
-
-#: src/Widgets/RadioRow.vala:58 src/Widgets/TrackQueueRow.vala:61
-msgid "Remove"
-msgstr "リストから削除"
-
-#: src/Widgets/TrackAlbumRow.vala:44 src/Widgets/TrackRow.vala:80
-msgid "Options"
-msgstr "オプション"
-
-#: src/Widgets/TrackAlbumRow.vala:157 src/Widgets/TrackRow.vala:246
-msgid "Create New Playlist"
-msgstr "新しいプレイリストを作成"
-
-#: src/Widgets/TrackAlbumRow.vala:223 src/Widgets/TrackRow.vala:312
-msgid "Play Next"
-msgstr "次を再生"
-
-#: src/Widgets/TrackAlbumRow.vala:224 src/Widgets/TrackRow.vala:313
-msgid "Play Later"
-msgstr "後で再生"
-
-#: src/Widgets/TrackAlbumRow.vala:226 src/Widgets/TrackRow.vala:315
-msgid "Add to Playlist"
-msgstr "プレイリストに追加"
-
-#: src/Widgets/TrackAlbumRow.vala:231 src/Widgets/TrackRow.vala:320
-msgid "Edit Song Info…"
-msgstr "曲情報を編集…"
-
-#: src/Widgets/TrackAlbumRow.vala:232 src/Widgets/TrackRow.vala:321
-msgid "Favorite"
-msgstr "お気に入り"
-
-#: src/Widgets/TrackAlbumRow.vala:233 src/Widgets/TrackRow.vala:322
-msgid "Delete from library"
-msgstr "ライブラリから削除"
-
-#: src/Widgets/TrackAlbumRow.vala:234 src/Widgets/TrackRow.vala:323
-msgid "Delete from file"
-msgstr "ファイルを削除"
-
-#: src/Widgets/TrackAlbumRow.vala:235 src/Widgets/TrackRow.vala:324
-msgid "Remove from playlist"
-msgstr "プレイリストから削除"
-
-#: src/Widgets/Welcome.vala:12
-msgid "Library is Empty"
-msgstr "ライブラリに何もありません"
-
-#: src/Widgets/Welcome.vala:12
-msgid "Add music to start jamming out"
-msgstr "続行するには曲を追加してください"
-
-#: src/Widgets/Welcome.vala:14
-msgid "Load Music"
-msgstr "曲を読み込む"
-
-#: src/Widgets/Welcome.vala:14
-msgid "Load from the user's music directory"
-msgstr "ユーザーのミュージックフォルダーから読み込みます"
-
-#: src/Widgets/Welcome.vala:15
-msgid "Change Music Folder"
-msgstr "ミュージックフォルダーを変更"
-
-#: src/Widgets/Welcome.vala:15
-msgid "Load music from folder"
-msgstr "曲をフォルダーから読み込みます"
+#: src/Widgets/NewPlaylist.vala:32
+msgid "Project name"
+msgstr "プロジェクト名"
 
 #: src/Widgets/PlaylistRow.vala:24 src/Widgets/PlaylistRow.vala:49
 #, fuzzy, c-format
 msgid "Updated %s"
 msgstr "更新日時"
+
+#: src/Widgets/Popovers/Sort.vala:130
+msgid "Sort by"
+msgstr "並べ替え"
+
+#: src/Widgets/Popovers/Sort.vala:159
+msgid "Reversed order"
+msgstr "逆順"
+
+#: src/Widgets/Popovers/NewPlaylist.vala:31 src/Views/Playlist.vala:242
+msgid "Add Description"
+msgstr "説明を追加"
+
+#: src/Widgets/Popovers/NewPlaylist.vala:56
+msgid "Add"
+msgstr "追加"
+
+#: src/Views/Home.vala:29
+msgid "Recently added"
+msgstr "最近追加した項目"
+
+#: src/Views/Home.vala:29
+msgid "(last 100)"
+msgstr "(最近の 100 曲)"
+
+#: src/Views/Home.vala:36 src/Views/Playlists.vala:30
+msgid "Playlists"
+msgstr "プレイリスト"
+
+#. listbox.hexpand = true;
+#: src/Views/Home.vala:37 src/Views/Albums.vala:34 src/Views/Artist.vala:116
+msgid "Albums"
+msgstr "アルバム"
+
+#: src/Views/Home.vala:38 src/Views/Tracks.vala:45
+msgid "Songs"
+msgstr "曲"
+
+#: src/Views/Home.vala:40 src/Views/Artists.vala:33
+msgid "Artists"
+msgstr "アーティスト"
+
+#: src/Views/Home.vala:43 src/Views/Favorites.vala:28
+msgid "Favorites"
+msgstr "お気に入り"
+
+#: src/Views/Albums.vala:43 src/Views/Albums.vala:46 src/Views/Albums.vala:47
+msgid "Search by title, artist, genre and year"
+msgstr "タイトル、アーティスト名、ジャンル、発表年で検索"
+
+#: src/Views/Albums.vala:63 src/Views/Tracks.vala:74
+#: src/Views/Playlist.vala:103
+msgid "Sort"
+msgstr "並べ替え"
+
+#: src/Views/Albums.vala:76 src/Views/Tracks.vala:87
+#: src/Views/Playlist.vala:116
+msgid "Name"
+msgstr "名前"
+
+#: src/Views/Albums.vala:77 src/Views/Tracks.vala:88
+#: src/Views/Playlist.vala:117 src/Views/Artist.vala:82
+#: src/Dialogs/TrackEditor.vala:84
+msgid "Artist"
+msgstr "アーティスト名"
+
+#: src/Views/Albums.vala:78 src/Dialogs/TrackEditor.vala:90
+msgid "Year"
+msgstr "発表年"
+
+#: src/Views/Albums.vala:79 src/Dialogs/TrackEditor.vala:88
+msgid "Genre"
+msgstr "ジャンル"
+
+#: src/Views/Album.vala:73 src/Views/Tracks.vala:89 src/Views/Playlist.vala:118
+#: src/Dialogs/TrackEditor.vala:86
+msgid "Album"
+msgstr "アルバム"
+
+#: src/Views/Album.vala:133 src/Views/Tracks.vala:107
+#: src/Views/Favorites.vala:73 src/Views/Playlist.vala:207
+msgid "Shuffle"
+msgstr "シャッフル"
+
+#: src/Views/Tracks.vala:31
+msgid "No Results"
+msgstr "検索結果はありません"
+
+#: src/Views/Tracks.vala:54 src/Views/Tracks.vala:57 src/Views/Tracks.vala:58
+#: src/Views/Artists.vala:39 src/Views/Artists.vala:40
+#: src/Views/Favorites.vala:37 src/Views/Favorites.vala:41
+#: src/Views/Favorites.vala:42
+msgid "Search by title, artist and album"
+msgstr "タイトル、アーティスト名、アルバム名で検索"
+
+#: src/Views/Tracks.vala:90 src/Views/Playlist.vala:119
+msgid "Date Added"
+msgstr "追加された日時"
+
+#: src/Views/Tracks.vala:91 src/Views/Playlist.vala:120
+msgid "Play Count"
+msgstr "再生回数"
+
+#: src/Views/Tracks.vala:323
+#, c-format
+msgid "No results for '%s' in Tracks. Try again."
+msgstr "トラックに '%s' の検索結果はありません。もう一度お試しください。"
+
+#: src/Views/Tracks.vala:354
+msgid "No Songs"
+msgstr "曲はありません"
+
+#: src/Views/Tracks.vala:355
+msgid "Add some tracks to your selected music folder."
+msgstr "選択したミュージックフォルダーにトラックを追加してください。"
+
+#: src/Views/Radios.vala:35
+msgid "Search internet radios"
+msgstr "インターネットラジオを検索"
+
+#: src/Views/Playlists.vala:43
+msgid "Add New Playlist"
+msgstr "新しいプレイリストを追加"
+
+#: src/Views/Playlist.vala:73
+#, fuzzy, c-format
+msgid "%i songs"
+msgstr "曲はありません"
+
+#: src/Views/Playlist.vala:93
+msgid "Playlist"
+msgstr "プレイリスト"
+
+#: src/Views/Playlist.vala:157
+msgid "Edit Name and Appearance"
+msgstr "名前と画像を変更"
+
+#. Items
+#: src/Views/Playlist.vala:164
+msgid "Edit Details"
+msgstr "詳細を編集"
+
+#: src/Views/Playlist.vala:165
+msgid "Set new Cover"
+msgstr "新しいカバー画像を設定"
+
+#: src/Views/Playlist.vala:189
+msgid "Updated"
+msgstr "更新日時"
+
+#: src/Views/Playlist.vala:246 src/Dialogs/TrackEditor.vala:136
+msgid "Save"
+msgstr "保存"
+
+#: src/Views/Artist.vala:106
+msgid "Most Played"
+msgstr ""
+
+#: src/Dialogs/TrackEditor.vala:82
+msgid "Title"
+msgstr "タイトル"
+
+#: src/Dialogs/TrackEditor.vala:92
+msgid "Track"
+msgstr "トラック"
+
+#: src/Dialogs/TrackEditor.vala:94
+msgid "Lyrics"
+msgstr "歌詞"
+
+#: src/Dialogs/TrackEditor.vala:134 src/Dialogs/Settings.vala:270
+msgid "Close"
+msgstr "閉じる"
+
+#: src/Dialogs/Settings.vala:16
+msgid "General"
+msgstr "一般"
+
+#: src/Dialogs/Settings.vala:33
+msgid "Dark mode"
+msgstr "ダークモード"
+
+#: src/Dialogs/Settings.vala:61
+msgid "Notifications"
+msgstr "通知"
+
+#: src/Dialogs/Settings.vala:85
+msgid "Play in background if closed"
+msgstr "アプリを閉じてもバックグラウンドで再生"
+
+#: src/Dialogs/Settings.vala:127
+msgid "Music folder location"
+msgstr "ミュージックフォルダーの場所"
+
+#: src/Dialogs/Settings.vala:129
+msgid "Select Music Folder…"
+msgstr "ミュージックフォルダーを選択…"
+
+#: src/Dialogs/Settings.vala:152
+msgid "Sync library on start up"
+msgstr "アプリの起動時にライブラリを同期"
+
+#: src/Dialogs/Settings.vala:176
+msgid "Automatically download covers"
+msgstr "アルバムカバーを自動的にダウンロード"
+
+#: src/Dialogs/Settings.vala:200
+msgid "Save changes into ID3-Tag"
+msgstr "変更を ID3 タグに保存"
+
+#: src/Dialogs/Settings.vala:238
+msgid "Reset all library"
+msgstr "すべてのライブラリをリセット"
+
+#: src/Dialogs/Settings.vala:240 src/Dialogs/Settings.vala:354
+msgid "Reset"
+msgstr "リセット"
+
+#: src/Dialogs/Settings.vala:326
+msgid "Set Music Folder?"
+msgstr "ミュージックフォルダーを設定しますか？"
+
+#: src/Dialogs/Settings.vala:327
+#, c-format
+msgid "Are you sure you want to set the music folder to <b>%s</b>?"
+msgstr "ミュージックフォルダーを <b>%s</b> に設定してもよろしいですか？"
+
+#: src/Dialogs/Settings.vala:332
+msgid "Set Music Folder"
+msgstr "ミュージックフォルダーを設定"
+
+#: src/Dialogs/Settings.vala:348
+msgid "Reset your library?"
+msgstr "ライブラリをリセットしますか？"
+
+#: src/Dialogs/Settings.vala:349
+msgid "Are you sure you want to reset all your library?"
+msgstr "すべてのライブラリをリセットしてもよろしいですか？"
+
+#, fuzzy
+#~ msgid "_Cancel"
+#~ msgstr "キャンセル"
 
 #~ msgid "Your library"
 #~ msgstr "ライブラリ"

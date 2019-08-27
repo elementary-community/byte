@@ -283,10 +283,10 @@ public class Utils : GLib.Object {
     public string? choose_new_cover () {
         string? return_value = null;
         var chooser = new Gtk.FileChooserDialog (
-            _ ("Choose an image…"), Byte.instance.main_window,
+            _("Choose an image…"), Byte.instance.main_window,
             Gtk.FileChooserAction.OPEN,
-            _ ("_Cancel"), Gtk.ResponseType.CANCEL,
-            _ ("_Open"), Gtk.ResponseType.ACCEPT);
+            _("Cancel"), Gtk.ResponseType.CANCEL,
+            _("Open"), Gtk.ResponseType.ACCEPT);
 
         var filter = new Gtk.FileFilter ();
         filter.set_filter_name (_ ("Images"));

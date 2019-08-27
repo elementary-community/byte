@@ -85,8 +85,8 @@ public class Services.Scan : GLib.Object {
 
         Gtk.FileChooserDialog chooser = new Gtk.FileChooserDialog (
             _ ("Select a folder."), window, Gtk.FileChooserAction.SELECT_FOLDER,
-            _ ("_Cancel"), Gtk.ResponseType.CANCEL,
-            _ ("_Open"), Gtk.ResponseType.ACCEPT);
+            _ ("Cancel"), Gtk.ResponseType.CANCEL,
+            _ ("Open"), Gtk.ResponseType.ACCEPT);
 
         var filter = new Gtk.FileFilter ();
         filter.set_filter_name (_ ("Folder"));
