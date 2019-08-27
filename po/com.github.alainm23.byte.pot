@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: com.github.alainm23.byte\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-08-26 21:35-0500\n"
+"POT-Creation-Date: 2019-08-27 22:38+0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -127,8 +127,8 @@ msgstr ""
 
 #: src/Views/Album.vala:126 src/Views/Favorites.vala:64
 #: src/Views/Playlist.vala:200 src/Views/Tracks.vala:98
-#: src/Widgets/HeaderBar.vala:77 src/Widgets/TrackAlbumRow.vala:220
-#: src/Widgets/TrackRow.vala:309
+#: src/Widgets/HeaderBar.vala:77 src/Widgets/TrackAlbumRow.vala:222
+#: src/Widgets/TrackRow.vala:311
 msgid "Play"
 msgstr ""
 
@@ -191,6 +191,11 @@ msgstr ""
 msgid "Radios"
 msgstr ""
 
+#: src/Views/Playlist.vala:73
+#, c-format
+msgid "%i songs"
+msgstr ""
+
 #: src/Views/Playlist.vala:93
 msgid "Playlist"
 msgstr ""
@@ -217,7 +222,7 @@ msgid "Set new Cover"
 msgstr ""
 
 #: src/Views/Playlist.vala:166 src/Views/Playlist.vala:396
-#: src/Widgets/RadioRow.vala:116 src/Widgets/TrackRow.vala:383
+#: src/Widgets/RadioRow.vala:116 src/Widgets/TrackRow.vala:385
 msgid "Delete"
 msgstr ""
 
@@ -233,6 +238,17 @@ msgstr ""
 
 #: src/Views/Playlist.vala:242 src/Widgets/Popovers/NewPlaylist.vala:31
 msgid "Add Description"
+msgstr ""
+
+#: src/Views/Playlist.vala:390 src/Widgets/RadioRow.vala:110
+#: src/Widgets/TrackRow.vala:379
+msgid "Delete from library?"
+msgstr ""
+
+#: src/Views/Playlist.vala:391 src/Widgets/RadioRow.vala:111
+#: src/Widgets/TrackRow.vala:380
+#, c-format
+msgid "Are you sure you want to delete <b>%s</b> from your library?"
 msgstr ""
 
 #: src/Views/Playlists.vala:43
@@ -268,7 +284,7 @@ msgstr ""
 msgid "Sort by"
 msgstr ""
 
-#: src/Widgets/Popovers/Sort.vala:154
+#: src/Widgets/Popovers/Sort.vala:159
 msgid "Reversed order"
 msgstr ""
 
@@ -388,39 +404,39 @@ msgstr ""
 msgid "Options"
 msgstr ""
 
-#: src/Widgets/TrackAlbumRow.vala:155 src/Widgets/TrackRow.vala:244
+#: src/Widgets/TrackAlbumRow.vala:157 src/Widgets/TrackRow.vala:246
 msgid "Create New Playlist"
 msgstr ""
 
-#: src/Widgets/TrackAlbumRow.vala:221 src/Widgets/TrackRow.vala:310
+#: src/Widgets/TrackAlbumRow.vala:223 src/Widgets/TrackRow.vala:312
 msgid "Play Next"
 msgstr ""
 
-#: src/Widgets/TrackAlbumRow.vala:222 src/Widgets/TrackRow.vala:311
+#: src/Widgets/TrackAlbumRow.vala:224 src/Widgets/TrackRow.vala:313
 msgid "Play Later"
 msgstr ""
 
-#: src/Widgets/TrackAlbumRow.vala:224 src/Widgets/TrackRow.vala:313
+#: src/Widgets/TrackAlbumRow.vala:226 src/Widgets/TrackRow.vala:315
 msgid "Add to Playlist"
 msgstr ""
 
-#: src/Widgets/TrackAlbumRow.vala:229 src/Widgets/TrackRow.vala:318
+#: src/Widgets/TrackAlbumRow.vala:231 src/Widgets/TrackRow.vala:320
 msgid "Edit Song Info…"
 msgstr ""
 
-#: src/Widgets/TrackAlbumRow.vala:230 src/Widgets/TrackRow.vala:319
+#: src/Widgets/TrackAlbumRow.vala:232 src/Widgets/TrackRow.vala:321
 msgid "Favorite"
 msgstr ""
 
-#: src/Widgets/TrackAlbumRow.vala:231 src/Widgets/TrackRow.vala:320
+#: src/Widgets/TrackAlbumRow.vala:233 src/Widgets/TrackRow.vala:322
 msgid "Delete from library"
 msgstr ""
 
-#: src/Widgets/TrackAlbumRow.vala:232 src/Widgets/TrackRow.vala:321
+#: src/Widgets/TrackAlbumRow.vala:234 src/Widgets/TrackRow.vala:323
 msgid "Delete from file"
 msgstr ""
 
-#: src/Widgets/TrackAlbumRow.vala:233 src/Widgets/TrackRow.vala:322
+#: src/Widgets/TrackAlbumRow.vala:235 src/Widgets/TrackRow.vala:324
 msgid "Remove from playlist"
 msgstr ""
 
@@ -446,4 +462,9 @@ msgstr ""
 
 #: src/Widgets/Welcome.vala:15
 msgid "Load music from folder"
+msgstr ""
+
+#: src/Widgets/PlaylistRow.vala:24 src/Widgets/PlaylistRow.vala:49
+#, c-format
+msgid "Updated %s"
 msgstr ""

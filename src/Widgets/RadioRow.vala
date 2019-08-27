@@ -12,7 +12,7 @@ public class Widgets.RadioRow : Gtk.ListBoxRow {
         );
     }
 
-    construct {  
+    construct {
         get_style_context ().add_class ("album-row");
         tooltip_text = radio.name;
 
@@ -33,7 +33,7 @@ public class Widgets.RadioRow : Gtk.ListBoxRow {
         name_label.get_style_context ().add_class ("font-bold");
         name_label.ellipsize = Pango.EllipsizeMode.END;
         name_label.halign = Gtk.Align.START;
-        name_label.valign = Gtk.Align.END; 
+        name_label.valign = Gtk.Align.END;
 
         country_state_label = new Gtk.Label (radio.country);
         country_state_label.halign = Gtk.Align.START;
@@ -50,7 +50,7 @@ public class Widgets.RadioRow : Gtk.ListBoxRow {
         overlay.halign = Gtk.Align.START;
         overlay.valign = Gtk.Align.START;
         overlay.add_overlay (playing_revealer);
-        overlay.add (image_cover); 
+        overlay.add (image_cover);
 
         var remove_button = new Gtk.Button.from_icon_name ("edit-delete-symbolic", Gtk.IconSize.MENU);
         remove_button.can_focus = false;
@@ -100,15 +100,15 @@ public class Widgets.RadioRow : Gtk.ListBoxRow {
             if (event.detail == Gdk.NotifyType.INFERIOR) {
                 return false;
             }
-            
+
             remove_revealer.reveal_child = false;
             return false;
         });
 
         remove_button.clicked.connect (() => {
             var message_dialog = new Granite.MessageDialog.with_image_from_icon_name (
-                "Delete from library?",
-                "Are you sure you want to delete <b>%s</b> from your library?".printf (radio.name),
+                _("Delete from library?"),
+                _("Are you sure you want to delete <b>%s</b> from your library?").printf (radio.name),
                 "dialog-warning",
                 Gtk.ButtonsType.CANCEL
             );
@@ -116,7 +116,7 @@ public class Widgets.RadioRow : Gtk.ListBoxRow {
             var set_button = new Gtk.Button.with_label (_("Delete"));
             set_button.get_style_context ().add_class (Gtk.STYLE_CLASS_DESTRUCTIVE_ACTION);
             message_dialog.add_action_widget (set_button, Gtk.ResponseType.ACCEPT);
-             
+
             message_dialog.show_all ();
 
             if (message_dialog.run () == Gtk.ResponseType.ACCEPT) {
@@ -132,8 +132,8 @@ public class Widgets.RadioRow : Gtk.ListBoxRow {
             if (radio.id == id) {
                 try {
                     image_cover.pixbuf = new Gdk.Pixbuf.from_file_at_size (
-                        GLib.Path.build_filename (Byte.utils.COVER_FOLDER, ("radio-%i.jpg").printf (id)), 
-                        48, 
+                        GLib.Path.build_filename (Byte.utils.COVER_FOLDER, ("radio-%i.jpg").printf (id)),
+                        48,
                         48);
                 } catch (Error e) {
                     stderr.printf ("Error setting default avatar icon: %s ", e.message);
