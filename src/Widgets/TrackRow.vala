@@ -1,12 +1,12 @@
 public class Widgets.TrackRow : Gtk.ListBoxRow {
     public Objects.Track track { get; construct; }
-    
+
     private Gtk.Label primary_label;
     private Gtk.Label secondary_label;
-    private Gtk.Label duration_label; 
+    private Gtk.Label duration_label;
     private Gtk.Button favorite_button;
     Gtk.Menu playlists;
-    private Gtk.Menu menu = null; 
+    private Gtk.Menu menu = null;
     private Widgets.Cover image_cover;
     public TrackRow (Objects.Track track) {
         Object (
@@ -21,7 +21,7 @@ public class Widgets.TrackRow : Gtk.ListBoxRow {
         var root_window = Gdk.Screen.get_default ().get_root_window ();
         */
         get_style_context ().add_class ("track-row");
-        
+
         var playing_icon = new Gtk.Image ();
         playing_icon.gicon = new ThemedIcon ("audio-volume-medium-symbolic");
         playing_icon.get_style_context ().add_class ("playing-ani-color");
@@ -56,7 +56,7 @@ public class Widgets.TrackRow : Gtk.ListBoxRow {
             _label = "%s - <small>%i played</small>".printf (track.artist_name, track.play_count);
         }
         */
-        
+
         secondary_label = new Gtk.Label (track.artist_name);
         //secondary_label = new Gtk.Label (_label);
         secondary_label.get_style_context ().add_class ("secondary_label");
@@ -65,9 +65,9 @@ public class Widgets.TrackRow : Gtk.ListBoxRow {
         secondary_label.valign = Gtk.Align.START;
         secondary_label.max_width_chars = 45;
         secondary_label.ellipsize = Pango.EllipsizeMode.END;
-        
+
         image_cover = new Widgets.Cover.from_file (
-            GLib.Path.build_filename (Byte.utils.COVER_FOLDER, ("track-%i.jpg").printf (track.id)), 
+            GLib.Path.build_filename (Byte.utils.COVER_FOLDER, ("track-%i.jpg").printf (track.id)),
             32, "track");
         image_cover.halign = Gtk.Align.START;
         image_cover.valign = Gtk.Align.START;
@@ -117,18 +117,18 @@ public class Widgets.TrackRow : Gtk.ListBoxRow {
         overlay.valign = Gtk.Align.START;
         overlay.margin_top = 1;
         overlay.add_overlay (playing_revealer);
-        overlay.add (image_cover); 
+        overlay.add (image_cover);
 
         var main_grid = new Gtk.Grid ();
         main_grid.margin_top = 1;
         main_grid.margin_start = 3;
         main_grid.margin_end = 9;
-        main_grid.column_spacing = 3; 
+        main_grid.column_spacing = 3;
         main_grid.attach (overlay, 0, 0, 1, 2);
         main_grid.attach (primary_label, 1, 0, 1, 1);
         main_grid.attach (secondary_label, 1, 1, 1, 1);
         main_grid.attach (right_grid, 2, 0, 2, 2);
-        
+
         var separator = new Gtk.Separator (Gtk.Orientation.HORIZONTAL);
         separator.margin_start = 48;
         separator.margin_top = 1;
@@ -154,7 +154,7 @@ public class Widgets.TrackRow : Gtk.ListBoxRow {
             if (track.id == current_track.id) {
                 playing_revealer.reveal_child = true;
                 main_grid.get_style_context ().add_class ("label-color-primary");
-                
+
                 try {
                     grab_focus ();
                 } catch (Error e) {
@@ -171,14 +171,14 @@ public class Widgets.TrackRow : Gtk.ListBoxRow {
                 if (track_id == track.id) {
                     try {
                         image_cover.pixbuf = new Gdk.Pixbuf.from_file_at_size (
-                            GLib.Path.build_filename (Byte.utils.COVER_FOLDER, ("track-%i.jpg").printf (track_id)), 
-                            32, 
+                            GLib.Path.build_filename (Byte.utils.COVER_FOLDER, ("track-%i.jpg").printf (track_id)),
+                            32,
                             32);
                     } catch (Error e) {
                         stderr.printf ("Error setting default avatar icon: %s ", e.message);
                     }
                 }
-                
+
                 return false;
             });
         });
@@ -208,7 +208,7 @@ public class Widgets.TrackRow : Gtk.ListBoxRow {
                 activate_menu ();
                 return true;
             }
-            
+
             return false;
         });
 
@@ -281,7 +281,7 @@ public class Widgets.TrackRow : Gtk.ListBoxRow {
         secondary_label.halign = Gtk.Align.START;
         secondary_label.max_width_chars = 25;
         secondary_label.ellipsize = Pango.EllipsizeMode.END;
-        
+
         var cover_path = GLib.Path.build_filename (Byte.utils.COVER_FOLDER, ("track-%i.jpg").printf (track.id));
         var image_cover = new Gtk.Image ();
         image_cover.halign = Gtk.Align.START;
@@ -311,7 +311,7 @@ public class Widgets.TrackRow : Gtk.ListBoxRow {
         var play_menu = new Widgets.MenuItem (_("Play"), "media-playback-start-symbolic", _("Play"));
         var play_next_menu = new Widgets.MenuItem (_("Play Next"), "byte-play-next-symbolic", _("Play Next"));
         var play_last_menu = new Widgets.MenuItem (_("Play Later"), "byte-play-later-symbolic", _("Play Later"));
-        
+
         var add_playlist_menu = new Widgets.MenuItem (_("Add to Playlist"), "zoom-in-symbolic", _("Add to Playlist"));
         playlists = new Gtk.Menu ();
         playlists.get_style_context ().add_class ("view");
@@ -333,11 +333,11 @@ public class Widgets.TrackRow : Gtk.ListBoxRow {
         //menu.add (edit_menu);
         menu.add (favorite_menu);
         menu.add (new Gtk.SeparatorMenuItem ());
-        
+
         if (track.playlist != 0) {
             menu.add (remove_playlist_menu);
         }
-        
+
         menu.add (remove_db_menu);
 
         menu.show_all ();
@@ -376,8 +376,8 @@ public class Widgets.TrackRow : Gtk.ListBoxRow {
 
         remove_db_menu.activate.connect (() => {
             var message_dialog = new Granite.MessageDialog.with_image_from_icon_name (
-                "Delete from library?",
-                "Are you sure you want to delete <b>%s</b> from your library?".printf (track.title),
+                _("Delete from library?"),
+                _("Are you sure you want to delete <b>%s</b> from your library?").printf (track.title),
                 "dialog-warning",
                 Gtk.ButtonsType.CANCEL
             );
@@ -385,7 +385,7 @@ public class Widgets.TrackRow : Gtk.ListBoxRow {
             var set_button = new Gtk.Button.with_label (_("Delete"));
             set_button.get_style_context ().add_class (Gtk.STYLE_CLASS_DESTRUCTIVE_ACTION);
             message_dialog.add_action_widget (set_button, Gtk.ResponseType.ACCEPT);
-            
+
             message_dialog.show_all ();
 
             if (message_dialog.run () == Gtk.ResponseType.ACCEPT) {

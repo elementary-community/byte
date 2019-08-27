@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: com.github.alainm23.byte\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-08-27 21:16+0400\n"
+"POT-Creation-Date: 2019-08-27 22:38+0400\n"
 "PO-Revision-Date: 2019-08-10 12:12+0200\n"
 "Last-Translator: NathanBnm\n"
 "Language-Team: none\n"
@@ -240,12 +240,14 @@ msgstr "Nouvelle playlist"
 msgid "Add Description"
 msgstr "Ajouter une description"
 
-#: src/Views/Playlist.vala:390
+#: src/Views/Playlist.vala:390 src/Widgets/RadioRow.vala:110
+#: src/Widgets/TrackRow.vala:379
 #, fuzzy
 msgid "Delete from library?"
 msgstr "Supprimer de la bibliothèque"
 
-#: src/Views/Playlist.vala:391
+#: src/Views/Playlist.vala:391 src/Widgets/RadioRow.vala:111
+#: src/Widgets/TrackRow.vala:380
 #, fuzzy, c-format
 msgid "Are you sure you want to delete <b>%s</b> from your library?"
 msgstr "Êtes-vous sûr de vouloir réinitialiser toute votre bibliothèque ?"
