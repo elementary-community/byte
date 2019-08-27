@@ -208,6 +208,8 @@ public class Widgets.TrackRow : Gtk.ListBoxRow {
                 activate_menu ();
                 return true;
             }
+            
+            return false;
         });
 
         options_button.clicked.connect (activate_menu);
