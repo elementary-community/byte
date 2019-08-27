@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: com.github.alainm23.byte\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-08-24 01:13+0400\n"
+"POT-Creation-Date: 2019-08-26 21:35-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -34,7 +34,7 @@ msgid "Play in background if closed"
 msgstr ""
 
 #: src/Dialogs/Settings.vala:111 src/Views/Home.vala:20
-#: src/Widgets/QuickFind.vala:45
+#: src/Widgets/QuickFind.vala:46
 msgid "Library"
 msgstr ""
 
@@ -95,21 +95,21 @@ msgstr ""
 msgid "Title"
 msgstr ""
 
-#: src/Dialogs/TrackEditor.vala:84 src/Views/Albums.vala:82
-#: src/Views/Playlist.vala:117 src/Views/Tracks.vala:92
+#: src/Dialogs/TrackEditor.vala:84 src/Views/Albums.vala:77
+#: src/Views/Playlist.vala:117 src/Views/Tracks.vala:88
 msgid "Artist"
 msgstr ""
 
 #: src/Dialogs/TrackEditor.vala:86 src/Views/Album.vala:73
-#: src/Views/Playlist.vala:118 src/Views/Tracks.vala:93
+#: src/Views/Playlist.vala:118 src/Views/Tracks.vala:89
 msgid "Album"
 msgstr ""
 
-#: src/Dialogs/TrackEditor.vala:88 src/Views/Albums.vala:84
+#: src/Dialogs/TrackEditor.vala:88 src/Views/Albums.vala:79
 msgid "Genre"
 msgstr ""
 
-#: src/Dialogs/TrackEditor.vala:90 src/Views/Albums.vala:83
+#: src/Dialogs/TrackEditor.vala:90 src/Views/Albums.vala:78
 msgid "Year"
 msgstr ""
 
@@ -125,15 +125,15 @@ msgstr ""
 msgid "Save"
 msgstr ""
 
-#: src/Views/Album.vala:126 src/Views/Favorites.vala:67
-#: src/Views/Playlist.vala:200 src/Views/Tracks.vala:102
+#: src/Views/Album.vala:126 src/Views/Favorites.vala:64
+#: src/Views/Playlist.vala:200 src/Views/Tracks.vala:98
 #: src/Widgets/HeaderBar.vala:77 src/Widgets/TrackAlbumRow.vala:220
 #: src/Widgets/TrackRow.vala:309
 msgid "Play"
 msgstr ""
 
-#: src/Views/Album.vala:133 src/Views/Favorites.vala:76
-#: src/Views/Playlist.vala:207 src/Views/Tracks.vala:111
+#: src/Views/Album.vala:133 src/Views/Favorites.vala:73
+#: src/Views/Playlist.vala:207 src/Views/Tracks.vala:107
 msgid "Shuffle"
 msgstr ""
 
@@ -141,21 +141,17 @@ msgstr ""
 msgid "Albums"
 msgstr ""
 
-#: src/Views/Albums.vala:43 src/Views/Albums.vala:51 src/Views/Albums.vala:52
+#: src/Views/Albums.vala:43 src/Views/Albums.vala:46 src/Views/Albums.vala:47
 msgid "Search by title, artist, genre and year"
 msgstr ""
 
-#: src/Views/Albums.vala:50
-msgid "Your library"
-msgstr ""
-
-#: src/Views/Albums.vala:68 src/Views/Playlist.vala:103
-#: src/Views/Tracks.vala:78
+#: src/Views/Albums.vala:63 src/Views/Playlist.vala:103
+#: src/Views/Tracks.vala:74
 msgid "Sort"
 msgstr ""
 
-#: src/Views/Albums.vala:81 src/Views/Playlist.vala:116
-#: src/Views/Tracks.vala:91
+#: src/Views/Albums.vala:76 src/Views/Playlist.vala:116
+#: src/Views/Tracks.vala:87
 msgid "Name"
 msgstr ""
 
@@ -163,10 +159,10 @@ msgstr ""
 msgid "Artists"
 msgstr ""
 
-#: src/Views/Artists.vala:43 src/Views/Artists.vala:44
-#: src/Views/Favorites.vala:37 src/Views/Favorites.vala:44
-#: src/Views/Favorites.vala:45 src/Views/Tracks.vala:54
-#: src/Views/Tracks.vala:61 src/Views/Tracks.vala:62
+#: src/Views/Artists.vala:39 src/Views/Artists.vala:40
+#: src/Views/Favorites.vala:37 src/Views/Favorites.vala:41
+#: src/Views/Favorites.vala:42 src/Views/Tracks.vala:54
+#: src/Views/Tracks.vala:57 src/Views/Tracks.vala:58
 msgid "Search by title, artist and album"
 msgstr ""
 
@@ -191,7 +187,7 @@ msgid "Songs"
 msgstr ""
 
 #: src/Views/Home.vala:42 src/Views/Radios.vala:28
-#: src/Widgets/QuickFind.vala:46
+#: src/Widgets/QuickFind.vala:47
 msgid "Radios"
 msgstr ""
 
@@ -199,11 +195,11 @@ msgstr ""
 msgid "Playlist"
 msgstr ""
 
-#: src/Views/Playlist.vala:119 src/Views/Tracks.vala:94
+#: src/Views/Playlist.vala:119 src/Views/Tracks.vala:90
 msgid "Date Added"
 msgstr ""
 
-#: src/Views/Playlist.vala:120 src/Views/Tracks.vala:95
+#: src/Views/Playlist.vala:120 src/Views/Tracks.vala:91
 msgid "Play Count"
 msgstr ""
 
@@ -251,16 +247,16 @@ msgstr ""
 msgid "No Results"
 msgstr ""
 
-#: src/Views/Tracks.vala:321
+#: src/Views/Tracks.vala:323
 #, c-format
 msgid "No results for '%s' in Tracks. Try again."
 msgstr ""
 
-#: src/Views/Tracks.vala:352
+#: src/Views/Tracks.vala:354
 msgid "No Songs"
 msgstr ""
 
-#: src/Views/Tracks.vala:353
+#: src/Views/Tracks.vala:355
 msgid "Add some tracks to your selected music folder."
 msgstr ""
 
@@ -360,27 +356,27 @@ msgstr ""
 msgid "Add Favorite"
 msgstr ""
 
-#: src/Widgets/QuickFind.vala:24 src/Widgets/QuickFind.vala:137
+#: src/Widgets/QuickFind.vala:24 src/Widgets/QuickFind.vala:138
 msgid "The radio station was added correctly"
 msgstr ""
 
-#: src/Widgets/QuickFind.vala:28
+#: src/Widgets/QuickFind.vala:29
 msgid "Quick find"
 msgstr ""
 
-#: src/Widgets/QuickFind.vala:30
+#: src/Widgets/QuickFind.vala:31
 msgid "Cancel"
 msgstr ""
 
-#: src/Widgets/QuickFind.vala:62
+#: src/Widgets/QuickFind.vala:63
 msgid "Discover…"
 msgstr ""
 
-#: src/Widgets/QuickFind.vala:63
+#: src/Widgets/QuickFind.vala:64
 msgid "Search your favorite radios"
 msgstr ""
 
-#: src/Widgets/QuickFind.vala:106
+#: src/Widgets/QuickFind.vala:107
 msgid "The radio station is already added"
 msgstr ""
 

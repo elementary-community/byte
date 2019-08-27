@@ -5,7 +5,8 @@ Interact with your music and fall in love with your library all over again.
 Byte offers a beautiful presentation of your Music Library with loads of powerful features in a minimalistic yet highly customizable UI.
 
 ## Handy features:
-* Light and Dark themes.</li>
+
+* Light and Dark themes.
 * Add up to 100 items under "Recently Added" for songs.
 * Sort individual playlists by album, title, play count or recently added.
 * Advanced Media Details and Artist Info.
@@ -15,10 +16,6 @@ Byte offers a beautiful presentation of your Music Library with loads of powerfu
 <a href="https://appcenter.elementary.io/com.github.alainm23.byte"><img src="https://appcenter.elementary.io/badge.svg?new" alt="Get it on AppCenter" /></a>
 
 ![Byte Screenshot](https://github.com/alainm23/byte/raw/master/data/screenshot/screenshot-01.png)
-![Byte Screenshot](https://github.com/alainm23/byte/raw/master/data/screenshot/screenshot-02.png)
-![Byte Screenshot](https://github.com/alainm23/byte/raw/master/data/screenshot/screenshot-03.png)
-![Byte Screenshot](https://github.com/alainm23/byte/raw/master/data/screenshot/screenshot-04.png)
-![Byte Screenshot](https://github.com/alainm23/byte/raw/master/data/screenshot/screenshot-05.png)
 
 ## Building and Installation
 
