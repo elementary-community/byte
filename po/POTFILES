@@ -20,3 +20,4 @@ src/Widgets/TrackAlbumRow.vala
 src/Widgets/TrackQueueRow.vala
 src/Widgets/TrackRow.vala
 src/Widgets/Welcome.vala
+src/Widgets/PlaylistRow.vala

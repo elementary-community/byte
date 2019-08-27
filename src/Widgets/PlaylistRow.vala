@@ -10,7 +10,7 @@ public class Widgets.PlaylistRow : Gtk.ListBoxRow {
         );
     }
 
-    construct { 
+    construct {
         tooltip_text = playlist.title;
         get_style_context ().add_class ("album-row");
 
@@ -21,10 +21,10 @@ public class Widgets.PlaylistRow : Gtk.ListBoxRow {
         title_label.halign = Gtk.Align.START;
         title_label.valign = Gtk.Align.END;
 
-        var tracks_label = new Gtk.Label ("Updated %s".printf(Byte.utils.get_relative_datetime (playlist.date_updated)));
+        var tracks_label = new Gtk.Label (_("Updated %s").printf(Byte.utils.get_relative_datetime (playlist.date_updated)));
         tracks_label.valign = Gtk.Align.START;
         tracks_label.halign = Gtk.Align.START;
-        
+
         cover_path = GLib.Path.build_filename (Byte.utils.COVER_FOLDER, ("playlist-%i.jpg").printf (playlist.id));
         image_cover = new Widgets.Cover.from_file (cover_path, 64, "playlist");
 
@@ -46,7 +46,7 @@ public class Widgets.PlaylistRow : Gtk.ListBoxRow {
         Byte.database.updated_playlist.connect ((p) => {
             if (playlist.id == p.id) {
                 title_label.label = p.title;
-                tracks_label.label = "Updated %s".printf(Byte.utils.get_relative_datetime (p.date_updated));
+                tracks_label.label = _("Updated %s").printf(Byte.utils.get_relative_datetime (p.date_updated));
             }
         });
 
@@ -54,8 +54,8 @@ public class Widgets.PlaylistRow : Gtk.ListBoxRow {
             if (playlist.id == id) {
                 try {
                     image_cover.pixbuf = new Gdk.Pixbuf.from_file_at_size (
-                        GLib.Path.build_filename (Byte.utils.COVER_FOLDER, ("playlist-%i.jpg").printf (playlist.id)), 
-                        64, 
+                        GLib.Path.build_filename (Byte.utils.COVER_FOLDER, ("playlist-%i.jpg").printf (playlist.id)),
+                        64,
                         64);
                 } catch (Error e) {
                     stderr.printf ("Error setting default avatar icon: %s ", e.message);
