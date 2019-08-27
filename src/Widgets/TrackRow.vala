@@ -203,11 +203,13 @@ public class Widgets.TrackRow : Gtk.ListBoxRow {
             return false;
         });
 
-        eventbox.button_press_event.connect ((sender, evt) => {
+        button_press_event.connect ((sender, evt) => {
             if (evt.type == Gdk.EventType.BUTTON_PRESS && evt.button == 3) {
                 activate_menu ();
                 return true;
             }
+            
+            return false;
         });
 
         options_button.clicked.connect (activate_menu);

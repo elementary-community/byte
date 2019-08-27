@@ -134,22 +134,27 @@ public class Widgets.Popovers.Sort : Gtk.Popover {
         radio_01 = new Gtk.RadioButton.with_label_from_widget (null, "");
         radio_01.get_style_context ().add_class ("h3");
         radio_01.margin_start = 12;
+        radio_01.margin_end = 12;
 
         radio_02 = new Gtk.RadioButton.with_label_from_widget (radio_01, "");
         radio_02.get_style_context ().add_class ("h3");
         radio_02.margin_start = 12;
+        radio_02.margin_end = 12;
 
         radio_03 = new Gtk.RadioButton.with_label_from_widget (radio_01, "");
         radio_03.get_style_context ().add_class ("h3");
         radio_03.margin_start = 12;
+        radio_03.margin_end = 12;
 
         radio_04 = new Gtk.RadioButton.with_label_from_widget (radio_01, "");
         radio_04.get_style_context ().add_class ("h3");
         radio_04.margin_start = 12;
+        radio_04.margin_end = 12;
 
         radio_05 = new Gtk.RadioButton.with_label_from_widget (radio_01, "");
         radio_05.get_style_context ().add_class ("h3");
         radio_05.margin_start = 12;
+        radio_05.margin_end = 12;
 
         order_reverse_button = new Gtk.CheckButton.with_label (_("Reversed order"));
         order_reverse_button.get_style_context ().add_class ("h3");

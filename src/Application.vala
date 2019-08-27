@@ -14,9 +14,10 @@ public class Byte : Gtk.Application {
     public static Utils utils;
 
     public string[] argsv;
+    public bool has_entry_focus = false;
+    public SimpleAction toggle_playing_action;
 
     public static Byte _instance = null;
-
     public static Byte instance {
         get {
             if (_instance == null) {
@@ -78,16 +79,35 @@ public class Byte : Gtk.Application {
         // Media Keys
         Services.MediaKey.listen ();
 
+        // Actions
         var quit_action = new SimpleAction ("quit", null);
-
-        add_action (quit_action);
         set_accels_for_action ("app.quit", {"<Control>q"});
+
+        toggle_playing_action = new SimpleAction ("toggle_playing_action", null);
+        set_accels_for_action ("app.toggle_playing_action", {"space"});
+
+        var search_action = new SimpleAction ("search", null);
+        set_accels_for_action ("app.search", {"<Control>f"});
 
         quit_action.activate.connect (() => {
             if (main_window != null) {
                 main_window.destroy ();
             }
         });
+
+        toggle_playing_action.activate.connect (() => {
+            if (!has_entry_focus) {
+                player.toggle_playing ();
+            }
+        });
+
+        search_action.activate.connect (() => {
+            //player.toggle_playing ();
+        });
+
+        add_action (quit_action);
+        add_action (toggle_playing_action);
+        add_action (search_action);
 
         // Stylesheet
         var provider = new Gtk.CssProvider ();
@@ -115,6 +135,14 @@ public class Byte : Gtk.Application {
         // Default Icon Theme
         weak Gtk.IconTheme default_theme = Gtk.IconTheme.get_default ();
         default_theme.add_resource_path ("/com/github/alainm23/byte");
+    }
+
+    public void toggle_playing_action_enabled (bool b) {
+        if (b) {
+            set_accels_for_action ("app.toggle_playing_action", {"space"});
+        } else {
+            set_accels_for_action ("app.toggle_playing_action", {null});
+        }
     }
 
     public static int main (string[] args) {

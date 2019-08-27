@@ -43,7 +43,8 @@ msgstr "Redescubre tu música"
 #: data/com.github.alainm23.byte.appdata.xml.in:10
 msgid ""
 "Interact with your music and fall in love with your library all over again."
-msgstr "Interactúa con tu música y enamórate de tu biblioteca de nuevo."
+msgstr ""
+"Interactúa con tu música y enamórate de tu biblioteca de nuevo."
 
 #: data/com.github.alainm23.byte.appdata.xml.in:11
 msgid ""
@@ -64,8 +65,7 @@ msgstr "Temas claros y oscuros."
 
 #: data/com.github.alainm23.byte.appdata.xml.in:15
 msgid "Add up to 100 items under \"Recently Added\" for songs."
-msgstr ""
-"Ultimos 100 elementos en \"Recientemente agregado\" para las canciones."
+msgstr "Ultimos 100 elementos en \"Recientemente agregado\" para las canciones."
 
 #: data/com.github.alainm23.byte.appdata.xml.in:16
 msgid ""

@@ -13,7 +13,7 @@ public class Widgets.Queue : Gtk.Revealer {
 
     construct {
         items = new Gee.ArrayList<Objects.Track?> ();
- 
+
         image_cover = new Widgets.Cover.with_default_icon (24, "track");
 
         var next_track_label = new Gtk.Label ("<small>%s</small>".printf (_("Next track")));
@@ -29,7 +29,7 @@ public class Widgets.Queue : Gtk.Revealer {
         next_track_name.use_markup = true;
         next_track_name.max_width_chars = 31;
         next_track_name.ellipsize = Pango.EllipsizeMode.END;
-        
+
         var view_button = new Gtk.Button.with_label (_("View all"));
         view_button.hexpand = true;
         view_button.halign = Gtk.Align.END;
@@ -53,7 +53,7 @@ public class Widgets.Queue : Gtk.Revealer {
         */
 
         var notification_image = new Gtk.Image ();
-        notification_image.gicon = new ThemedIcon ("byte-favorite-symbolic"); 
+        notification_image.gicon = new ThemedIcon ("byte-favorite-symbolic");
         notification_image.pixel_size = 16;
         notification_image.margin_top = 1;
         notification_image.valign = Gtk.Align.CENTER;
@@ -83,9 +83,9 @@ public class Widgets.Queue : Gtk.Revealer {
         notification_grid.attach (notification_primary_label, 1, 0, 1, 1);
         notification_grid.attach (notification_secondary_label, 1, 1, 1, 1);
 
-        /* 
+        /*
             Sync
-        */ 
+        */
 
         var sync_image = new Gtk.Image ();
         sync_image.gicon = new ThemedIcon ("emblem-synchronizing-symbolic");
@@ -147,7 +147,7 @@ public class Widgets.Queue : Gtk.Revealer {
         //mode_button.append_text (_("History"));
         //mode_button.append_text (_("Lyrics"));
         mode_button.selected = 0;
- 
+
         var title_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 0);
         title_box.get_style_context ().add_class ("queue-title");
         title_box.set_center_widget (mode_button);
@@ -162,7 +162,7 @@ public class Widgets.Queue : Gtk.Revealer {
         title_revealer.add (title_eventbox);
         title_revealer.reveal_child = false;
 
-        listbox = new Gtk.ListBox (); 
+        listbox = new Gtk.ListBox ();
         listbox.expand = true;
 
         var queue_scrolled = new Gtk.ScrolledWindow (null, null);
@@ -191,7 +191,7 @@ public class Widgets.Queue : Gtk.Revealer {
 
         Byte.utils.play_items.connect ((_items, _track) => {
             listbox.foreach ((widget) => {
-                widget.destroy (); 
+                widget.destroy ();
             });
 
             items = _items;
@@ -202,20 +202,20 @@ public class Widgets.Queue : Gtk.Revealer {
             if (item_max > items.size) {
                 item_max = items.size;
             }
-            
+
             add_all_items (items);
-            
+
             if (_track == null) {
                 Byte.player.set_track (items [0]);
             } else {
                 Byte.player.set_track (_track);
-                
+
                 int current_index = Byte.utils.get_track_index_by_id (_track.id, items);
 
                 listbox.set_filter_func ((row) => {
                     var index = row.get_index ();
 
-                    return index >= current_index; 
+                    return index >= current_index;
                 });
             }
 
@@ -225,15 +225,15 @@ public class Widgets.Queue : Gtk.Revealer {
                 top_stack.visible_child_name = "top_eventbox";
             }
         });
-        
+
         Byte.player.current_track_changed.connect ((track) => {
             int current_index = Byte.utils.get_track_index_by_id (track.id, items);
 
             listbox.set_filter_func ((row) => {
                 var index = row.get_index ();
-                return index >= current_index; 
+                return index >= current_index;
             });
-    
+
             Objects.Track? next_track = Byte.utils.get_next_track (track);
 
             if (next_track != null) {
@@ -241,7 +241,7 @@ public class Widgets.Queue : Gtk.Revealer {
 
                 next_track_name.label = "%s <b>by</b> %s".printf (next_track.title, next_track.artist_name);
                 next_track_grid.tooltip_text = "%s - %s".printf (next_track.artist_name, next_track.title);
-                    
+
                 try {
                     var cover_path = GLib.Path.build_filename (Byte.utils.COVER_FOLDER, ("track-%i.jpg").printf (next_track.id));
                     image_cover.pixbuf = new Gdk.Pixbuf.from_file_at_size (cover_path, 27, 27);
@@ -263,14 +263,14 @@ public class Widgets.Queue : Gtk.Revealer {
                 reveal_child = false;
             }
         });
-        
+
         Byte.utils.update_next_track.connect (() => {
             var next_track = Byte.utils.get_next_track (Byte.player.current_track);
 
             if (next_track != null) {
                 next_track_name.label = _("%s <b>by</b> %s".printf (next_track.title, next_track.artist_name));
                 next_track_grid.tooltip_text = "%s - %s".printf (next_track.artist_name, next_track.title);
-                
+
                 try {
                     var cover_path = GLib.Path.build_filename (Byte.utils.COVER_FOLDER, ("track-%i.jpg").printf (next_track.id));
                     image_cover.pixbuf = new Gdk.Pixbuf.from_file_at_size (cover_path, 27, 27);
@@ -293,7 +293,7 @@ public class Widgets.Queue : Gtk.Revealer {
 
         Byte.utils.add_next_track.connect ((_items) => {
             listbox.foreach ((widget) => {
-                widget.destroy (); 
+                widget.destroy ();
             });
 
             items = _items;
@@ -304,15 +304,15 @@ public class Widgets.Queue : Gtk.Revealer {
             if (item_max > items.size) {
                 item_max = items.size;
             }
-            
+
             add_all_items (items);
 
             Byte.utils.update_next_track ();
         });
-        
+
         Byte.utils.add_last_track.connect ((_items) => {
             listbox.foreach ((widget) => {
-                widget.destroy (); 
+                widget.destroy ();
             });
 
             items = _items;
@@ -323,7 +323,7 @@ public class Widgets.Queue : Gtk.Revealer {
             if (item_max > items.size) {
                 item_max = items.size;
             }
-            
+
             add_all_items (items);
 
             Byte.utils.update_next_track ();
@@ -331,7 +331,7 @@ public class Widgets.Queue : Gtk.Revealer {
 
         queue_scrolled.edge_reached.connect((pos)=> {
             if (pos == Gtk.PositionType.BOTTOM) {
-                
+
                 item_index = item_max;
                 item_max = item_max + 50;
 
@@ -377,14 +377,14 @@ public class Widgets.Queue : Gtk.Revealer {
 
         listbox.row_activated.connect ((row) => {
             var item = row as Widgets.TrackQueueRow;
-            
+
             Byte.player.set_track (item.track);
             int current_index = Byte.utils.get_track_index_by_id (item.track.id, items);
 
             listbox.set_filter_func ((row) => {
                 var index = row.get_index ();
 
-                return index >= current_index; 
+                return index >= current_index;
             });
         });
 

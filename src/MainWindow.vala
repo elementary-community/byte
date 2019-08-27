@@ -1,7 +1,7 @@
 public class MainWindow : Gtk.Window {
     private Widgets.HeaderBar headerbar;
     private Widgets.MediaControl media_control;
-
+    
     private Widgets.Welcome welcome_view;
     private Views.Home home_view;
     private Views.Albums albums_view;
@@ -20,6 +20,8 @@ public class MainWindow : Gtk.Window {
 
     private Gtk.Stack main_stack;
     private Gtk.Stack library_stack;
+
+    public Unity.LauncherEntry launcher;
     public MainWindow (Byte application) {
         Object (
             application: application,
@@ -32,6 +34,8 @@ public class MainWindow : Gtk.Window {
 
     construct {
         get_style_context ().add_class ("rounded");
+
+        launcher = Unity.LauncherEntry.get_for_desktop_file (GLib.Application.get_default ().application_id + ".desktop");
 
         headerbar = new Widgets.HeaderBar ();
 
@@ -221,6 +225,18 @@ public class MainWindow : Gtk.Window {
             } else {
                 return false;
             }
+        });
+
+        Byte.scan_service.sync_started.connect (() => {
+            launcher.progress_visible = true;
+        });
+
+        Byte.scan_service.sync_finished.connect (() => {
+            launcher.progress_visible = false;
+        });
+
+        Byte.scan_service.sync_progress.connect ((fraction) => {
+            launcher.progress = fraction;
         });
     }
     

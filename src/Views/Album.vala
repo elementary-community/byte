@@ -215,7 +215,7 @@ public class Views.Album : Gtk.EventBox {
 
         Byte.database.adden_new_track.connect ((track) => {
             Idle.add (() => {
-                if (_album != null && track.album_id == _album.id) {
+                if (track != null && _album != null && track.album_id == _album.id) {
                     var row = new Widgets.TrackAlbumRow (track);
                     listbox.add (row);
                     listbox.show_all ();
@@ -244,7 +244,11 @@ public class Views.Album : Gtk.EventBox {
 
         Byte.database.reset_library.connect (() => {
             listbox.foreach ((widget) => {
-                widget.destroy (); 
+                Idle.add (() => {
+                    widget.destroy (); 
+    
+                    return false;
+                });
             });
         });
     }

@@ -1,5 +1,5 @@
 public class Views.Tracks : Gtk.EventBox {
-    private Gtk.SearchEntry search_entry;
+    private Widgets.SearchEntry search_entry;
     private Gtk.ListBox listbox;
     private Gtk.Stack stack;
     private Widgets.AlertView alert_view;
@@ -53,11 +53,7 @@ public class Views.Tracks : Gtk.EventBox {
         search_button.always_show_image = true;
         search_button.tooltip_text = _("Search by title, artist and album");
 
-        search_entry = new Gtk.SearchEntry ();
-        search_entry.margin = 6;
-        search_entry.valign = Gtk.Align.CENTER;
-        search_entry.hexpand = true;
-        search_entry.get_style_context ().add_class ("search-entry");
+        search_entry = new Widgets.SearchEntry ();
         search_entry.tooltip_text = _("Search by title, artist and album");
         search_entry.placeholder_text = _("Search by title, artist and album");
 
@@ -253,8 +249,10 @@ public class Views.Tracks : Gtk.EventBox {
 
         Byte.database.adden_new_track.connect ((track) => {
             Idle.add (() => {
-                add_track (track);
-                stack.visible_child_name = "listbox_scrolled";
+                if (track != null) {
+                    add_track (track);
+                    stack.visible_child_name = "listbox_scrolled";
+                }
                 
                 return false;
             });
@@ -276,7 +274,11 @@ public class Views.Tracks : Gtk.EventBox {
 
         Byte.database.reset_library.connect (() => {
             listbox.foreach ((widget) => {
-                widget.destroy (); 
+                Idle.add (() => {
+                    widget.destroy (); 
+    
+                    return false;
+                });
             });
         });
 

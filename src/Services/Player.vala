@@ -70,9 +70,15 @@ public class Services.Player : GLib.Object {
         });
 
         current_track_changed.connect ((track) => {
+            current_radio = null;
+            
             if (track != null && Byte.scan_service.is_sync == false) {
                 Byte.database.add_track_count (track);
             }
+        });
+
+        current_radio_changed.connect ((radio) => {
+            current_track = null;
         });
 
         /*
@@ -98,7 +104,11 @@ public class Services.Player : GLib.Object {
     public void set_radio (Objects.Radio radio) {
         if (radio == current_radio || radio == null || radio.file == null) {
             return;
-        }
+        } 
+        
+        mode_changed ("radio");
+        mode = "radio";
+        current_radio_changed (radio);
 
         current_radio = radio;
 
@@ -108,10 +118,6 @@ public class Services.Player : GLib.Object {
         state_changed (Gst.State.PLAYING);
         player_state = Gst.State.PLAYING;
         play ();
-
-        mode_changed ("radio");
-        mode = "radio";
-        current_radio_changed (radio);
     }
 
     public void set_track (Objects.Track? track) {
@@ -120,11 +126,11 @@ public class Services.Player : GLib.Object {
         }
 
         if (load_track (track)) {
-            play ();
-
             current_track_changed (track);
             mode_changed ("track");
             mode = "track";
+
+            play ();
         }
     }
 
@@ -274,22 +280,28 @@ public class Services.Player : GLib.Object {
                 message.parse_error (out err, out debug);
                 warning ("Error: %s\n%s\n", err.message, debug);
 
-                // Check
-                next ();
+                if (mode == "radio") {
+
+                } else {
+                    next ();
+                }
+
                 break;
             case Gst.MessageType.EOS:
                 next ();
                 break;
-            case Gst.MessageType.TAG:
+            case Gst.MessageType.TAG: 
                 Gst.TagList tag_list;
                 string title;
 
                 message.parse_tag (out tag_list);
-                tag_list.get_string ("title", out title);
+                tag_list.get_string (Gst.Tags.TITLE, out title);
                 tag_list = null;
 
                 current_radio_title = title;
-                if (current_radio_title != null) {
+
+                if (current_radio_title != null && mode == "radio") {
+                    print ("Radio current title: %s\n".printf (current_radio_title));
                     current_radio_title_changed (current_radio_title);
                 }
                 

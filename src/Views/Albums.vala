@@ -42,12 +42,7 @@ public class Views.Albums : Gtk.EventBox {
         search_button.always_show_image = true;
         search_button.tooltip_text = _("Search by title, artist, genre and year");
 
-        var search_entry = new Gtk.SearchEntry ();
-        search_entry.valign = Gtk.Align.CENTER;
-        search_entry.hexpand = true;
-        search_entry.margin = 6;
-        search_entry.get_style_context ().add_class ("search-entry");
-        search_entry.placeholder_text = _("Your library");
+        var search_entry = new Widgets.SearchEntry ();
         search_entry.tooltip_text = _("Search by title, artist, genre and year");
         search_entry.placeholder_text = _("Search by title, artist, genre and year");
 
@@ -229,7 +224,11 @@ public class Views.Albums : Gtk.EventBox {
 
         Byte.database.reset_library.connect (() => {
             listbox.foreach ((widget) => {
-                widget.destroy (); 
+                Idle.add (() => {
+                    widget.destroy (); 
+    
+                    return false;
+                });
             });
         });
 
