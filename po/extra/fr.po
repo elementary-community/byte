@@ -29,7 +29,7 @@ msgstr "Musique"
 
 #: data/com.github.alainm23.byte.desktop.in:8
 msgid "com.github.alainm23.byte"
-msgstr "com.github.alainm3.byte"
+msgstr "com.github.alainm23.byte"
 
 #: data/com.github.alainm23.byte.desktop.in:12
 msgid "mp3;music;byte;radio;playlist;"
