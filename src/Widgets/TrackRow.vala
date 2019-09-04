@@ -37,7 +37,7 @@ public class Widgets.TrackRow : Gtk.ListBoxRow {
         primary_label = new Gtk.Label (track.title);
         primary_label.get_style_context ().add_class ("font-bold");
         primary_label.ellipsize = Pango.EllipsizeMode.END;
-        primary_label.max_width_chars = 45;
+        primary_label.max_width_chars = 40;
         primary_label.halign = Gtk.Align.START;
         primary_label.valign = Gtk.Align.END;
 
@@ -63,7 +63,7 @@ public class Widgets.TrackRow : Gtk.ListBoxRow {
         secondary_label.use_markup = true;
         secondary_label.halign = Gtk.Align.START;
         secondary_label.valign = Gtk.Align.START;
-        secondary_label.max_width_chars = 45;
+        secondary_label.max_width_chars = 40;
         secondary_label.ellipsize = Pango.EllipsizeMode.END;
 
         image_cover = new Widgets.Cover.from_file (
@@ -203,7 +203,7 @@ public class Widgets.TrackRow : Gtk.ListBoxRow {
             return false;
         });
 
-        button_press_event.connect ((sender, evt) => {
+         button_press_event.connect ((sender, evt) => {
             if (evt.type == Gdk.EventType.BUTTON_PRESS && evt.button == 3) {
                 activate_menu ();
                 return true;

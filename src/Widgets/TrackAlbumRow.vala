@@ -33,7 +33,7 @@ public class Widgets.TrackAlbumRow : Gtk.ListBoxRow {
 
         title_label = new Gtk.Label (track.title);
         title_label.ellipsize = Pango.EllipsizeMode.END;
-        title_label.max_width_chars = 45;
+        title_label.max_width_chars = 40;
         title_label.halign = Gtk.Align.START;
 
         duration_label = new Gtk.Label (Byte.utils.get_formated_duration (track.duration));

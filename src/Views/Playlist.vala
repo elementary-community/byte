@@ -446,17 +446,38 @@ public class Views.Playlist : Gtk.EventBox {
         });
 
         note_text.focus_in_event.connect (() => {
+            Byte.instance.toggle_playing_action_enabled (false);
             note_placeholder.visible = false;
             return false;
         });
 
         note_text.focus_out_event.connect (() => {
+            Byte.instance.toggle_playing_action_enabled (true);
+
             if (note_text.buffer.text == "") {
                 note_placeholder.visible = true;
             }
             return false;
         });
 
+        note_text.buffer.changed.connect (() => {
+            Byte.instance.toggle_playing_action_enabled (false);
+        });
+
+        title_entry.focus_in_event.connect (() => {
+            Byte.instance.toggle_playing_action_enabled (false);
+            return false;
+        });
+
+        title_entry.focus_out_event.connect (() => {
+            Byte.instance.toggle_playing_action_enabled (true);
+            return false;
+        });
+
+        title_entry.changed.connect (() => {
+            Byte.instance.toggle_playing_action_enabled (false);
+        });
+        
         title_entry.activate.connect (update);
         update_button.clicked.connect (update);
     }
@@ -472,7 +493,12 @@ public class Views.Playlist : Gtk.EventBox {
             update_relative_label.label = Byte.utils.get_relative_datetime (_playlist.date_updated);
 
             right_stack.visible_child_name = "detail_box";
-            note_label.visible = true;
+            
+            if (_playlist.note != "") {
+                note_label.visible = true;
+            } else {
+                note_label.visible = false;
+            }
 
             Byte.database.update_playlist (_playlist);
         }

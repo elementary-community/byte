@@ -34,7 +34,7 @@ public class Widgets.TrackQueueRow : Gtk.ListBoxRow {
         track_title_label = new Gtk.Label (track.title);
         track_title_label.get_style_context ().add_class ("font-bold");
         track_title_label.ellipsize = Pango.EllipsizeMode.END;
-        track_title_label.max_width_chars = 45;
+        track_title_label.max_width_chars = 40;
         track_title_label.halign = Gtk.Align.START;
         track_title_label.valign = Gtk.Align.END;
 
@@ -42,7 +42,7 @@ public class Widgets.TrackQueueRow : Gtk.ListBoxRow {
         artist_album_label.halign = Gtk.Align.START;
         artist_album_label.use_markup = true;
         artist_album_label.valign = Gtk.Align.START;
-        artist_album_label.max_width_chars = 45;
+        artist_album_label.max_width_chars = 40;
         artist_album_label.ellipsize = Pango.EllipsizeMode.END;
         artist_album_label.get_style_context ().add_class ("font-size-small");
 

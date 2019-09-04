@@ -1,17 +1,29 @@
-public class Dialogs.Settings : Gtk.Dialog { 
+public class Dialogs.Settings : Gtk.Dialog {
+    public const string COLOR_CSS = """
+        .color-%s radio {
+            background: %s;
+        }
+    """;
+
     public Settings () {
         Object (
             transient_for: Byte.instance.main_window,
-            deletable: false,
+            deletable: true,
             resizable: true,
-            destroy_with_parent: true
-            //window_position: Gtk.WindowPosition.CENTER_ON_PARENT
+            destroy_with_parent: true,
+            window_position: Gtk.WindowPosition.CENTER_ON_PARENT
         );
 	}
 
     construct {
         get_style_context ().add_class ("editor-titlebar");
         set_size_request (550, -1);
+
+        use_header_bar = 1;
+        var header_bar = (Gtk.HeaderBar) get_header_bar ();
+        header_bar.get_style_context ().add_class (Gtk.STYLE_CLASS_FLAT);
+        header_bar.get_style_context ().add_class ("oauth-dialog");
+        //header_bar.custom_title = container_grid;
 
         var general_label = new Gtk.Label (_("General"));
         general_label.halign = Gtk.Align.START;
@@ -96,6 +108,62 @@ public class Dialogs.Settings : Gtk.Dialog {
         settings_03_box.pack_start (settings_03_label, false, false, 6);
         settings_03_box.pack_end (settings_03_switch, false, false, 0);
 
+        /*
+            Theme
+        */
+
+        var settings_09_icon = new Gtk.Image ();
+        settings_09_icon.gicon = new ThemedIcon ("applications-graphics-symbolic");
+        settings_09_icon.pixel_size = 16;
+        settings_09_icon.get_style_context ().add_class ("settings-icon");
+        settings_09_icon.valign = Gtk.Align.CENTER;
+
+        var settings_09_label = new Gtk.Label (_("Theme"));
+ 
+        var theme_01 = new Gtk.RadioButton (null);
+        theme_01.valign = Gtk.Align.START;
+        theme_01.halign = Gtk.Align.START;
+        theme_01.tooltip_text = _("Byte");
+        apply_styles ("01", "#fe2851", theme_01);
+
+        var theme_02 = new Gtk.RadioButton.from_widget (theme_01);
+        theme_02.valign = Gtk.Align.START;
+        theme_02.halign = Gtk.Align.START;
+        theme_02.tooltip_text = _("Black");
+        apply_styles ("02", "#333333", theme_02);
+
+        var theme_03 = new Gtk.RadioButton.from_widget (theme_01);
+        theme_03.valign = Gtk.Align.START;
+        theme_03.halign = Gtk.Align.START;
+        theme_03.tooltip_text = _("Blueberry");
+        apply_styles ("03", "#3689e6", theme_03);
+
+        var theme_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 0);
+        theme_box.pack_start (theme_01, false, false, 6);
+        theme_box.pack_start (theme_02, false, false, 6);
+        theme_box.pack_start (theme_03, false, false, 6);
+
+        int theme = Byte.settings.get_enum ("theme");
+
+        if (theme == 1) {
+            theme_01.active = true;
+        } else if (theme == 2) {
+            theme_02.active = true;
+        } else {
+            theme_03.active = true;
+        }
+
+        if (Byte.settings.get_boolean ("dark-mode")) {
+            theme_box.sensitive = false;
+        }
+
+        var settings_09_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 0);
+        settings_09_box.hexpand = true;
+        settings_09_box.margin = 6;
+        settings_09_box.pack_start (settings_09_icon, false, false, 0);
+        settings_09_box.pack_start (settings_09_label, false, false, 6);
+        settings_09_box.pack_end (theme_box, false, false, 6);
+
         var general_grid = new Gtk.Grid ();
         general_grid.get_style_context ().add_class ("view");
         general_grid.orientation = Gtk.Orientation.VERTICAL;
@@ -106,6 +174,8 @@ public class Dialogs.Settings : Gtk.Dialog {
         general_grid.add (settings_02_box);
         general_grid.add (new Gtk.Separator (Gtk.Orientation.HORIZONTAL));
         general_grid.add (settings_03_box);
+        general_grid.add (new Gtk.Separator (Gtk.Orientation.HORIZONTAL));
+        general_grid.add (settings_09_box);
         general_grid.add (new Gtk.Separator (Gtk.Orientation.HORIZONTAL));
 
         var library_label = new Gtk.Label (_("Library"));
@@ -251,6 +321,7 @@ public class Dialogs.Settings : Gtk.Dialog {
 
         var settings_08_grid = new Gtk.Grid ();
         settings_08_grid.margin_top = 12;
+        settings_08_grid.margin_bottom = 12;
         settings_08_grid.get_style_context ().add_class ("view");
         settings_08_grid.orientation = Gtk.Orientation.VERTICAL;
         settings_08_grid.row_spacing = 3;
@@ -267,13 +338,19 @@ public class Dialogs.Settings : Gtk.Dialog {
 
         get_content_area ().add (main_grid);
 
-        add_button (_("Close"), Gtk.ResponseType.CLOSE);
+        get_action_area ().visible = false;
+        get_action_area ().no_show_all = true;
 
+        //add_button (_("Close"), Gtk.ResponseType.CLOSE);
+        /*
         response.connect ((response_id) => {
             destroy (); 
         });
+        */
 
         settings_01_switch.notify["active"].connect (() => { 
+            theme_box.sensitive = !settings_01_switch.active;
+
             var provider = new Gtk.CssProvider ();
             var colored_css = """
                 @define-color colorPrimary %s;
@@ -283,13 +360,10 @@ public class Dialogs.Settings : Gtk.Dialog {
             if (settings_01_switch.active) {
                 colored_css = colored_css.printf (
                     "@base_color",
-                    "#fe2851"
+                    "@text_color"
                 );
             } else {
-                colored_css = colored_css.printf (
-                    "#fe2851",
-                    "#ffffff"
-                );
+                Byte.utils.apply_theme (Byte.settings.get_enum ("theme"));
             }
 
             try {
@@ -364,5 +438,39 @@ public class Dialogs.Settings : Gtk.Dialog {
 
             message_dialog.destroy ();
         });
+
+        theme_01.toggled.connect (() => {
+            Byte.settings.set_enum ("theme", 1);
+            Byte.utils.apply_theme (1);
+        });
+
+        theme_02.toggled.connect (() => {
+            Byte.settings.set_enum ("theme", 2);
+            Byte.utils.apply_theme (2);
+        });
+
+        theme_03.toggled.connect (() => {
+            Byte.settings.set_enum ("theme", 3);
+            Byte.utils.apply_theme (3);
+        });
+    }
+
+    private void apply_styles (string id, string color, Gtk.RadioButton radio) {
+        var provider = new Gtk.CssProvider ();
+        radio.get_style_context ().add_class ("color-%s".printf (id));
+        radio.get_style_context ().add_class ("color-radio");
+
+        try {
+            var colored_css = COLOR_CSS.printf (
+                id,
+                color
+            );
+
+            provider.load_from_data (colored_css, colored_css.length);
+
+            Gtk.StyleContext.add_provider_for_screen (Gdk.Screen.get_default (), provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
+        } catch (GLib.Error e) {
+            return;
+        }
     }
 }
