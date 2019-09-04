@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: com.github.alainm23.byte\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-08-27 15:48-0500\n"
+"POT-Creation-Date: 2019-09-04 12:21-0500\n"
 "PO-Revision-Date: 2019-08-10 12:12+0200\n"
 "Last-Translator: NathanBnm\n"
 "Language-Team: none\n"
@@ -204,7 +204,7 @@ msgid "Quick find"
 msgstr "Recherche rapide"
 
 #: src/Widgets/QuickFind.vala:46 src/Views/Home.vala:20
-#: src/Dialogs/Settings.vala:111
+#: src/Dialogs/Settings.vala:181
 msgid "Library"
 msgstr "Bibliothèque"
 
@@ -432,72 +432,89 @@ msgstr "Titre"
 msgid "Lyrics"
 msgstr "Paroles"
 
-#: src/Dialogs/TrackEditor.vala:134 src/Dialogs/Settings.vala:270
+#: src/Dialogs/TrackEditor.vala:134
 msgid "Close"
 msgstr "Fermer"
 
-#: src/Dialogs/Settings.vala:16
+#. header_bar.custom_title = container_grid;
+#: src/Dialogs/Settings.vala:28
 msgid "General"
 msgstr "Général"
 
-#: src/Dialogs/Settings.vala:33
+#: src/Dialogs/Settings.vala:45
 msgid "Dark mode"
 msgstr "Thème sombre"
 
-#: src/Dialogs/Settings.vala:61
+#: src/Dialogs/Settings.vala:73
 msgid "Notifications"
 msgstr "Notifications"
 
-#: src/Dialogs/Settings.vala:85
+#: src/Dialogs/Settings.vala:97
 msgid "Play in background if closed"
 msgstr "Lecture en arrière-plan"
 
-#: src/Dialogs/Settings.vala:127
+#: src/Dialogs/Settings.vala:121
+msgid "Theme"
+msgstr ""
+
+#: src/Dialogs/Settings.vala:126
+msgid "Byte"
+msgstr ""
+
+#: src/Dialogs/Settings.vala:132
+msgid "Black"
+msgstr ""
+
+#: src/Dialogs/Settings.vala:138
+msgid "Blueberry"
+msgstr ""
+
+#: src/Dialogs/Settings.vala:197
 msgid "Music folder location"
 msgstr "Emplacement du dossier de musique"
 
-#: src/Dialogs/Settings.vala:129
+#: src/Dialogs/Settings.vala:199
 msgid "Select Music Folder…"
 msgstr "Sélectionner le dossier de musique…"
 
-#: src/Dialogs/Settings.vala:152
+#: src/Dialogs/Settings.vala:222
 msgid "Sync library on start up"
 msgstr "Synchroniser la bibliothèque au lancement"
 
-#: src/Dialogs/Settings.vala:176
+#: src/Dialogs/Settings.vala:246
 msgid "Automatically download covers"
 msgstr "Télécharger automatiquement les pochettes"
 
-#: src/Dialogs/Settings.vala:200
+#: src/Dialogs/Settings.vala:270
 msgid "Save changes into ID3-Tag"
 msgstr "Enregistrer les modifications dans les tags ID3"
 
-#: src/Dialogs/Settings.vala:238
+#: src/Dialogs/Settings.vala:308
 msgid "Reset all library"
 msgstr "Réinitialiser toute la bibliothèque"
 
-#: src/Dialogs/Settings.vala:240 src/Dialogs/Settings.vala:354
+#: src/Dialogs/Settings.vala:310 src/Dialogs/Settings.vala:428
 msgid "Reset"
 msgstr "Réinitialiser"
 
-#: src/Dialogs/Settings.vala:326
+#: src/Dialogs/Settings.vala:400
 msgid "Set Music Folder?"
 msgstr "Définir le dossier de musique ?"
 
-#: src/Dialogs/Settings.vala:327
+#: src/Dialogs/Settings.vala:401
 #, c-format
 msgid "Are you sure you want to set the music folder to <b>%s</b>?"
 msgstr "Êtes-vous sûr de vouloir régler le dossier de musique sur <b>%s</b> ?"
 
-#: src/Dialogs/Settings.vala:332
+#: src/Dialogs/Settings.vala:406
 msgid "Set Music Folder"
 msgstr "Définir le dossier de musique"
 
-#: src/Dialogs/Settings.vala:348
+#: src/Dialogs/Settings.vala:422
 msgid "Reset your library?"
 msgstr "Réinitialiser la bibliothèque ?"
 
-#: src/Dialogs/Settings.vala:349
+#: src/Dialogs/Settings.vala:423
 msgid "Are you sure you want to reset all your library?"
 msgstr "Êtes-vous sûr de vouloir réinitialiser toute votre bibliothèque ?"
 
