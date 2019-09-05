@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: extra\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-09-04 12:21-0500\n"
-"PO-Revision-Date: 2019-08-24 02:38+0400\n"
+"PO-Revision-Date: 2019-09-06 01:52+0400\n"
 "Last-Translator: Andrey Kultyapov <camellan@yandex.ru>\n"
 "Language-Team: none\n"
 "Language: ru\n"
@@ -93,44 +93,43 @@ msgstr "Поиск, добавление и воспроизведение ва�
 #: data/com.github.alainm23.byte.appdata.xml.in:38
 #: data/com.github.alainm23.byte.appdata.xml.in:51
 msgid "This update brings some new features and bug fixes:"
-msgstr ""
+msgstr "Это обновление содержит некоторые новые функции и исправления ошибок:"
 
 #: data/com.github.alainm23.byte.appdata.xml.in:30
 msgid "3 new themes added"
-msgstr ""
+msgstr "Добавлено 3 новые темы"
 
 #: data/com.github.alainm23.byte.appdata.xml.in:31
-#, fuzzy
 msgid "Fix icon name in French translation @NathanBnm"
-msgstr "Французский перевод @NathanBnm 🇲🇫️"
+msgstr "Исправлено имя иконки во французском переводе @NathanBnm"
 
 #: data/com.github.alainm23.byte.appdata.xml.in:40
 #: data/com.github.alainm23.byte.appdata.xml.in:53
 msgid "Space shortcut added to play/pause."
-msgstr ""
+msgstr "Добавлена клавиша пробела для воспроизведения/паузы."
 
 #: data/com.github.alainm23.byte.appdata.xml.in:41
 #: data/com.github.alainm23.byte.appdata.xml.in:54
 msgid ""
 "A progress bar was added in the dock every time your library is synchronized."
 msgstr ""
+"Прогрессбар добавляется в док каждый раз при синхронизации вашей фонотеки."
 
 #: data/com.github.alainm23.byte.appdata.xml.in:42
 #: data/com.github.alainm23.byte.appdata.xml.in:55
 msgid "Fixed a bug that does not allow songs to be played when clicking."
 msgstr ""
+"Исправлена ошибка, которая не позволяла воспроизводить песни при нажатии."
 
 #: data/com.github.alainm23.byte.appdata.xml.in:43
 #: data/com.github.alainm23.byte.appdata.xml.in:56
-#, fuzzy
 msgid "Russian translation @camellan 🇷🇺️"
-msgstr "Японский перевод @ryonakano 🇯🇵️"
+msgstr "Русский перевод от @camellan 🇷🇺️"
 
 #: data/com.github.alainm23.byte.appdata.xml.in:44
 #: data/com.github.alainm23.byte.appdata.xml.in:57
-#, fuzzy
 msgid "Updated japanese translation @ryonakano 🇯🇵️"
-msgstr "Японский перевод @ryonakano 🇯🇵️"
+msgstr "Обновлён японский перевод @ryonakano 🇯🇵️"
 
 #: data/com.github.alainm23.byte.appdata.xml.in:63
 msgid ""
