@@ -27,7 +27,7 @@ public class Byte : Gtk.Application {
         }
     }
 
-    public Byte () {
+    public Byte () { 
         Object (
             application_id: "com.github.alainm23.byte",
             flags: ApplicationFlags.HANDLES_OPEN
@@ -135,6 +135,30 @@ public class Byte : Gtk.Application {
         // Default Icon Theme
         weak Gtk.IconTheme default_theme = Gtk.IconTheme.get_default ();
         default_theme.add_resource_path ("/com/github/alainm23/byte");
+
+        if (Byte.settings.get_boolean ("dark-mode")) {
+            var provider_theme = new Gtk.CssProvider ();
+
+            var colored_css = """
+                @define-color colorPrimary %s;
+                @define-color textColorPrimary %s;
+            """;
+            
+            colored_css = colored_css.printf (
+                "@base_color",
+                "@text_color"
+            );
+
+            try {
+                provider_theme.load_from_data (colored_css, colored_css.length);
+
+                Gtk.StyleContext.add_provider_for_screen (Gdk.Screen.get_default (), provider_theme, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
+            } catch (GLib.Error e) {
+                return;
+            }
+        } else {
+            Byte.utils.apply_theme (Byte.settings.get_enum ("theme"));
+        }
     }
 
     public void toggle_playing_action_enabled (bool b) {

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: com.github.alainm23.byte\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-08-27 22:38+0400\n"
+"POT-Creation-Date: 2019-09-04 12:21-0500\n"
 "PO-Revision-Date: 2019-08-27 22:40+0400\n"
 "Last-Translator: Andrey Kultyapov <camellan@yandex.ru>\n"
 "Language-Team: none\n"
@@ -19,280 +19,75 @@ msgstr ""
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 "X-Generator: Poedit 2.2.3\n"
 
-#: src/Dialogs/Settings.vala:16
-msgid "General"
-msgstr "Основные"
+#: src/Utils.vala:286
+msgid "Choose an image…"
+msgstr ""
 
-#: src/Dialogs/Settings.vala:33
-msgid "Dark mode"
-msgstr "Темная тема"
+#: src/Utils.vala:288 src/Services/Scan.vala:88 src/Widgets/QuickFind.vala:31
+msgid "Cancel"
+msgstr "Отменить"
 
-#: src/Dialogs/Settings.vala:61
-msgid "Notifications"
-msgstr "Уведомления"
+#: src/Utils.vala:289 src/Services/Scan.vala:89
+msgid "Open"
+msgstr ""
 
-#: src/Dialogs/Settings.vala:85
-msgid "Play in background if closed"
-msgstr "Играть в фоновом режиме после закрытия"
-
-#: src/Dialogs/Settings.vala:111 src/Views/Home.vala:20
-#: src/Widgets/QuickFind.vala:46
-msgid "Library"
-msgstr "Фонотека"
-
-#: src/Dialogs/Settings.vala:127
-msgid "Music folder location"
-msgstr "Расположение папки музыки"
-
-#: src/Dialogs/Settings.vala:129
-msgid "Select Music Folder…"
-msgstr "Выбор папки музыки..."
-
-#: src/Dialogs/Settings.vala:152
-msgid "Sync library on start up"
-msgstr "Обновлять фонотеку при запуске"
-
-#: src/Dialogs/Settings.vala:176
-msgid "Automatically download covers"
-msgstr "Автоматически загружать обложки"
-
-#: src/Dialogs/Settings.vala:200
-msgid "Save changes into ID3-Tag"
-msgstr "Сохранить изменения в ID3-тег"
-
-#: src/Dialogs/Settings.vala:238
-msgid "Reset all library"
-msgstr "Сбросить всю фонотеку"
-
-#: src/Dialogs/Settings.vala:240 src/Dialogs/Settings.vala:354
-msgid "Reset"
-msgstr "Сбросить"
-
-#: src/Dialogs/Settings.vala:270 src/Dialogs/TrackEditor.vala:134
-msgid "Close"
-msgstr "Закрыть"
-
-#: src/Dialogs/Settings.vala:326
-msgid "Set Music Folder?"
-msgstr "Установить папку музыки?"
-
-#: src/Dialogs/Settings.vala:327
-#, c-format
-msgid "Are you sure you want to set the music folder to <b>%s</b>?"
-msgstr "Вы уверены, что хотите установить папку музыки в <b>%s</b>?"
-
-#: src/Dialogs/Settings.vala:332
-msgid "Set Music Folder"
-msgstr "Установка папки музыки"
-
-#: src/Dialogs/Settings.vala:348
-msgid "Reset your library?"
-msgstr "Сбросить вашу фонотеку?"
-
-#: src/Dialogs/Settings.vala:349
-msgid "Are you sure you want to reset all your library?"
-msgstr "Вы уверены, что хотите сбросить всю свою фонотеку?"
-
-#: src/Dialogs/TrackEditor.vala:82
-msgid "Title"
-msgstr "Название"
-
-#: src/Dialogs/TrackEditor.vala:84 src/Views/Albums.vala:77
-#: src/Views/Playlist.vala:117 src/Views/Tracks.vala:88
-msgid "Artist"
-msgstr "Исполнитель"
-
-#: src/Dialogs/TrackEditor.vala:86 src/Views/Album.vala:73
-#: src/Views/Playlist.vala:118 src/Views/Tracks.vala:89
-msgid "Album"
-msgstr "Альбом"
-
-#: src/Dialogs/TrackEditor.vala:88 src/Views/Albums.vala:79
-msgid "Genre"
-msgstr "Жанр"
-
-#: src/Dialogs/TrackEditor.vala:90 src/Views/Albums.vala:78
-msgid "Year"
-msgstr "Год"
-
-#: src/Dialogs/TrackEditor.vala:92
-msgid "Track"
-msgstr "Трек"
-
-#: src/Dialogs/TrackEditor.vala:94
-msgid "Lyrics"
-msgstr "Текст песни"
-
-#: src/Dialogs/TrackEditor.vala:136 src/Views/Playlist.vala:246
-msgid "Save"
-msgstr "Сохранить"
-
-#: src/Views/Album.vala:126 src/Views/Favorites.vala:64
-#: src/Views/Playlist.vala:200 src/Views/Tracks.vala:98
-#: src/Widgets/HeaderBar.vala:77 src/Widgets/TrackAlbumRow.vala:222
-#: src/Widgets/TrackRow.vala:311
-msgid "Play"
-msgstr "Воспроизвести"
-
-#: src/Views/Album.vala:133 src/Views/Favorites.vala:73
-#: src/Views/Playlist.vala:207 src/Views/Tracks.vala:107
-msgid "Shuffle"
-msgstr "Перемешать"
-
-#: src/Views/Albums.vala:34 src/Views/Home.vala:37
-msgid "Albums"
-msgstr "Альбомы"
-
-#: src/Views/Albums.vala:43 src/Views/Albums.vala:46 src/Views/Albums.vala:47
-msgid "Search by title, artist, genre and year"
-msgstr "Поиск по названию, исполнителю, жанру и году"
-
-#: src/Views/Albums.vala:63 src/Views/Playlist.vala:103
-#: src/Views/Tracks.vala:74
-msgid "Sort"
-msgstr "Сортировать"
-
-#: src/Views/Albums.vala:76 src/Views/Playlist.vala:116
-#: src/Views/Tracks.vala:87
-msgid "Name"
-msgstr "Имя"
-
-#: src/Views/Artists.vala:33 src/Views/Home.vala:40
-msgid "Artists"
-msgstr "Исполнители"
-
-#: src/Views/Artists.vala:39 src/Views/Artists.vala:40
-#: src/Views/Favorites.vala:37 src/Views/Favorites.vala:41
-#: src/Views/Favorites.vala:42 src/Views/Tracks.vala:54
-#: src/Views/Tracks.vala:57 src/Views/Tracks.vala:58
-msgid "Search by title, artist and album"
-msgstr "Поиск по названию, исполнителю и альбому"
-
-#: src/Views/Favorites.vala:28 src/Views/Home.vala:43
-msgid "Favorites"
-msgstr "Избранные"
-
-#: src/Views/Home.vala:29
-msgid "Recently added"
-msgstr "Недавно добавленные"
-
-#: src/Views/Home.vala:29
-msgid "(last 100)"
-msgstr "(последние 100)"
-
-#: src/Views/Home.vala:36 src/Views/Playlists.vala:30
-msgid "Playlists"
-msgstr "Плейлисты"
-
-#: src/Views/Home.vala:38 src/Views/Tracks.vala:45
-msgid "Songs"
-msgstr "Песни"
-
-#: src/Views/Home.vala:42 src/Views/Radios.vala:28
-#: src/Widgets/QuickFind.vala:47
-msgid "Radios"
-msgstr "Радио"
-
-#: src/Views/Playlist.vala:73
-#, c-format
-msgid "%i songs"
-msgstr "%i песен"
-
-#: src/Views/Playlist.vala:93
-msgid "Playlist"
-msgstr "Плейлист"
-
-#: src/Views/Playlist.vala:119 src/Views/Tracks.vala:90
-msgid "Date Added"
-msgstr "Дата добавления"
-
-#: src/Views/Playlist.vala:120 src/Views/Tracks.vala:91
-msgid "Play Count"
-msgstr "Количество прослушиваний"
-
-#: src/Views/Playlist.vala:157
-msgid "Edit Name and Appearance"
-msgstr "Изменить имя и отображение"
-
-#. Items
-#: src/Views/Playlist.vala:164
-msgid "Edit Details"
-msgstr "Редактировать детали"
-
-#: src/Views/Playlist.vala:165
-msgid "Set new Cover"
-msgstr "Установить новую обложку"
-
-#: src/Views/Playlist.vala:166 src/Views/Playlist.vala:396
-#: src/Widgets/RadioRow.vala:116 src/Widgets/TrackRow.vala:385
-msgid "Delete"
-msgstr "Удалить"
-
-#: src/Views/Playlist.vala:189
-msgid "Updated"
-msgstr "Обновлено"
+#: src/Utils.vala:292
+msgid "Images"
+msgstr ""
 
 #. Add
-#: src/Views/Playlist.vala:229 src/Widgets/Popovers/NewPlaylist.vala:19
-#: src/Widgets/NewPlaylist.vala:10
+#: src/Services/Database.vala:1622 src/Widgets/NewPlaylist.vala:10
+#: src/Widgets/Popovers/NewPlaylist.vala:19 src/Views/Playlist.vala:229
 msgid "New Playlist"
 msgstr "Новый плейлист"
 
-#: src/Views/Playlist.vala:242 src/Widgets/Popovers/NewPlaylist.vala:31
-msgid "Add Description"
-msgstr "Добавить описание"
+#: src/Services/TagManager.vala:4 src/Widgets/AlbumRow.vala:8
+msgid "Unknown"
+msgstr ""
 
-#: src/Views/Playlist.vala:390 src/Widgets/RadioRow.vala:110
-#: src/Widgets/TrackRow.vala:379
-msgid "Delete from library?"
-msgstr "Удалить из фонотеки?"
+#: src/Services/Scan.vala:87
+#, fuzzy
+msgid "Select a folder."
+msgstr "Выбор папки музыки..."
 
-#: src/Views/Playlist.vala:391 src/Widgets/RadioRow.vala:111
-#: src/Widgets/TrackRow.vala:380
-#, c-format
-msgid "Are you sure you want to delete <b>%s</b> from your library?"
-msgstr "Вы уверены, что хотите удалить <b>%s</b> из вашей фонотеки?"
+#: src/Services/Scan.vala:92
+msgid "Folder"
+msgstr ""
 
-#: src/Views/Playlists.vala:43
-msgid "Add New Playlist"
-msgstr "Добавить новый плейлист"
+#: src/Widgets/Welcome.vala:12
+msgid "Library is Empty"
+msgstr "Фонотека пуста"
 
-#: src/Views/Radios.vala:35
-msgid "Search internet radios"
-msgstr "Поиск интернет-радио"
+#: src/Widgets/Welcome.vala:12
+msgid "Add music to start jamming out"
+msgstr "Добавьте музыку для начала приглушённого вывода"
 
-#: src/Views/Tracks.vala:31
-msgid "No Results"
-msgstr "Ничего не найдено"
+#: src/Widgets/Welcome.vala:14
+msgid "Load Music"
+msgstr "Загрузить музыку"
 
-#: src/Views/Tracks.vala:323
-#, c-format
-msgid "No results for '%s' in Tracks. Try again."
-msgstr "Нет результатов для '%s' в треках. Попробуйте еще раз."
+#: src/Widgets/Welcome.vala:14
+msgid "Load from the user's music directory"
+msgstr "Загрузка из пользовательского каталога музыки"
 
-#: src/Views/Tracks.vala:354
-msgid "No Songs"
-msgstr "Нет песен"
+#: src/Widgets/Welcome.vala:15
+msgid "Change Music Folder"
+msgstr "Выбрать папку музыки"
 
-#: src/Views/Tracks.vala:355
-msgid "Add some tracks to your selected music folder."
-msgstr "Добавьте несколько треков в выбранную папку музыки."
-
-#: src/Widgets/Popovers/NewPlaylist.vala:56
-msgid "Add"
-msgstr "Добавить"
-
-#: src/Widgets/Popovers/Sort.vala:130
-msgid "Sort by"
-msgstr "Сортировать по"
-
-#: src/Widgets/Popovers/Sort.vala:159
-msgid "Reversed order"
-msgstr "Обратный порядок"
+#: src/Widgets/Welcome.vala:15
+msgid "Load music from folder"
+msgstr "Загрузить музыку из папки"
 
 #: src/Widgets/HeaderBar.vala:70
 msgid "Previous"
 msgstr "Предыдущий"
+
+#: src/Widgets/HeaderBar.vala:77 src/Widgets/TrackRow.vala:311
+#: src/Widgets/TrackAlbumRow.vala:222 src/Views/Album.vala:126
+#: src/Views/Tracks.vala:98 src/Views/Favorites.vala:64
+#: src/Views/Playlist.vala:200
+msgid "Play"
+msgstr "Воспроизвести"
 
 #: src/Widgets/HeaderBar.vala:84
 msgid "Next"
@@ -341,9 +136,95 @@ msgstr "Повторять все"
 msgid "Repeat One"
 msgstr "Повторять один"
 
-#: src/Widgets/NewPlaylist.vala:32
-msgid "Project name"
-msgstr "Имя проекта"
+#: src/Widgets/TrackRow.vala:80 src/Widgets/TrackAlbumRow.vala:44
+msgid "Options"
+msgstr "Свойства"
+
+#: src/Widgets/TrackRow.vala:246 src/Widgets/TrackAlbumRow.vala:157
+msgid "Create New Playlist"
+msgstr "Создать новый плейлист"
+
+#: src/Widgets/TrackRow.vala:312 src/Widgets/TrackAlbumRow.vala:223
+msgid "Play Next"
+msgstr "Воспроизвести следующий"
+
+#: src/Widgets/TrackRow.vala:313 src/Widgets/TrackAlbumRow.vala:224
+msgid "Play Later"
+msgstr "Воспроизвести позже"
+
+#: src/Widgets/TrackRow.vala:315 src/Widgets/TrackAlbumRow.vala:226
+msgid "Add to Playlist"
+msgstr "Добавить в плейлист"
+
+#: src/Widgets/TrackRow.vala:320 src/Widgets/TrackAlbumRow.vala:231
+msgid "Edit Song Info…"
+msgstr "Изменить информацию о песне ..."
+
+#: src/Widgets/TrackRow.vala:321 src/Widgets/TrackAlbumRow.vala:232
+msgid "Favorite"
+msgstr "Избранное"
+
+#: src/Widgets/TrackRow.vala:322 src/Widgets/TrackAlbumRow.vala:233
+msgid "Delete from library"
+msgstr "Удалить из фонотеки"
+
+#: src/Widgets/TrackRow.vala:323 src/Widgets/TrackAlbumRow.vala:234
+msgid "Delete from file"
+msgstr "Удалить из файла"
+
+#: src/Widgets/TrackRow.vala:324 src/Widgets/TrackAlbumRow.vala:235
+msgid "Remove from playlist"
+msgstr "Удалить из плейлиста"
+
+#: src/Widgets/TrackRow.vala:379 src/Widgets/RadioRow.vala:110
+#: src/Views/Playlist.vala:390
+msgid "Delete from library?"
+msgstr "Удалить из фонотеки?"
+
+#: src/Widgets/TrackRow.vala:380 src/Widgets/RadioRow.vala:111
+#: src/Views/Playlist.vala:391
+#, c-format
+msgid "Are you sure you want to delete <b>%s</b> from your library?"
+msgstr "Вы уверены, что хотите удалить <b>%s</b> из вашей фонотеки?"
+
+#: src/Widgets/TrackRow.vala:385 src/Widgets/RadioRow.vala:116
+#: src/Views/Playlist.vala:166 src/Views/Playlist.vala:396
+msgid "Delete"
+msgstr "Удалить"
+
+#: src/Widgets/TrackQueueRow.vala:61 src/Widgets/RadioRow.vala:58
+msgid "Remove"
+msgstr "Удалить"
+
+#: src/Widgets/QuickFind.vala:24 src/Widgets/QuickFind.vala:138
+msgid "The radio station was added correctly"
+msgstr "Радиостанция успешно добавлена"
+
+#: src/Widgets/QuickFind.vala:29
+msgid "Quick find"
+msgstr "Быстрый поиск"
+
+#: src/Widgets/QuickFind.vala:46 src/Views/Home.vala:20
+#: src/Dialogs/Settings.vala:181
+msgid "Library"
+msgstr "Фонотека"
+
+#: src/Widgets/QuickFind.vala:47 src/Views/Home.vala:42
+#: src/Views/Radios.vala:28
+msgid "Radios"
+msgstr "Радио"
+
+#: src/Widgets/QuickFind.vala:63
+msgid "Discover…"
+msgstr "Обзор..."
+
+#: src/Widgets/QuickFind.vala:64
+msgid "Search your favorite radios"
+msgstr "Поиск ваших любимых радиостанций"
+
+#: src/Widgets/QuickFind.vala:107
+msgid "The radio station is already added"
+msgstr "Радиостанция уже была добавлена"
 
 #: src/Widgets/Queue.vala:19
 msgid "Next track"
@@ -374,102 +255,273 @@ msgstr "%s <b>от</b> %s"
 msgid "Add Favorite"
 msgstr "Добавить в избранное"
 
-#: src/Widgets/QuickFind.vala:24 src/Widgets/QuickFind.vala:138
-msgid "The radio station was added correctly"
-msgstr "Радиостанция успешно добавлена"
-
-#: src/Widgets/QuickFind.vala:29
-msgid "Quick find"
-msgstr "Быстрый поиск"
-
-#: src/Widgets/QuickFind.vala:31
-msgid "Cancel"
-msgstr "Отменить"
-
-#: src/Widgets/QuickFind.vala:63
-msgid "Discover…"
-msgstr "Обзор..."
-
-#: src/Widgets/QuickFind.vala:64
-msgid "Search your favorite radios"
-msgstr "Поиск ваших любимых радиостанций"
-
-#: src/Widgets/QuickFind.vala:107
-msgid "The radio station is already added"
-msgstr "Радиостанция уже была добавлена"
-
-#: src/Widgets/RadioRow.vala:58 src/Widgets/TrackQueueRow.vala:61
-msgid "Remove"
-msgstr "Удалить"
-
-#: src/Widgets/TrackAlbumRow.vala:44 src/Widgets/TrackRow.vala:80
-msgid "Options"
-msgstr "Свойства"
-
-#: src/Widgets/TrackAlbumRow.vala:157 src/Widgets/TrackRow.vala:246
-msgid "Create New Playlist"
-msgstr "Создать новый плейлист"
-
-#: src/Widgets/TrackAlbumRow.vala:223 src/Widgets/TrackRow.vala:312
-msgid "Play Next"
-msgstr "Воспроизвести следующий"
-
-#: src/Widgets/TrackAlbumRow.vala:224 src/Widgets/TrackRow.vala:313
-msgid "Play Later"
-msgstr "Воспроизвести позже"
-
-#: src/Widgets/TrackAlbumRow.vala:226 src/Widgets/TrackRow.vala:315
-msgid "Add to Playlist"
-msgstr "Добавить в плейлист"
-
-#: src/Widgets/TrackAlbumRow.vala:231 src/Widgets/TrackRow.vala:320
-msgid "Edit Song Info…"
-msgstr "Изменить информацию о песне ..."
-
-#: src/Widgets/TrackAlbumRow.vala:232 src/Widgets/TrackRow.vala:321
-msgid "Favorite"
-msgstr "Избранное"
-
-#: src/Widgets/TrackAlbumRow.vala:233 src/Widgets/TrackRow.vala:322
-msgid "Delete from library"
-msgstr "Удалить из фонотеки"
-
-#: src/Widgets/TrackAlbumRow.vala:234 src/Widgets/TrackRow.vala:323
-msgid "Delete from file"
-msgstr "Удалить из файла"
-
-#: src/Widgets/TrackAlbumRow.vala:235 src/Widgets/TrackRow.vala:324
-msgid "Remove from playlist"
-msgstr "Удалить из плейлиста"
-
-#: src/Widgets/Welcome.vala:12
-msgid "Library is Empty"
-msgstr "Фонотека пуста"
-
-#: src/Widgets/Welcome.vala:12
-msgid "Add music to start jamming out"
-msgstr "Добавьте музыку для начала приглушённого вывода"
-
-#: src/Widgets/Welcome.vala:14
-msgid "Load Music"
-msgstr "Загрузить музыку"
-
-#: src/Widgets/Welcome.vala:14
-msgid "Load from the user's music directory"
-msgstr "Загрузка из пользовательского каталога музыки"
-
-#: src/Widgets/Welcome.vala:15
-msgid "Change Music Folder"
-msgstr "Выбрать папку музыки"
-
-#: src/Widgets/Welcome.vala:15
-msgid "Load music from folder"
-msgstr "Загрузить музыку из папки"
+#: src/Widgets/NewPlaylist.vala:32
+msgid "Project name"
+msgstr "Имя проекта"
 
 #: src/Widgets/PlaylistRow.vala:24 src/Widgets/PlaylistRow.vala:49
 #, c-format
 msgid "Updated %s"
 msgstr "Обновлено %s"
+
+#: src/Widgets/Popovers/Sort.vala:130
+msgid "Sort by"
+msgstr "Сортировать по"
+
+#: src/Widgets/Popovers/Sort.vala:159
+msgid "Reversed order"
+msgstr "Обратный порядок"
+
+#: src/Widgets/Popovers/NewPlaylist.vala:31 src/Views/Playlist.vala:242
+msgid "Add Description"
+msgstr "Добавить описание"
+
+#: src/Widgets/Popovers/NewPlaylist.vala:56
+msgid "Add"
+msgstr "Добавить"
+
+#: src/Views/Home.vala:29
+msgid "Recently added"
+msgstr "Недавно добавленные"
+
+#: src/Views/Home.vala:29
+msgid "(last 100)"
+msgstr "(последние 100)"
+
+#: src/Views/Home.vala:36 src/Views/Playlists.vala:30
+msgid "Playlists"
+msgstr "Плейлисты"
+
+#. listbox.hexpand = true;
+#: src/Views/Home.vala:37 src/Views/Albums.vala:34 src/Views/Artist.vala:116
+msgid "Albums"
+msgstr "Альбомы"
+
+#: src/Views/Home.vala:38 src/Views/Tracks.vala:45
+msgid "Songs"
+msgstr "Песни"
+
+#: src/Views/Home.vala:40 src/Views/Artists.vala:33
+msgid "Artists"
+msgstr "Исполнители"
+
+#: src/Views/Home.vala:43 src/Views/Favorites.vala:28
+msgid "Favorites"
+msgstr "Избранные"
+
+#: src/Views/Albums.vala:43 src/Views/Albums.vala:46 src/Views/Albums.vala:47
+msgid "Search by title, artist, genre and year"
+msgstr "Поиск по названию, исполнителю, жанру и году"
+
+#: src/Views/Albums.vala:63 src/Views/Tracks.vala:74
+#: src/Views/Playlist.vala:103
+msgid "Sort"
+msgstr "Сортировать"
+
+#: src/Views/Albums.vala:76 src/Views/Tracks.vala:87
+#: src/Views/Playlist.vala:116
+msgid "Name"
+msgstr "Имя"
+
+#: src/Views/Albums.vala:77 src/Views/Tracks.vala:88
+#: src/Views/Playlist.vala:117 src/Views/Artist.vala:82
+#: src/Dialogs/TrackEditor.vala:84
+msgid "Artist"
+msgstr "Исполнитель"
+
+#: src/Views/Albums.vala:78 src/Dialogs/TrackEditor.vala:90
+msgid "Year"
+msgstr "Год"
+
+#: src/Views/Albums.vala:79 src/Dialogs/TrackEditor.vala:88
+msgid "Genre"
+msgstr "Жанр"
+
+#: src/Views/Album.vala:73 src/Views/Tracks.vala:89 src/Views/Playlist.vala:118
+#: src/Dialogs/TrackEditor.vala:86
+msgid "Album"
+msgstr "Альбом"
+
+#: src/Views/Album.vala:133 src/Views/Tracks.vala:107
+#: src/Views/Favorites.vala:73 src/Views/Playlist.vala:207
+msgid "Shuffle"
+msgstr "Перемешать"
+
+#: src/Views/Tracks.vala:31
+msgid "No Results"
+msgstr "Ничего не найдено"
+
+#: src/Views/Tracks.vala:54 src/Views/Tracks.vala:57 src/Views/Tracks.vala:58
+#: src/Views/Artists.vala:39 src/Views/Artists.vala:40
+#: src/Views/Favorites.vala:37 src/Views/Favorites.vala:41
+#: src/Views/Favorites.vala:42
+msgid "Search by title, artist and album"
+msgstr "Поиск по названию, исполнителю и альбому"
+
+#: src/Views/Tracks.vala:90 src/Views/Playlist.vala:119
+msgid "Date Added"
+msgstr "Дата добавления"
+
+#: src/Views/Tracks.vala:91 src/Views/Playlist.vala:120
+msgid "Play Count"
+msgstr "Количество прослушиваний"
+
+#: src/Views/Tracks.vala:323
+#, c-format
+msgid "No results for '%s' in Tracks. Try again."
+msgstr "Нет результатов для '%s' в треках. Попробуйте еще раз."
+
+#: src/Views/Tracks.vala:354
+msgid "No Songs"
+msgstr "Нет песен"
+
+#: src/Views/Tracks.vala:355
+msgid "Add some tracks to your selected music folder."
+msgstr "Добавьте несколько треков в выбранную папку музыки."
+
+#: src/Views/Radios.vala:35
+msgid "Search internet radios"
+msgstr "Поиск интернет-радио"
+
+#: src/Views/Playlists.vala:43
+msgid "Add New Playlist"
+msgstr "Добавить новый плейлист"
+
+#: src/Views/Playlist.vala:73
+#, c-format
+msgid "%i songs"
+msgstr "%i песен"
+
+#: src/Views/Playlist.vala:93
+msgid "Playlist"
+msgstr "Плейлист"
+
+#: src/Views/Playlist.vala:157
+msgid "Edit Name and Appearance"
+msgstr "Изменить имя и отображение"
+
+#. Items
+#: src/Views/Playlist.vala:164
+msgid "Edit Details"
+msgstr "Редактировать детали"
+
+#: src/Views/Playlist.vala:165
+msgid "Set new Cover"
+msgstr "Установить новую обложку"
+
+#: src/Views/Playlist.vala:189
+msgid "Updated"
+msgstr "Обновлено"
+
+#: src/Views/Playlist.vala:246 src/Dialogs/TrackEditor.vala:136
+msgid "Save"
+msgstr "Сохранить"
+
+#: src/Views/Artist.vala:106
+msgid "Most Played"
+msgstr ""
+
+#: src/Dialogs/TrackEditor.vala:82
+msgid "Title"
+msgstr "Название"
+
+#: src/Dialogs/TrackEditor.vala:92
+msgid "Track"
+msgstr "Трек"
+
+#: src/Dialogs/TrackEditor.vala:94
+msgid "Lyrics"
+msgstr "Текст песни"
+
+#: src/Dialogs/TrackEditor.vala:134
+msgid "Close"
+msgstr "Закрыть"
+
+#. header_bar.custom_title = container_grid;
+#: src/Dialogs/Settings.vala:28
+msgid "General"
+msgstr "Основные"
+
+#: src/Dialogs/Settings.vala:45
+msgid "Dark mode"
+msgstr "Темная тема"
+
+#: src/Dialogs/Settings.vala:73
+msgid "Notifications"
+msgstr "Уведомления"
+
+#: src/Dialogs/Settings.vala:97
+msgid "Play in background if closed"
+msgstr "Играть в фоновом режиме после закрытия"
+
+#: src/Dialogs/Settings.vala:121
+msgid "Theme"
+msgstr ""
+
+#: src/Dialogs/Settings.vala:126
+msgid "Byte"
+msgstr ""
+
+#: src/Dialogs/Settings.vala:132
+msgid "Black"
+msgstr ""
+
+#: src/Dialogs/Settings.vala:138
+msgid "Blueberry"
+msgstr ""
+
+#: src/Dialogs/Settings.vala:197
+msgid "Music folder location"
+msgstr "Расположение папки музыки"
+
+#: src/Dialogs/Settings.vala:199
+msgid "Select Music Folder…"
+msgstr "Выбор папки музыки..."
+
+#: src/Dialogs/Settings.vala:222
+msgid "Sync library on start up"
+msgstr "Обновлять фонотеку при запуске"
+
+#: src/Dialogs/Settings.vala:246
+msgid "Automatically download covers"
+msgstr "Автоматически загружать обложки"
+
+#: src/Dialogs/Settings.vala:270
+msgid "Save changes into ID3-Tag"
+msgstr "Сохранить изменения в ID3-тег"
+
+#: src/Dialogs/Settings.vala:308
+msgid "Reset all library"
+msgstr "Сбросить всю фонотеку"
+
+#: src/Dialogs/Settings.vala:310 src/Dialogs/Settings.vala:428
+msgid "Reset"
+msgstr "Сбросить"
+
+#: src/Dialogs/Settings.vala:400
+msgid "Set Music Folder?"
+msgstr "Установить папку музыки?"
+
+#: src/Dialogs/Settings.vala:401
+#, c-format
+msgid "Are you sure you want to set the music folder to <b>%s</b>?"
+msgstr "Вы уверены, что хотите установить папку музыки в <b>%s</b>?"
+
+#: src/Dialogs/Settings.vala:406
+msgid "Set Music Folder"
+msgstr "Установка папки музыки"
+
+#: src/Dialogs/Settings.vala:422
+msgid "Reset your library?"
+msgstr "Сбросить вашу фонотеку?"
+
+#: src/Dialogs/Settings.vala:423
+msgid "Are you sure you want to reset all your library?"
+msgstr "Вы уверены, что хотите сбросить всю свою фонотеку?"
+
+#, fuzzy
+#~ msgid "_Cancel"
+#~ msgstr "Отменить"
 
 #~ msgid "Your library"
 #~ msgstr "Ваша медиатека"

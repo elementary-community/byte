@@ -283,10 +283,10 @@ public class Utils : GLib.Object {
     public string? choose_new_cover () {
         string? return_value = null;
         var chooser = new Gtk.FileChooserDialog (
-            _ ("Choose an image…"), Byte.instance.main_window,
+            _("Choose an image…"), Byte.instance.main_window,
             Gtk.FileChooserAction.OPEN,
-            _ ("_Cancel"), Gtk.ResponseType.CANCEL,
-            _ ("_Open"), Gtk.ResponseType.ACCEPT);
+            _("Cancel"), Gtk.ResponseType.CANCEL,
+            _("Open"), Gtk.ResponseType.ACCEPT);
 
         var filter = new Gtk.FileFilter ();
         filter.set_filter_name (_ ("Images"));
@@ -337,5 +337,42 @@ public class Utils : GLib.Object {
         pixbuf = pixbuf.scale_simple (size, size, Gdk.InterpType.BILINEAR);
 
         return pixbuf;
+    }
+
+    public void apply_theme (int id) {
+        string THEME_CSS = """
+            @define-color colorPrimary %s;
+            @define-color colorAccent %s;
+            @define-color textColorPrimary %s;
+        """;
+
+        var provider = new Gtk.CssProvider ();
+        
+        try {
+            string colorPrimary = "";
+            string colorAccent = "";
+            if (id == 1) {
+                colorPrimary = "#fe2851";
+                colorAccent = "#fe2851";
+            } else if (id == 2) {
+                colorPrimary = "#4d4d4d";
+                colorAccent = "@text_color";
+            } else {
+                colorPrimary = "#3689e6";
+                colorAccent = "@text_color";
+            }
+
+            var theme_css = THEME_CSS.printf (
+                colorPrimary,
+                colorAccent,
+                "@base_color"
+            );
+
+            provider.load_from_data (theme_css, theme_css.length);
+
+            Gtk.StyleContext.add_provider_for_screen (Gdk.Screen.get_default (), provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
+        } catch (GLib.Error e) {
+            return;
+        }
     }
 }

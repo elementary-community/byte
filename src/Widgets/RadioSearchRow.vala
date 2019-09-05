@@ -27,7 +27,7 @@ public class Widgets.RadioSearchRow : Gtk.ListBoxRow {
         secondary_label = new Gtk.Label ("👍️ %s - %s".printf (radio.votes, radio.country));
         secondary_label.halign = Gtk.Align.START;
         secondary_label.valign = Gtk.Align.START;
-        secondary_label.max_width_chars = 45;
+        secondary_label.max_width_chars = 35;
         secondary_label.ellipsize = Pango.EllipsizeMode.END;
 
         image_cover = new Widgets.Cover.from_url_async (radio.favicon, 32, true, "radio");

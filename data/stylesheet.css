@@ -41,16 +41,16 @@
 
 .track-row:hover {
     background-color: @colorAccent;
-    color: #fff;
+    color: @bg_color;
 }
 
 .track-row:hover label {
-    color: #fff;
+    color: @bg_color;
 }
 
 .track-row:hover button {
     background-color: transparent;
-    color: #fff;
+    color: @bg_color;
 }
 
 .track-queue-row:selected {
@@ -183,7 +183,9 @@ selection {
 .queue-title {
     background-color: @colorAccent;
     border-radius: 4px 4px 0px 0px;
+    /*
     border: 1px solid @colorPrimary;
+    */
     color: #fff;
     padding: 3px 0px 3px 6px;
     font-weight: bold;
@@ -254,10 +256,10 @@ selection {
 
 .playing-ani-color {
     background-color: #fff;
-    color: @colorAccent;
+    color: @colorPrimary;
     border-radius: 50px;
     padding: 3px;
-    border: 1px solid @colorAccent;
+    border: 1px solid @colorPrimary;
 }
 
 .options-button {
@@ -386,7 +388,7 @@ overshoot.left {
 }
 
 .settings-icon {
-    background-color: @colorAccent;
+    background-color: @colorPrimary;
     color: #fff;
     border-radius: 3px;
     padding: 3px;
@@ -422,4 +424,26 @@ overshoot.left {
 
 .font-size-small {
     font-size: 10px;
+}
+
+
+.color-radio radio,
+.color-radio radio:checked {
+    border-color: alpha (#000, 0.3);
+    box-shadow:
+        inset 0 1px 0 0 alpha (@shadowColor, 0.7),
+        inset 0 0 0 1px alpha (@shadowColor, 0.3),
+        0 1px 0 0 alpha (@shadowColor, 0.3);
+    padding: 3px;
+    -gtk-icon-shadow: none;
+}
+  
+.color-radio radio:focus {
+    border-color: @bg_color;
+    box-shadow:
+        inset 0 1px 0 0 alpha (@shadowColor, 0.7),
+        inset 0 0 0 1px alpha (@shadowColor, 0.3),
+        inset 0 0 0 1px alpha (@shadowColor, 0.05),
+        0 1px 0 0 alpha (@shadowColor, 0.3),
+        0 0 0 1px alpha (@shadowColor, 0.25);
 }

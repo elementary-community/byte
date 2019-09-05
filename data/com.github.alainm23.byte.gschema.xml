@@ -29,8 +29,20 @@
 		<value nick="genre" value="3" />
 	</enum>
 
+	<enum id="com.github.alainm23.byte.theme">
+		<value nick="Byte" value="1" />
+		<value nick="Black" value="2" />
+		<value nick="Blueberry" value="3" />
+	</enum>
+
     <schema path="/com/github/alainm23/byte/" id="com.github.alainm23.byte" gettext-domain="com.github.alainm23.byte">
-        <key name="library-location" type="s">
+		<key name="theme" enum="com.github.alainm23.byte.theme">
+            <default>"Byte"</default>
+            <summary>Theme</summary>
+            <description>Theme</description>
+        </key>
+        
+		<key name="library-location" type="s">
 		    <default>""</default>
 			<summary>Default library location.</summary>
 			<description>Default library location.</description>

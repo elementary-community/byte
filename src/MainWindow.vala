@@ -27,8 +27,6 @@ public class MainWindow : Gtk.Window {
             application: application,
             icon_name: "com.github.alainm23.byte",
             title: "Byte"
-            /*height_request: 769,
-            width_request: 550*/
         );
     }
 
@@ -78,12 +76,17 @@ public class MainWindow : Gtk.Window {
 
         // Welcome
         welcome_view = new Widgets.Welcome ();
+        
+        var welcome_scrolled = new Gtk.ScrolledWindow (null, null);
+        welcome_scrolled.hscrollbar_policy = Gtk.PolicyType.NEVER;
+        welcome_scrolled.expand = true;
+        welcome_scrolled.add (welcome_view);
 
         main_stack = new Gtk.Stack ();
         main_stack.expand = true;
         main_stack.transition_type = Gtk.StackTransitionType.SLIDE_LEFT_RIGHT;
 
-        main_stack.add_named (welcome_view, "welcome_view");
+        main_stack.add_named (welcome_scrolled, "welcome_view");
         main_stack.add_named (library_view, "library_view");
 
         quick_find = new Widgets.QuickFind ();
