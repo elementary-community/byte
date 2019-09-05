@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: com.github.alainm23.byte\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-09-04 12:21-0500\n"
-"PO-Revision-Date: 2019-08-27 22:40+0400\n"
+"PO-Revision-Date: 2019-09-06 01:47+0400\n"
 "Last-Translator: Andrey Kultyapov <camellan@yandex.ru>\n"
 "Language-Team: none\n"
 "Language: ru\n"
@@ -21,7 +21,7 @@ msgstr ""
 
 #: src/Utils.vala:286
 msgid "Choose an image…"
-msgstr ""
+msgstr "Выбрать изображение…"
 
 #: src/Utils.vala:288 src/Services/Scan.vala:88 src/Widgets/QuickFind.vala:31
 msgid "Cancel"
@@ -29,11 +29,11 @@ msgstr "Отменить"
 
 #: src/Utils.vala:289 src/Services/Scan.vala:89
 msgid "Open"
-msgstr ""
+msgstr "Открыть"
 
 #: src/Utils.vala:292
 msgid "Images"
-msgstr ""
+msgstr "Изображения"
 
 #. Add
 #: src/Services/Database.vala:1622 src/Widgets/NewPlaylist.vala:10
@@ -43,16 +43,15 @@ msgstr "Новый плейлист"
 
 #: src/Services/TagManager.vala:4 src/Widgets/AlbumRow.vala:8
 msgid "Unknown"
-msgstr ""
+msgstr "Неизвестно"
 
 #: src/Services/Scan.vala:87
-#, fuzzy
 msgid "Select a folder."
-msgstr "Выбор папки музыки..."
+msgstr "Выберите папку."
 
 #: src/Services/Scan.vala:92
 msgid "Folder"
-msgstr ""
+msgstr "Папка"
 
 #: src/Widgets/Welcome.vala:12
 msgid "Library is Empty"
@@ -419,7 +418,7 @@ msgstr "Сохранить"
 
 #: src/Views/Artist.vala:106
 msgid "Most Played"
-msgstr ""
+msgstr "Популярные"
 
 #: src/Dialogs/TrackEditor.vala:82
 msgid "Title"
@@ -456,19 +455,19 @@ msgstr "Играть в фоновом режиме после закрытия"
 
 #: src/Dialogs/Settings.vala:121
 msgid "Theme"
-msgstr ""
+msgstr "Тема"
 
 #: src/Dialogs/Settings.vala:126
 msgid "Byte"
-msgstr ""
+msgstr "Byte"
 
 #: src/Dialogs/Settings.vala:132
 msgid "Black"
-msgstr ""
+msgstr "Чёрный"
 
 #: src/Dialogs/Settings.vala:138
 msgid "Blueberry"
-msgstr ""
+msgstr "Черничный"
 
 #: src/Dialogs/Settings.vala:197
 msgid "Music folder location"
