@@ -166,10 +166,6 @@ public class Dialogs.Settings : Gtk.Dialog {
             break;
         }
 
-        if (Byte.settings.get_boolean ("dark-mode")) {
-            theme_box.sensitive = false;
-        }
-
         var settings_09_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 0);
         settings_09_box.hexpand = true;
         settings_09_box.margin = 6;
