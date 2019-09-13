@@ -20,21 +20,21 @@ public class Utils : GLib.Object {
         if (all_items.size > 0) {
             if (shuffle_mode) {
                 queue_playlist = generate_shuffle (all_items);
-                
+
                 if (track != null) {
                     int index = get_track_index_by_id (track.id, queue_playlist);
                     queue_playlist.remove_at (index);
                     queue_playlist.insert (0, track);
                 }
-        
+
                 Byte.settings.set_boolean ("shuffle-mode", true);
             } else {
                 queue_playlist = playlist_order (all_items);
                 Byte.settings.set_boolean ("shuffle-mode", false);
             }
-    
+
             play_items (queue_playlist, track);
-        }     
+        }
     }
 
     public void shuffle_changed (bool shuffle_mode) {
@@ -50,7 +50,7 @@ public class Utils : GLib.Object {
             } else {
                 queue_playlist = playlist_order (queue_playlist);
             }
-    
+
             play_items (queue_playlist, Byte.player.current_track);
             update_next_track ();
         }
@@ -134,7 +134,7 @@ public class Utils : GLib.Object {
 
         return queue_playlist [index];
     }
-    
+
     public void remove_track (int id) {
         var index = get_track_index_by_id (id, queue_playlist);
         queue_playlist.remove_at (index);
@@ -151,10 +151,10 @@ public class Utils : GLib.Object {
             }
 
             int index = get_track_index_by_id (Byte.player.current_track.id, queue_playlist) + 1;
-            
+
             track.track_order = index;
             queue_playlist.insert (index, track);
-            
+
             add_next_track (queue_playlist);
         }
     }
@@ -169,7 +169,7 @@ public class Utils : GLib.Object {
             }
 
             track.track_order = queue_playlist.size + 1;
-            queue_playlist.add (track); 
+            queue_playlist.add (track);
             add_last_track (queue_playlist);
         }
     }
@@ -180,7 +180,7 @@ public class Utils : GLib.Object {
 
         var file_path = File.new_for_path (image_path);
         var file_from_uri = File.new_for_uri (url);
-        
+
         MainLoop loop = new MainLoop ();
 
         file_from_uri.copy_async.begin (file_path, 0, Priority.DEFAULT, null, (current_num_bytes, total_num_bytes) => {
@@ -212,7 +212,7 @@ public class Utils : GLib.Object {
             GLib.DirUtils.create_with_parents (path, 0775);
         }
     }
-    
+
     public string get_formated_duration (uint64 duration) {
         uint seconds = (uint) (duration / 1000000000);
         if (seconds < 3600) {
@@ -223,12 +223,12 @@ public class Utils : GLib.Object {
 
         uint hours = seconds / 3600;
         seconds -= hours * 3600;
-        
+
         uint minutes = seconds / 60;
         seconds -= minutes * 60;
-        
+
         return "%u:%02u:%02u".printf (hours, minutes, seconds);
-    } 
+    }
 
     public string get_relative_datetime (string date) {
         return Granite.DateTime.get_relative_datetime (
@@ -347,7 +347,7 @@ public class Utils : GLib.Object {
         """;
 
         var provider = new Gtk.CssProvider ();
-        
+
         try {
             string colorPrimary = "";
             string colorAccent = "";
@@ -357,9 +357,12 @@ public class Utils : GLib.Object {
             } else if (id == 2) {
                 colorPrimary = "#4d4d4d";
                 colorAccent = "@text_color";
-            } else {
+            } else if (id == 3) {
                 colorPrimary = "#3689e6";
-                colorAccent = "@text_color";
+                colorAccent = "#3689e6";
+            }else {
+                colorPrimary = "#36E683";
+                colorAccent = "#36E683";
             }
 
             var theme_css = THEME_CSS.printf (
