@@ -80,6 +80,7 @@ public class Widgets.TrackRow : Gtk.ListBoxRow {
         options_button.tooltip_text = _("Options");
         options_button.get_style_context ().add_class (Gtk.STYLE_CLASS_FLAT);
         options_button.get_style_context ().add_class ("options-button");
+        options_button.get_style_context ().add_class ("button-color");
         options_button.get_style_context ().remove_class ("button");
 
         var options_stack = new Gtk.Stack ();
@@ -88,8 +89,13 @@ public class Widgets.TrackRow : Gtk.ListBoxRow {
         options_stack.add_named (duration_label, "duration_label");
         options_stack.add_named (options_button, "options_button");
 
-        var icon_favorite = new Gtk.Image.from_icon_name ("byte-favorite-symbolic", Gtk.IconSize.MENU);
-        var icon_no_favorite = new Gtk.Image.from_icon_name ("byte-no-favorite-symbolic", Gtk.IconSize.MENU);
+        var icon_favorite = new Gtk.Image ();
+        icon_favorite.gicon = new ThemedIcon ("byte-favorite-symbolic");
+        icon_favorite.pixel_size = 14;
+
+        var icon_no_favorite = new Gtk.Image ();
+        icon_no_favorite.gicon = new ThemedIcon ("byte-no-favorite-symbolic");
+        icon_no_favorite.pixel_size = 14;
 
         favorite_button = new Gtk.Button ();
         favorite_button.get_style_context ().add_class (Gtk.STYLE_CLASS_FLAT);
@@ -109,7 +115,7 @@ public class Widgets.TrackRow : Gtk.ListBoxRow {
         right_grid.hexpand = true;
         right_grid.column_spacing = 6;
         right_grid.orientation = Gtk.Orientation.HORIZONTAL;
-        //right_grid.add (favorite_button);
+        right_grid.add (favorite_button);
         right_grid.add (options_stack);
 
         var overlay = new Gtk.Overlay ();
@@ -203,7 +209,7 @@ public class Widgets.TrackRow : Gtk.ListBoxRow {
             return false;
         });
 
-         button_press_event.connect ((sender, evt) => {
+        button_press_event.connect ((sender, evt) => {
             if (evt.type == Gdk.EventType.BUTTON_PRESS && evt.button == 3) {
                 activate_menu ();
                 return true;
@@ -227,6 +233,16 @@ public class Widgets.TrackRow : Gtk.ListBoxRow {
         Byte.database.removed_track.connect ((track_id) => {
             if (track_id == track.id) {
                 destroy ();
+            }
+        });
+
+        Byte.database.updated_track_favorite.connect ((_track, favorite) => {
+            if (track.id == _track.id) {
+                if (favorite == 0) {
+                    favorite_button.image = icon_no_favorite;
+                } else {
+                    favorite_button.image = icon_favorite;
+                }
             }
         });
     }
@@ -318,7 +334,10 @@ public class Widgets.TrackRow : Gtk.ListBoxRow {
         add_playlist_menu.set_submenu (playlists);
 
         var edit_menu = new Widgets.MenuItem (_("Edit Song Info…"), "edit-symbolic", _("Edit Song Info…"));
-        var favorite_menu = new Widgets.MenuItem (_("Favorite"), "byte-favorite-symbolic", _("Favorite"));
+
+        var favorite_menu = new Widgets.MenuItem (_("Love"), "byte-favorite-symbolic", _("Love"));
+        var no_favorite_menu = new Widgets.MenuItem (_("Diskile"), "byte-no-favorite-symbolic", _("Diskile"));
+        
         var remove_db_menu = new Widgets.MenuItem (_("Delete from library"), "user-trash-symbolic", _("Delete from library"));
         var remove_file_menu = new Widgets.MenuItem (_("Delete from file"), "user-trash-symbolic", _("Delete from file"));
         var remove_playlist_menu = new Widgets.MenuItem (_("Remove from playlist"), "zoom-out-symbolic", _("Remove from playlist"));
@@ -332,6 +351,7 @@ public class Widgets.TrackRow : Gtk.ListBoxRow {
         menu.add (add_playlist_menu);
         //menu.add (edit_menu);
         menu.add (favorite_menu);
+        menu.add (no_favorite_menu);
         menu.add (new Gtk.SeparatorMenuItem ());
 
         if (track.playlist != 0) {
@@ -361,6 +381,12 @@ public class Widgets.TrackRow : Gtk.ListBoxRow {
         favorite_menu.activate.connect (() => {
             if (Byte.scan_service.is_sync == false) {
                 Byte.database.set_track_favorite (track, 1);
+            }
+        });
+
+        no_favorite_menu.activate.connect (() => {
+            if (Byte.scan_service.is_sync == false) {
+                Byte.database.set_track_favorite (track, 0);
             }
         });
 

@@ -160,9 +160,10 @@ public class Dialogs.Settings : Gtk.Dialog {
         var settings_09_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 0);
         settings_09_box.hexpand = true;
         settings_09_box.margin = 6;
+        settings_09_box.margin_end = 0;
         settings_09_box.pack_start (settings_09_icon, false, false, 0);
         settings_09_box.pack_start (settings_09_label, false, false, 6);
-        settings_09_box.pack_end (theme_box, false, false, 6);
+        settings_09_box.pack_end (theme_box, false, false, 0);
 
         var general_grid = new Gtk.Grid ();
         general_grid.get_style_context ().add_class ("view");
