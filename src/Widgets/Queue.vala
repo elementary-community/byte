@@ -187,12 +187,12 @@ public class Widgets.Queue : Gtk.Revealer {
         main_box.pack_start (top_revealer, false, false, 0);
         main_box.pack_start (tracks_revealer, true, true, 0);
 
-        var stack = new Gtk.Stack ();
-        stack.expand = true;
-        stack.transition_type = Gtk.StackTransitionType.SLIDE_LEFT_RIGHT;
+        //var stack = new Gtk.Stack ();
+        //stack.expand = true;
+        //stack.transition_type = Gtk.StackTransitionType.SLIDE_LEFT_RIGHT;
 
-        stack.add_named (welcome_scrolled, "welcome_view");
-        stack.add_named (library_view, "library_view");
+        //stack.add_named (welcome_scrolled, "welcome_view");
+        //stack.add_named (library_view, "library_view");
 
         add (main_box);
 

@@ -11,6 +11,12 @@ public class Utils : GLib.Object {
 
     public string MAIN_FOLDER;
     public string COVER_FOLDER;
+
+    bool dark_mode;
+    string colorPrimary;
+    string colorAccent;
+    string textColorPrimary;
+
     public Utils () {
         MAIN_FOLDER = Environment.get_home_dir () + "/.local/share/com.github.alainm23.byte";
         COVER_FOLDER = GLib.Path.build_filename (MAIN_FOLDER, "covers");
@@ -340,6 +346,25 @@ public class Utils : GLib.Object {
     }
 
     public void apply_theme (int id) {
+        if (id == 1) {
+            dark_mode = false;
+            colorPrimary = "#fe2851";
+            colorAccent = "#fe2851";
+            textColorPrimary = "#fff";
+        } else if (id == 2) {
+            dark_mode = true;
+            colorPrimary = "#fe2851";
+            colorAccent = "#fe2851";
+            textColorPrimary = "#fff";
+        } else if (id == 3) {
+            dark_mode = true;
+            colorPrimary = "#36E683";
+            colorAccent = "#36E683";
+            textColorPrimary = "#333";
+        }
+
+        Gtk.Settings.get_default ().gtk_application_prefer_dark_theme = dark_mode;
+
         string THEME_CSS = """
             @define-color colorPrimary %s;
             @define-color colorAccent %s;
@@ -349,26 +374,10 @@ public class Utils : GLib.Object {
         var provider = new Gtk.CssProvider ();
 
         try {
-            string colorPrimary = "";
-            string colorAccent = "";
-            if (id == 1) {
-                colorPrimary = "#fe2851";
-                colorAccent = "#fe2851";
-            } else if (id == 2) {
-                colorPrimary = "#4d4d4d";
-                colorAccent = "@text_color";
-            } else if (id == 3) {
-                colorPrimary = "#3689e6";
-                colorAccent = "#3689e6";
-            }else {
-                colorPrimary = "#36E683";
-                colorAccent = "#36E683";
-            }
-
             var theme_css = THEME_CSS.printf (
                 colorPrimary,
                 colorAccent,
-                "@base_color"
+                textColorPrimary
             );
 
             provider.load_from_data (theme_css, theme_css.length);

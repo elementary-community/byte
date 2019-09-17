@@ -32,8 +32,7 @@
 	<enum id="com.github.alainm23.byte.theme">
 		<value nick="Byte" value="1" />
 		<value nick="Black" value="2" />
-		<value nick="Blueberry" value="3" />
-    <value nick="Turquoise" value="4" />
+    	<value nick="Turquoise" value="3" />
 	</enum>
 
     <schema path="/com/github/alainm23/byte/" id="com.github.alainm23.byte" gettext-domain="com.github.alainm23.byte">
@@ -108,13 +107,7 @@
             <summary>Most recent window position (x, y)</summary>
             <description>Most recent window position (x, y)</description>
         </key>
-
-        <key name="dark-mode" type="b">
-            <default>false</default>
-            <summary>If the dark Gtk stylesheet should be used</summary>
-            <description>If the dark Gtk stylesheet should be used</description>
-        </key>
-
+		
 		<key name="sync-files" type="b">
 			<default>true</default>
 			<summary>Look for new music files on start up.</summary>

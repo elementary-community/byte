@@ -108,57 +108,18 @@ public class Byte : Gtk.Application {
         add_action (quit_action);
         add_action (toggle_playing_action);
         add_action (search_action);
+        
+        // Default Icon Theme
+        weak Gtk.IconTheme default_theme = Gtk.IconTheme.get_default ();
+        default_theme.add_resource_path ("/com/github/alainm23/byte");
+
 
         // Stylesheet
         var provider = new Gtk.CssProvider ();
         provider.load_from_resource ("/com/github/alainm23/byte/stylesheet.css");
         Gtk.StyleContext.add_provider_for_screen (Gdk.Screen.get_default (), provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
-
-        Gtk.Settings.get_default ().gtk_application_prefer_dark_theme = settings.get_boolean ("dark-mode");
-
-        if (settings.get_boolean ("dark-mode")) {
-            var dark_mode_provider = new Gtk.CssProvider ();
-            var colored_css = """
-                @define-color colorPrimary %s;
-                @define-color textColorPrimary %s;
-            """.printf ("@base_color", "#fe2851");
-
-            try {
-                dark_mode_provider.load_from_data (colored_css, colored_css.length);
-
-                Gtk.StyleContext.add_provider_for_screen (Gdk.Screen.get_default (), dark_mode_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
-            } catch (GLib.Error e) {
-                return;
-            }
-        }
-
-        // Default Icon Theme
-        weak Gtk.IconTheme default_theme = Gtk.IconTheme.get_default ();
-        default_theme.add_resource_path ("/com/github/alainm23/byte");
-
-        if (Byte.settings.get_boolean ("dark-mode")) {
-            var provider_theme = new Gtk.CssProvider ();
-
-            var colored_css = """
-                @define-color colorPrimary %s;
-                @define-color textColorPrimary %s;
-            """;
-            
-            colored_css = colored_css.printf (
-                "@base_color",
-                "@text_color"
-            );
-
-            try {
-                provider_theme.load_from_data (colored_css, colored_css.length);
-
-                Gtk.StyleContext.add_provider_for_screen (Gdk.Screen.get_default (), provider_theme, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
-            } catch (GLib.Error e) {
-                return;
-            }
-        } else {
-            Byte.utils.apply_theme (Byte.settings.get_enum ("theme"));
-        }
+    
+        utils.apply_theme (Byte.settings.get_enum ("theme"));
     }
 
     public void toggle_playing_action_enabled (bool b) {
