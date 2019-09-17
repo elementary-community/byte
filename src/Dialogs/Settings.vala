@@ -31,34 +31,7 @@ public class Dialogs.Settings : Gtk.Dialog {
         general_label.get_style_context ().add_class ("font-bold");
         general_label.margin_bottom = 6;
         general_label.margin_start = 6;
-
-        /*
-        Dark Mode
         
-        var settings_01_icon = new Gtk.Image ();
-        settings_01_icon.gicon = new ThemedIcon ("weather-clear-night-symbolic");
-        settings_01_icon.pixel_size = 16;
-        settings_01_icon.get_style_context ().add_class ("settings-icon");
-        settings_01_icon.valign = Gtk.Align.CENTER;
-
-        var settings_01_label = new Gtk.Label (_("Dark mode"));
-        settings_01_label.get_style_context ().add_class ("h3");
-
-        var settings_01_switch = new Gtk.Switch ();
-        settings_01_switch.get_style_context ().add_class ("active-switch");
-        settings_01_switch.valign = Gtk.Align.CENTER;
-
-        var gtk_settings = Gtk.Settings.get_default ();
-        settings_01_switch.bind_property ("active", gtk_settings, "gtk_application_prefer_dark_theme");
-        Byte.settings.bind ("dark-mode", settings_01_switch, "active", GLib.SettingsBindFlags.DEFAULT);
-        
-        var settings_01_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 0);
-        settings_01_box.hexpand = true;
-        settings_01_box.margin = 6;
-        settings_01_box.pack_start (settings_01_icon, false, false, 0);
-        settings_01_box.pack_start (settings_01_label, false, false, 6);
-        settings_01_box.pack_end (settings_01_switch, false, false, 0);
-
         /*
             Theme
         */

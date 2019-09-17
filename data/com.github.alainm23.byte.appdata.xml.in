@@ -23,6 +23,16 @@
     <binary>com.github.alainm23.byte</binary>
   </provides>
   ​<releases>
+    <release version="0.1.7" date="2019-09-17">
+      <description>
+        <p>This update brings some new features and bug fixes:</p>
+        <ul>
+          <li>A new green theme color was added @redian23</li>
+          <li>Added an new indicator to know if a favorite songs</li>
+        </ul>
+      </description>
+    </release>
+
     <release version="0.1.6" date="2019-09-04">
       <description>
         <p>This update brings some new features and bug fixes:</p>

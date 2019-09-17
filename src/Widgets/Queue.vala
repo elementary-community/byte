@@ -145,7 +145,7 @@ public class Widgets.Queue : Gtk.Revealer {
         mode_button.margin = 3;
         mode_button.append_text (_("Up Next"));
         //mode_button.append_text (_("History"));
-        mode_button.append_text (_("Lyrics"));
+        //mode_button.append_text (_("Lyrics"));
         mode_button.selected = 0;
 
         var title_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 0);
