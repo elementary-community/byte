@@ -5,18 +5,18 @@ public class Widgets.HeaderBar : Gtk.HeaderBar {
     private Gtk.Button next_button;
     private Gtk.Button previous_button;
     private Gtk.Button search_button;
-    private Gtk.MenuButton app_menu;  
+    private Gtk.MenuButton app_menu;
 
     public Gtk.Image icon_play;
     public Gtk.Image icon_pause;
- 
+
     private Gtk.Image icon_shuffle_on;
     private Gtk.Image icon_shuffle_off;
 
     private Gtk.Image icon_repeat_one;
     private Gtk.Image icon_repeat_all;
     private Gtk.Image icon_repeat_off;
-    
+
     private Gtk.Box main_box;
 
     public signal void show_quick_find ();
@@ -52,7 +52,7 @@ public class Widgets.HeaderBar : Gtk.HeaderBar {
         icon_repeat_off = new Gtk.Image.from_icon_name ("media-playlist-no-repeat-symbolic", Gtk.IconSize.BUTTON);
 
         //get_style_context ().add_class ("default-decoration");
-        decoration_layout = "close:menu";
+        decoration_layout = "close,minimize:menu";
 
         // Shuffle Button
         shuffle_button = new Gtk.Button ();
@@ -101,7 +101,7 @@ public class Widgets.HeaderBar : Gtk.HeaderBar {
         var search_menuitem = new Widgets.ModelButton (_("Search"), "edit-find-symbolic", _("Search"));
         search_menuitem.sensitive = false;
         var import_menuitem = new Widgets.ModelButton (_("Import Music"), "document-import-symbolic", _("Import Music"));
-        var resync_menuitem = new Widgets.ModelButton (_("Resync Libray"), "emblem-synchronizing-symbolic", _("Resync Libray"));        
+        var resync_menuitem = new Widgets.ModelButton (_("Resync Libray"), "emblem-synchronizing-symbolic", _("Resync Libray"));
         var preferences_menuitem = new Widgets.ModelButton (_("Preferences"), "preferences-system-symbolic", _("Preferences"));
 
         var menu_grid = new Gtk.Grid ();
@@ -136,7 +136,7 @@ public class Widgets.HeaderBar : Gtk.HeaderBar {
         main_box.pack_start (play_button, false, false, 0);
         main_box.pack_start (next_button, false, false, 0);
         main_box.pack_start (shuffle_button, false, false, 24);
-        
+
         custom_title = main_box;
         pack_end (app_menu);
 
@@ -187,9 +187,9 @@ public class Widgets.HeaderBar : Gtk.HeaderBar {
                 check_shuffle_button ();
             } else if (key == "repeat-mode") {
                 check_repeat_button ();
-            }   
+            }
         });
-        
+
         Byte.player.mode_changed.connect ((mode) => {
             if (mode == "radio") {
                 shuffle_button.sensitive = false;
@@ -213,21 +213,21 @@ public class Widgets.HeaderBar : Gtk.HeaderBar {
 
         import_menuitem.clicked.connect (() => {
             menu_popover.popdown ();
-            
+
             string folder = Byte.scan_service.choose_folder (Byte.instance.main_window);
 
-            if (folder != null) {                
+            if (folder != null) {
                 Byte.scan_service.scan_local_files (folder);
             }
         });
 
         resync_menuitem.clicked.connect (() => {
             menu_popover.popdown ();
-            
+
             Byte.scan_service.scan_local_files (Byte.settings.get_string ("library-location"));
         });
     }
-    
+
     public void toggle_playing () {
         if (play_button.image == icon_play) {
             play_button.image = icon_pause;
