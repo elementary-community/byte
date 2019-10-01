@@ -384,7 +384,7 @@ msgstr "Oynatma Sayısı"
 #: src/Views/Tracks.vala:323
 #, c-format
 msgid "No results for '%s' in Tracks. Try again."
-msgstr "'%s' Trackleri için sonuç yok. tekrar deneyin."
+msgstr "'%s' Trackleri için sonuç yok. Tekrar deneyin."
 
 #: src/Views/Tracks.vala:354
 msgid "No Songs"
