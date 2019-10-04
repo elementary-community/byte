@@ -350,7 +350,7 @@ msgstr "Yıl"
 
 #: src/Views/Albums.vala:79 src/Dialogs/TrackEditor.vala:88
 msgid "Genre"
-msgstr Tür
+msgstr "Tür"
 
 #: src/Views/Album.vala:73 src/Views/Tracks.vala:89 src/Views/Playlist.vala:118
 #: src/Dialogs/TrackEditor.vala:86
