@@ -256,7 +256,7 @@ public class Widgets.TrackRow : Gtk.ListBoxRow {
             child.destroy ();
         }
 
-        if (Byte.scan_service.is_sync == false) {
+        if (Byte.scan_service.is_sync == false) { 
             var all_items = Byte.database.get_all_playlists ();
 
             var item = new Gtk.MenuItem.with_label (_ ("Create New Playlist"));

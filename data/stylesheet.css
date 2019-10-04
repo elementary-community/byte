@@ -39,32 +39,22 @@
     background-color: transparent;
 }
 
-/*
-.track-row:hover {
+.track-row:selected {
     background-color: @colorAccent;
-    color: @bg_color;
 }
 
-.track-row:hover label {
-    color: @bg_color;
+.track-row:selected label {
+    color: @textColorPrimary;
 }
 
-.track-row:hover button {
-    background-color: transparent;
-    color: @bg_color;
+.track-row:selected button {
+    color: @textColorPrimary;
 }
-
-.track-row:selected:hover label {
-    color: #fff;
-}
-*/
 
 .track-queue-row:selected {
     background-color: transparent;
     color: @text_color;
 }
-
-
 
 .slider-button {
     padding: 3px;

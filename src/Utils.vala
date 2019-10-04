@@ -353,9 +353,9 @@ public class Utils : GLib.Object {
             textColorPrimary = "#fff";
         } else if (id == 2) {
             dark_mode = true;
-            colorPrimary = "#fe2851";
+            colorPrimary = "mix(@BLACK_500, @BLACK_300, 0.5)";
             colorAccent = "#fe2851";
-            textColorPrimary = "#fff";
+            textColorPrimary = "#fe2851";
         } else if (id == 3) {
             dark_mode = true;
             colorPrimary = "#36E683";

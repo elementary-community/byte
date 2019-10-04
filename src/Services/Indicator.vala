@@ -6,7 +6,7 @@ public class Services.Indicator : GLib.Object {
     uint owner_id;
     uint root_id;
     uint player_id;
-
+    
     public void initialize () {
         owner_id = Bus.own_name (BusType.SESSION, "org.mpris.MediaPlayer2.Byte", GLib.BusNameOwnerFlags.NONE, on_bus_acquired, on_name_acquired, on_name_lost);
         if (owner_id == 0) {
