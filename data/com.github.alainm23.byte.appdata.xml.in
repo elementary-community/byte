@@ -23,6 +23,16 @@
     <binary>com.github.alainm23.byte</binary>
   </provides>
   ​<releases>
+    <release version="0.1.8" date="2019-10-09">
+      <description>
+        <p>This update brings some new features and bug fixes:</p>
+        <ul>
+          <li>Turkish translation @ibrakap</li>
+          <li>Fixing style errors</li>
+        </ul>
+      </description>
+    </release>
+
     <release version="0.1.7" date="2019-09-17">
       <description>
         <p>This update brings some new features and bug fixes:</p>
