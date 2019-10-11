@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: com.github.alainm23.byte\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-09-17 09:50-0500\n"
+"POT-Creation-Date: 2019-10-11 20:11+0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -170,7 +170,7 @@ msgstr ""
 
 #: src/Widgets/TrackRow.vala:339 src/Widgets/MediaControl.vala:264
 #: src/Widgets/TrackAlbumRow.vala:234
-msgid "Diskile"
+msgid "Dislike"
 msgstr ""
 
 #: src/Widgets/TrackRow.vala:341 src/Widgets/MediaControl.vala:266

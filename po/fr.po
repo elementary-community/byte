@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: com.github.alainm23.byte\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-09-04 12:21-0500\n"
+"POT-Creation-Date: 2019-10-11 20:11+0400\n"
 "PO-Revision-Date: 2019-08-10 12:12+0200\n"
 "Last-Translator: NathanBnm\n"
 "Language-Team: none\n"
@@ -17,19 +17,19 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: src/Utils.vala:286
+#: src/Utils.vala:292
 msgid "Choose an image…"
 msgstr ""
 
-#: src/Utils.vala:288 src/Services/Scan.vala:88 src/Widgets/QuickFind.vala:31
+#: src/Utils.vala:294 src/Services/Scan.vala:90 src/Widgets/QuickFind.vala:31
 msgid "Cancel"
 msgstr "Annuler"
 
-#: src/Utils.vala:289 src/Services/Scan.vala:89
+#: src/Utils.vala:295 src/Services/Scan.vala:91
 msgid "Open"
 msgstr ""
 
-#: src/Utils.vala:292
+#: src/Utils.vala:298
 msgid "Images"
 msgstr ""
 
@@ -43,12 +43,12 @@ msgstr "Nouvelle playlist"
 msgid "Unknown"
 msgstr ""
 
-#: src/Services/Scan.vala:87
+#: src/Services/Scan.vala:89
 #, fuzzy
 msgid "Select a folder."
 msgstr "Sélectionner le dossier de musique…"
 
-#: src/Services/Scan.vala:92
+#: src/Services/Scan.vala:94
 msgid "Folder"
 msgstr ""
 
@@ -80,10 +80,10 @@ msgstr "Charger de la musique depuis un dossier"
 msgid "Previous"
 msgstr "Précédent"
 
-#: src/Widgets/HeaderBar.vala:77 src/Widgets/TrackRow.vala:311
-#: src/Widgets/TrackAlbumRow.vala:222 src/Views/Album.vala:126
-#: src/Views/Tracks.vala:98 src/Views/Favorites.vala:64
-#: src/Views/Playlist.vala:200
+#: src/Widgets/HeaderBar.vala:77 src/Widgets/TrackRow.vala:327
+#: src/Widgets/MediaControl.vala:252 src/Widgets/TrackAlbumRow.vala:222
+#: src/Views/Album.vala:126 src/Views/Tracks.vala:98
+#: src/Views/Favorites.vala:64 src/Views/Playlist.vala:200
 msgid "Play"
 msgstr "Lire"
 
@@ -134,60 +134,76 @@ msgstr "Tout répéter"
 msgid "Repeat One"
 msgstr "Répéter une fois"
 
-#: src/Widgets/TrackRow.vala:80 src/Widgets/TrackAlbumRow.vala:44
+#: src/Widgets/TrackRow.vala:80 src/Widgets/MediaControl.vala:47
+#: src/Widgets/TrackAlbumRow.vala:44
 msgid "Options"
 msgstr "Options"
 
-#: src/Widgets/TrackRow.vala:246 src/Widgets/TrackAlbumRow.vala:157
+#: src/Widgets/TrackRow.vala:262 src/Widgets/MediaControl.vala:187
+#: src/Widgets/TrackAlbumRow.vala:157
 msgid "Create New Playlist"
 msgstr "Créer une nouvelle playlist"
 
-#: src/Widgets/TrackRow.vala:312 src/Widgets/TrackAlbumRow.vala:223
+#: src/Widgets/TrackRow.vala:328 src/Widgets/MediaControl.vala:253
+#: src/Widgets/TrackAlbumRow.vala:223
 msgid "Play Next"
 msgstr "Lire juste après"
 
-#: src/Widgets/TrackRow.vala:313 src/Widgets/TrackAlbumRow.vala:224
+#: src/Widgets/TrackRow.vala:329 src/Widgets/MediaControl.vala:254
+#: src/Widgets/TrackAlbumRow.vala:224
 msgid "Play Later"
 msgstr "Lire plus tard"
 
-#: src/Widgets/TrackRow.vala:315 src/Widgets/TrackAlbumRow.vala:226
+#: src/Widgets/TrackRow.vala:331 src/Widgets/MediaControl.vala:256
+#: src/Widgets/TrackAlbumRow.vala:226
 msgid "Add to Playlist"
 msgstr "Ajouter à une playlist"
 
-#: src/Widgets/TrackRow.vala:320 src/Widgets/TrackAlbumRow.vala:231
+#: src/Widgets/TrackRow.vala:336 src/Widgets/MediaControl.vala:261
+#: src/Widgets/TrackAlbumRow.vala:231
 msgid "Edit Song Info…"
 msgstr "Modifier les informations sur le titre…"
 
-#: src/Widgets/TrackRow.vala:321 src/Widgets/TrackAlbumRow.vala:232
-msgid "Favorite"
-msgstr "Favoris"
+#: src/Widgets/TrackRow.vala:338 src/Widgets/MediaControl.vala:263
+#: src/Widgets/TrackAlbumRow.vala:233
+msgid "Love"
+msgstr ""
 
-#: src/Widgets/TrackRow.vala:322 src/Widgets/TrackAlbumRow.vala:233
+#: src/Widgets/TrackRow.vala:339 src/Widgets/MediaControl.vala:264
+#: src/Widgets/TrackAlbumRow.vala:234
+msgid "Dislike"
+msgstr ""
+
+#: src/Widgets/TrackRow.vala:341 src/Widgets/MediaControl.vala:266
+#: src/Widgets/TrackAlbumRow.vala:236
 msgid "Delete from library"
 msgstr "Supprimer de la bibliothèque"
 
-#: src/Widgets/TrackRow.vala:323 src/Widgets/TrackAlbumRow.vala:234
+#: src/Widgets/TrackRow.vala:342 src/Widgets/MediaControl.vala:267
+#: src/Widgets/TrackAlbumRow.vala:237
 msgid "Delete from file"
 msgstr "Supprimer le fichier"
 
-#: src/Widgets/TrackRow.vala:324 src/Widgets/TrackAlbumRow.vala:235
+#: src/Widgets/TrackRow.vala:343 src/Widgets/MediaControl.vala:268
+#: src/Widgets/TrackAlbumRow.vala:238
 msgid "Remove from playlist"
 msgstr "Retirer de la playlist"
 
-#: src/Widgets/TrackRow.vala:379 src/Widgets/RadioRow.vala:110
-#: src/Views/Playlist.vala:390
+#: src/Widgets/TrackRow.vala:405 src/Widgets/MediaControl.vala:330
+#: src/Widgets/RadioRow.vala:110 src/Views/Playlist.vala:390
 #, fuzzy
 msgid "Delete from library?"
 msgstr "Supprimer de la bibliothèque"
 
-#: src/Widgets/TrackRow.vala:380 src/Widgets/RadioRow.vala:111
-#: src/Views/Playlist.vala:391
+#: src/Widgets/TrackRow.vala:406 src/Widgets/MediaControl.vala:331
+#: src/Widgets/RadioRow.vala:111 src/Views/Playlist.vala:391
 #, fuzzy, c-format
 msgid "Are you sure you want to delete <b>%s</b> from your library?"
 msgstr "Êtes-vous sûr de vouloir réinitialiser toute votre bibliothèque ?"
 
-#: src/Widgets/TrackRow.vala:385 src/Widgets/RadioRow.vala:116
-#: src/Views/Playlist.vala:166 src/Views/Playlist.vala:396
+#: src/Widgets/TrackRow.vala:411 src/Widgets/MediaControl.vala:336
+#: src/Widgets/RadioRow.vala:116 src/Views/Playlist.vala:166
+#: src/Views/Playlist.vala:396
 msgid "Delete"
 msgstr "Supprimer"
 
@@ -203,8 +219,10 @@ msgstr "La webradio a bien été ajoutée"
 msgid "Quick find"
 msgstr "Recherche rapide"
 
+#. general_grid.add (settings_09_box);
+#. general_grid.add (new Gtk.Separator (Gtk.Orientation.HORIZONTAL));
 #: src/Widgets/QuickFind.vala:46 src/Views/Home.vala:20
-#: src/Dialogs/Settings.vala:181
+#: src/Dialogs/Settings.vala:153
 msgid "Library"
 msgstr "Bibliothèque"
 
@@ -245,12 +263,12 @@ msgstr "Masquer"
 msgid "Up Next"
 msgstr "À suivre"
 
-#: src/Widgets/Queue.vala:271
+#: src/Widgets/Queue.vala:278
 #, c-format
 msgid "%s <b>by</b> %s"
 msgstr "%s <b>par</b> %s"
 
-#: src/Widgets/Queue.vala:395
+#: src/Widgets/Queue.vala:402
 msgid "Add Favorite"
 msgstr "Ajouté comme favoris"
 
@@ -442,81 +460,83 @@ msgid "General"
 msgstr "Général"
 
 #: src/Dialogs/Settings.vala:45
-msgid "Dark mode"
-msgstr "Thème sombre"
-
-#: src/Dialogs/Settings.vala:73
-msgid "Notifications"
-msgstr "Notifications"
-
-#: src/Dialogs/Settings.vala:97
-msgid "Play in background if closed"
-msgstr "Lecture en arrière-plan"
-
-#: src/Dialogs/Settings.vala:121
 msgid "Theme"
 msgstr ""
 
-#: src/Dialogs/Settings.vala:126
+#: src/Dialogs/Settings.vala:50
 msgid "Byte"
 msgstr ""
 
-#: src/Dialogs/Settings.vala:132
+#: src/Dialogs/Settings.vala:56
 msgid "Black"
 msgstr ""
 
-#: src/Dialogs/Settings.vala:138
-msgid "Blueberry"
+#: src/Dialogs/Settings.vala:62
+msgid "Turquoise"
 msgstr ""
 
-#: src/Dialogs/Settings.vala:197
+#: src/Dialogs/Settings.vala:101
+msgid "Notifications"
+msgstr "Notifications"
+
+#: src/Dialogs/Settings.vala:125
+msgid "Play in background if closed"
+msgstr "Lecture en arrière-plan"
+
+#: src/Dialogs/Settings.vala:169
 msgid "Music folder location"
 msgstr "Emplacement du dossier de musique"
 
-#: src/Dialogs/Settings.vala:199
+#: src/Dialogs/Settings.vala:171
 msgid "Select Music Folder…"
 msgstr "Sélectionner le dossier de musique…"
 
-#: src/Dialogs/Settings.vala:222
+#: src/Dialogs/Settings.vala:194
 msgid "Sync library on start up"
 msgstr "Synchroniser la bibliothèque au lancement"
 
-#: src/Dialogs/Settings.vala:246
+#: src/Dialogs/Settings.vala:218
 msgid "Automatically download covers"
 msgstr "Télécharger automatiquement les pochettes"
 
-#: src/Dialogs/Settings.vala:270
+#: src/Dialogs/Settings.vala:242
 msgid "Save changes into ID3-Tag"
 msgstr "Enregistrer les modifications dans les tags ID3"
 
-#: src/Dialogs/Settings.vala:308
+#: src/Dialogs/Settings.vala:280
 msgid "Reset all library"
 msgstr "Réinitialiser toute la bibliothèque"
 
-#: src/Dialogs/Settings.vala:310 src/Dialogs/Settings.vala:428
+#: src/Dialogs/Settings.vala:282 src/Dialogs/Settings.vala:366
 msgid "Reset"
 msgstr "Réinitialiser"
 
-#: src/Dialogs/Settings.vala:400
+#: src/Dialogs/Settings.vala:338
 msgid "Set Music Folder?"
 msgstr "Définir le dossier de musique ?"
 
-#: src/Dialogs/Settings.vala:401
+#: src/Dialogs/Settings.vala:339
 #, c-format
 msgid "Are you sure you want to set the music folder to <b>%s</b>?"
 msgstr "Êtes-vous sûr de vouloir régler le dossier de musique sur <b>%s</b> ?"
 
-#: src/Dialogs/Settings.vala:406
+#: src/Dialogs/Settings.vala:344
 msgid "Set Music Folder"
 msgstr "Définir le dossier de musique"
 
-#: src/Dialogs/Settings.vala:422
+#: src/Dialogs/Settings.vala:360
 msgid "Reset your library?"
 msgstr "Réinitialiser la bibliothèque ?"
 
-#: src/Dialogs/Settings.vala:423
+#: src/Dialogs/Settings.vala:361
 msgid "Are you sure you want to reset all your library?"
 msgstr "Êtes-vous sûr de vouloir réinitialiser toute votre bibliothèque ?"
+
+#~ msgid "Favorite"
+#~ msgstr "Favoris"
+
+#~ msgid "Dark mode"
+#~ msgstr "Thème sombre"
 
 #, fuzzy
 #~ msgid "_Cancel"
