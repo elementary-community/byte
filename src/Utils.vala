@@ -11,6 +11,12 @@ public class Utils : GLib.Object {
 
     public string MAIN_FOLDER;
     public string COVER_FOLDER;
+
+    bool dark_mode;
+    string colorPrimary;
+    string colorAccent;
+    string textColorPrimary;
+
     public Utils () {
         MAIN_FOLDER = Environment.get_home_dir () + "/.local/share/com.github.alainm23.byte";
         COVER_FOLDER = GLib.Path.build_filename (MAIN_FOLDER, "covers");
@@ -20,21 +26,21 @@ public class Utils : GLib.Object {
         if (all_items.size > 0) {
             if (shuffle_mode) {
                 queue_playlist = generate_shuffle (all_items);
-                
+
                 if (track != null) {
                     int index = get_track_index_by_id (track.id, queue_playlist);
                     queue_playlist.remove_at (index);
                     queue_playlist.insert (0, track);
                 }
-        
+
                 Byte.settings.set_boolean ("shuffle-mode", true);
             } else {
                 queue_playlist = playlist_order (all_items);
                 Byte.settings.set_boolean ("shuffle-mode", false);
             }
-    
+
             play_items (queue_playlist, track);
-        }     
+        }
     }
 
     public void shuffle_changed (bool shuffle_mode) {
@@ -50,7 +56,7 @@ public class Utils : GLib.Object {
             } else {
                 queue_playlist = playlist_order (queue_playlist);
             }
-    
+
             play_items (queue_playlist, Byte.player.current_track);
             update_next_track ();
         }
@@ -134,7 +140,7 @@ public class Utils : GLib.Object {
 
         return queue_playlist [index];
     }
-    
+
     public void remove_track (int id) {
         var index = get_track_index_by_id (id, queue_playlist);
         queue_playlist.remove_at (index);
@@ -151,10 +157,10 @@ public class Utils : GLib.Object {
             }
 
             int index = get_track_index_by_id (Byte.player.current_track.id, queue_playlist) + 1;
-            
+
             track.track_order = index;
             queue_playlist.insert (index, track);
-            
+
             add_next_track (queue_playlist);
         }
     }
@@ -169,7 +175,7 @@ public class Utils : GLib.Object {
             }
 
             track.track_order = queue_playlist.size + 1;
-            queue_playlist.add (track); 
+            queue_playlist.add (track);
             add_last_track (queue_playlist);
         }
     }
@@ -180,7 +186,7 @@ public class Utils : GLib.Object {
 
         var file_path = File.new_for_path (image_path);
         var file_from_uri = File.new_for_uri (url);
-        
+
         MainLoop loop = new MainLoop ();
 
         file_from_uri.copy_async.begin (file_path, 0, Priority.DEFAULT, null, (current_num_bytes, total_num_bytes) => {
@@ -212,7 +218,7 @@ public class Utils : GLib.Object {
             GLib.DirUtils.create_with_parents (path, 0775);
         }
     }
-    
+
     public string get_formated_duration (uint64 duration) {
         uint seconds = (uint) (duration / 1000000000);
         if (seconds < 3600) {
@@ -223,12 +229,12 @@ public class Utils : GLib.Object {
 
         uint hours = seconds / 3600;
         seconds -= hours * 3600;
-        
+
         uint minutes = seconds / 60;
         seconds -= minutes * 60;
-        
+
         return "%u:%02u:%02u".printf (hours, minutes, seconds);
-    } 
+    }
 
     public string get_relative_datetime (string date) {
         return Granite.DateTime.get_relative_datetime (
@@ -340,6 +346,25 @@ public class Utils : GLib.Object {
     }
 
     public void apply_theme (int id) {
+        if (id == 1) {
+            dark_mode = false;
+            colorPrimary = "#fe2851";
+            colorAccent = "#fe2851";
+            textColorPrimary = "#fff";
+        } else if (id == 2) {
+            dark_mode = true;
+            colorPrimary = "mix(@BLACK_500, @BLACK_300, 0.5)";
+            colorAccent = "#fe2851";
+            textColorPrimary = "#fe2851";
+        } else if (id == 3) {
+            dark_mode = true;
+            colorPrimary = "#36E683";
+            colorAccent = "#36E683";
+            textColorPrimary = "#333";
+        }
+
+        Gtk.Settings.get_default ().gtk_application_prefer_dark_theme = dark_mode;
+
         string THEME_CSS = """
             @define-color colorPrimary %s;
             @define-color colorAccent %s;
@@ -347,25 +372,12 @@ public class Utils : GLib.Object {
         """;
 
         var provider = new Gtk.CssProvider ();
-        
-        try {
-            string colorPrimary = "";
-            string colorAccent = "";
-            if (id == 1) {
-                colorPrimary = "#fe2851";
-                colorAccent = "#fe2851";
-            } else if (id == 2) {
-                colorPrimary = "#4d4d4d";
-                colorAccent = "@text_color";
-            } else {
-                colorPrimary = "#3689e6";
-                colorAccent = "@text_color";
-            }
 
+        try {
             var theme_css = THEME_CSS.printf (
                 colorPrimary,
                 colorAccent,
-                "@base_color"
+                textColorPrimary
             );
 
             provider.load_from_data (theme_css, theme_css.length);

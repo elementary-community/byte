@@ -3,7 +3,7 @@
     <enum id="com.github.alainm23.byte.repeat-mode">
 		<value nick="off" value="0" />
 		<value nick="all" value="1" />
-		<value nick="one" value="2" /> 
+		<value nick="one" value="2" />
 	</enum>
 
     <enum id="com.github.alainm23.byte.tracks-sort-mode">
@@ -32,7 +32,7 @@
 	<enum id="com.github.alainm23.byte.theme">
 		<value nick="Byte" value="1" />
 		<value nick="Black" value="2" />
-		<value nick="Blueberry" value="3" />
+    	<value nick="Turquoise" value="3" />
 	</enum>
 
     <schema path="/com/github/alainm23/byte/" id="com.github.alainm23.byte" gettext-domain="com.github.alainm23.byte">
@@ -41,7 +41,7 @@
             <summary>Theme</summary>
             <description>Theme</description>
         </key>
-        
+
 		<key name="library-location" type="s">
 		    <default>""</default>
 			<summary>Default library location.</summary>
@@ -107,13 +107,7 @@
             <summary>Most recent window position (x, y)</summary>
             <description>Most recent window position (x, y)</description>
         </key>
-
-        <key name="dark-mode" type="b">
-            <default>false</default>
-            <summary>If the dark Gtk stylesheet should be used</summary>
-            <description>If the dark Gtk stylesheet should be used</description>
-        </key>
-
+		
 		<key name="sync-files" type="b">
 			<default>true</default>
 			<summary>Look for new music files on start up.</summary>
@@ -137,7 +131,7 @@
 			<summary>Show notifications.</summary>
 			<description>Show notifications.</description>
 		</key>
-		
+
 		<key name="auto-download-covers" type="b">
 			<default>false</default>
 			<summary>Auto download covers</summary>

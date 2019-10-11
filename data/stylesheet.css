@@ -39,27 +39,21 @@
     background-color: transparent;
 }
 
-.track-row:hover {
+.track-row:selected {
     background-color: @colorAccent;
-    color: @bg_color;
 }
 
-.track-row:hover label {
-    color: @bg_color;
+.track-row:selected label {
+    color: @textColorPrimary;
 }
 
-.track-row:hover button {
-    background-color: transparent;
-    color: @bg_color;
+.track-row:selected button {
+    color: @textColorPrimary;
 }
 
 .track-queue-row:selected {
     background-color: transparent;
     color: @text_color;
-}
-
-.track-row:selected:hover label {
-    color: #fff;
 }
 
 .slider-button {
@@ -82,6 +76,7 @@
 
 .button-color {
     color: @colorAccent;
+    background-color: transparent;
 }
 
 .w-round {
@@ -380,7 +375,7 @@ overshoot.left {
 }
 
 .editor-titlebar headerbar {
-    padding: 0px;
+    padding: 0px 0px 0px 3px;
 }
 
 .editor-textview text {

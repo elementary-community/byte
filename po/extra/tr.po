@@ -21,23 +21,23 @@ msgstr ""
 #: data/com.github.alainm23.byte.desktop.in:4
 #: data/com.github.alainm23.byte.appdata.xml.in:7
 msgid "Byte"
-msgstr ""
+msgstr "Byte"
 
 #: data/com.github.alainm23.byte.desktop.in:5
 msgid "Music"
-msgstr ""
+msgstr "Müzik"
 
 #: data/com.github.alainm23.byte.desktop.in:8
 msgid "com.github.alainm23.byte"
-msgstr ""
+msgstr "com.github.alainm23.byte"
 
 #: data/com.github.alainm23.byte.desktop.in:12
 msgid "mp3;music;byte;radio;playlist;"
-msgstr ""
+msgstr "mp3;music;byte;radio;playlist;"
 
 #: data/com.github.alainm23.byte.appdata.xml.in:8
 msgid "Rediscover your music"
-msgstr ""
+msgstr "Müziğini yeniden keşfet"
 
 #: data/com.github.alainm23.byte.appdata.xml.in:10
 msgid ""
@@ -56,7 +56,7 @@ msgstr ""
 
 #: data/com.github.alainm23.byte.appdata.xml.in:14
 msgid "Light and Dark themes."
-msgstr ""
+msgstr "Aydınlık ve Karanlık temalar"
 
 #: data/com.github.alainm23.byte.appdata.xml.in:15
 msgid "Add up to 100 items under \"Recently Added\" for songs."

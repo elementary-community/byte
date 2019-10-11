@@ -56,7 +56,7 @@ public class Widgets.RadioRow : Gtk.ListBoxRow {
         remove_button.can_focus = false;
         remove_button.valign = Gtk.Align.CENTER;
         remove_button.tooltip_text = _("Remove");
-        remove_button.margin_end = 3;
+        remove_button.margin_end = 2;
         remove_button.get_style_context ().add_class (Gtk.STYLE_CLASS_FLAT);
         remove_button.get_style_context ().add_class ("options-button");
         remove_button.get_style_context ().remove_class ("button");

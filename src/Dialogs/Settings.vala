@@ -31,34 +31,62 @@ public class Dialogs.Settings : Gtk.Dialog {
         general_label.get_style_context ().add_class ("font-bold");
         general_label.margin_bottom = 6;
         general_label.margin_start = 6;
-
+        
         /*
-            Dark Mode
+            Theme
         */
 
         var settings_01_icon = new Gtk.Image ();
-        settings_01_icon.gicon = new ThemedIcon ("weather-clear-night-symbolic");
+        settings_01_icon.gicon = new ThemedIcon ("applications-graphics-symbolic");
         settings_01_icon.pixel_size = 16;
         settings_01_icon.get_style_context ().add_class ("settings-icon");
         settings_01_icon.valign = Gtk.Align.CENTER;
 
-        var settings_01_label = new Gtk.Label (_("Dark mode"));
-        //settings_01_label.get_style_context ().add_class ("h3");
-        
-        var settings_01_switch = new Gtk.Switch ();
-        settings_01_switch.get_style_context ().add_class ("active-switch");
-        settings_01_switch.valign = Gtk.Align.CENTER;
-        
-        var gtk_settings = Gtk.Settings.get_default (); 
-        settings_01_switch.bind_property ("active", gtk_settings, "gtk_application_prefer_dark_theme");
-        Byte.settings.bind ("dark-mode", settings_01_switch, "active", GLib.SettingsBindFlags.DEFAULT);
+        var settings_01_label = new Gtk.Label (_("Theme"));
+
+        var theme_01 = new Gtk.RadioButton (null);
+        theme_01.valign = Gtk.Align.START;
+        theme_01.halign = Gtk.Align.START;
+        theme_01.tooltip_text = _("Byte");
+        apply_styles ("01", "#fe2851", theme_01);
+
+        var theme_02 = new Gtk.RadioButton.from_widget (theme_01);
+        theme_02.valign = Gtk.Align.START;
+        theme_02.halign = Gtk.Align.START;
+        theme_02.tooltip_text = _("Black");
+        apply_styles ("02", "#333333", theme_02);
+
+        var theme_03 = new Gtk.RadioButton.from_widget (theme_01);
+        theme_03.valign = Gtk.Align.START;
+        theme_03.halign = Gtk.Align.START;
+        theme_03.tooltip_text = _("Turquoise");
+        apply_styles ("04", "#36E683", theme_03);
+
+        var theme_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 0);
+        theme_box.pack_start (theme_01, false, false, 6);
+        theme_box.pack_start (theme_02, false, false, 6);
+        theme_box.pack_start (theme_03, false, false, 6);
+
+        // I think switch most better here (redian23)
+        switch (Byte.settings.get_enum ("theme")) {
+          case 1 :
+            theme_01.active = true;
+            break;
+          case 2 :
+            theme_02.active = true;
+            break;
+          case 3 :
+            theme_03.active = true;
+            break;
+        }
 
         var settings_01_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 0);
         settings_01_box.hexpand = true;
         settings_01_box.margin = 6;
+        settings_01_box.margin_end = 0;
         settings_01_box.pack_start (settings_01_icon, false, false, 0);
         settings_01_box.pack_start (settings_01_label, false, false, 6);
-        settings_01_box.pack_end (settings_01_switch, false, false, 0);
+        settings_01_box.pack_end (theme_box, false, false, 0);
 
         /*
             Notifications
@@ -71,7 +99,7 @@ public class Dialogs.Settings : Gtk.Dialog {
         settings_02_icon.valign = Gtk.Align.CENTER;
 
         var settings_02_label = new Gtk.Label (_("Notifications"));
-        
+
         var settings_02_switch = new Gtk.Switch ();
         settings_02_switch.get_style_context ().add_class ("active-switch");
         settings_02_switch.valign = Gtk.Align.CENTER;
@@ -95,74 +123,18 @@ public class Dialogs.Settings : Gtk.Dialog {
         settings_03_icon.valign = Gtk.Align.CENTER;
 
         var settings_03_label = new Gtk.Label (_("Play in background if closed"));
-        
+
         var settings_03_switch = new Gtk.Switch ();
         settings_03_switch.get_style_context ().add_class ("active-switch");
         settings_03_switch.valign = Gtk.Align.CENTER;
         settings_03_switch.active = Byte.settings.get_boolean ("play-in-background");
-        
+
         var settings_03_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 0);
         settings_03_box.hexpand = true;
         settings_03_box.margin = 6;
         settings_03_box.pack_start (settings_03_icon, false, false, 0);
         settings_03_box.pack_start (settings_03_label, false, false, 6);
         settings_03_box.pack_end (settings_03_switch, false, false, 0);
-
-        /*
-            Theme
-        */
-
-        var settings_09_icon = new Gtk.Image ();
-        settings_09_icon.gicon = new ThemedIcon ("applications-graphics-symbolic");
-        settings_09_icon.pixel_size = 16;
-        settings_09_icon.get_style_context ().add_class ("settings-icon");
-        settings_09_icon.valign = Gtk.Align.CENTER;
-
-        var settings_09_label = new Gtk.Label (_("Theme"));
- 
-        var theme_01 = new Gtk.RadioButton (null);
-        theme_01.valign = Gtk.Align.START;
-        theme_01.halign = Gtk.Align.START;
-        theme_01.tooltip_text = _("Byte");
-        apply_styles ("01", "#fe2851", theme_01);
-
-        var theme_02 = new Gtk.RadioButton.from_widget (theme_01);
-        theme_02.valign = Gtk.Align.START;
-        theme_02.halign = Gtk.Align.START;
-        theme_02.tooltip_text = _("Black");
-        apply_styles ("02", "#333333", theme_02);
-
-        var theme_03 = new Gtk.RadioButton.from_widget (theme_01);
-        theme_03.valign = Gtk.Align.START;
-        theme_03.halign = Gtk.Align.START;
-        theme_03.tooltip_text = _("Blueberry");
-        apply_styles ("03", "#3689e6", theme_03);
-
-        var theme_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 0);
-        theme_box.pack_start (theme_01, false, false, 6);
-        theme_box.pack_start (theme_02, false, false, 6);
-        theme_box.pack_start (theme_03, false, false, 6);
-
-        int theme = Byte.settings.get_enum ("theme");
-
-        if (theme == 1) {
-            theme_01.active = true;
-        } else if (theme == 2) {
-            theme_02.active = true;
-        } else {
-            theme_03.active = true;
-        }
-
-        if (Byte.settings.get_boolean ("dark-mode")) {
-            theme_box.sensitive = false;
-        }
-
-        var settings_09_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 0);
-        settings_09_box.hexpand = true;
-        settings_09_box.margin = 6;
-        settings_09_box.pack_start (settings_09_icon, false, false, 0);
-        settings_09_box.pack_start (settings_09_label, false, false, 6);
-        settings_09_box.pack_end (theme_box, false, false, 6);
 
         var general_grid = new Gtk.Grid ();
         general_grid.get_style_context ().add_class ("view");
@@ -175,8 +147,8 @@ public class Dialogs.Settings : Gtk.Dialog {
         general_grid.add (new Gtk.Separator (Gtk.Orientation.HORIZONTAL));
         general_grid.add (settings_03_box);
         general_grid.add (new Gtk.Separator (Gtk.Orientation.HORIZONTAL));
-        general_grid.add (settings_09_box);
-        general_grid.add (new Gtk.Separator (Gtk.Orientation.HORIZONTAL));
+        //general_grid.add (settings_09_box);
+        //general_grid.add (new Gtk.Separator (Gtk.Orientation.HORIZONTAL));
 
         var library_label = new Gtk.Label (_("Library"));
         library_label.halign = Gtk.Align.START;
@@ -195,10 +167,10 @@ public class Dialogs.Settings : Gtk.Dialog {
         settings_04_icon.valign = Gtk.Align.CENTER;
 
         var settings_04_label = new Gtk.Label (_("Music folder location"));
-        
+
         var library_filechooser = new Gtk.FileChooserButton (_("Select Music Folder…"), Gtk.FileChooserAction.SELECT_FOLDER);
         library_filechooser.valign = Gtk.Align.CENTER;
-        
+
         File library_path = File.new_for_uri (Byte.settings.get_string ("library-location"));
         library_filechooser.set_current_folder (library_path.get_path ());
 
@@ -210,7 +182,7 @@ public class Dialogs.Settings : Gtk.Dialog {
         settings_04_box.pack_end (library_filechooser, false, false, 0);
 
         /*
-            Sync init 
+            Sync init
         */
 
         var settings_05_icon = new Gtk.Image ();
@@ -220,12 +192,12 @@ public class Dialogs.Settings : Gtk.Dialog {
         settings_05_icon.valign = Gtk.Align.CENTER;
 
         var settings_05_label = new Gtk.Label (_("Sync library on start up"));
-        
+
         var settings_05_switch = new Gtk.Switch ();
         settings_05_switch.get_style_context ().add_class ("active-switch");
         settings_05_switch.valign = Gtk.Align.CENTER;
         settings_05_switch.active = Byte.settings.get_boolean ("sync-files");
-        
+
         var settings_05_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 0);
         settings_05_box.hexpand = true;
         settings_05_box.margin = 6;
@@ -236,7 +208,7 @@ public class Dialogs.Settings : Gtk.Dialog {
         /*
             Auto download cover
         */
-        
+
         var settings_06_icon = new Gtk.Image ();
         settings_06_icon.gicon = new ThemedIcon ("folder-download-symbolic");
         settings_06_icon.pixel_size = 16;
@@ -244,12 +216,12 @@ public class Dialogs.Settings : Gtk.Dialog {
         settings_06_icon.valign = Gtk.Align.CENTER;
 
         var settings_06_label = new Gtk.Label (_("Automatically download covers"));
-        
+
         var settings_06_switch = new Gtk.Switch ();
         settings_06_switch.get_style_context ().add_class ("active-switch");
         settings_06_switch.valign = Gtk.Align.CENTER;
         settings_06_switch.active = Byte.settings.get_boolean ("auto-download-covers");
-        
+
         var settings_06_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 0);
         settings_06_box.hexpand = true;
         settings_06_box.margin = 6;
@@ -268,12 +240,12 @@ public class Dialogs.Settings : Gtk.Dialog {
         settings_07_icon.valign = Gtk.Align.CENTER;
 
         var settings_07_label = new Gtk.Label (_("Save changes into ID3-Tag"));
-        
+
         var settings_07_switch = new Gtk.Switch ();
         settings_07_switch.get_style_context ().add_class ("active-switch");
         settings_07_switch.valign = Gtk.Align.CENTER;
         settings_07_switch.active = Byte.settings.get_boolean ("save-id3-tags");
-        
+
         var settings_07_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 0);
         settings_07_box.hexpand = true;
         settings_07_box.margin = 6;
@@ -306,10 +278,10 @@ public class Dialogs.Settings : Gtk.Dialog {
         settings_08_icon.valign = Gtk.Align.CENTER;
 
         var settings_08_label = new Gtk.Label (_("Reset all library"));
-        
+
         var settings_08_button = new Gtk.Button.with_label (_("Reset"));
         settings_08_button.valign = Gtk.Align.CENTER;
-        
+
         var settings_08_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 0);
         settings_08_box.hexpand = true;
         settings_08_box.margin = 6;
@@ -340,40 +312,6 @@ public class Dialogs.Settings : Gtk.Dialog {
 
         get_action_area ().visible = false;
         get_action_area ().no_show_all = true;
-
-        //add_button (_("Close"), Gtk.ResponseType.CLOSE);
-        /*
-        response.connect ((response_id) => {
-            destroy (); 
-        });
-        */
-
-        settings_01_switch.notify["active"].connect (() => { 
-            theme_box.sensitive = !settings_01_switch.active;
-
-            var provider = new Gtk.CssProvider ();
-            var colored_css = """
-                @define-color colorPrimary %s;
-                @define-color textColorPrimary %s;
-            """;
-
-            if (settings_01_switch.active) {
-                colored_css = colored_css.printf (
-                    "@base_color",
-                    "@text_color"
-                );
-            } else {
-                Byte.utils.apply_theme (Byte.settings.get_enum ("theme"));
-            }
-
-            try {
-                provider.load_from_data (colored_css, colored_css.length);
-
-                Gtk.StyleContext.add_provider_for_screen (Gdk.Screen.get_default (), provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
-            } catch (GLib.Error e) {
-                return;
-            }
-        });
 
         settings_02_switch.notify["active"].connect (() => {
             Byte.settings.set_boolean ("notifications-enabled", settings_02_switch.active);
@@ -406,7 +344,7 @@ public class Dialogs.Settings : Gtk.Dialog {
             var set_button = new Gtk.Button.with_label (_("Set Music Folder"));
             set_button.get_style_context ().add_class (Gtk.STYLE_CLASS_DESTRUCTIVE_ACTION);
             message_dialog.add_action_widget (set_button, Gtk.ResponseType.ACCEPT);
-            
+
             message_dialog.show_all ();
 
             if (message_dialog.run () == Gtk.ResponseType.ACCEPT) {
@@ -418,23 +356,23 @@ public class Dialogs.Settings : Gtk.Dialog {
         });
 
         settings_08_button.clicked.connect (() => {
-            var message_dialog = new Granite.MessageDialog.with_image_from_icon_name (	
-                _("Reset your library?"),	
-                _("Are you sure you want to reset all your library?"),	
-                "dialog-warning",	
-                Gtk.ButtonsType.CANCEL	
-            );	
+            var message_dialog = new Granite.MessageDialog.with_image_from_icon_name (
+                _("Reset your library?"),
+                _("Are you sure you want to reset all your library?"),
+                "dialog-warning",
+                Gtk.ButtonsType.CANCEL
+            );
 
-             var remove_button = new Gtk.Button.with_label (_("Reset"));	
-            remove_button.get_style_context ().add_class (Gtk.STYLE_CLASS_DESTRUCTIVE_ACTION);	
-            message_dialog.add_action_widget (remove_button, Gtk.ResponseType.ACCEPT);	
+             var remove_button = new Gtk.Button.with_label (_("Reset"));
+            remove_button.get_style_context ().add_class (Gtk.STYLE_CLASS_DESTRUCTIVE_ACTION);
+            message_dialog.add_action_widget (remove_button, Gtk.ResponseType.ACCEPT);
 
-             message_dialog.show_all ();	
+             message_dialog.show_all ();
 
-             if (message_dialog.run () == Gtk.ResponseType.ACCEPT) {	
-                Byte.database.reset_all_library ();	
-                destroy ();	
-            }	
+             if (message_dialog.run () == Gtk.ResponseType.ACCEPT) {
+                Byte.database.reset_all_library ();
+                destroy ();
+            }
 
             message_dialog.destroy ();
         });

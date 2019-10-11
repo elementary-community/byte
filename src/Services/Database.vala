@@ -1585,7 +1585,7 @@ public class Services.Database : GLib.Object {
 
         sql = """
             UPDATE playlists SET title = ?, note = ?, date_updated = ? WHERE id = ?;
-        """;
+        """; 
 
         res = db.prepare_v2 (sql, -1, out stmt);
         assert (res == Sqlite.OK);

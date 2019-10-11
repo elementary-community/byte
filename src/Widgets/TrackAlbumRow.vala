@@ -229,7 +229,10 @@ public class Widgets.TrackAlbumRow : Gtk.ListBoxRow {
         add_playlist_menu.set_submenu (playlists);
 
         var edit_menu = new Widgets.MenuItem (_("Edit Song Info…"), "edit-symbolic", _("Edit Song Info…"));
-        var favorite_menu = new Widgets.MenuItem (_("Favorite"), "byte-favorite-symbolic", _("Favorite"));
+        
+        var favorite_menu = new Widgets.MenuItem (_("Love"), "byte-favorite-symbolic", _("Love"));
+        var no_favorite_menu = new Widgets.MenuItem (_("Diskile"), "byte-no-favorite-symbolic", _("Diskile"));
+
         var remove_db_menu = new Widgets.MenuItem (_("Delete from library"), "user-trash-symbolic", _("Delete from library"));
         var remove_file_menu = new Widgets.MenuItem (_("Delete from file"), "user-trash-symbolic", _("Delete from file"));
         var remove_playlist_menu = new Widgets.MenuItem (_("Remove from playlist"), "zoom-out-symbolic", _("Remove from playlist"));
@@ -243,6 +246,7 @@ public class Widgets.TrackAlbumRow : Gtk.ListBoxRow {
         menu.add (add_playlist_menu);
         //menu.add (edit_menu);
         menu.add (favorite_menu);
+        menu.add (no_favorite_menu);
         menu.add (new Gtk.SeparatorMenuItem ());
         
         if (track.playlist != 0) {
@@ -272,6 +276,12 @@ public class Widgets.TrackAlbumRow : Gtk.ListBoxRow {
         favorite_menu.activate.connect (() => {
             if (Byte.scan_service.is_sync == false) {
                 Byte.database.set_track_favorite (track, 1);
+            }
+        });
+
+        no_favorite_menu.activate.connect (() => {
+            if (Byte.scan_service.is_sync == false) {
+                Byte.database.set_track_favorite (track, 0);
             }
         });
 

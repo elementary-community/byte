@@ -26,6 +26,7 @@ You'll need the following dependencies:
 * libtagc0-dev
 * libsqlite3-dev
 * libgranite-dev (>=0.5)
+* libunity-dev
 * meson
 * valac >= 0.40.3
 
