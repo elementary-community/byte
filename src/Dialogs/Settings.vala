@@ -24,7 +24,7 @@ public class Dialogs.Settings : Gtk.Dialog {
         header_bar.get_style_context ().add_class (Gtk.STYLE_CLASS_FLAT);
         header_bar.get_style_context ().add_class ("oauth-dialog");
         //header_bar.custom_title = container_grid;
-
+        
         var general_label = new Gtk.Label (_("General"));
         general_label.halign = Gtk.Align.START;
         general_label.get_style_context ().add_class ("h3");
