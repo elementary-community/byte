@@ -15,7 +15,7 @@ public class Widgets.TrackAlbumRow : Gtk.ListBoxRow {
 
     construct {
         get_style_context ().add_class ("album-row");
-        
+
         track_label = new Gtk.Label ("%i".printf (track.track));
         track_label.get_style_context ().add_class ("label-color-primary");
         track_label.halign = Gtk.Align.START;
@@ -101,7 +101,7 @@ public class Widgets.TrackAlbumRow : Gtk.ListBoxRow {
                 duration_label.get_style_context ().remove_class ("label-color-primary");
             }
         });
-        
+
         Byte.database.updated_track_favorite.connect ((_track, favorite) => {
             if (track.id == _track.id) {
                 track.is_favorite = favorite;
@@ -129,7 +129,7 @@ public class Widgets.TrackAlbumRow : Gtk.ListBoxRow {
                 activate_menu ();
                 return true;
             }
-            
+
             return false;
         });
 
@@ -192,7 +192,7 @@ public class Widgets.TrackAlbumRow : Gtk.ListBoxRow {
         secondary_label.halign = Gtk.Align.START;
         secondary_label.max_width_chars = 25;
         secondary_label.ellipsize = Pango.EllipsizeMode.END;
-        
+
         var cover_path = GLib.Path.build_filename (Byte.utils.COVER_FOLDER, ("track-%i.jpg").printf (track.id));
         var image_cover = new Gtk.Image ();
         image_cover.halign = Gtk.Align.START;
@@ -222,16 +222,16 @@ public class Widgets.TrackAlbumRow : Gtk.ListBoxRow {
         var play_menu = new Widgets.MenuItem (_("Play"), "media-playback-start-symbolic", _("Play"));
         var play_next_menu = new Widgets.MenuItem (_("Play Next"), "byte-play-next-symbolic", _("Play Next"));
         var play_last_menu = new Widgets.MenuItem (_("Play Later"), "byte-play-later-symbolic", _("Play Later"));
-        
+
         var add_playlist_menu = new Widgets.MenuItem (_("Add to Playlist"), "zoom-in-symbolic", _("Add to Playlist"));
         playlists = new Gtk.Menu ();
         playlists.get_style_context ().add_class ("view");
         add_playlist_menu.set_submenu (playlists);
 
         var edit_menu = new Widgets.MenuItem (_("Edit Song Info…"), "edit-symbolic", _("Edit Song Info…"));
-        
+
         var favorite_menu = new Widgets.MenuItem (_("Love"), "byte-favorite-symbolic", _("Love"));
-        var no_favorite_menu = new Widgets.MenuItem (_("Diskile"), "byte-no-favorite-symbolic", _("Diskile"));
+        var no_favorite_menu = new Widgets.MenuItem (_("Dislike"), "byte-no-favorite-symbolic", _("Dislike"));
 
         var remove_db_menu = new Widgets.MenuItem (_("Delete from library"), "user-trash-symbolic", _("Delete from library"));
         var remove_file_menu = new Widgets.MenuItem (_("Delete from file"), "user-trash-symbolic", _("Delete from file"));
@@ -248,11 +248,11 @@ public class Widgets.TrackAlbumRow : Gtk.ListBoxRow {
         menu.add (favorite_menu);
         menu.add (no_favorite_menu);
         menu.add (new Gtk.SeparatorMenuItem ());
-        
+
         if (track.playlist != 0) {
             menu.add (remove_playlist_menu);
         }
-        
+
         menu.add (remove_db_menu);
 
         menu.show_all ();

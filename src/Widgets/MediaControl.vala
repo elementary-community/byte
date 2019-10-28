@@ -2,7 +2,7 @@ public class Widgets.MediaControl : Gtk.Revealer {
     private Granite.SeekBar timeline;
     private Gtk.Label title_label;
     private Gtk.Label subtitle_label;
-    
+
     private Gtk.Image icon_favorite;
     private Gtk.Image icon_no_favorite;
 
@@ -12,7 +12,7 @@ public class Widgets.MediaControl : Gtk.Revealer {
     public MediaControl () {
 
     }
-    
+
     construct {
         icon_favorite = new Gtk.Image.from_icon_name ("byte-favorite-symbolic", Gtk.IconSize.MENU);
         icon_no_favorite = new Gtk.Image.from_icon_name ("byte-no-favorite-symbolic", Gtk.IconSize.MENU);
@@ -65,9 +65,9 @@ public class Widgets.MediaControl : Gtk.Revealer {
         var image_cover = new Widgets.Cover ();
 
         var header_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 0);
-        header_box.margin = 3;  
+        header_box.margin = 3;
         header_box.margin_start = 4;
-        header_box.margin_end = 3;      
+        header_box.margin_end = 3;
         header_box.pack_start (image_cover, false, false, 0);
         header_box.set_center_widget (metainfo_box);
         header_box.pack_end (favorite_revealer, false, false, 0);
@@ -75,7 +75,7 @@ public class Widgets.MediaControl : Gtk.Revealer {
         var main_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 0);
         main_box.pack_start (timeline_revealer, false, false, 0);
         main_box.pack_start (header_box, false, false, 0);
-        
+
         add (main_box);
 
         Byte.player.current_progress_changed.connect ((progress) => {
@@ -133,25 +133,25 @@ public class Widgets.MediaControl : Gtk.Revealer {
         Byte.lastfm_service.radio_cover_track_found.connect ((track_url) => {
             print ("URL: %s\n".printf (track_url));
             image_cover.set_from_url_async (track_url, 32, true, "track");
-        }); 
+        });
 
         Byte.database.updated_track_cover.connect ((track_id) => {
             Idle.add (() => {
                 if (Byte.player.current_track != null && track_id == Byte.player.current_track.id) {
                     try {
                         image_cover.pixbuf = new Gdk.Pixbuf.from_file_at_size (
-                            GLib.Path.build_filename (Byte.utils.COVER_FOLDER, ("track-%i.jpg").printf (track_id)), 
-                            32, 
+                            GLib.Path.build_filename (Byte.utils.COVER_FOLDER, ("track-%i.jpg").printf (track_id)),
+                            32,
                             32);
                     } catch (Error e) {
                         stderr.printf ("Error setting default avatar icon: %s ", e.message);
                     }
                 }
-                
+
                 return false;
             });
         });
-        
+
         timeline.scale.change_value.connect ((scroll, new_value) => {
             Byte.player.seek_to_progress (new_value);
             return true;
@@ -259,9 +259,9 @@ public class Widgets.MediaControl : Gtk.Revealer {
         add_playlist_menu.set_submenu (playlists);
 
         var edit_menu = new Widgets.MenuItem (_("Edit Song Info…"), "edit-symbolic", _("Edit Song Info…"));
-        
+
         var favorite_menu = new Widgets.MenuItem (_("Love"), "byte-favorite-symbolic", _("Love"));
-        var no_favorite_menu = new Widgets.MenuItem (_("Diskile"), "byte-no-favorite-symbolic", _("Diskile"));
+        var no_favorite_menu = new Widgets.MenuItem (_("Dislike"), "byte-no-favorite-symbolic", _("Dislike"));
 
         var remove_db_menu = new Widgets.MenuItem (_("Delete from library"), "user-trash-symbolic", _("Delete from library"));
         var remove_file_menu = new Widgets.MenuItem (_("Delete from file"), "user-trash-symbolic", _("Delete from file"));

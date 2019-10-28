@@ -256,7 +256,7 @@ public class Widgets.TrackRow : Gtk.ListBoxRow {
             child.destroy ();
         }
 
-        if (Byte.scan_service.is_sync == false) { 
+        if (Byte.scan_service.is_sync == false) {
             var all_items = Byte.database.get_all_playlists ();
 
             var item = new Gtk.MenuItem.with_label (_ ("Create New Playlist"));
@@ -336,8 +336,8 @@ public class Widgets.TrackRow : Gtk.ListBoxRow {
         var edit_menu = new Widgets.MenuItem (_("Edit Song Info…"), "edit-symbolic", _("Edit Song Info…"));
 
         var favorite_menu = new Widgets.MenuItem (_("Love"), "byte-favorite-symbolic", _("Love"));
-        var no_favorite_menu = new Widgets.MenuItem (_("Diskile"), "byte-no-favorite-symbolic", _("Diskile"));
-        
+        var no_favorite_menu = new Widgets.MenuItem (_("Dislike"), "byte-no-favorite-symbolic", _("Dislike"));
+
         var remove_db_menu = new Widgets.MenuItem (_("Delete from library"), "user-trash-symbolic", _("Delete from library"));
         var remove_file_menu = new Widgets.MenuItem (_("Delete from file"), "user-trash-symbolic", _("Delete from file"));
         var remove_playlist_menu = new Widgets.MenuItem (_("Remove from playlist"), "zoom-out-symbolic", _("Remove from playlist"));
