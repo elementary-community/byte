@@ -1,6 +1,6 @@
 project('com.github.alainm23.byte',
         'vala', 'c',
-        version: '0.1.6')
+        version: '0.1.9')
 
 gnome = import('gnome')
 i18n = import('i18n')
@@ -39,8 +39,7 @@ executable(
         dependency('json-glib-1.0'),
         dependency('gstreamer-pbutils-1.0'),
         dependency('gstreamer-tag-1.0'),
-        dependency('taglib_c'), 
-        dependency('unity'),
+        dependency('taglib_c'),
         meson.get_compiler('c').find_library('m', required : false)
     ],
     install: true

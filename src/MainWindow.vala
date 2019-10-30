@@ -21,7 +21,6 @@ public class MainWindow : Gtk.Window {
     private Gtk.Stack main_stack;
     private Gtk.Stack library_stack;
 
-    public Unity.LauncherEntry launcher;
     public MainWindow (Byte application) {
         Object (
             application: application,
@@ -32,9 +31,7 @@ public class MainWindow : Gtk.Window {
 
     construct {
         get_style_context ().add_class ("rounded");
-
-        launcher = Unity.LauncherEntry.get_for_desktop_file (GLib.Application.get_default ().application_id + ".desktop");
-
+        
         headerbar = new Widgets.HeaderBar ();
 
         set_titlebar (headerbar);
@@ -231,15 +228,33 @@ public class MainWindow : Gtk.Window {
         });
 
         Byte.scan_service.sync_started.connect (() => {
-            launcher.progress_visible = true;
+            Granite.Services.Application.set_progress_visible.begin (true, (obj, res) => {
+                try {
+                    Granite.Services.Application.set_progress_visible.end (res);
+                } catch (GLib.Error e) {
+                    critical (e.message);
+                }
+            });
         });
 
         Byte.scan_service.sync_finished.connect (() => {
-            launcher.progress_visible = false;
+            Granite.Services.Application.set_progress_visible.begin (false, (obj, res) => {
+                try {
+                    Granite.Services.Application.set_progress_visible.end (res);
+                } catch (GLib.Error e) {
+                    critical (e.message);
+                }
+            });
         });
 
         Byte.scan_service.sync_progress.connect ((fraction) => {
-            launcher.progress = fraction;
+            Granite.Services.Application.set_progress.begin (fraction, (obj, res) => {
+                try {
+                    Granite.Services.Application.set_progress.end (res);
+                } catch (GLib.Error e) {
+                    critical (e.message);
+                }
+            });
         });
     }
     

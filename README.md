@@ -13,9 +13,18 @@ Byte offers a beautiful presentation of your Music Library with loads of powerfu
 * Group Playlists, Albums, Artists, Songs, etc.
 * Search, add and play your favorite online radio stations.
 
-<a href="https://appcenter.elementary.io/com.github.alainm23.byte"><img src="https://appcenter.elementary.io/badge.svg?new" alt="Get it on AppCenter" /></a>
+<p align="center">
+  <a href="https://appcenter.elementary.io/com.github.alainm23.byte">
+    <img src="https://appcenter.elementary.io/badge.svg" alt="Get it on AppCenter">
+  </a>
+  <a href="https://flathub.org/apps/details/com.github.alainm23.byte">
+    <img src="https://flathub.org/assets/badges/flathub-badge-i-en.svg" width="150px" alt="Download On Flathub">
+  </a>
+</p>
 
-![Byte Screenshot](https://github.com/alainm23/byte/raw/master/data/screenshot/screenshot-01.png)
+<p align="center">
+    ![Byte Screenshot](https://github.com/alainm23/byte/raw/master/data/screenshot/screenshot-01.png)
+</p>
 
 ## Building and Installation
 
@@ -26,7 +35,6 @@ You'll need the following dependencies:
 * libtagc0-dev
 * libsqlite3-dev
 * libgranite-dev (>=0.5)
-* libunity-dev
 * meson
 * valac >= 0.40.3
 
