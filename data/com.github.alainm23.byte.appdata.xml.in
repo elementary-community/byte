@@ -23,6 +23,16 @@
     <binary>com.github.alainm23.byte</binary>
   </provides>
   ​<releases>
+    <release version="0.1.11" date="2019-30-09">
+      <description>
+        <ul>
+          <li>Fix LINGUAS error @ryonakano</li>
+          <li>Added Dutch translation @Vistaus</li>
+          <li>Updated Russian translation @camellan</li>
+        </ul>
+      </description>
+    </release>
+
     <release version="0.1.10" date="2019-30-09">
       <description>
         <ul>
@@ -132,15 +142,6 @@
     </screenshot>
     <screenshot>
       <image>https://raw.githubusercontent.com/alainm23/byte/master/data/screenshot/screenshot-02.png</image>
-    </screenshot>
-    <screenshot>
-      <image>https://raw.githubusercontent.com/alainm23/byte/master/data/screenshot/screenshot-03.png</image>
-    </screenshot>
-    <screenshot>
-      <image>https://raw.githubusercontent.com/alainm23/byte/master/data/screenshot/screenshot-04.png</image>
-    </screenshot>
-    <screenshot>
-      <image>https://raw.githubusercontent.com/alainm23/byte/master/data/screenshot/screenshot-05.png</image>
     </screenshot>
   </screenshots>
   <content_rating type="oars-1.1">
