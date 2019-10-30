@@ -23,7 +23,7 @@
     <binary>com.github.alainm23.byte</binary>
   </provides>
   ​<releases>
-    <release version="0.1.12" date="2019-30-09">
+    <release version="0.1.14" date="2019-30-09">
       <description>
         <ul>
           <li>Fix LINGUAS error @ryonakano</li>

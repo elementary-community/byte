@@ -2,7 +2,8 @@ Source: com.github.alainm23.byte
 Section: x11
 Priority: extra
 Maintainer: Alain M. <alain23@protonmail.com>
-Build-Depends: debhelper (>= 9),
+Build-Depends: appstream,
+               debhelper (>= 9),
                desktop-file-utils,
                libgranite-dev,
                libjson-glib-dev,
