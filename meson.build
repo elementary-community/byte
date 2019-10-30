@@ -39,8 +39,7 @@ executable(
         dependency('json-glib-1.0'),
         dependency('gstreamer-pbutils-1.0'),
         dependency('gstreamer-tag-1.0'),
-        dependency('taglib_c'), 
-        dependency('unity'),
+        dependency('taglib_c'),
         meson.get_compiler('c').find_library('m', required : false)
     ],
     install: true
