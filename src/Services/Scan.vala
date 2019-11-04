@@ -91,7 +91,7 @@ public class Services.Scan : GLib.Object {
             _ ("Open"), Gtk.ResponseType.ACCEPT);
 
         var filter = new Gtk.FileFilter ();
-        filter.set_filter_name (_ ("Folder"));
+        filter.set_filter_name (_("Folder"));
         filter.add_mime_type ("inode/directory");
 
         chooser.add_filter (filter);

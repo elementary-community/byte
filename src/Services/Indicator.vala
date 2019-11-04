@@ -8,9 +8,9 @@ public class Services.Indicator : GLib.Object {
     uint player_id;
     
     public void initialize () {
-        owner_id = Bus.own_name (BusType.SESSION, "org.mpris.MediaPlayer2.Byte", GLib.BusNameOwnerFlags.NONE, on_bus_acquired, on_name_acquired, on_name_lost);
+        owner_id = Bus.own_name (BusType.SESSION, "org.mpris.MediaPlayer2.com.github.alainm23.byte", GLib.BusNameOwnerFlags.NONE, on_bus_acquired, on_name_acquired, on_name_lost);
         if (owner_id == 0) {
-            warning ("Could not initialize MPRIS session.\n");
+            warning ("Could not initialize MPRIS session.\n"); 
         }
 
         Byte.instance.main_window.destroy.connect (() => {
