@@ -17,14 +17,10 @@ Byte offers a beautiful presentation of your Music Library with loads of powerfu
   <a href="https://appcenter.elementary.io/com.github.alainm23.byte">
     <img src="https://appcenter.elementary.io/badge.svg" alt="Get it on AppCenter">
   </a>
-  <a href="https://flathub.org/apps/details/com.github.alainm23.byte">
-    <img src="https://flathub.org/assets/badges/flathub-badge-i-en.svg" width="150px" alt="Download On Flathub">
-  </a>
+  <a href="https://flathub.org/apps/details/com.github.alainm23.byte"><img height="50" alt="Download on Flathub" src="https://flathub.org/assets/badges/flathub-badge-en.png"/></a>
 </p>
 
-<p align="center">
-    ![Byte Screenshot](https://github.com/alainm23/byte/raw/master/data/screenshot/screenshot-01.png)
-</p>
+![Byte Screenshot](https://github.com/alainm23/byte/raw/master/data/screenshot/screenshot-01.png)
 
 ## Building and Installation
 
@@ -48,6 +44,6 @@ com.github.alainm23.byte
 ```
 
 ## Support
-Stripe is not yet available in my country, If you like Byte and you want to support its development,consider supporting via [Patreon](https://www.patreon.com/alainm23)
+If you like Byte and you want to support its development,consider supporting via [Patreon](https://www.patreon.com/alainm23)
 
 Made with 💗 in Perú
