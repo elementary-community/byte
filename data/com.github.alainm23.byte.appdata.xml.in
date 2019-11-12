@@ -23,7 +23,7 @@
     <binary>com.github.alainm23.byte</binary>
   </provides> 
   ​<releases>
-    <release date="2019-11-12" version="0.1.18">
+    <release date="2019-11-12" version="0.1.19">
       <description>
         <p>This update brings some new features and bug fixes:</p>
         <ul>
