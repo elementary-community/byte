@@ -23,6 +23,16 @@
     <binary>com.github.alainm23.byte</binary>
   </provides> 
   ​<releases>
+    <release date="2019-11-12" version="0.1.17">
+      <description>
+        <p>This update brings some new features and bug fixes:</p>
+        <ul>
+          <li>The songs now bring more information according to the type of sort.</li>
+          <li>When a radio is playing, it is now possible to stop playback and play again.</li>
+        </ul>
+      </description>
+    </release>
+
     <release date="2019-10-30" version="0.1.16">
       <description>
         <ul>

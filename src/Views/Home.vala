@@ -146,7 +146,7 @@ public class Views.Home : Gtk.EventBox {
 
     public void add_all_tracks () {
         foreach (var track in all_tracks) {
-            var row = new Widgets.TrackRow (track);
+            var row = new Widgets.TrackRow (track, 3);
 
             listbox.add (row);
             listbox.show_all ();

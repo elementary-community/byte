@@ -105,6 +105,17 @@ public class Services.Database : GLib.Object {
             "state      TEXT)", null, null);
         debug ("Table radios created");
 
+        /*
+        rc = db.exec ("CREATE TABLE IF NOT EXISTS radio_tracks_history (" +
+            "id         INTEGER PRIMARY KEY AUTOINCREMENT," +
+            "radio_id   INTEGER," +
+            "title      TEXT," +
+            "genre      TEXT," +
+            "date_added TEXT," +
+            "FOREIGN KEY (radio_id) REFERENCES radios (id) ON DELETE CASCADE)", null, null);
+        debug ("Table radios created");
+        */
+
         rc = db.exec ("CREATE TABLE IF NOT EXISTS playlists (" +
             "id           INTEGER PRIMARY KEY AUTOINCREMENT," +
             "title        TEXT," +
@@ -1038,6 +1049,7 @@ public class Services.Database : GLib.Object {
             track.artist_name = stmt.column_text (10);
             track.favorite_added = stmt.column_text (11);
             track.last_played = stmt.column_text (12);
+            track.playlist_added = stmt.column_text (13);
             track.playlist = id;
             
             all.add (track);
@@ -1371,7 +1383,7 @@ public class Services.Database : GLib.Object {
         Sqlite.Statement stmt;
         string sql;
         int res;
-        string favorite_added = "";
+        track.favorite_added = "";
 
         sql = """
             UPDATE tracks SET is_favorite = ?, favorite_added = ? WHERE id = ?;
@@ -1384,10 +1396,10 @@ public class Services.Database : GLib.Object {
         assert (res == Sqlite.OK);
 
         if (favorite == 1) {
-            favorite_added = new GLib.DateTime.now_local ().to_string ();
+            track.favorite_added = new GLib.DateTime.now_local ().to_string ();
         }
 
-        res = stmt.bind_text (2, favorite_added);
+        res = stmt.bind_text (2, track.favorite_added);
         assert (res == Sqlite.OK);
 
         res = stmt.bind_int (3, track.id);

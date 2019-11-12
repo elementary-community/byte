@@ -21,28 +21,31 @@ public class Views.Playlist : Gtk.EventBox {
 
     public Objects.Playlist _playlist { get; set; }
     public Objects.Playlist playlist {
+        get {
+            return _playlist;
+        }
         set {
             if (value != null) {
                 _playlist = value;
 
-                title_label.label = _playlist.title;
-                title_entry.text = _playlist.title;
+                title_label.label = playlist.title;
+                title_entry.text = playlist.title;
 
-                note_label.label = _playlist.note;
-                note_text.buffer.text = _playlist.note;
+                note_label.label = playlist.note;
+                note_text.buffer.text = playlist.note;
 
-                if (_playlist.note != "") {
+                if (playlist.note != "") {
                     note_placeholder.visible = false;
                 }
 
-                update_relative_label.label = Byte.utils.get_relative_datetime (_playlist.date_updated);
+                update_relative_label.label = Byte.utils.get_relative_datetime (playlist.date_updated);
 
-                if (_playlist.note == "") {
+                if (playlist.note == "") {
                     note_label.visible = false;
                 }
 
                 try {
-                    cover_path = GLib.Path.build_filename (Byte.utils.COVER_FOLDER, ("playlist-%i.jpg").printf (_playlist.id));
+                    cover_path = GLib.Path.build_filename (Byte.utils.COVER_FOLDER, ("playlist-%i.jpg").printf (playlist.id));
                     var pixbuf = new Gdk.Pixbuf.from_file_at_size (cover_path, 128, 128);
                     image_cover.pixbuf = pixbuf;
                 } catch (Error e) {
@@ -57,14 +60,13 @@ public class Views.Playlist : Gtk.EventBox {
                 if (Byte.scan_service.is_sync == false) {
                     all_tracks = new Gee.ArrayList<Objects.Track?> ();
                     all_tracks = Byte.database.get_all_tracks_by_playlist (
-                        _playlist.id,
+                        playlist.id,
                         Byte.settings.get_enum ("playlist-sort"),
                         Byte.settings.get_boolean ("playlist-order-reverse")
                     );
 
                     foreach (var item in all_tracks) {
-                        print ("Track: %s\n".printf (item.title));
-                        var row = new Widgets.TrackRow (item);
+                        var row = new Widgets.TrackRow (item, 6);
                         listbox.add (row);
                     }
 
@@ -348,13 +350,13 @@ public class Views.Playlist : Gtk.EventBox {
 
             all_tracks = new Gee.ArrayList<Objects.Track?> ();
             all_tracks = Byte.database.get_all_tracks_by_playlist (
-                _playlist.id,
+                playlist.id,
                 Byte.settings.get_enum ("playlist-sort"),
                 Byte.settings.get_boolean ("playlist-order-reverse")
             );
 
             foreach (var item in all_tracks) {
-                var row = new Widgets.TrackRow (item);
+                var row = new Widgets.TrackRow (item, 6);
                 listbox.add (row);
             }
 
@@ -370,13 +372,13 @@ public class Views.Playlist : Gtk.EventBox {
 
             all_tracks = new Gee.ArrayList<Objects.Track?> ();
             all_tracks = Byte.database.get_all_tracks_by_playlist (
-                _playlist.id,
+                playlist.id,
                 Byte.settings.get_enum ("playlist-sort"),
                 Byte.settings.get_boolean ("playlist-order-reverse")
             );
 
             foreach (var item in all_tracks) {
-                var row = new Widgets.TrackRow (item);
+                var row = new Widgets.TrackRow (item, 6);
                 listbox.add (row);
             }
 
@@ -388,7 +390,7 @@ public class Views.Playlist : Gtk.EventBox {
 
             var message_dialog = new Granite.MessageDialog.with_image_from_icon_name (
                 _("Delete from library?"),
-                _("Are you sure you want to delete <b>%s</b> from your library?").printf (_playlist.title),
+                _("Are you sure you want to delete <b>%s</b> from your library?").printf (playlist.title),
                 "dialog-warning",
                 Gtk.ButtonsType.CANCEL
             );
@@ -401,7 +403,7 @@ public class Views.Playlist : Gtk.EventBox {
 
             if (message_dialog.run () == Gtk.ResponseType.ACCEPT) {
                 //Byte.database.remove_from_library (track);
-                if (Byte.database.remove_playlist_from_library (_playlist)) {
+                if (Byte.database.remove_playlist_from_library (playlist)) {
                     go_back (back_page);
                 }
             }
@@ -434,10 +436,10 @@ public class Views.Playlist : Gtk.EventBox {
                     );
 
                     image_cover.pixbuf = pixbuf;
-                    string playlist_path = GLib.Path.build_filename (Byte.utils.COVER_FOLDER, ("playlist-%i.jpg").printf (_playlist.id));
+                    string playlist_path = GLib.Path.build_filename (Byte.utils.COVER_FOLDER, ("playlist-%i.jpg").printf (playlist.id));
 
                     if (pixbuf.save (playlist_path, "jpeg", "quality", "100")) {
-                        Byte.database.updated_playlist_cover (_playlist.id);
+                        Byte.database.updated_playlist_cover (playlist.id);
                     }
                 } catch (Error err) {
                     warning (err.message);
@@ -484,23 +486,23 @@ public class Views.Playlist : Gtk.EventBox {
 
     private void update () {
         if (title_entry.text != "") {
-            _playlist.title = title_entry.text;
-            _playlist.note = note_text.buffer.text;
-            _playlist.date_updated = new GLib.DateTime.now_local ().to_string ();
+            playlist.title = title_entry.text;
+            playlist.note = note_text.buffer.text;
+            playlist.date_updated = new GLib.DateTime.now_local ().to_string ();
 
-            title_label.label = _playlist.title;
-            note_label.label = _playlist.note;
-            update_relative_label.label = Byte.utils.get_relative_datetime (_playlist.date_updated);
+            title_label.label = playlist.title;
+            note_label.label = playlist.note;
+            update_relative_label.label = Byte.utils.get_relative_datetime (playlist.date_updated);
 
             right_stack.visible_child_name = "detail_box";
             
-            if (_playlist.note != "") {
+            if (playlist.note != "") {
                 note_label.visible = true;
             } else {
                 note_label.visible = false;
             }
 
-            Byte.database.update_playlist (_playlist);
+            Byte.database.update_playlist (playlist);
         }
     }
 }

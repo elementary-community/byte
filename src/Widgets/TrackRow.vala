@@ -1,5 +1,6 @@
 public class Widgets.TrackRow : Gtk.ListBoxRow {
     public Objects.Track track { get; construct; }
+    public int sort { get; construct; }
 
     private Gtk.Label primary_label;
     private Gtk.Label secondary_label;
@@ -8,19 +9,15 @@ public class Widgets.TrackRow : Gtk.ListBoxRow {
     Gtk.Menu playlists;
     private Gtk.Menu menu = null;
     private Widgets.Cover image_cover;
-    public TrackRow (Objects.Track track) {
+    public TrackRow (Objects.Track track, int sort=Byte.settings.get_enum ("track-sort")) {
         Object (
-            track: track
+            track: track,
+            sort: sort
         );
     }
 
     construct {
-        /*
-        var hand_cursor = new Gdk.Cursor.for_display (Gdk.Display.get_default (), Gdk.CursorType.HAND2);
-        var arrow_cursor = new Gdk.Cursor.for_display (Gdk.Display.get_default (), Gdk.CursorType.ARROW);
-        var root_window = Gdk.Screen.get_default ().get_root_window ();
-        */
-        get_style_context ().add_class ("track-row");
+        get_style_context ().add_class ("album-row");
 
         var playing_icon = new Gtk.Image ();
         playing_icon.gicon = new ThemedIcon ("audio-volume-medium-symbolic");
@@ -41,30 +38,52 @@ public class Widgets.TrackRow : Gtk.ListBoxRow {
         primary_label.halign = Gtk.Align.START;
         primary_label.valign = Gtk.Align.END;
 
-        /*
-        int sort = Byte.settings.get_enum ("track-sort");
-        string _label = "";
-        if (sort == 0) {
-            _label = track.artist_name;
-        } else if (sort == 1) {
-            _label = track.artist_name;
-        } else if (sort == 2) {
-            _label = "%s - <small>%s</small>".printf (track.artist_name, track.album_title);
-        } else if (sort == 3) {
-            _label = _("%s - <small>Added %s</small>".printf (track.artist_name, Granite.DateTime.get_relative_datetime (new GLib.DateTime.from_iso8601 (track.date_added, new GLib.TimeZone.local ()))));
-        } else {
-            _label = "%s - <small>%i played</small>".printf (track.artist_name, track.play_count);
-        }
-        */
-
         secondary_label = new Gtk.Label (track.artist_name);
-        //secondary_label = new Gtk.Label (_label);
         secondary_label.get_style_context ().add_class ("secondary_label");
         secondary_label.use_markup = true;
         secondary_label.halign = Gtk.Align.START;
         secondary_label.valign = Gtk.Align.START;
         secondary_label.max_width_chars = 40;
         secondary_label.ellipsize = Pango.EllipsizeMode.END;
+
+        string _label = "";
+        string added = _("Added");
+        string played = _("played");
+
+        if (sort == 3) {
+            _label = "<small>%s %s</small>".printf (
+                added,
+                Granite.DateTime.get_relative_datetime (
+                    new GLib.DateTime.from_iso8601 (track.date_added, new GLib.TimeZone.local ())
+                )
+            );
+        } else if (sort == 4) {
+            _label = "<small>%i %s</small>".printf (track.play_count, played);
+        } else if (sort == 5) {
+            _label = "<small>%s %s</small>".printf (
+                added,
+                Granite.DateTime.get_relative_datetime (
+                    new GLib.DateTime.from_iso8601 (track.favorite_added, new GLib.TimeZone.local ())
+                )
+            );
+        } else if (sort == 6) {
+            _label = "<small>%s %s</small>".printf (
+                added,
+                Granite.DateTime.get_relative_datetime (
+                    new GLib.DateTime.from_iso8601 (track.playlist_added, new GLib.TimeZone.local ())
+                )
+            );
+        }
+
+        var extra_label = new Gtk.Label (_label);
+        extra_label.get_style_context ().add_class ("secondary_label");
+        extra_label.use_markup = true;
+        extra_label.ellipsize = Pango.EllipsizeMode.END;
+        extra_label.margin_bottom = 2;
+
+        var box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 6);
+        box.pack_start (secondary_label, false, false, 0);
+        box.pack_start (extra_label, false, false, 0);
 
         image_cover = new Widgets.Cover.from_file (
             GLib.Path.build_filename (Byte.utils.COVER_FOLDER, ("track-%i.jpg").printf (track.id)),
@@ -132,7 +151,7 @@ public class Widgets.TrackRow : Gtk.ListBoxRow {
         main_grid.column_spacing = 3;
         main_grid.attach (overlay, 0, 0, 1, 2);
         main_grid.attach (primary_label, 1, 0, 1, 1);
-        main_grid.attach (secondary_label, 1, 1, 1, 1);
+        main_grid.attach (box, 1, 1, 1, 1);
         main_grid.attach (right_grid, 2, 0, 2, 2);
 
         var separator = new Gtk.Separator (Gtk.Orientation.HORIZONTAL);

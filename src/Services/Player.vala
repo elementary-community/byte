@@ -14,7 +14,7 @@ public class Services.Player : GLib.Object {
     uint progress_timer = 0;
 
     public Objects.Track? current_track { get; set; }
-    public Objects.Radio? current_radio { get; private set; }
+    public Objects.Radio? current_radio { get; set; }
     public string? current_radio_title { get; set; }
     public string? mode { get; set; }
     public Gst.State? player_state { get; set; }
@@ -106,8 +106,8 @@ public class Services.Player : GLib.Object {
             return;
         } 
         
-        mode_changed ("radio");
         mode = "radio";
+        mode_changed ("radio");
         current_radio_changed (radio);
 
         current_radio = radio;
@@ -278,13 +278,15 @@ public class Services.Player : GLib.Object {
                 GLib.Error err;
                 string debug;
                 message.parse_error (out err, out debug);
-                warning ("Error: %s\n%s\n", err.message, debug);
+                print ("bus_callback error: %s\n%s\n".printf (err.message, debug));
 
+                /*
                 if (mode == "radio") {
 
                 } else {
                     next ();
                 }
+                */
 
                 break;
             case Gst.MessageType.EOS:
@@ -301,7 +303,6 @@ public class Services.Player : GLib.Object {
                 current_radio_title = title;
 
                 if (current_radio_title != null && mode == "radio") {
-                    print ("Radio current title: %s\n".printf (current_radio_title));
                     current_radio_title_changed (current_radio_title);
                 }
                 

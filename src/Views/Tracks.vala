@@ -145,7 +145,6 @@ public class Views.Tracks : Gtk.EventBox {
         
         add (main_box);
         add_all_tracks ();
-        get_realtive_time ();
 
         Timeout.add (200, () => {
             check_size ();
@@ -370,20 +369,5 @@ public class Views.Tracks : Gtk.EventBox {
             listbox.add (row);
             listbox.show_all ();
         }   
-    }
-
-    private void get_realtive_time () {
-        /* 
-        tracks_number = all_tracks.size;
-
-        foreach (var item in all_tracks) {
-            tracks_time = tracks_time + item.duration;
-        }
-
-        time_label.label = "%i Tracks - %s".printf (tracks_number, Byte.utils.get_relative_duration (tracks_time));
-
-        print ("tracks_time: %s\n".printf (Byte.utils.get_relative_duration (tracks_time)));
-        print ("size: %s\n".printf (tracks_number.to_string ()));
-        */
     }
 }
