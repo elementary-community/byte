@@ -26,7 +26,8 @@ public class Objects.Track : GLib.Object {
     public string lyrics;         
     public string genre;          
     public string album_artist;   
-    public string date_added;     
+    public string date_added; 
+    public string playlist_added;     
 
     public Track (int track_order = 0,
                   int id = 0,

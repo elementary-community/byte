@@ -282,7 +282,7 @@ public class Views.Favorites : Gtk.EventBox {
         }
 
         for (int i = item_index; i < item_max; i++) {
-            var row = new Widgets.TrackRow (all_tracks [i]);
+            var row = new Widgets.TrackRow (all_tracks [i], 5);
 
             listbox.add (row);
             listbox.show_all ();

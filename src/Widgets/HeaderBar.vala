@@ -9,6 +9,7 @@ public class Widgets.HeaderBar : Gtk.HeaderBar {
 
     public Gtk.Image icon_play;
     public Gtk.Image icon_pause;
+    public Gtk.Image icon_stop;
  
     private Gtk.Image icon_shuffle_on;
     private Gtk.Image icon_shuffle_off;
@@ -43,6 +44,7 @@ public class Widgets.HeaderBar : Gtk.HeaderBar {
     construct {
         icon_play = new Gtk.Image.from_icon_name ("media-playback-start-symbolic", Gtk.IconSize.LARGE_TOOLBAR);
         icon_pause = new Gtk.Image.from_icon_name ("media-playback-pause-symbolic", Gtk.IconSize.LARGE_TOOLBAR);
+        icon_stop = new Gtk.Image.from_icon_name ("media-playback-stop-symbolic", Gtk.IconSize.LARGE_TOOLBAR);
 
         icon_shuffle_on = new Gtk.Image.from_icon_name ("media-playlist-shuffle-symbolic", Gtk.IconSize.BUTTON);
         icon_shuffle_off = new Gtk.Image.from_icon_name ("media-playlist-no-shuffle-symbolic", Gtk.IconSize.BUTTON);
@@ -151,7 +153,11 @@ public class Widgets.HeaderBar : Gtk.HeaderBar {
 
         Byte.player.state_changed.connect ((state) => {
             if (state == Gst.State.PLAYING) {
-                play_button.image = icon_pause;
+                if (Byte.player.mode == "radio") {
+                    play_button.image = icon_stop;
+                } else {
+                    play_button.image = icon_pause;
+                }
             } else {
                 play_button.image = icon_play;
             }
@@ -232,9 +238,13 @@ public class Widgets.HeaderBar : Gtk.HeaderBar {
         if (play_button.image == icon_play) {
             play_button.image = icon_pause;
             Byte.player.state_changed (Gst.State.PLAYING);
-        } else {
+        } else if (play_button.image == icon_pause) {
             play_button.image = icon_play;
             Byte.player.state_changed (Gst.State.PAUSED);
+        } else {
+            Byte.player.current_radio = null;
+            play_button.image = icon_play;
+            Byte.player.state_changed (Gst.State.READY);
         }
     }
 

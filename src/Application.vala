@@ -47,8 +47,6 @@ public class Byte : Gtk.Application {
         scan_service = new Services.Scan ();
         radio_browser = new Services.RadioBrowser ();
         lastfm_service = new Services.Lastfm ();
-
-        
     }
 
     protected override void activate () {
@@ -73,7 +71,7 @@ public class Byte : Gtk.Application {
 
         main_window.set_allocation (rect);
         main_window.show_all ();
-
+        
         // Indicator
         indicator = new Services.Indicator ();
         indicator.initialize ();
@@ -122,6 +120,9 @@ public class Byte : Gtk.Application {
         Gtk.StyleContext.add_provider_for_screen (Gdk.Screen.get_default (), provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
     
         utils.apply_theme (Byte.settings.get_enum ("theme"));
+
+        Gtk.Settings.get_default().set_property("gtk-icon-theme-name", "elementary");
+        Gtk.Settings.get_default().set_property("gtk-theme-name", "elementary");
     }
 
     public void toggle_playing_action_enabled (bool b) {

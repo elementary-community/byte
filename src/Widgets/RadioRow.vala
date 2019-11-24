@@ -43,12 +43,8 @@ public class Widgets.RadioRow : Gtk.ListBoxRow {
 
         var cover_path = GLib.Path.build_filename (Byte.utils.COVER_FOLDER, ("radio-%i.jpg").printf (radio.id));
         var image_cover = new Widgets.Cover.from_file (cover_path, 48, "radio");
-        image_cover.halign = Gtk.Align.START;
-        image_cover.valign = Gtk.Align.START;
 
         var overlay = new Gtk.Overlay ();
-        overlay.halign = Gtk.Align.START;
-        overlay.valign = Gtk.Align.START;
         overlay.add_overlay (playing_revealer);
         overlay.add (image_cover);
 

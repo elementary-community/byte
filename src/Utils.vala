@@ -241,33 +241,7 @@ public class Utils : GLib.Object {
             new GLib.DateTime.from_iso8601 (date, new GLib.TimeZone.local ())
         );
     }
-
-    public string get_relative_duration (uint64 duration) {
-        uint temp_sec = (uint) (duration / 1000000000);
-        uint sec = (uint) temp_sec % 60;
-        uint min = (uint) ((temp_sec / 60) % 60);
-        uint hour = (uint) ((temp_sec / (60 * 60)) % 24);
-        uint day = (uint) ((temp_sec / (24 * 60 * 60)) % 24);
-
-        if (day > 0) {
-            return "%ud %uh %um %us".printf (day, hour, min, sec);
-        } else {
-            if (hour > 0) {
-                return "%uh %um %us".printf (hour, min, sec);
-            } else {
-                if (min > 0) {
-                    return "%um %us".printf (min, sec);
-                } else {
-                    if (sec > 0) {
-                        return "%us".printf (sec);
-                    } else {
-                        return "";
-                    }
-                }
-            }
-        }
-    }
-
+    
     public string get_cover_file (int track_id) {
         var cover_path = GLib.Path.build_filename (Byte.utils.COVER_FOLDER, ("track-%i.jpg").printf (track_id));
         if (File.new_for_path (cover_path).query_exists ()) {
