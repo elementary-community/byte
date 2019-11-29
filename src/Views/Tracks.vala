@@ -146,6 +146,8 @@ public class Views.Tracks : Gtk.EventBox {
         add (main_box);
         add_all_tracks ();
 
+        show_all ();
+        
         Timeout.add (200, () => {
             check_size ();
             return false;

@@ -105,6 +105,8 @@ public class Views.Favorites : Gtk.EventBox {
         add (main_box);
         add_all_tracks ();
 
+        show_all ();
+        
         back_button.clicked.connect (() => {
             go_back ();
         });
