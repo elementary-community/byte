@@ -11,6 +11,7 @@ public class Widgets.QuickFind : Gtk.Revealer {
             }
         }
     }
+    
     public QuickFind () {
         transition_type = Gtk.RevealerTransitionType.SLIDE_DOWN;
         margin_top = 12;
