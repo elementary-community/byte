@@ -65,6 +65,8 @@ public class Views.Radios : Gtk.EventBox {
         add (main_box);
         add_all_items ();
 
+        show_all ();
+        
         back_button.clicked.connect (() => {
             go_back ();
         });

@@ -117,7 +117,7 @@ public class Views.Home : Gtk.EventBox {
         Byte.database.adden_new_track.connect ((track) => {
             Idle.add (() => {
                 if (track != null) {
-                    var row = new Widgets.TrackRow (track);
+                    var row = new Widgets.TrackRow (track, 3);
                     listbox.insert (row, 0);
                     all_tracks.insert (0, track);
                     listbox.show_all ();

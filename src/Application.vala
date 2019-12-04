@@ -1,4 +1,4 @@
-public class Byte : Gtk.Application { 
+public class Byte : Gtk.Application {
     public MainWindow main_window;
 
     public static Services.Database database;
@@ -32,7 +32,7 @@ public class Byte : Gtk.Application {
             application_id: "com.github.alainm23.byte",
             flags: ApplicationFlags.HANDLES_OPEN
         );
-        
+
         // Dir to Database
         utils = new Utils ();
         utils.create_dir_with_parents ("/.local/share/com.github.alainm23.byte");
@@ -55,23 +55,21 @@ public class Byte : Gtk.Application {
             return;
         }
 
-        var window_size = settings.get_value ("window-size");
-        var rect = Gtk.Allocation ();
-        rect.height = (int32) window_size.get_child_value (0);
-        rect.width =  (int32) window_size.get_child_value (1);
-
-        var window_position = settings.get_value ("window-position");
-        var window_x = (int32) window_position.get_child_value (0);
-        var window_y = (int32) window_position.get_child_value (1);
-
         main_window = new MainWindow (this);
-        if (window_x != -1 ||  window_y != -1) {
+
+        int window_x, window_y;
+        var rect = Gtk.Allocation ();
+
+        settings.get ("window-position", "(ii)", out window_x, out window_y);
+        settings.get ("window-size", "(ii)", out rect.width, out rect.height);
+
+        if (window_x != -1 || window_y != -1) {
             main_window.move (window_x, window_y);
         }
 
         main_window.set_allocation (rect);
         main_window.show_all ();
-        
+
         // Indicator
         indicator = new Services.Indicator ();
         indicator.initialize ();
@@ -108,7 +106,7 @@ public class Byte : Gtk.Application {
         add_action (quit_action);
         add_action (toggle_playing_action);
         add_action (search_action);
-        
+
         // Default Icon Theme
         weak Gtk.IconTheme default_theme = Gtk.IconTheme.get_default ();
         default_theme.add_resource_path ("/com/github/alainm23/byte");
@@ -118,7 +116,7 @@ public class Byte : Gtk.Application {
         var provider = new Gtk.CssProvider ();
         provider.load_from_resource ("/com/github/alainm23/byte/stylesheet.css");
         Gtk.StyleContext.add_provider_for_screen (Gdk.Screen.get_default (), provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
-    
+
         utils.apply_theme (Byte.settings.get_enum ("theme"));
 
         Gtk.Settings.get_default().set_property("gtk-icon-theme-name", "elementary");

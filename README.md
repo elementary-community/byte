@@ -30,6 +30,7 @@ You'll need the following dependencies:
 * libgstreamer-plugins-base1.0-dev
 * libtagc0-dev
 * libsqlite3-dev
+* libsoup2.4-dev
 * libgranite-dev (>=0.5)
 * meson
 * valac >= 0.40.3

@@ -149,6 +149,8 @@ public class Views.Artist : Gtk.EventBox {
 
         add (main_box);
 
+        show_all ();
+        
         back_button.clicked.connect (() => {
             go_back (back_page);
         });
