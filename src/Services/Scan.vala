@@ -105,15 +105,15 @@ public class Services.Scan : GLib.Object {
     }
 
     public void discovered_new_local_item (Objects.Artist artist, Objects.Album album, Objects.Track track) {
-        if (counter == 0) {
-            sync_started ();
-            is_sync = true;
-        }
-        
-        counter++;
-        counter_max++;
-
         new Thread<void*> ("discovered_new_local_item", () => {
+            if (counter == 0) {
+                sync_started ();
+                is_sync = true;
+            }
+            
+            counter++;
+            counter_max++;
+            
             album.artist_id = Byte.database.insert_artist_if_not_exists (artist);
             album.artist_name = artist.name;
 

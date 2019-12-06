@@ -123,6 +123,7 @@ public class MainWindow : Gtk.Window {
                 Byte.scan_service.scan_local_files (folder);
 
                 main_stack.visible_child_name = "library_view";
+                library_stack.visible_child_name = "home_view";
             }
         });
 

@@ -40,7 +40,6 @@ public class Widgets.TrackRow : Gtk.ListBoxRow {
 
         secondary_label = new Gtk.Label (track.artist_name);
         secondary_label.get_style_context ().add_class ("secondary_label");
-        secondary_label.use_markup = true;
         secondary_label.halign = Gtk.Align.START;
         secondary_label.valign = Gtk.Align.START;
         secondary_label.max_width_chars = 40;

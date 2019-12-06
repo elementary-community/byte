@@ -101,6 +101,7 @@
 			<summary>Window position</summary>
 			<description>Most recent window position (x, y)</description>
 		</key>
+		
 		<key name="window-size" type="(ii)">
 			<default>(532, 786)</default>
 			<summary>Most recent window size</summary>
