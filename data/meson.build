@@ -16,36 +16,6 @@ install_data(
     install_dir: join_paths(get_option('datadir'), 'glib-2.0', 'schemas')
 )
 
-install_data(
-    join_paths('resources', 'album-default-cover.svg'),
-    install_dir: join_paths(get_option('datadir'), 'com.github.alainm23.byte')
-)
-
-install_data(
-    join_paths('resources', 'track-default-cover.svg'),
-    install_dir: join_paths(get_option('datadir'), 'com.github.alainm23.byte')
-)
-
-install_data(
-    join_paths('resources', 'radio-default-cover.svg'),
-    install_dir: join_paths(get_option('datadir'), 'com.github.alainm23.byte')
-)
-
-install_data(
-    join_paths('resources', 'playlist-default-cover.svg'),
-    install_dir: join_paths(get_option('datadir'), 'com.github.alainm23.byte')
-)
-
-install_data(
-    join_paths('resources', 'artist-default-cover.svg'),
-    install_dir: join_paths(get_option('datadir'), 'com.github.alainm23.byte')
-)
-
-install_data(
-    join_paths('resources', 'playlist-add.svg'),
-    install_dir: join_paths(get_option('datadir'), 'com.github.alainm23.byte')
-)
-
 i18n.merge_file(
   input: meson.project_name() + '.desktop.in',
   output: meson.project_name() + '.desktop',

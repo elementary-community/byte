@@ -134,19 +134,19 @@ public class Widgets.Cover : Gtk.EventBox {
 
     private void set_default (string type) {
         if (type == "album") {
-            DEFAULT_ICON = "/usr/share/com.github.alainm23.byte/album-default-cover.svg";
+            DEFAULT_ICON = "/com/github/alainm23/byte/album-default-cover.svg";
             get_style_context ().add_class ("album-cover");
         } else if (type == "artist") {
-            DEFAULT_ICON = "/usr/share/com.github.alainm23.byte/artist-default-cover.svg";
+            DEFAULT_ICON = "/com/github/alainm23/byte/artist-default-cover.svg";
             get_style_context ().add_class ("artist-cover");
         } else if (type == "radio") {
-            DEFAULT_ICON = "/usr/share/com.github.alainm23.byte/radio-default-cover.svg";
+            DEFAULT_ICON = "/com/github/alainm23/byte/radio-default-cover.svg";
             get_style_context ().add_class ("playlist-cover");
         } else if (type == "track") {
-            DEFAULT_ICON = "/usr/share/com.github.alainm23.byte/track-default-cover.svg";
+            DEFAULT_ICON = "/com/github/alainm23/byte/track-default-cover.svg";
             get_style_context ().add_class ("track-cover");
         } else {
-            DEFAULT_ICON = "/usr/share/com.github.alainm23.byte/playlist-default-cover.svg";
+            DEFAULT_ICON = "/com/github/alainm23/byte/playlist-default-cover.svg";
             get_style_context ().add_class ("playlist-cover");
         }
     }
@@ -154,7 +154,7 @@ public class Widgets.Cover : Gtk.EventBox {
     public void show_default (int pixel_size) {
         try {
             var size = pixel_size * get_scale_factor ();
-            pixbuf = new Gdk.Pixbuf.from_file_at_size (DEFAULT_ICON, size, size);
+            pixbuf = new Gdk.Pixbuf.from_resource_at_scale (DEFAULT_ICON, size, size, true);
         } catch (Error e) {
             stderr.printf ("Error setting default avatar icon: %s ", e.message);
         }

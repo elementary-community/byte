@@ -18,6 +18,8 @@ public class Services.Database : GLib.Object {
     public signal void updated_track_favorite (Objects.Track track, int favorite);
     public signal void updated_playlist (Objects.Playlist playlist);
 
+    public signal void radio_track_added (int radio_id, string title, string date);
+    
     public signal void reset_library ();
 
     public Database (bool skip_tables = false) {
@@ -105,16 +107,13 @@ public class Services.Database : GLib.Object {
             "state      TEXT)", null, null);
         debug ("Table radios created");
 
-        /*
         rc = db.exec ("CREATE TABLE IF NOT EXISTS radio_tracks_history (" +
             "id         INTEGER PRIMARY KEY AUTOINCREMENT," +
             "radio_id   INTEGER," +
             "title      TEXT," +
-            "genre      TEXT," +
             "date_added TEXT," +
             "FOREIGN KEY (radio_id) REFERENCES radios (id) ON DELETE CASCADE)", null, null);
         debug ("Table radios created");
-        */
 
         rc = db.exec ("CREATE TABLE IF NOT EXISTS playlists (" +
             "id           INTEGER PRIMARY KEY AUTOINCREMENT," +
@@ -1645,5 +1644,91 @@ public class Services.Database : GLib.Object {
         playlist.id = insert_playlist (playlist);
         
         return playlist;
+    }
+
+    public void insert_radio_track_history (int radio_id, string title) {
+        if (get_last_radio_track (radio_id).title != title) {
+            Sqlite.Statement stmt;
+            string sql;
+            int res;
+
+            sql = """
+                INSERT INTO radio_tracks_history (radio_id, title, date_added) VALUES (?, ?, ?);
+            """;
+
+            res = db.prepare_v2 (sql, -1, out stmt);
+            assert (res == Sqlite.OK);
+
+            res = stmt.bind_int (1, radio_id);
+            assert (res == Sqlite.OK);
+
+            res = stmt.bind_text (2, title);
+            assert (res == Sqlite.OK);
+
+            string date = new GLib.DateTime.now_local ().to_string ();
+            res = stmt.bind_text (3, date);
+            assert (res == Sqlite.OK);
+
+            if (stmt.step () == Sqlite.DONE) {
+                radio_track_added (radio_id, title, date);
+            }
+        }
+    }
+
+    public Objects.RadioTrack? get_last_radio_track (int radio_id) {
+        Sqlite.Statement stmt;
+        int res;
+
+        string sql = """
+        SELECT * FROM radio_tracks_history WHERE radio_id = ? ORDER BY date_added DESC LIMIT 1;
+        """;
+
+        res = db.prepare_v2 (sql, -1, out stmt);
+        assert (res == Sqlite.OK);
+
+        res = stmt.bind_int (1, radio_id);
+        assert (res == Sqlite.OK);
+
+        var r = new Objects.RadioTrack ();
+
+        if (stmt.step () == Sqlite.ROW) {
+            r.id = stmt.column_int (0);
+            r.radio_id = stmt.column_int (1);
+            r.title = stmt.column_text (2);
+            r.date_added = stmt.column_text (3);
+        }
+
+        return r;
+    }
+
+    public Gee.ArrayList<Objects.RadioTrack?> get_radio_track_history (int radio_id) {
+        Sqlite.Statement stmt;
+        string sql;
+        int res;
+
+        sql = """
+            SELECT * FROM radio_tracks_history WHERE radio_id = ? ORDER BY date_added DESC;
+        """;
+
+        res = db.prepare_v2 (sql, -1, out stmt);
+        assert (res == Sqlite.OK);
+
+        res = stmt.bind_int (1, radio_id);
+        assert (res == Sqlite.OK);
+
+        var all = new Gee.ArrayList<Objects.RadioTrack?> ();
+
+        while ((res = stmt.step ()) == Sqlite.ROW) {
+            var r = new Objects.RadioTrack ();
+
+            r.id = stmt.column_int (0);
+            r.radio_id = stmt.column_int (1);
+            r.title = stmt.column_text (2);
+            r.date_added = stmt.column_text (3);
+            
+            all.add (r);
+        }
+
+        return all;
     }
 }

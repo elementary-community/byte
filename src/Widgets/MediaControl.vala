@@ -6,8 +6,12 @@ public class Widgets.MediaControl : Gtk.Revealer {
     private Gtk.Image icon_favorite;
     private Gtk.Image icon_no_favorite;
 
+    private Gtk.ToggleButton history_button;
+    private Gtk.ListBox radio_track_listbox;
+
     Gtk.Menu playlists;
-    private Gtk.Menu menu;
+    private Gtk.Menu menu = null;
+    private Gtk.Popover popover = null;
 
     public MediaControl () {
 
@@ -50,10 +54,26 @@ public class Widgets.MediaControl : Gtk.Revealer {
         options_button.get_style_context ().add_class ("button-color");
         options_button.get_style_context ().remove_class ("button");
 
-        var favorite_revealer = new Gtk.Revealer ();
-        favorite_revealer.transition_type = Gtk.RevealerTransitionType.SLIDE_LEFT;
-        favorite_revealer.add (options_button);
-        favorite_revealer.reveal_child = false;
+        history_button = new Gtk.ToggleButton ();
+        history_button.add (new Gtk.Image.from_icon_name ("radio-track-played-recent-symbolic", Gtk.IconSize.MENU));
+        history_button.valign = Gtk.Align.CENTER;
+        history_button.can_focus = false;
+        history_button.margin_end = 3;
+        history_button.tooltip_text = _("Radio tracks history");
+        history_button.get_style_context ().add_class (Gtk.STYLE_CLASS_FLAT);
+        history_button.get_style_context ().add_class ("options-button");
+        history_button.get_style_context ().add_class ("button-color");
+        history_button.get_style_context ().remove_class ("button");
+        
+        var button_stack = new Gtk.Stack ();
+        button_stack.transition_type = Gtk.StackTransitionType.CROSSFADE;
+        button_stack.add_named (options_button, "options_button");
+        button_stack.add_named (history_button, "history_button");
+
+        var button_revealer = new Gtk.Revealer ();
+        button_revealer.transition_type = Gtk.RevealerTransitionType.SLIDE_LEFT;
+        button_revealer.add (button_stack);
+        button_revealer.reveal_child = true;
 
         var metainfo_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 0);
         metainfo_box.margin_start = 6;
@@ -70,7 +90,7 @@ public class Widgets.MediaControl : Gtk.Revealer {
         header_box.margin_end = 3;
         header_box.pack_start (image_cover, false, false, 0);
         header_box.set_center_widget (metainfo_box);
-        header_box.pack_end (favorite_revealer, false, false, 0);
+        header_box.pack_end (button_revealer, false, false, 0);
 
         var main_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 0);
         main_box.pack_start (timeline_revealer, false, false, 0);
@@ -121,11 +141,11 @@ public class Widgets.MediaControl : Gtk.Revealer {
         Byte.player.mode_changed.connect ((mode) => {
             if (mode == "radio") {
                 timeline_revealer.reveal_child = false;
-                favorite_revealer.reveal_child = false;
+                button_stack.visible_child_name = "history_button";
             } else {
                 timeline_revealer.reveal_child = true;
                 if (Byte.scan_service.is_sync == false) {
-                    favorite_revealer.reveal_child = true;
+                    button_stack.visible_child_name = "options_button";
                 }
             }
         });
@@ -158,24 +178,30 @@ public class Widgets.MediaControl : Gtk.Revealer {
         });
 
         Byte.scan_service.sync_started.connect (() => {
-            favorite_revealer.reveal_child = false;
+            button_revealer.reveal_child = false;
         });
 
         Byte.scan_service.sync_finished.connect (() => {
-            favorite_revealer.reveal_child = true;
+            button_revealer.reveal_child = true;
         });
 
         options_button.clicked.connect (() => {
-            print ("Click\n");
-
             if (Byte.player.current_track != null) {
                 activate_menu (Byte.player.current_track);
+            }
+        });
+
+        history_button.toggled.connect (() => {
+            if (history_button.active) {
+                activate_popover ();
             }
         });
     }
 
     private void activate_menu (Objects.Track track) {
-        build_context_menu (track);
+        if (menu == null) {
+            build_context_menu (track);
+        }
 
         foreach (var child in playlists.get_children ()) {
             child.destroy ();
@@ -355,5 +381,108 @@ public class Widgets.MediaControl : Gtk.Revealer {
                 destroy ();
             }
         });
+    }
+
+    private void activate_popover () {
+        if (popover == null) {
+            build_history_popover ();
+        }
+
+        foreach (var child in radio_track_listbox.get_children ()) {
+            child.destroy ();
+        }
+
+        foreach (var r in Byte.database.get_radio_track_history (Byte.player.current_radio.id)) {
+            var row = new Widgets.RadioTrackRow (r.radio_id, r.title, r.date_added);
+
+            radio_track_listbox.add (row);
+            radio_track_listbox.show_all ();
+        }
+
+        popover.popup ();
+    }
+
+    private void build_history_popover () {
+        popover = new Gtk.Popover (history_button);
+        popover.position = Gtk.PositionType.BOTTOM;
+
+        radio_track_listbox = new Gtk.ListBox ();
+        radio_track_listbox.selection_mode = Gtk.SelectionMode.NONE;
+        radio_track_listbox.expand = true;
+
+        var listbox_scrolled = new Gtk.ScrolledWindow (null, null);
+        listbox_scrolled.expand = true;
+        listbox_scrolled.add (radio_track_listbox);
+
+        var header_label = new Granite.HeaderLabel (_("Radio tracks history"));
+        header_label.halign = Gtk.Align.CENTER;
+
+        var popover_grid = new Gtk.Grid ();
+        popover_grid.width_request = 255;
+        popover_grid.height_request = 250;
+        popover_grid.orientation = Gtk.Orientation.VERTICAL;
+        popover_grid.add (header_label);
+        popover_grid.add (listbox_scrolled);
+        popover_grid.show_all ();
+
+        popover.add (popover_grid);
+
+        Byte.database.radio_track_added.connect ((radio_id, title, date_added) => {
+            var row = new Widgets.RadioTrackRow (radio_id, title, date_added);
+
+            radio_track_listbox.insert (row, 0);
+            radio_track_listbox.show_all ();
+        });
+
+        popover.closed.connect (() => {
+            history_button.active = false;
+        });
+    }
+}
+
+public class Widgets.RadioTrackRow : Gtk.ListBoxRow {
+    public int radio_id { get; construct; }
+    public string title { get; construct; }
+    public string date_added { get; construct; }
+
+    public GLib.DateTime _date;
+    public GLib.DateTime date {
+        get {
+            _date = new GLib.DateTime.from_iso8601 (date_added, new GLib.TimeZone.local ());
+            return _date;
+        }
+    }
+
+    public RadioTrackRow (int radio_id, string title, string date_added) {
+        Object (
+            radio_id: radio_id,
+            title: title,
+            date_added: date_added
+        );
+    }
+
+    construct {
+        var icon = new Gtk.Image ();
+        icon.gicon = new ThemedIcon ("folder-music-symbolic");
+        icon.pixel_size = 16;
+
+        var title_label = new Gtk.Label (title);
+        title_label.get_style_context ().add_class ("font-bold-600");
+        title_label.ellipsize = Pango.EllipsizeMode.END;
+        title_label.selectable = true;
+        title_label.valign = Gtk.Align.CENTER;
+
+        var date_label = new Gtk.Label (date.format (Granite.DateTime.get_default_time_format (true, false)));
+        date_label.halign = Gtk.Align.START;
+        date_label.valign = Gtk.Align.CENTER;
+        
+        var box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 6);
+        box.margin = 6;
+        box.margin_top = 0;
+        box.pack_start (icon, false, false, 0);
+        box.pack_start (title_label, false, false, 0);
+        //box.pack_end (date_label, false, false, 0);
+
+        add (box);
     }
 }

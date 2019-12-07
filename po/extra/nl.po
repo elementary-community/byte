@@ -7,16 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: extra\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-09-17 09:50-0500\n"
+"POT-Creation-Date: 2019-12-07 02:05-0500\n"
 "PO-Revision-Date: 2019-10-28 21:26+0100\n"
+"Last-Translator: Heimen Stoffels <vistausss@outlook.com>\n"
 "Language-Team: \n"
+"Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 2.2.4\n"
-"Last-Translator: Heimen Stoffels <vistausss@outlook.com>\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"Language: nl\n"
 
 #: data/com.github.alainm23.byte.desktop.in:3
 #: data/com.github.alainm23.byte.desktop.in:4
@@ -85,58 +85,116 @@ msgid "Search, add and play your favorite online radio stations."
 msgstr "Zoek naar je favoriete online-radiostations en speel ze af"
 
 #: data/com.github.alainm23.byte.appdata.xml.in:28
-#: data/com.github.alainm23.byte.appdata.xml.in:38
-#: data/com.github.alainm23.byte.appdata.xml.in:48
-#: data/com.github.alainm23.byte.appdata.xml.in:61
+#: data/com.github.alainm23.byte.appdata.xml.in:40
+#: data/com.github.alainm23.byte.appdata.xml.in:66
+#: data/com.github.alainm23.byte.appdata.xml.in:75
+#: data/com.github.alainm23.byte.appdata.xml.in:84
+#: data/com.github.alainm23.byte.appdata.xml.in:93
+#: data/com.github.alainm23.byte.appdata.xml.in:105
 msgid "This update brings some new features and bug fixes:"
 msgstr "Deze update bevat nieuwe mogelijkheden en foutoplossingen:"
 
 #: data/com.github.alainm23.byte.appdata.xml.in:30
+msgid "Byte now starts faster 🚀️."
+msgstr ""
+
+#: data/com.github.alainm23.byte.appdata.xml.in:31
+msgid ""
+"An indicator was added that records all the playback radio station history."
+msgstr ""
+
+#: data/com.github.alainm23.byte.appdata.xml.in:32
+msgid "Fixed a bug by not showing the default covers (Flathub)."
+msgstr ""
+
+#: data/com.github.alainm23.byte.appdata.xml.in:33
+msgid "Fixed a bug that blocks the application at startup."
+msgstr ""
+
+#: data/com.github.alainm23.byte.appdata.xml.in:34
+#, fuzzy
+msgid "Update French translation @NathanBnm"
+msgstr "Pictogramnaam in Franse vertaling gerepareerd, met dank aan @NathanBnm"
+
+#: data/com.github.alainm23.byte.appdata.xml.in:42
+msgid "The songs now bring more information according to the type of sort."
+msgstr ""
+
+#: data/com.github.alainm23.byte.appdata.xml.in:43
+msgid ""
+"When a radio is playing, it is now possible to stop playback and play again."
+msgstr ""
+
+#: data/com.github.alainm23.byte.appdata.xml.in:50
+msgid "Fix LINGUAS error @ryonakano"
+msgstr ""
+
+#: data/com.github.alainm23.byte.appdata.xml.in:51
+#: data/com.github.alainm23.byte.appdata.xml.in:59
+msgid "Added Dutch translation @Vistaus"
+msgstr ""
+
+#: data/com.github.alainm23.byte.appdata.xml.in:52
+#: data/com.github.alainm23.byte.appdata.xml.in:60
+#, fuzzy
+msgid "Updated Russian translation @camellan"
+msgstr "Russische vertaling, met dank aan @camellan 🇷🇺️"
+
+#: data/com.github.alainm23.byte.appdata.xml.in:68
 msgid "A new green theme color was added @redian23"
 msgstr "Nieuwe themakleur: groen - met dank aan @redian23"
 
-#: data/com.github.alainm23.byte.appdata.xml.in:31
+#: data/com.github.alainm23.byte.appdata.xml.in:69
 msgid "Added an new indicator to know if a favorite songs"
 msgstr ""
 "Nieuwe indicator om aan te geven of een nummer toegevoegd is aan je "
 "favorieten"
 
-#: data/com.github.alainm23.byte.appdata.xml.in:40
+#: data/com.github.alainm23.byte.appdata.xml.in:77
+#, fuzzy
+msgid "Turkish translation @ibrakap"
+msgstr "Spaanse vertaling, met dank aan @alainm23"
+
+#: data/com.github.alainm23.byte.appdata.xml.in:78
+msgid "Fixing style errors"
+msgstr ""
+
+#: data/com.github.alainm23.byte.appdata.xml.in:86
 msgid "3 new themes added"
 msgstr "3 nieuwe thema's"
 
-#: data/com.github.alainm23.byte.appdata.xml.in:41
+#: data/com.github.alainm23.byte.appdata.xml.in:87
 msgid "Fix icon name in French translation @NathanBnm"
 msgstr "Pictogramnaam in Franse vertaling gerepareerd, met dank aan @NathanBnm"
 
-#: data/com.github.alainm23.byte.appdata.xml.in:50
-#: data/com.github.alainm23.byte.appdata.xml.in:63
+#: data/com.github.alainm23.byte.appdata.xml.in:95
+#: data/com.github.alainm23.byte.appdata.xml.in:107
 msgid "Space shortcut added to play/pause."
 msgstr "Druk op de spatiebalk om nummers af te spelen/te pauzeren"
 
-#: data/com.github.alainm23.byte.appdata.xml.in:51
-#: data/com.github.alainm23.byte.appdata.xml.in:64
+#: data/com.github.alainm23.byte.appdata.xml.in:96
+#: data/com.github.alainm23.byte.appdata.xml.in:108
 msgid ""
 "A progress bar was added in the dock every time your library is synchronized."
 msgstr "Voortgangsbalk op het dock telkens als je muziekmap wordt doorzocht"
 
-#: data/com.github.alainm23.byte.appdata.xml.in:52
-#: data/com.github.alainm23.byte.appdata.xml.in:65
+#: data/com.github.alainm23.byte.appdata.xml.in:97
+#: data/com.github.alainm23.byte.appdata.xml.in:109
 msgid "Fixed a bug that does not allow songs to be played when clicking."
 msgstr ""
 "Bug opgelost waarbij nummers niet konden worden afgespeeld na aanklikken"
 
-#: data/com.github.alainm23.byte.appdata.xml.in:53
-#: data/com.github.alainm23.byte.appdata.xml.in:66
+#: data/com.github.alainm23.byte.appdata.xml.in:98
+#: data/com.github.alainm23.byte.appdata.xml.in:110
 msgid "Russian translation @camellan 🇷🇺️"
 msgstr "Russische vertaling, met dank aan @camellan 🇷🇺️"
 
-#: data/com.github.alainm23.byte.appdata.xml.in:54
-#: data/com.github.alainm23.byte.appdata.xml.in:67
+#: data/com.github.alainm23.byte.appdata.xml.in:99
+#: data/com.github.alainm23.byte.appdata.xml.in:111
 msgid "Updated japanese translation @ryonakano 🇯🇵️"
 msgstr "Japanse vertaling bijgewerkt, met dank aan @ryonakano 🇯🇵️"
 
-#: data/com.github.alainm23.byte.appdata.xml.in:73
+#: data/com.github.alainm23.byte.appdata.xml.in:117
 msgid ""
 "This update brings improvements in the synchronization of your library as "
 "well as some new features"
@@ -144,23 +202,23 @@ msgstr ""
 "Deze update bevat verbeteringen aangaande het doorzoeken van je muziekmap en "
 "daarnaast oon nieuwe mogelijkheden"
 
-#: data/com.github.alainm23.byte.appdata.xml.in:75
+#: data/com.github.alainm23.byte.appdata.xml.in:119
 msgid "The new Artist view was added."
 msgstr "Nieuw: artiestweergave"
 
-#: data/com.github.alainm23.byte.appdata.xml.in:76
+#: data/com.github.alainm23.byte.appdata.xml.in:120
 msgid "Now you can edit and delete your Playlist."
 msgstr "Bewerk en verwijder afspeellijsten"
 
-#: data/com.github.alainm23.byte.appdata.xml.in:77
+#: data/com.github.alainm23.byte.appdata.xml.in:121
 msgid "'New Playlist' Option in 'Add to Playlist' Popover."
 msgstr "'Nieuwe afspeellijst'-optie in menu 'Toevoegen aan afspeellijst'"
 
-#: data/com.github.alainm23.byte.appdata.xml.in:78
+#: data/com.github.alainm23.byte.appdata.xml.in:122
 msgid "Byte now correctly imports your album covers."
 msgstr "Byte importeert nu al je albumhoezen op de juiste manier"
 
-#: data/com.github.alainm23.byte.appdata.xml.in:79
+#: data/com.github.alainm23.byte.appdata.xml.in:123
 msgid ""
 "Improvements in online radio search. Now the radios are sorted by the number "
 "of positive votes."
@@ -168,30 +226,30 @@ msgstr ""
 "Verbeteringen omtrent het zoeken naar online-radiostations: ze worden nu "
 "gesorteerd op basis van het aantal vind-ik-leuks"
 
-#: data/com.github.alainm23.byte.appdata.xml.in:81
+#: data/com.github.alainm23.byte.appdata.xml.in:125
 msgid "Translations"
 msgstr "Vertalingen"
 
-#: data/com.github.alainm23.byte.appdata.xml.in:83
+#: data/com.github.alainm23.byte.appdata.xml.in:127
 msgid "French translation @NathanBnm 🇲🇫️"
 msgstr "Franse vertaling, met dank aan @NathanBnm 🇲🇫️"
 
-#: data/com.github.alainm23.byte.appdata.xml.in:84
+#: data/com.github.alainm23.byte.appdata.xml.in:128
 msgid "Japanese translation @ryonakano 🇯🇵️"
 msgstr "Japanse vertaling, met dank aan @ryonakano 🇯🇵️"
 
-#: data/com.github.alainm23.byte.appdata.xml.in:85
+#: data/com.github.alainm23.byte.appdata.xml.in:129
 msgid "Spanish translation @alainm23"
 msgstr "Spaanse vertaling, met dank aan @alainm23"
 
-#: data/com.github.alainm23.byte.appdata.xml.in:91
+#: data/com.github.alainm23.byte.appdata.xml.in:135
 msgid "Fix some error and performance improvement"
 msgstr "Fouten opgelost en prestaties verbeterd"
 
-#: data/com.github.alainm23.byte.appdata.xml.in:96
+#: data/com.github.alainm23.byte.appdata.xml.in:140
 msgid "Initial release"
 msgstr "Initiële uitgave"
 
-#: data/com.github.alainm23.byte.appdata.xml.in:146
+#: data/com.github.alainm23.byte.appdata.xml.in:181
 msgid "Alain M."
 msgstr "Alain M."

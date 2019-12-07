@@ -36,9 +36,7 @@ public class Views.Home : Gtk.EventBox {
         var playlists_button = new Widgets.HomeButton (_("Playlists"), "playlist-symbolic");
         var albums_button = new Widgets.HomeButton (_("Albums"), "byte-album-symbolic");
         var songs_button = new Widgets.HomeButton (_("Songs"), "folder-music-symbolic");
-        
         var artists_button = new Widgets.HomeButton (_("Artists"), "byte-artist-symbolic");
-        
         var radios_button = new Widgets.HomeButton (_("Radios"), "byte-radio-symbolic");
         var favorites_button = new Widgets.HomeButton (_("Favorites"), "byte-favorite-symbolic");
 
@@ -141,6 +139,24 @@ public class Views.Home : Gtk.EventBox {
                     return false;
                 });
             });
+        });
+
+        Byte.scan_service.sync_started.connect (() => {
+            playlists_button.sensitive = false;
+            albums_button.sensitive = false;
+            songs_button.sensitive = false;
+            artists_button.sensitive = false;
+            radios_button.sensitive = false;
+            favorites_button.sensitive = false;
+        });
+
+        Byte.scan_service.sync_finished.connect (() => {
+            playlists_button.sensitive = true;
+            albums_button.sensitive = true;
+            songs_button.sensitive = true;
+            artists_button.sensitive = true;
+            radios_button.sensitive = true;
+            favorites_button.sensitive = true;
         });
     }
 

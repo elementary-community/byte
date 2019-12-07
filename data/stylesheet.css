@@ -95,6 +95,10 @@ textview {
     font-weight: bold;
 }
 
+.font-bold-600 {
+    font-weight: 600;
+}
+
 .search-entry {
     border-radius: 4px;
 }

@@ -55,6 +55,7 @@ sources  = files(
     'Objects/Artist.vala',
     'Objects/Radio.vala',
     'Objects/Playlist.vala',
+    'Objects/RadioTrack.vala',
 
     'Dialogs/TrackEditor.vala',
     'Dialogs/Settings.vala',
