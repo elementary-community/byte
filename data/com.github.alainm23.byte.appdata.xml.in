@@ -23,6 +23,19 @@
     <binary>com.github.alainm23.byte</binary>
   </provides> 
   ​<releases>
+    <release version="0.2.2" date="2019-12-11">
+      <description>
+        <p>This update brings some new features and bug fixes:</p>
+        <ul>
+          <li>Byte now starts faster 🚀️.</li>
+          <li>An indicator was added that records all the playback radio station history.</li>
+          <li>Fixed a bug by not showing the default covers (Flathub).</li>
+          <li>Fixed a bug that blocks the application at startup.</li>
+          <li>Update French translation @NathanBnm</li>
+          <li>Update Spanish translation @alainm23</li>
+        </ul>
+      </description>
+    </release>
     <release version="0.2" date="2019-12-06">
       <description>
         <p>This update brings some new features and bug fixes:</p>

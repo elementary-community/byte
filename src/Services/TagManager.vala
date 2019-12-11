@@ -14,7 +14,7 @@ public class Services.TagManager : GLib.Object {
     }
 
     private void discovered (Gst.PbUtils.DiscovererInfo info, Error? err) {
-        new Thread<void*> (null, () => {
+        Idle.add (() => {
             string uri = info.get_uri ();
 
             if (info.get_result () != Gst.PbUtils.DiscovererResult.OK) {
@@ -79,7 +79,7 @@ public class Services.TagManager : GLib.Object {
                     if (tags.get_double (Gst.Tags.BEATS_PER_MINUTE, out dou)) {
                         track.bpm = (int) dou.clamp (0, dou);
                     }
-    
+
                     // ALBUM OBJECT
                     var album = new Objects.Album ();
                     if (tags.get_string (Gst.Tags.ALBUM, out o)) {
@@ -135,7 +135,8 @@ public class Services.TagManager : GLib.Object {
             }
 
             info.dispose ();
-            return null;
+
+            return false;
         });
     }
 

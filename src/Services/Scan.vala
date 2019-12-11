@@ -71,12 +71,16 @@ public class Services.Scan : GLib.Object {
     } 
 
     public void found_music_file (string uri) {
-        //print ("URI: %s\n".printf (uri));
+        print ("URI: %s\n".printf (uri));
 
         new Thread<void*> ("found_local_music_file", () => {
-            if (Byte.database.music_file_exists (uri) == false && Byte.database.music_blacklist_exists (uri) == false) {
-                Byte.tg_manager.add_discover_uri (uri);
-            }
+            Idle.add (() => {
+                if (Byte.database.music_file_exists (uri) == false && Byte.database.music_blacklist_exists (uri) == false) {
+                    Byte.tg_manager.add_discover_uri (uri);
+                }
+                
+                return false;
+            });
             
             return null;
         });
