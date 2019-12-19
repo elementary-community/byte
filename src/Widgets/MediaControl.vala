@@ -47,7 +47,6 @@ public class Widgets.MediaControl : Gtk.Revealer {
         var options_button = new Gtk.Button.from_icon_name ("view-more-horizontal-symbolic", Gtk.IconSize.MENU);
         options_button.valign = Gtk.Align.CENTER;
         options_button.can_focus = false;
-        options_button.margin_end = 6;
         options_button.tooltip_text = _("Options");
         options_button.get_style_context ().add_class (Gtk.STYLE_CLASS_FLAT);
         options_button.get_style_context ().add_class ("options-button");
@@ -58,7 +57,6 @@ public class Widgets.MediaControl : Gtk.Revealer {
         history_button.add (new Gtk.Image.from_icon_name ("radio-track-played-recent-symbolic", Gtk.IconSize.MENU));
         history_button.valign = Gtk.Align.CENTER;
         history_button.can_focus = false;
-        history_button.margin_end = 3;
         history_button.tooltip_text = _("Radio tracks history");
         history_button.get_style_context ().add_class (Gtk.STYLE_CLASS_FLAT);
         history_button.get_style_context ().add_class ("options-button");
@@ -66,6 +64,7 @@ public class Widgets.MediaControl : Gtk.Revealer {
         history_button.get_style_context ().remove_class ("button");
         
         var button_stack = new Gtk.Stack ();
+        button_stack.width_request = 40;
         button_stack.transition_type = Gtk.StackTransitionType.CROSSFADE;
         button_stack.add_named (options_button, "options_button");
         button_stack.add_named (history_button, "history_button");

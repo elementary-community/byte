@@ -198,8 +198,8 @@
   <url type="donation">https://www.patreon.com/alainm23</url>
   <url type="help">https://www.patreon.com/alainm23</url>
   <custom>
-    <value key="x-appcenter-color-primary">#FE2851</value>
-    <value key="x-appcenter-color-primary-text">#0A005D</value>
+    <value key="x-appcenter-color-primary">#2D0941</value>
+    <value key="x-appcenter-color-primary-text">#fe2851</value>
     <value key="x-appcenter-suggested-price">3</value>
   </custom>
 </component>
