@@ -23,6 +23,16 @@
     <binary>com.github.alainm23.byte</binary>
   </provides> 
   ​<releases>
+    <release version="0.2.4" date="2019-12-30">
+      <description>
+        <p>This update brings some new features and bug fixes:</p>
+        <ul>
+          <li>Fixing error loading songs in your playlists.</li>
+          <li>The error that does not allow adding a song as a favorite is fixed.</li>
+          <li>Notifications now show album covers correctly.</li>
+        </ul>
+      </description>
+    </release>
     <release version="0.2.3" date="2019-12-11">
       <description>
         <p>This update brings some new features and bug fixes:</p>

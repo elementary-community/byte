@@ -17,9 +17,14 @@ public class Services.Notification : GLib.Object {
         try {
             var notification = new GLib.Notification (track.title);
             notification.set_body (track.artist_name);
-            notification.set_icon (GLib.Icon.new_for_string (Byte.utils.get_cover_file (track.id)));
             notification.set_priority (GLib.NotificationPriority.LOW);
-
+            
+            if (Byte.utils.cover_file_exists (track.id)) {
+                notification.set_icon (GLib.Icon.new_for_string (Byte.utils.get_cover_file (track.id)));
+            } else {
+                notification.set_icon (new ThemedIcon (Byte.instance.application_id));
+            }
+            
             Byte.instance.send_notification (Byte.instance.application_id, notification);
         } catch (Error e) {
             stderr.printf ("Error setting default avatar icon: %s ", e.message);

@@ -198,9 +198,7 @@ public class Widgets.MediaControl : Gtk.Revealer {
     }
 
     private void activate_menu (Objects.Track track) {
-        if (menu == null) {
-            build_context_menu (track);
-        }
+        build_context_menu (track);
 
         foreach (var child in playlists.get_children ()) {
             child.destroy ();

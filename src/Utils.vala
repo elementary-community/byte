@@ -244,11 +244,12 @@ public class Utils : GLib.Object {
     
     public string get_cover_file (int track_id) {
         var cover_path = GLib.Path.build_filename (Byte.utils.COVER_FOLDER, ("track-%i.jpg").printf (track_id));
-        if (File.new_for_path (cover_path).query_exists ()) {
-            return "file://" + cover_path;
-        }
+        return "file://" + cover_path;
+    }
 
-        return "file:///usr/share/com.github.alainm23.byte/track-default-cover.svg";
+    public bool cover_file_exists (int track_id) {
+        var cover_path = GLib.Path.build_filename (Byte.utils.COVER_FOLDER, ("track-%i.jpg").printf (track_id));
+        return File.new_for_path (cover_path).query_exists ();
     }
 
     public string get_cover_radio_file (int radio_id) {

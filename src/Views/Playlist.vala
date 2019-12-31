@@ -49,7 +49,7 @@ public class Views.Playlist : Gtk.EventBox {
                     var pixbuf = new Gdk.Pixbuf.from_file_at_size (cover_path, 128, 128);
                     image_cover.pixbuf = pixbuf;
                 } catch (Error e) {
-                    var pixbuf = new Gdk.Pixbuf.from_file_at_size ("/usr/share/com.github.alainm23.byte/album-default-cover.svg", 128, 128);
+                    var pixbuf = new Gdk.Pixbuf.from_resource_at_scale ("/com/github/alainm23/byte/playlist-default-cover.svg", 128, 128, true);
                     image_cover.pixbuf = pixbuf;
                 }
 
@@ -58,6 +58,7 @@ public class Views.Playlist : Gtk.EventBox {
                 });
 
                 if (Byte.scan_service.is_sync == false) {
+                    print ("Entro aqui\n");
                     all_tracks = new Gee.ArrayList<Objects.Track?> ();
                     all_tracks = Byte.database.get_all_tracks_by_playlist (
                         playlist.id,
@@ -66,6 +67,7 @@ public class Views.Playlist : Gtk.EventBox {
                     );
 
                     foreach (var item in all_tracks) {
+                        print ("ID: %i".printf (item.id));
                         var row = new Widgets.TrackRow (item, 6);
                         listbox.add (row);
                     }
