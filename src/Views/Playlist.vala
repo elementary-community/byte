@@ -167,7 +167,7 @@ public class Views.Playlist : Gtk.EventBox {
         /* Items */
         var edit_menuitem = new Widgets.ModelButton (_("Edit Details"), "edit-symbolic", _("Edit Details"));
         var cover_menuitem = new Widgets.ModelButton (_("Set new Cover"), "image-x-generic-symbolic", _("Set new Cover"));
-        var delete_menuitem = new Widgets.ModelButton (_("Delete"), "edit-delete-symbolic", _("Delete"));
+        var delete_menuitem = new Widgets.ModelButton (_("Delete"), "user-trash-symbolic", _("Delete"));
 
         var menu_grid = new Gtk.Grid ();
         menu_grid.margin_top = 6;

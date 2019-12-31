@@ -323,7 +323,7 @@ public class Widgets.TrackRow : Gtk.ListBoxRow {
         try {
             image_cover.pixbuf = new Gdk.Pixbuf.from_file_at_size (cover_path, 38, 38);
         } catch (Error e) {
-            image_cover.pixbuf = new Gdk.Pixbuf.from_file_at_size ("/usr/share/com.github.alainm23.byte/track-default-cover.svg", 38, 38);
+            image_cover.pixbuf = new Gdk.Pixbuf.from_resource_at_scale ("/com/github/alainm23/byte/track-default-cover.svg", 38, 38, true);
         }
 
         var track_grid = new Gtk.Grid ();
