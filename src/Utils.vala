@@ -9,6 +9,9 @@ public class Utils : GLib.Object {
 
     public signal void radio_image_downloaded (int id);
 
+    public signal void quick_find_toggled ();
+    public signal void hide_quick_find ();
+
     public string MAIN_FOLDER;
     public string COVER_FOLDER;
 
@@ -149,34 +152,38 @@ public class Utils : GLib.Object {
     }
 
     public void set_next_track (Objects.Track track) {
-        if (track.id != Byte.player.current_track.id) {
-            bool track_exists = track_exists (track.id, queue_playlist);
-            if (track_exists) {
-                int remove_index = get_track_index_by_id (track.id, queue_playlist);
-                queue_playlist.remove_at (remove_index);
+        if (queue_playlist.size > 0) {
+            if (track.id != Byte.player.current_track.id) {
+                bool track_exists = track_exists (track.id, queue_playlist);
+                if (track_exists) {
+                    int remove_index = get_track_index_by_id (track.id, queue_playlist);
+                    queue_playlist.remove_at (remove_index);
+                }
+    
+                int index = get_track_index_by_id (Byte.player.current_track.id, queue_playlist) + 1;
+    
+                track.track_order = index;
+                queue_playlist.insert (index, track);
+    
+                add_next_track (queue_playlist);
             }
-
-            int index = get_track_index_by_id (Byte.player.current_track.id, queue_playlist) + 1;
-
-            track.track_order = index;
-            queue_playlist.insert (index, track);
-
-            add_next_track (queue_playlist);
         }
     }
 
     public void set_last_track (Objects.Track track) {
-        if (track.id != Byte.player.current_track.id) {
-            bool track_exists = track_exists (track.id, queue_playlist);
-
-            if (track_exists) {
-                int remove_index = get_track_index_by_id (track.id, queue_playlist);
-                queue_playlist.remove_at (remove_index);
+        if (queue_playlist.size > 0) {
+            if (track.id != Byte.player.current_track.id) {
+                bool track_exists = track_exists (track.id, queue_playlist);
+    
+                if (track_exists) {
+                    int remove_index = get_track_index_by_id (track.id, queue_playlist);
+                    queue_playlist.remove_at (remove_index);
+                }
+    
+                track.track_order = queue_playlist.size + 1;
+                queue_playlist.add (track);
+                add_last_track (queue_playlist);
             }
-
-            track.track_order = queue_playlist.size + 1;
-            queue_playlist.add (track);
-            add_last_track (queue_playlist);
         }
     }
 

@@ -103,7 +103,7 @@ public class Views.Albums : Gtk.EventBox {
         show_all ();
         
         back_button.clicked.connect (() => {
-            go_back ();
+            Byte.navCtrl.pop ();
         });
 
         search_button.clicked.connect (() => {
@@ -199,7 +199,13 @@ public class Views.Albums : Gtk.EventBox {
         
         listbox.row_activated.connect ((row) => {
             var item = row as Widgets.AlbumRow;
-            go_album (item.album);
+
+            if (!Byte.navCtrl.has_key ("album-%i".printf (item.album.id))) {
+                var album_view = new Views.Album (item.album);
+                Byte.navCtrl.add_named (album_view, "album-%i".printf (item.album.id));
+            }
+
+            Byte.navCtrl.push ("album-%i".printf (item.album.id));
         });
 
         Byte.database.added_new_album.connect ((album) => {

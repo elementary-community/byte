@@ -73,7 +73,7 @@ public class Views.Playlists : Gtk.EventBox {
         show_all ();
         
         back_button.clicked.connect (() => {
-            go_back ();
+            Byte.navCtrl.pop ();
         });
 
         add_button.toggled.connect (() => {
@@ -89,7 +89,13 @@ public class Views.Playlists : Gtk.EventBox {
 
         listbox.row_activated.connect ((row) => {
             var item = row as Widgets.PlaylistRow;
-            go_playlist (item.playlist);
+
+            if (!Byte.navCtrl.has_key ("playlist-%i".printf (item.playlist.id))) {
+                var album_view = new Views.Playlist (item.playlist);
+                Byte.navCtrl.add_named (album_view, "playlist-%i".printf (item.playlist.id));
+            }
+
+            Byte.navCtrl.push ("playlist-%i".printf (item.playlist.id));
         });
 
         Byte.database.adden_new_playlist.connect ((playlist) => {

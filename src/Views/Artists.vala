@@ -82,7 +82,7 @@ public class Views.Artists : Gtk.EventBox {
         show_all ();
         
         back_button.clicked.connect (() => {
-            go_back ();
+            Byte.navCtrl.pop ();
         });
 
         scrolled.edge_reached.connect((pos)=> {
@@ -122,7 +122,13 @@ public class Views.Artists : Gtk.EventBox {
 
         listbox.row_activated.connect ((row) => {
             var item = row as Widgets.ArtistRow;
-            go_artist (item.artist);
+
+            if (!Byte.navCtrl.has_key ("artist-%i".printf (item.artist.id))) {
+                var view = new Views.Artist (item.artist);
+                Byte.navCtrl.add_named (view, "artist-%i".printf (item.artist.id));
+            }
+
+            Byte.navCtrl.push ("artist-%i".printf (item.artist.id));
         });
 
         Byte.database.added_new_artist.connect ((artist) => {

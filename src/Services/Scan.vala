@@ -12,7 +12,7 @@ public class Services.Scan : GLib.Object {
         Byte.database.adden_new_track.connect (() => {
             Idle.add (() => {
                 counter--;
-                print ("%i/%i\n".printf (counter, counter_max));
+                //print ("%i/%i\n".printf (counter, counter_max));
                 sync_progress (((double) counter_max - (double) counter) / (double) counter_max);
                 if (counter <= 0) {
                     sync_finished ();
@@ -71,7 +71,7 @@ public class Services.Scan : GLib.Object {
     } 
 
     public void found_music_file (string uri) {
-        print ("URI: %s\n".printf (uri));
+        //print ("URI: %s\n".printf (uri));
 
         new Thread<void*> ("found_local_music_file", () => {
             Idle.add (() => {
@@ -122,8 +122,10 @@ public class Services.Scan : GLib.Object {
             album.artist_name = artist.name;
 
             track.album_id = Byte.database.insert_album_if_not_exists (album);
-            track.artist_name = artist.name;
             track.album_title = album.title;
+
+            track.artist_id = album.artist_id;
+            track.artist_name = artist.name;
 
             Byte.database.insert_track (track);
             return null;

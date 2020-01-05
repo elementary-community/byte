@@ -308,12 +308,7 @@ selection {
 }
 
 .track-options:hover {
-    background-color: @colorAccent;
-    color: #ffffff;
-}
-
-.track-options:hover image {
-    color: #ffffff;
+    background-color: alpha (@colorAccent, 0.6);
 }
 
 overshoot.top {

@@ -277,7 +277,8 @@ public class Widgets.TrackRow : Gtk.ListBoxRow {
         if (Byte.scan_service.is_sync == false) {
             var all_items = Byte.database.get_all_playlists ();
 
-            var item = new Gtk.MenuItem.with_label (_ ("Create New Playlist"));
+            Widgets.MenuItem item;
+            item = new Widgets.MenuItem (_("Create New Playlist"), "zoom-in-symbolic", _("Create New Playlist"));
             item.get_style_context ().add_class ("track-options");
             item.get_style_context ().add_class ("css-item");
             item.activate.connect (() => {
@@ -287,7 +288,7 @@ public class Widgets.TrackRow : Gtk.ListBoxRow {
             playlists.add (item);
 
             foreach (var playlist in all_items) {
-                item = new Gtk.MenuItem.with_label (playlist.title);
+                item = new Widgets.MenuItem (playlist.title, "playlist-symbolic", playlist.title);
                 item.get_style_context ().add_class ("track-options");
                 item.get_style_context ().add_class ("css-item");
                 item.activate.connect (() => {
@@ -346,6 +347,17 @@ public class Widgets.TrackRow : Gtk.ListBoxRow {
         var play_next_menu = new Widgets.MenuItem (_("Play Next"), "byte-play-next-symbolic", _("Play Next"));
         var play_last_menu = new Widgets.MenuItem (_("Play Later"), "byte-play-later-symbolic", _("Play Later"));
 
+        var view_menu = new Widgets.MenuItem (_("Go to"), "go-jump-symbolic", _("View"));
+        var views_menu = new Gtk.Menu ();
+        views_menu.get_style_context ().add_class ("view");
+        view_menu.set_submenu (views_menu);
+
+        var artist_menu = new Widgets.MenuItem (track.artist_name, "avatar-default-symbolic", _("Artist"));
+        var album_menu = new Widgets.MenuItem (track.album_title, "media-optical-symbolic", _("Album"));
+        
+        views_menu.add (artist_menu);
+        views_menu.add (album_menu);
+
         var add_playlist_menu = new Widgets.MenuItem (_("Add to Playlist"), "zoom-in-symbolic", _("Add to Playlist"));
         playlists = new Gtk.Menu ();
         playlists.get_style_context ().add_class ("view");
@@ -366,19 +378,21 @@ public class Widgets.TrackRow : Gtk.ListBoxRow {
         menu.add (play_next_menu);
         menu.add (play_last_menu);
         menu.add (new Gtk.SeparatorMenuItem ());
+        menu.add (view_menu);
+        menu.add (new Gtk.SeparatorMenuItem ());
         menu.add (add_playlist_menu);
-        //menu.add (edit_menu);
         menu.add (favorite_menu);
         menu.add (no_favorite_menu);
         menu.add (new Gtk.SeparatorMenuItem ());
 
-        if (track.playlist != 0) {
+        if (track.playlist_id != 0) {
             menu.add (remove_playlist_menu);
         }
 
         menu.add (remove_db_menu);
 
         menu.show_all ();
+        views_menu.show_all ();
 
         track_menu.activate.connect (() => {
             this.activate ();
@@ -407,9 +421,27 @@ public class Widgets.TrackRow : Gtk.ListBoxRow {
                 Byte.database.set_track_favorite (track, 0);
             }
         });
+    
+        artist_menu.activate.connect (() => {
+            var artist = Byte.database.get_artist_by_id (track.artist_id);
 
-        add_playlist_menu.activate.connect (() => {
+            if (!Byte.navCtrl.has_key ("artist-%i".printf (artist.id))) {
+                var view = new Views.Artist (artist);
+                Byte.navCtrl.add_named (view, "artist-%i".printf (artist.id));
+            }
+    
+            Byte.navCtrl.push ("artist-%i".printf (artist.id));
+        });
 
+        album_menu.activate.connect (() => {
+            var album = Byte.database.get_album_by_id (track.album_id);
+
+            if (!Byte.navCtrl.has_key ("album-%i".printf (album.id))) {
+                var album_view = new Views.Album (album);
+                Byte.navCtrl.add_named (album_view, "album-%i".printf (album.id));
+            }
+
+            Byte.navCtrl.push ("album-%i".printf (album.id));
         });
 
         edit_menu.activate.connect (() => {

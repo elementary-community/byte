@@ -38,7 +38,7 @@ public class Views.Radios : Gtk.EventBox {
         internet_radio_button.get_style_context ().add_class ("label-color-primary");
 
         internet_radio_button.clicked.connect (() => {
-            show_quick_find ();
+            Byte.utils.quick_find_toggled ();
         });
 
         var header_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 0);
@@ -68,7 +68,8 @@ public class Views.Radios : Gtk.EventBox {
         show_all ();
         
         back_button.clicked.connect (() => {
-            go_back ();
+            Byte.navCtrl.pop ();
+            Byte.utils.hide_quick_find ();
         });
 
         listbox.row_activated.connect ((row) => {

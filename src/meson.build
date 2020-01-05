@@ -13,6 +13,7 @@ sources  = files(
     'Services/Notification.vala',
     'Services/RadioBrowser.vala',
     'Services/Lastfm.vala',
+    'Services/NavController.vala',
 
     'Widgets/Welcome.vala',
     'Widgets/HeaderBar.vala',
