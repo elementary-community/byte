@@ -6,6 +6,7 @@ public class Services.Scan : GLib.Object {
     public int counter = 0;
     public int counter_max = 0;
     public bool is_sync = false;
+    
     construct {
         Byte.tg_manager.discovered_new_item.connect (discovered_new_local_item);
         
@@ -68,11 +69,9 @@ public class Services.Scan : GLib.Object {
             directory.dispose ();
             return null;
         });
-    } 
+    }
 
     public void found_music_file (string uri) {
-        //print ("URI: %s\n".printf (uri));
-
         new Thread<void*> ("found_local_music_file", () => {
             Idle.add (() => {
                 if (Byte.database.music_file_exists (uri) == false && Byte.database.music_blacklist_exists (uri) == false) {

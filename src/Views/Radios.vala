@@ -25,10 +25,11 @@ public class Views.Radios : Gtk.EventBox {
         back_button.get_style_context ().add_class (Gtk.STYLE_CLASS_FLAT);
         back_button.get_style_context ().add_class ("label-color-primary"); 
 
-        var title_label = new Gtk.Label ("<b>%s</b>".printf (_("Radios")));
+        var title_label = new Gtk.Label (_("Radios"));
         title_label.use_markup = true;
         title_label.valign = Gtk.Align.CENTER;
         title_label.get_style_context ().add_class ("h3");
+        title_label.get_style_context ().add_class ("label-color-primary");
 
         var internet_radio_button = new Gtk.Button.from_icon_name ("internet-radio-symbolic", Gtk.IconSize.MENU);
         internet_radio_button.can_focus = false;

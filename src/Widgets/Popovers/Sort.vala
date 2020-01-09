@@ -20,6 +20,9 @@
 */
 
 public class Widgets.Popovers.Sort : Gtk.Popover {
+    private Granite.HeaderLabel navigate_label;
+    private Granite.Widgets.ModeButton mode_button;
+
     private Gtk.RadioButton radio_01;
     private Gtk.RadioButton radio_02;
     private Gtk.RadioButton radio_03;
@@ -45,6 +48,7 @@ public class Widgets.Popovers.Sort : Gtk.Popover {
             }
         }
     }
+
     public bool reverse {
         set {
             order_reverse_button.active = value;
@@ -116,6 +120,16 @@ public class Widgets.Popovers.Sort : Gtk.Popover {
         }
     }
 
+    public bool navigate_visible {
+        set {
+            navigate_label.visible = value;
+            navigate_label.no_show_all = !value;
+
+            mode_button.visible = value;
+            mode_button.no_show_all = !value;
+        }
+    }
+
     public Sort (Gtk.Widget relative) {
         Object (
             relative_to: relative,
@@ -127,7 +141,17 @@ public class Widgets.Popovers.Sort : Gtk.Popover {
     construct {
         get_style_context ().add_class (Gtk.STYLE_CLASS_VIEW);
 
-        var sort_label = new Granite.HeaderLabel (_("Sort by"));
+        navigate_label = new Granite.HeaderLabel (_("Navigate:"));
+        navigate_label.margin_start = 12;
+        navigate_label.margin_top = 6;
+
+        mode_button = new Granite.Widgets.ModeButton ();
+        mode_button.margin_start = mode_button.margin_end = 9;
+        mode_button.append_text (_("Songs"));
+        mode_button.append_text (_("Folders"));   
+        mode_button.selected = Byte.settings.get_enum ("tracks-navigation");
+
+        var sort_label = new Granite.HeaderLabel (_("Sort by:"));
         sort_label.margin_start = 12;
         sort_label.margin_top = 6;
         
@@ -167,6 +191,8 @@ public class Widgets.Popovers.Sort : Gtk.Popover {
         separator.margin_top = 3;
 
         var main_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 3);
+        main_box.pack_start (navigate_label, false, false, 0);
+        main_box.pack_start (mode_button, false, false, 0);
         main_box.pack_start (sort_label, false, false, 0);
         main_box.pack_start (radio_01, false, false, 0);
         main_box.pack_start (radio_02, false, false, 0);
@@ -177,6 +203,8 @@ public class Widgets.Popovers.Sort : Gtk.Popover {
         main_box.pack_start (order_reverse_button, false, false, 0);
 
         add (main_box);
+        navigate_visible = false;
+        check_visible (mode_button.selected);
 
         radio_01.toggled.connect (() => {
             mode_changed (0);
@@ -201,5 +229,28 @@ public class Widgets.Popovers.Sort : Gtk.Popover {
         order_reverse_button.toggled.connect (() => {
             order_reverse (order_reverse_button.active);
         });
+
+        mode_button.mode_changed.connect (() => {
+            Byte.settings.set_enum ("tracks-navigation", mode_button.selected);
+            check_visible (mode_button.selected);
+        });
+    }
+
+    private void check_visible (int selected) {
+        if (mode_button.selected == 0) {
+            radio_01.sensitive = true;
+            radio_02.sensitive = true;
+            radio_03.sensitive = true;
+            radio_04.sensitive = true;
+            radio_05.sensitive = true;
+            order_reverse_button.sensitive = true;
+        } else {
+            radio_01.sensitive = false;
+            radio_02.sensitive = false;
+            radio_03.sensitive = false;
+            radio_04.sensitive = false;
+            radio_05.sensitive = false;
+            order_reverse_button.sensitive = false;
+        }
     }
 }

@@ -7,6 +7,7 @@ public class Services.Database : GLib.Object {
     public signal void added_new_album (Objects.Album album);
     public signal void adden_new_radio (Objects.Radio radio);
     public signal void adden_new_playlist (Objects.Playlist playlist);
+    public signal void playlist_track_added (Objects.Playlist playlist, Objects.Track track);
     
     public signal void removed_track (int id); 
     public signal void removed_playlist (int id);
@@ -488,8 +489,8 @@ public class Services.Database : GLib.Object {
         int res;
 
         string sql = """
-            SELECT tracks.id, tracks.path, tracks.title, tracks.duration, tracks.is_favorite, tracks.date_added, 
-            tracks.album_id, albums.title, artists.id, artists.name, tracks.favorite_added, tracks.last_played FROM tracks 
+            SELECT tracks.id, tracks.path, tracks.title, tracks.duration, tracks.is_favorite, tracks.track, tracks.date_added, 
+            tracks.play_count, tracks.album_id, albums.title, artists.id, artists.name, tracks.favorite_added, tracks.last_played FROM tracks 
             INNER JOIN albums ON tracks.album_id = albums.id
             INNER JOIN artists ON albums.artist_id = artists.id WHERE id = ?;
         """;
@@ -498,6 +499,45 @@ public class Services.Database : GLib.Object {
         assert (res == Sqlite.OK);
 
         res = stmt.bind_int (1, id);
+        assert (res == Sqlite.OK);
+
+        var track = new Objects.Track ();
+
+        if (stmt.step () == Sqlite.ROW) {
+            track.id = stmt.column_int (0);
+            track.path = stmt.column_text (1);
+            track.title = stmt.column_text (2);
+            track.duration = stmt.column_int64 (3);
+            track.is_favorite = stmt.column_int (4);
+            track.track = stmt.column_int (5);
+            track.date_added = stmt.column_text (6);
+            track.play_count = stmt.column_int (7);
+            track.album_id = stmt.column_int (8);
+            track.album_title = stmt.column_text (9);
+            track.artist_id = stmt.column_int (10);
+            track.artist_name = stmt.column_text (11);
+            track.favorite_added = stmt.column_text (12);
+            track.last_played = stmt.column_text (13);
+        }
+
+        return track;
+    }
+
+    public Objects.Track? get_track_by_path (string path) {
+        Sqlite.Statement stmt;
+        int res;
+
+        string sql = """
+            SELECT tracks.id, tracks.path, tracks.title, tracks.duration, tracks.is_favorite, tracks.track, tracks.date_added, 
+            tracks.play_count, tracks.album_id, albums.title, artists.id, artists.name, tracks.favorite_added, tracks.last_played FROM tracks 
+            INNER JOIN albums ON tracks.album_id = albums.id
+            INNER JOIN artists ON albums.artist_id = artists.id WHERE tracks.path = ?;
+        """;
+
+        res = db.prepare_v2 (sql, -1, out stmt);
+        assert (res == Sqlite.OK);
+
+        res = stmt.bind_text (1, path);
         assert (res == Sqlite.OK);
 
         var track = new Objects.Track ();
@@ -1396,7 +1436,7 @@ public class Services.Database : GLib.Object {
         }
     }
     
-    public void insert_track_into_playlist (Objects.Playlist playlist, int track_id) {
+    public void insert_track_into_playlist (Objects.Playlist playlist, Objects.Track track) {
         Sqlite.Statement stmt;
         string sql;
         int res;
@@ -1411,16 +1451,17 @@ public class Services.Database : GLib.Object {
         res = stmt.bind_int (1, playlist.id);
         assert (res == Sqlite.OK);
 
-        res = stmt.bind_int (2, track_id);
+        res = stmt.bind_int (2, track.id);
         assert (res == Sqlite.OK);
 
         res = stmt.bind_text (3, new GLib.DateTime.now_local ().to_string ());
         assert (res == Sqlite.OK);
 
         if (stmt.step () == Sqlite.DONE) {
-            print ("Track: %i agregado \n".printf (track_id));
+            print ("Track: %s agregado \n".printf (track.title));
             playlist.date_updated = new GLib.DateTime.now_local ().to_string ();
             Byte.database.update_playlist (playlist);
+            Byte.database.playlist_track_added (playlist, track);
         }
     }
 

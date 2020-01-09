@@ -36,7 +36,9 @@ sources  = files(
     'Widgets/AlertView.vala',
     'Widgets/AlbumArtistChild.vala',
     'Widgets/SearchEntry.vala',
-    
+    'Widgets/FolderRow.vala',
+    'Widgets/Files.vala',
+
     'Widgets/Popovers/Sort.vala',
     'Widgets/Popovers/NewPlaylist.vala',
 

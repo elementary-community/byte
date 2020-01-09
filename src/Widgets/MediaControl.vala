@@ -57,7 +57,7 @@ public class Widgets.MediaControl : Gtk.Revealer {
         history_button.add (new Gtk.Image.from_icon_name ("radio-track-played-recent-symbolic", Gtk.IconSize.MENU));
         history_button.valign = Gtk.Align.CENTER;
         history_button.can_focus = false;
-        history_button.tooltip_text = _("Radio tracks history");
+        history_button.tooltip_text = _("Recently Played");
         history_button.get_style_context ().add_class (Gtk.STYLE_CLASS_FLAT);
         history_button.get_style_context ().add_class ("options-button");
         history_button.get_style_context ().add_class ("button-color");
@@ -213,7 +213,7 @@ public class Widgets.MediaControl : Gtk.Revealer {
             item.get_style_context ().add_class ("css-item");
             item.activate.connect (() => {
                 var new_playlist = Byte.database.create_new_playlist ();
-                Byte.database.insert_track_into_playlist (new_playlist, track.id);
+                Byte.database.insert_track_into_playlist (new_playlist, track);
             });
             playlists.add (item);
 
@@ -222,7 +222,7 @@ public class Widgets.MediaControl : Gtk.Revealer {
                 item.get_style_context ().add_class ("track-options");
                 item.get_style_context ().add_class ("css-item");
                 item.activate.connect (() => {
-                    Byte.database.insert_track_into_playlist (playlist, track.id);
+                    Byte.database.insert_track_into_playlist (playlist, track);
                 });
                 playlists.add (item);
             }

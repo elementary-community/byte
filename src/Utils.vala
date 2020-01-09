@@ -12,6 +12,8 @@ public class Utils : GLib.Object {
     public signal void quick_find_toggled ();
     public signal void hide_quick_find ();
 
+    public signal void nav_to (string title, string uri);
+
     public string MAIN_FOLDER;
     public string COVER_FOLDER;
 

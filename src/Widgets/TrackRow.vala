@@ -283,7 +283,7 @@ public class Widgets.TrackRow : Gtk.ListBoxRow {
             item.get_style_context ().add_class ("css-item");
             item.activate.connect (() => {
                 var new_playlist = Byte.database.create_new_playlist ();
-                Byte.database.insert_track_into_playlist (new_playlist, track.id);
+                Byte.database.insert_track_into_playlist (new_playlist, track);
             });
             playlists.add (item);
 
@@ -292,7 +292,7 @@ public class Widgets.TrackRow : Gtk.ListBoxRow {
                 item.get_style_context ().add_class ("track-options");
                 item.get_style_context ().add_class ("css-item");
                 item.activate.connect (() => {
-                    Byte.database.insert_track_into_playlist (playlist, track.id);
+                    Byte.database.insert_track_into_playlist (playlist, track);
                 });
                 playlists.add (item);
             }

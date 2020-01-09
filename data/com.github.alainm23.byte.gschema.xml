@@ -35,6 +35,11 @@
     	<value nick="Turquoise" value="3" />
 	</enum>
 
+	<enum id="com.github.alainm23.byte.tracks-navigation">
+		<value nick="Songs" value="0" />
+		<value nick="Files" value="1" />
+	</enum>
+
     <schema path="/com/github/alainm23/byte/" id="com.github.alainm23.byte" gettext-domain="com.github.alainm23.byte">
 		<key name="theme" enum="com.github.alainm23.byte.theme">
             <default>"Byte"</default>
@@ -46,6 +51,12 @@
 		    <default>""</default>
 			<summary>Default library location.</summary>
 			<description>Default library location.</description>
+		</key>
+
+		<key name="tracks-navigation" enum="com.github.alainm23.byte.tracks-navigation">
+			<default>"Songs"</default>
+			<summary>Tracks navigation</summary>
+			<description>Tracks navigation</description>
 		</key>
 
         <key name="repeat-mode" enum="com.github.alainm23.byte.repeat-mode">

@@ -6,6 +6,7 @@
     <file alias="byte-drag-music.svg">resources/byte-drag-music.svg</file>
     <file alias="byte-folder-open.svg">resources/byte-folder-open.svg</file>
     <file alias="byte-folder-music.svg">resources/byte-folder-music.svg</file>
+    <file alias="byte-folder.svg">resources/byte-folder.svg</file>
 
     <file alias="byte-album-symbolic.svg">resources/byte-album-symbolic.svg</file>
     <file alias="byte-artist-symbolic.svg">resources/byte-artist-symbolic.svg</file>

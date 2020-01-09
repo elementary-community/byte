@@ -30,10 +30,11 @@ public class Views.Artists : Gtk.EventBox {
         back_button.get_style_context ().add_class (Gtk.STYLE_CLASS_FLAT);
         back_button.get_style_context ().add_class ("label-color-primary");
 
-        var title_label = new Gtk.Label ("<b>%s</b>".printf (_("Artists")));
+        var title_label = new Gtk.Label (_("Artists"));
         title_label.use_markup = true;
         title_label.valign = Gtk.Align.CENTER;
         title_label.get_style_context ().add_class ("h3");
+        title_label.get_style_context ().add_class ("label-color-primary");
 
         search_entry = new Widgets.SearchEntry ();
         search_entry.tooltip_text = _("Search by title, artist and album");

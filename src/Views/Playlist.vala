@@ -27,6 +27,13 @@ public class Views.Playlist : Gtk.EventBox {
         get_style_context ().add_class (Gtk.STYLE_CLASS_VIEW);
         get_style_context ().add_class ("w-round");
 
+        all_tracks = new Gee.ArrayList<Objects.Track?> ();
+        all_tracks = Byte.database.get_all_tracks_by_playlist (
+            playlist,
+            Byte.settings.get_enum ("playlist-sort"),
+            Byte.settings.get_boolean ("playlist-order-reverse")
+        );
+
         var back_button = new Gtk.Button.from_icon_name ("byte-arrow-back-symbolic", Gtk.IconSize.MENU);
         back_button.can_focus = false;
         back_button.margin = 3;
@@ -95,6 +102,7 @@ public class Views.Playlist : Gtk.EventBox {
         note_label.halign = Gtk.Align.START;
 
         time_label = new Gtk.Label (_("%i songs").printf (all_tracks.size));
+        //time_label = new Gtk.Label (Granite.DateTime.seconds_to_time (484841515));
         time_label.get_style_context ().add_class ("h3");
         time_label.wrap = true;
         time_label.justify = Gtk.Justification.FILL;
@@ -267,13 +275,6 @@ public class Views.Playlist : Gtk.EventBox {
         show_all ();
 
         if (Byte.scan_service.is_sync == false) {
-            all_tracks = new Gee.ArrayList<Objects.Track?> ();
-            all_tracks = Byte.database.get_all_tracks_by_playlist (
-                playlist,
-                Byte.settings.get_enum ("playlist-sort"),
-                Byte.settings.get_boolean ("playlist-order-reverse")
-            );
-
             foreach (var item in all_tracks) {
                 var row = new Widgets.TrackRow (item, 6);
                 listbox.add (row);
@@ -462,6 +463,19 @@ public class Views.Playlist : Gtk.EventBox {
         
         title_entry.activate.connect (update);
         update_button.clicked.connect (update);
+
+        Byte.database.playlist_track_added.connect ((p, track) => {
+            if (playlist.id == p.id) {
+                var row = new Widgets.TrackRow (track, 6);
+                
+                listbox.add (row);
+                all_tracks.add (track);
+
+                listbox.show_all ();
+
+                time_label.label = _("%i songs").printf (all_tracks.size);
+            }
+        });
     }
 
     private void update () {
