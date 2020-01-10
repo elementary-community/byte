@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: extra\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-12-07 02:05-0500\n"
-"PO-Revision-Date: 2019-10-28 21:26+0100\n"
+"PO-Revision-Date: 2020-01-10 14:15+0100\n"
 "Last-Translator: Heimen Stoffels <vistausss@outlook.com>\n"
 "Language-Team: \n"
 "Language: nl\n"
@@ -96,49 +96,47 @@ msgstr "Deze update bevat nieuwe mogelijkheden en foutoplossingen:"
 
 #: data/com.github.alainm23.byte.appdata.xml.in:30
 msgid "Byte now starts faster 🚀️."
-msgstr ""
+msgstr "Byte start nu sneller op 🚀️."
 
 #: data/com.github.alainm23.byte.appdata.xml.in:31
 msgid ""
 "An indicator was added that records all the playback radio station history."
-msgstr ""
+msgstr "Indicator toegevoegd die alle radiogeschiedenis bijhoudt"
 
 #: data/com.github.alainm23.byte.appdata.xml.in:32
 msgid "Fixed a bug by not showing the default covers (Flathub)."
-msgstr ""
+msgstr "Fout opgelost omtrent het tonen van de standaardhoezen (Flathub)."
 
 #: data/com.github.alainm23.byte.appdata.xml.in:33
 msgid "Fixed a bug that blocks the application at startup."
-msgstr ""
+msgstr "Fout opgelost die de toepassing blokkeerde tijdens het opstarten"
 
 #: data/com.github.alainm23.byte.appdata.xml.in:34
-#, fuzzy
 msgid "Update French translation @NathanBnm"
-msgstr "Pictogramnaam in Franse vertaling gerepareerd, met dank aan @NathanBnm"
+msgstr "Franse vertaling bijgewerkt, met dank aan @NathanBnm"
 
 #: data/com.github.alainm23.byte.appdata.xml.in:42
 msgid "The songs now bring more information according to the type of sort."
-msgstr ""
+msgstr "Nummers tonen nu meer informatie, afhankelijk van de sortering"
 
 #: data/com.github.alainm23.byte.appdata.xml.in:43
 msgid ""
 "When a radio is playing, it is now possible to stop playback and play again."
-msgstr ""
+msgstr "Afspelen en stoppen van radiostations is nu weer mogelijk"
 
 #: data/com.github.alainm23.byte.appdata.xml.in:50
 msgid "Fix LINGUAS error @ryonakano"
-msgstr ""
+msgstr "LINGUAS-fout opgelosn, met dank aan @ryonakano"
 
 #: data/com.github.alainm23.byte.appdata.xml.in:51
 #: data/com.github.alainm23.byte.appdata.xml.in:59
 msgid "Added Dutch translation @Vistaus"
-msgstr ""
+msgstr "Nederlandse vertaling toegevoegd, met dank aan @Vistaus"
 
 #: data/com.github.alainm23.byte.appdata.xml.in:52
 #: data/com.github.alainm23.byte.appdata.xml.in:60
-#, fuzzy
 msgid "Updated Russian translation @camellan"
-msgstr "Russische vertaling, met dank aan @camellan 🇷🇺️"
+msgstr "Russische vertaling bijgewerkt, met dank aan @camellan"
 
 #: data/com.github.alainm23.byte.appdata.xml.in:68
 msgid "A new green theme color was added @redian23"
@@ -151,13 +149,12 @@ msgstr ""
 "favorieten"
 
 #: data/com.github.alainm23.byte.appdata.xml.in:77
-#, fuzzy
 msgid "Turkish translation @ibrakap"
-msgstr "Spaanse vertaling, met dank aan @alainm23"
+msgstr "Turkse vertaling toegevoegd, met dank aan @ibrakap"
 
 #: data/com.github.alainm23.byte.appdata.xml.in:78
 msgid "Fixing style errors"
-msgstr ""
+msgstr "Stijlfouten opgelost"
 
 #: data/com.github.alainm23.byte.appdata.xml.in:86
 msgid "3 new themes added"
