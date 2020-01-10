@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: com.github.alainm23.byte\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-12-07 02:05-0500\n"
-"PO-Revision-Date: 2019-10-28 21:13+0100\n"
+"PO-Revision-Date: 2020-01-10 14:12+0100\n"
 "Last-Translator: Heimen Stoffels <vistausss@outlook.com>\n"
 "Language-Team: \n"
 "Language: nl\n"
@@ -135,13 +135,12 @@ msgid "Repeat One"
 msgstr "Eén herhalen"
 
 #: src/Widgets/TrackRow.vala:49
-#, fuzzy
 msgid "Added"
-msgstr "Toegevoegd op"
+msgstr "Toegevoegd"
 
 #: src/Widgets/TrackRow.vala:50
 msgid "played"
-msgstr ""
+msgstr "afgespeeld"
 
 #: src/Widgets/TrackRow.vala:98 src/Widgets/MediaControl.vala:51
 #: src/Widgets/TrackAlbumRow.vala:44
@@ -181,7 +180,7 @@ msgstr "Vind ik leuk"
 #: src/Widgets/TrackRow.vala:357 src/Widgets/MediaControl.vala:290
 #: src/Widgets/TrackAlbumRow.vala:234
 msgid "Dislike"
-msgstr ""
+msgstr "Vind ik niet leuk"
 
 #: src/Widgets/TrackRow.vala:359 src/Widgets/MediaControl.vala:292
 #: src/Widgets/TrackAlbumRow.vala:236
@@ -221,7 +220,7 @@ msgstr "Verwijderen"
 
 #: src/Widgets/MediaControl.vala:62 src/Widgets/MediaControl.vala:417
 msgid "Radio tracks history"
-msgstr ""
+msgstr "Radiogeschiedenis"
 
 #. search_entry.get_style_context ().add_class ("search-entry");
 #: src/Widgets/QuickFind.vala:27
@@ -287,9 +286,8 @@ msgid "Add Favorite"
 msgstr "Toevoegen aan favorieten"
 
 #: src/Widgets/NewPlaylist.vala:32
-#, fuzzy
 msgid "Playlist name"
-msgstr "Afspeellijst"
+msgstr "Naam van afspeellijst"
 
 #: src/Widgets/PlaylistRow.vala:24 src/Widgets/PlaylistRow.vala:49
 #, c-format
