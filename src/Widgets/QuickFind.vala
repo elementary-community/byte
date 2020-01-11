@@ -10,6 +10,9 @@ public class Widgets.QuickFind : Gtk.Revealer {
                 reveal_child = false;
             }
         }
+        get {
+            return reveal_child;
+        }
     }
     
     public QuickFind () {

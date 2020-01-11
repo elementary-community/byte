@@ -37,14 +37,18 @@ You'll need the following dependencies:
 
 ## Building  
 
-```
-meson build && cd build
-meson configure -Dprefix=/usr
-sudo ninja install
-com.github.alainm23.byte
-```
+Run `meson build` to configure the build environment. Change to the build directory and run `ninja` to build
+
+    meson build --prefix=/usr
+    cd build
+    ninja
+
+To install, use `ninja install`, then execute with `com.github.alainm23.byte`
+
+    sudo ninja install
+    com.github.alainm23.byte
 
 ## Support
-If you like Byte and you want to support its development,consider supporting via [Patreon](https://www.patreon.com/alainm23)
+If you like Byte and you want to support its development,consider supporting via [Patreon](https://www.patreon.com/alainm23) or [PayPal](https://www.paypal.me/alainm23)
 
 Made with 💗 in Perú

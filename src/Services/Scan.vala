@@ -6,13 +6,14 @@ public class Services.Scan : GLib.Object {
     public int counter = 0;
     public int counter_max = 0;
     public bool is_sync = false;
+    
     construct {
         Byte.tg_manager.discovered_new_item.connect (discovered_new_local_item);
         
         Byte.database.adden_new_track.connect (() => {
             Idle.add (() => {
                 counter--;
-                print ("%i/%i\n".printf (counter, counter_max));
+                //print ("%i/%i\n".printf (counter, counter_max));
                 sync_progress (((double) counter_max - (double) counter) / (double) counter_max);
                 if (counter <= 0) {
                     sync_finished ();
@@ -68,15 +69,17 @@ public class Services.Scan : GLib.Object {
             directory.dispose ();
             return null;
         });
-    } 
+    }
 
     public void found_music_file (string uri) {
-        //print ("URI: %s\n".printf (uri));
-
         new Thread<void*> ("found_local_music_file", () => {
-            if (Byte.database.music_file_exists (uri) == false && Byte.database.music_blacklist_exists (uri) == false) {
-                Byte.tg_manager.add_discover_uri (uri);
-            }
+            Idle.add (() => {
+                if (Byte.database.music_file_exists (uri) == false && Byte.database.music_blacklist_exists (uri) == false) {
+                    Byte.tg_manager.add_discover_uri (uri);
+                }
+                
+                return false;
+            });
             
             return null;
         });
@@ -105,21 +108,23 @@ public class Services.Scan : GLib.Object {
     }
 
     public void discovered_new_local_item (Objects.Artist artist, Objects.Album album, Objects.Track track) {
-        if (counter == 0) {
-            sync_started ();
-            is_sync = true;
-        }
-        
-        counter++;
-        counter_max++;
-
         new Thread<void*> ("discovered_new_local_item", () => {
+            if (counter == 0) {
+                sync_started ();
+                is_sync = true;
+            }
+            
+            counter++;
+            counter_max++;
+            
             album.artist_id = Byte.database.insert_artist_if_not_exists (artist);
             album.artist_name = artist.name;
 
             track.album_id = Byte.database.insert_album_if_not_exists (album);
-            track.artist_name = artist.name;
             track.album_title = album.title;
+
+            track.artist_id = album.artist_id;
+            track.artist_name = artist.name;
 
             Byte.database.insert_track (track);
             return null;

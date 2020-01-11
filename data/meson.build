@@ -1,4 +1,4 @@
-icon_sizes = ['32', '48', '64', '128']
+icon_sizes = ['16', '24', '32', '48', '64', '128']
 
 foreach i : icon_sizes
     install_data(
@@ -14,36 +14,6 @@ endforeach
 install_data(
     meson.project_name() + '.gschema.xml',
     install_dir: join_paths(get_option('datadir'), 'glib-2.0', 'schemas')
-)
-
-install_data(
-    join_paths('resources', 'album-default-cover.svg'),
-    install_dir: join_paths(get_option('datadir'), 'com.github.alainm23.byte')
-)
-
-install_data(
-    join_paths('resources', 'track-default-cover.svg'),
-    install_dir: join_paths(get_option('datadir'), 'com.github.alainm23.byte')
-)
-
-install_data(
-    join_paths('resources', 'radio-default-cover.svg'),
-    install_dir: join_paths(get_option('datadir'), 'com.github.alainm23.byte')
-)
-
-install_data(
-    join_paths('resources', 'playlist-default-cover.svg'),
-    install_dir: join_paths(get_option('datadir'), 'com.github.alainm23.byte')
-)
-
-install_data(
-    join_paths('resources', 'artist-default-cover.svg'),
-    install_dir: join_paths(get_option('datadir'), 'com.github.alainm23.byte')
-)
-
-install_data(
-    join_paths('resources', 'playlist-add.svg'),
-    install_dir: join_paths(get_option('datadir'), 'com.github.alainm23.byte')
 )
 
 i18n.merge_file(

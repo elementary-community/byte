@@ -108,7 +108,7 @@ public class Views.Favorites : Gtk.EventBox {
         show_all ();
         
         back_button.clicked.connect (() => {
-            go_back ();
+            Byte.navCtrl.pop ();
         });
 
         search_button.clicked.connect (() => {

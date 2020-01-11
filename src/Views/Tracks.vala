@@ -1,15 +1,14 @@
 public class Views.Tracks : Gtk.EventBox {
     private Widgets.SearchEntry search_entry;
     private Gtk.ListBox listbox;
-    private Gtk.Stack stack;
-    private Widgets.AlertView alert_view;
+
+    private Widgets.Files files_nav = null; 
 
     public signal void go_back ();
 
     private int item_index;
     private int item_max;
     private Gee.ArrayList<Objects.Track?> all_tracks;
-    public Tracks () {} 
 
     construct {
         item_index = 0;
@@ -22,16 +21,6 @@ public class Views.Tracks : Gtk.EventBox {
 
         get_style_context ().add_class (Gtk.STYLE_CLASS_VIEW);
         get_style_context ().add_class ("w-round");
-
-        /*
-            Alert View
-        */
-
-        alert_view = new Widgets.AlertView (
-            _("No Results"),
-            null,
-            "edit-find-symbolic"
-        );
 
         var back_button = new Gtk.Button.from_icon_name ("byte-arrow-back-symbolic", Gtk.IconSize.MENU);
         back_button.can_focus = false;
@@ -84,14 +73,12 @@ public class Views.Tracks : Gtk.EventBox {
         var sort_popover = new Widgets.Popovers.Sort (sort_button);
         sort_popover.selected = Byte.settings.get_enum ("track-sort");
         sort_popover.reverse = Byte.settings.get_boolean ("track-order-reverse");
+        sort_popover.navigate_visible = true;
         sort_popover.radio_01_label = _("Name");
         sort_popover.radio_02_label = _("Artist");
         sort_popover.radio_03_label = _("Album");
         sort_popover.radio_04_label = _("Date Added");
         sort_popover.radio_05_label = _("Play Count");
-
-        listbox = new Gtk.ListBox (); 
-        listbox.expand = true;
 
         var play_button = new Gtk.Button.from_icon_name ("media-playback-start-symbolic", Gtk.IconSize.MENU);
         play_button.always_show_image = true;
@@ -117,54 +104,71 @@ public class Views.Tracks : Gtk.EventBox {
         action_grid.add (play_button);
         action_grid.add (shuffle_button);
 
+        listbox = new Gtk.ListBox (); 
+        listbox.expand = true;
+        
         var listbox_scrolled = new Gtk.ScrolledWindow (null, null);
         listbox_scrolled.hscrollbar_policy = Gtk.PolicyType.NEVER;
         listbox_scrolled.expand = true;
         listbox_scrolled.add (listbox);
 
-        stack = new Gtk.Stack ();
-        stack.expand = true;
-        stack.transition_type = Gtk.StackTransitionType.CROSSFADE;
+        var tracks_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 0);
+        tracks_box.expand = true;
+        tracks_box.pack_start (action_grid, false, false);
+        tracks_box.pack_start (new Gtk.Separator (Gtk.Orientation.HORIZONTAL), false, false, 0);
+        tracks_box.pack_start (search_revealer, false, false, 0);
+        tracks_box.pack_start (listbox_scrolled, true, true, 0);
 
-        stack.add_named (listbox_scrolled, "listbox_scrolled");
-        stack.add_named (alert_view, "alert_view");
+        var main_stack = new Gtk.Stack ();
+        main_stack.expand = true;
+        main_stack.transition_type = Gtk.StackTransitionType.SLIDE_LEFT_RIGHT;
 
-        var separator = new Gtk.Separator (Gtk.Orientation.HORIZONTAL);
-        separator.margin_start = 14;
-        separator.margin_end = 9;
+        main_stack.add_named (tracks_box, "tracks_box");
 
         var main_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 0);
         main_box.margin_bottom = 3;
         main_box.expand = true;
         main_box.pack_start (header_box, false, false, 0);
         main_box.pack_start (new Gtk.Separator (Gtk.Orientation.HORIZONTAL), false, false, 0);
-        main_box.pack_start (action_grid, false, false);
-        main_box.pack_start (new Gtk.Separator (Gtk.Orientation.HORIZONTAL), false, false, 0);
-        main_box.pack_start (search_revealer, false, false, 0);
-        main_box.pack_start (stack, true, true, 0);
-        
+        main_box.pack_start (main_stack, false, true, 0);
+
         add (main_box);
         add_all_tracks ();
-
         show_all ();
         
         Timeout.add (200, () => {
-            check_size ();
+            if (Byte.settings.get_enum ("tracks-navigation") == 0) {
+                main_stack.visible_child_name = "tracks_box";
+                search_button.label = _("Songs");
+            } else {
+                if (files_nav == null) {
+                    files_nav = new Widgets.Files ();
+                    main_stack.add_named (files_nav, "files_box");
+                }
+
+                main_stack.visible_child_name = "files_box";
+                search_button.label = _("Files");
+            }
+
             return false;
         });
 
         back_button.clicked.connect (() => {
-            go_back ();
+            Byte.navCtrl.pop ();
         });
 
         search_button.clicked.connect (() => {
-            if (search_revealer.reveal_child) {
-                search_revealer.reveal_child = false;
-                search_entry.text = "";
+            if (Byte.settings.get_enum ("tracks-navigation") == 0) {
+                if (search_revealer.reveal_child) {
+                    search_revealer.reveal_child = false;
+                    search_entry.text = "";
+                } else {
+                    search_revealer.reveal_child = true;
+                    search_entry.grab_focus ();
+                }
             } else {
-                search_revealer.reveal_child = true;
-                search_entry.grab_focus ();
-            }            
+                files_nav.reveal_search ();
+            }          
         });
 
         search_entry.key_release_event.connect ((key) => {
@@ -248,20 +252,8 @@ public class Views.Tracks : Gtk.EventBox {
             );
         });
 
-        Byte.database.adden_new_track.connect ((track) => {
-            Idle.add (() => {
-                if (track != null) {
-                    add_track (track);
-                    stack.visible_child_name = "listbox_scrolled";
-                }
-                
-                return false;
-            });
-        });
-
-        listbox_scrolled.edge_reached.connect((pos)=> {
+        listbox_scrolled.edge_reached.connect ((pos)=> {
             if (pos == Gtk.PositionType.BOTTOM) {
-                
                 item_index = item_max;
                 item_max = item_max + 100;
 
@@ -271,6 +263,16 @@ public class Views.Tracks : Gtk.EventBox {
 
                 add_all_tracks ();
             }
+        });
+
+        Byte.database.adden_new_track.connect ((track) => {
+            Idle.add (() => {
+                if (track != null) {
+                    add_track (track);
+                }
+                
+                return false;
+            });
         });
 
         Byte.database.reset_library.connect (() => {
@@ -292,6 +294,21 @@ public class Views.Tracks : Gtk.EventBox {
             sort_button.sensitive = true;
             search_entry.sensitive = true;
         });
+
+        Byte.settings.changed.connect ((key) => {
+            if (Byte.settings.get_enum ("tracks-navigation") == 0) {
+                main_stack.visible_child_name = "tracks_box";
+                search_button.label = _("Songs");
+            } else {
+                if (files_nav == null) {
+                    files_nav = new Widgets.Files ();
+                    main_stack.add_named (files_nav, "files_box");
+                }
+                
+                main_stack.visible_child_name = "files_box";
+                search_button.label = _("Files");
+            }
+        });        
     }
 
     private void add_track (Objects.Track track) {
@@ -317,17 +334,6 @@ public class Views.Tracks : Gtk.EventBox {
                 search_entry.text.down ()
             );
 
-            if (all_tracks.size > 0) {
-                stack.visible_child_name = "listbox_scrolled";
-            } else {
-                alert_view.description = _(
-                    "No results for '%s' in Tracks. Try again.".printf (
-                        search_entry.text
-                    )
-                );
-                stack.visible_child_name = "alert_view";
-            }
-
             add_all_tracks ();
         } else {
             item_index = 0;
@@ -342,21 +348,7 @@ public class Views.Tracks : Gtk.EventBox {
                 Byte.settings.get_boolean ("track-order-reverse")
             );
 
-            check_size ();
-
             add_all_tracks ();
-        }
-    }
-
-    public void check_size () {
-        if (all_tracks.size > 0) {
-            stack.visible_child_name = "listbox_scrolled";
-        } else {
-            alert_view.title = _("No Songs");
-            alert_view.description = _("Add some tracks to your selected music folder.");
-            alert_view.icon_name = "dialog-information-symbolic";
-
-            stack.visible_child_name = "alert_view";
         }
     }
 

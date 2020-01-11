@@ -145,7 +145,7 @@ public class Widgets.HeaderBar : Gtk.HeaderBar {
         check_repeat_button ();
 
         play_button.clicked.connect (() => {
-            toggle_playing ();
+            Byte.player.toggle_playing ();
         });
 
         Byte.player.toggle_playing.connect (toggle_playing);

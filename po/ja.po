@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: com.github.alainm23.byte\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-10-11 20:11+0400\n"
+"POT-Creation-Date: 2019-12-07 02:05-0500\n"
 "PO-Revision-Date: 2019-08-12 12:31+0900\n"
 "Last-Translator: Ryo Nakano <ryonakaknock3@gmail.com>\n"
 "Language-Team: none\n"
@@ -18,25 +18,25 @@ msgstr ""
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Poedit 2.2.3\n"
 
-#: src/Utils.vala:292
+#: src/Utils.vala:266
 msgid "Choose an image…"
 msgstr ""
 
-#: src/Utils.vala:294 src/Services/Scan.vala:90 src/Widgets/QuickFind.vala:31
+#: src/Utils.vala:268 src/Services/Scan.vala:90 src/Widgets/QuickFind.vala:29
 msgid "Cancel"
 msgstr "キャンセル"
 
-#: src/Utils.vala:295 src/Services/Scan.vala:91
+#: src/Utils.vala:269 src/Services/Scan.vala:91
 msgid "Open"
 msgstr ""
 
-#: src/Utils.vala:298
+#: src/Utils.vala:272
 msgid "Images"
 msgstr ""
 
 #. Add
-#: src/Services/Database.vala:1622 src/Widgets/NewPlaylist.vala:10
-#: src/Widgets/Popovers/NewPlaylist.vala:19 src/Views/Playlist.vala:229
+#: src/Services/Database.vala:1633 src/Widgets/NewPlaylist.vala:10
+#: src/Widgets/Popovers/NewPlaylist.vala:19 src/Views/Playlist.vala:231
 msgid "New Playlist"
 msgstr "新しいプレイリスト"
 
@@ -77,170 +77,185 @@ msgstr "ミュージックフォルダーを変更"
 msgid "Load music from folder"
 msgstr "曲をフォルダーから読み込みます"
 
-#: src/Widgets/HeaderBar.vala:70
+#: src/Widgets/HeaderBar.vala:72
 msgid "Previous"
 msgstr "前へ"
 
-#: src/Widgets/HeaderBar.vala:77 src/Widgets/TrackRow.vala:327
-#: src/Widgets/MediaControl.vala:252 src/Widgets/TrackAlbumRow.vala:222
+#: src/Widgets/HeaderBar.vala:79 src/Widgets/TrackRow.vala:345
+#: src/Widgets/MediaControl.vala:278 src/Widgets/TrackAlbumRow.vala:222
 #: src/Views/Album.vala:126 src/Views/Tracks.vala:98
-#: src/Views/Favorites.vala:64 src/Views/Playlist.vala:200
+#: src/Views/Favorites.vala:64 src/Views/Playlist.vala:202
 msgid "Play"
 msgstr "再生"
 
-#: src/Widgets/HeaderBar.vala:84
+#: src/Widgets/HeaderBar.vala:86
 msgid "Next"
 msgstr "次へ"
 
 #.
 #. Menu
 #.
-#: src/Widgets/HeaderBar.vala:101
+#: src/Widgets/HeaderBar.vala:103
 msgid "Search"
 msgstr "検索"
 
-#: src/Widgets/HeaderBar.vala:103
+#: src/Widgets/HeaderBar.vala:104
 msgid "Import Music"
 msgstr "曲をインポート"
 
-#: src/Widgets/HeaderBar.vala:104
+#: src/Widgets/HeaderBar.vala:105
 msgid "Resync Libray"
 msgstr "ライブラリを再同期"
 
-#: src/Widgets/HeaderBar.vala:105
+#: src/Widgets/HeaderBar.vala:106
 msgid "Preferences"
 msgstr "設定"
 
-#: src/Widgets/HeaderBar.vala:123
+#: src/Widgets/HeaderBar.vala:124
 msgid "Menu"
 msgstr "メニュー"
 
-#: src/Widgets/HeaderBar.vala:244
+#: src/Widgets/HeaderBar.vala:257
 msgid "Shuffle On"
 msgstr "シャッフルは有効"
 
-#: src/Widgets/HeaderBar.vala:247
+#: src/Widgets/HeaderBar.vala:260
 msgid "Shuffle Off"
 msgstr "シャッフルは無効"
 
-#: src/Widgets/HeaderBar.vala:256
+#: src/Widgets/HeaderBar.vala:269
 msgid "Repeat Off"
 msgstr "リピートは無効"
 
-#: src/Widgets/HeaderBar.vala:259
+#: src/Widgets/HeaderBar.vala:272
 msgid "Repeat All"
 msgstr "全体をリピート"
 
-#: src/Widgets/HeaderBar.vala:262
+#: src/Widgets/HeaderBar.vala:275
 msgid "Repeat One"
 msgstr "一曲をリピート"
 
-#: src/Widgets/TrackRow.vala:80 src/Widgets/MediaControl.vala:47
+#: src/Widgets/TrackRow.vala:49
+#, fuzzy
+msgid "Added"
+msgstr "追加された日時"
+
+#: src/Widgets/TrackRow.vala:50
+msgid "played"
+msgstr ""
+
+#: src/Widgets/TrackRow.vala:98 src/Widgets/MediaControl.vala:51
 #: src/Widgets/TrackAlbumRow.vala:44
 msgid "Options"
 msgstr "オプション"
 
-#: src/Widgets/TrackRow.vala:262 src/Widgets/MediaControl.vala:187
+#: src/Widgets/TrackRow.vala:280 src/Widgets/MediaControl.vala:213
 #: src/Widgets/TrackAlbumRow.vala:157
 msgid "Create New Playlist"
 msgstr "新しいプレイリストを作成"
 
-#: src/Widgets/TrackRow.vala:328 src/Widgets/MediaControl.vala:253
+#: src/Widgets/TrackRow.vala:346 src/Widgets/MediaControl.vala:279
 #: src/Widgets/TrackAlbumRow.vala:223
 msgid "Play Next"
 msgstr "次を再生"
 
-#: src/Widgets/TrackRow.vala:329 src/Widgets/MediaControl.vala:254
+#: src/Widgets/TrackRow.vala:347 src/Widgets/MediaControl.vala:280
 #: src/Widgets/TrackAlbumRow.vala:224
 msgid "Play Later"
 msgstr "後で再生"
 
-#: src/Widgets/TrackRow.vala:331 src/Widgets/MediaControl.vala:256
+#: src/Widgets/TrackRow.vala:349 src/Widgets/MediaControl.vala:282
 #: src/Widgets/TrackAlbumRow.vala:226
 msgid "Add to Playlist"
 msgstr "プレイリストに追加"
 
-#: src/Widgets/TrackRow.vala:336 src/Widgets/MediaControl.vala:261
+#: src/Widgets/TrackRow.vala:354 src/Widgets/MediaControl.vala:287
 #: src/Widgets/TrackAlbumRow.vala:231
 msgid "Edit Song Info…"
 msgstr "曲情報を編集…"
 
-#: src/Widgets/TrackRow.vala:338 src/Widgets/MediaControl.vala:263
+#: src/Widgets/TrackRow.vala:356 src/Widgets/MediaControl.vala:289
 #: src/Widgets/TrackAlbumRow.vala:233
 msgid "Love"
 msgstr ""
 
-#: src/Widgets/TrackRow.vala:339 src/Widgets/MediaControl.vala:264
+#: src/Widgets/TrackRow.vala:357 src/Widgets/MediaControl.vala:290
 #: src/Widgets/TrackAlbumRow.vala:234
 msgid "Dislike"
 msgstr ""
 
-#: src/Widgets/TrackRow.vala:341 src/Widgets/MediaControl.vala:266
+#: src/Widgets/TrackRow.vala:359 src/Widgets/MediaControl.vala:292
 #: src/Widgets/TrackAlbumRow.vala:236
 msgid "Delete from library"
 msgstr "ライブラリから削除"
 
-#: src/Widgets/TrackRow.vala:342 src/Widgets/MediaControl.vala:267
+#: src/Widgets/TrackRow.vala:360 src/Widgets/MediaControl.vala:293
 #: src/Widgets/TrackAlbumRow.vala:237
 msgid "Delete from file"
 msgstr "ファイルを削除"
 
-#: src/Widgets/TrackRow.vala:343 src/Widgets/MediaControl.vala:268
+#: src/Widgets/TrackRow.vala:361 src/Widgets/MediaControl.vala:294
 #: src/Widgets/TrackAlbumRow.vala:238
 msgid "Remove from playlist"
 msgstr "プレイリストから削除"
 
-#: src/Widgets/TrackRow.vala:405 src/Widgets/MediaControl.vala:330
-#: src/Widgets/RadioRow.vala:110 src/Views/Playlist.vala:390
+#: src/Widgets/TrackRow.vala:423 src/Widgets/MediaControl.vala:356
+#: src/Widgets/RadioRow.vala:106 src/Views/Playlist.vala:392
 #, fuzzy
 msgid "Delete from library?"
 msgstr "ライブラリから削除"
 
-#: src/Widgets/TrackRow.vala:406 src/Widgets/MediaControl.vala:331
-#: src/Widgets/RadioRow.vala:111 src/Views/Playlist.vala:391
+#: src/Widgets/TrackRow.vala:424 src/Widgets/MediaControl.vala:357
+#: src/Widgets/RadioRow.vala:107 src/Views/Playlist.vala:393
 #, fuzzy, c-format
 msgid "Are you sure you want to delete <b>%s</b> from your library?"
 msgstr "すべてのライブラリをリセットしてもよろしいですか？"
 
-#: src/Widgets/TrackRow.vala:411 src/Widgets/MediaControl.vala:336
-#: src/Widgets/RadioRow.vala:116 src/Views/Playlist.vala:166
-#: src/Views/Playlist.vala:396
+#: src/Widgets/TrackRow.vala:429 src/Widgets/MediaControl.vala:362
+#: src/Widgets/RadioRow.vala:112 src/Views/Playlist.vala:168
+#: src/Views/Playlist.vala:398
 msgid "Delete"
 msgstr "削除"
 
-#: src/Widgets/TrackQueueRow.vala:61 src/Widgets/RadioRow.vala:58
+#: src/Widgets/TrackQueueRow.vala:61 src/Widgets/RadioRow.vala:54
 msgid "Remove"
 msgstr "リストから削除"
 
-#: src/Widgets/QuickFind.vala:24 src/Widgets/QuickFind.vala:138
-msgid "The radio station was added correctly"
-msgstr "ラジオ局を正常に追加しました"
+#: src/Widgets/MediaControl.vala:62 src/Widgets/MediaControl.vala:417
+msgid "Radio tracks history"
+msgstr ""
 
-#: src/Widgets/QuickFind.vala:29
+#. search_entry.get_style_context ().add_class ("search-entry");
+#: src/Widgets/QuickFind.vala:27
 msgid "Quick find"
 msgstr "クイック検索"
 
 #. general_grid.add (settings_09_box);
 #. general_grid.add (new Gtk.Separator (Gtk.Orientation.HORIZONTAL));
-#: src/Widgets/QuickFind.vala:46 src/Views/Home.vala:20
+#: src/Widgets/QuickFind.vala:45 src/Views/Home.vala:20
 #: src/Dialogs/Settings.vala:153
 msgid "Library"
 msgstr "ライブラリ"
 
-#: src/Widgets/QuickFind.vala:47 src/Views/Home.vala:42
+#: src/Widgets/QuickFind.vala:46 src/Views/Home.vala:40
 #: src/Views/Radios.vala:28
 msgid "Radios"
 msgstr "ラジオ"
 
-#: src/Widgets/QuickFind.vala:63
+#. Toast
+#: src/Widgets/QuickFind.vala:101 src/Widgets/QuickFind.vala:174
+msgid "The radio station was added correctly"
+msgstr "ラジオ局を正常に追加しました"
+
+#: src/Widgets/QuickFind.vala:116
 msgid "Discover…"
 msgstr "見つける…"
 
-#: src/Widgets/QuickFind.vala:64
+#: src/Widgets/QuickFind.vala:117
 msgid "Search your favorite radios"
 msgstr "お気に入りのラジオを検索"
 
-#: src/Widgets/QuickFind.vala:107
+#: src/Widgets/QuickFind.vala:143
 msgid "The radio station is already added"
 msgstr "そのラジオ局はすでに追加されています"
 
@@ -274,8 +289,9 @@ msgid "Add Favorite"
 msgstr "お気に入りに追加"
 
 #: src/Widgets/NewPlaylist.vala:32
-msgid "Project name"
-msgstr "プロジェクト名"
+#, fuzzy
+msgid "Playlist name"
+msgstr "プレイリスト"
 
 #: src/Widgets/PlaylistRow.vala:24 src/Widgets/PlaylistRow.vala:49
 #, fuzzy, c-format
@@ -290,7 +306,7 @@ msgstr "並べ替え"
 msgid "Reversed order"
 msgstr "逆順"
 
-#: src/Widgets/Popovers/NewPlaylist.vala:31 src/Views/Playlist.vala:242
+#: src/Widgets/Popovers/NewPlaylist.vala:31 src/Views/Playlist.vala:244
 msgid "Add Description"
 msgstr "説明を追加"
 
@@ -319,11 +335,11 @@ msgstr "アルバム"
 msgid "Songs"
 msgstr "曲"
 
-#: src/Views/Home.vala:40 src/Views/Artists.vala:33
+#: src/Views/Home.vala:39 src/Views/Artists.vala:33
 msgid "Artists"
 msgstr "アーティスト"
 
-#: src/Views/Home.vala:43 src/Views/Favorites.vala:28
+#: src/Views/Home.vala:41 src/Views/Favorites.vala:28
 msgid "Favorites"
 msgstr "お気に入り"
 
@@ -332,17 +348,17 @@ msgid "Search by title, artist, genre and year"
 msgstr "タイトル、アーティスト名、ジャンル、発表年で検索"
 
 #: src/Views/Albums.vala:63 src/Views/Tracks.vala:74
-#: src/Views/Playlist.vala:103
+#: src/Views/Playlist.vala:105
 msgid "Sort"
 msgstr "並べ替え"
 
 #: src/Views/Albums.vala:76 src/Views/Tracks.vala:87
-#: src/Views/Playlist.vala:116
+#: src/Views/Playlist.vala:118
 msgid "Name"
 msgstr "名前"
 
 #: src/Views/Albums.vala:77 src/Views/Tracks.vala:88
-#: src/Views/Playlist.vala:117 src/Views/Artist.vala:82
+#: src/Views/Playlist.vala:119 src/Views/Artist.vala:82
 #: src/Dialogs/TrackEditor.vala:84
 msgid "Artist"
 msgstr "アーティスト名"
@@ -355,13 +371,13 @@ msgstr "発表年"
 msgid "Genre"
 msgstr "ジャンル"
 
-#: src/Views/Album.vala:73 src/Views/Tracks.vala:89 src/Views/Playlist.vala:118
+#: src/Views/Album.vala:73 src/Views/Tracks.vala:89 src/Views/Playlist.vala:120
 #: src/Dialogs/TrackEditor.vala:86
 msgid "Album"
 msgstr "アルバム"
 
 #: src/Views/Album.vala:133 src/Views/Tracks.vala:107
-#: src/Views/Favorites.vala:73 src/Views/Playlist.vala:207
+#: src/Views/Favorites.vala:73 src/Views/Playlist.vala:209
 msgid "Shuffle"
 msgstr "シャッフル"
 
@@ -376,24 +392,24 @@ msgstr "検索結果はありません"
 msgid "Search by title, artist and album"
 msgstr "タイトル、アーティスト名、アルバム名で検索"
 
-#: src/Views/Tracks.vala:90 src/Views/Playlist.vala:119
+#: src/Views/Tracks.vala:90 src/Views/Playlist.vala:121
 msgid "Date Added"
 msgstr "追加された日時"
 
-#: src/Views/Tracks.vala:91 src/Views/Playlist.vala:120
+#: src/Views/Tracks.vala:91 src/Views/Playlist.vala:122
 msgid "Play Count"
 msgstr "再生回数"
 
-#: src/Views/Tracks.vala:323
+#: src/Views/Tracks.vala:324
 #, c-format
 msgid "No results for '%s' in Tracks. Try again."
 msgstr "トラックに '%s' の検索結果はありません。もう一度お試しください。"
 
-#: src/Views/Tracks.vala:354
+#: src/Views/Tracks.vala:355
 msgid "No Songs"
 msgstr "曲はありません"
 
-#: src/Views/Tracks.vala:355
+#: src/Views/Tracks.vala:356
 msgid "Add some tracks to your selected music folder."
 msgstr "選択したミュージックフォルダーにトラックを追加してください。"
 
@@ -405,33 +421,33 @@ msgstr "インターネットラジオを検索"
 msgid "Add New Playlist"
 msgstr "新しいプレイリストを追加"
 
-#: src/Views/Playlist.vala:73
+#: src/Views/Playlist.vala:75
 #, fuzzy, c-format
 msgid "%i songs"
 msgstr "曲はありません"
 
-#: src/Views/Playlist.vala:93
+#: src/Views/Playlist.vala:95
 msgid "Playlist"
 msgstr "プレイリスト"
 
-#: src/Views/Playlist.vala:157
+#: src/Views/Playlist.vala:159
 msgid "Edit Name and Appearance"
 msgstr "名前と画像を変更"
 
 #. Items
-#: src/Views/Playlist.vala:164
+#: src/Views/Playlist.vala:166
 msgid "Edit Details"
 msgstr "詳細を編集"
 
-#: src/Views/Playlist.vala:165
+#: src/Views/Playlist.vala:167
 msgid "Set new Cover"
 msgstr "新しいカバー画像を設定"
 
-#: src/Views/Playlist.vala:189
+#: src/Views/Playlist.vala:191
 msgid "Updated"
 msgstr "更新日時"
 
-#: src/Views/Playlist.vala:246 src/Dialogs/TrackEditor.vala:136
+#: src/Views/Playlist.vala:248 src/Dialogs/TrackEditor.vala:136
 msgid "Save"
 msgstr "保存"
 
@@ -532,6 +548,9 @@ msgstr "ライブラリをリセットしますか？"
 #: src/Dialogs/Settings.vala:361
 msgid "Are you sure you want to reset all your library?"
 msgstr "すべてのライブラリをリセットしてもよろしいですか？"
+
+#~ msgid "Project name"
+#~ msgstr "プロジェクト名"
 
 #~ msgid "Favorite"
 #~ msgstr "お気に入り"

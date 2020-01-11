@@ -1,7 +1,8 @@
 public class Objects.Track : GLib.Object {
     public int track_order; 
     public int id;      
-    public int album_id;          
+    public int album_id;
+    public int artist_id;          
     public int track;             
     public int disc;              
     public int play_count;        
@@ -12,7 +13,7 @@ public class Objects.Track : GLib.Object {
     public int samplerate;        
     public int channels;          
     public int year;     
-    public int playlist;         
+    public int playlist_id;         
     public uint64 duration;       
     public string path;           
     public string title;          
@@ -26,12 +27,14 @@ public class Objects.Track : GLib.Object {
     public string lyrics;         
     public string genre;          
     public string album_artist;   
+    public string playlist_title;
     public string date_added; 
     public string playlist_added;     
 
     public Track (int track_order = 0,
                   int id = 0,
                   int album_id = 0,
+                  int artist_id = 0,
                   int track = 0,
                   int disc = 0,
                   int play_count = 0,
@@ -42,7 +45,7 @@ public class Objects.Track : GLib.Object {
                   int samplerate = 0,
                   int channels = 0,
                   int year = 0,
-                  int playlist = 0,
+                  int playlist_id = 0,
                   uint64 duration = 0,
                   string path = "",
                   string title = "",
@@ -56,10 +59,12 @@ public class Objects.Track : GLib.Object {
                   string lyrics = "",
                   string genre = "",
                   string album_artist = "",
+                  string playlist_title = "",
                   string date_added = new GLib.DateTime.now_local ().to_string ()) {
         this.track_order = track_order;
         this.id = id;
         this.album_id = album_id;
+        this.artist_id = artist_id;
         this.track = track;
         this.disc = disc;
         this.play_count = play_count;
@@ -70,6 +75,7 @@ public class Objects.Track : GLib.Object {
         this.samplerate = samplerate;
         this.channels = channels;
         this.year = year;
+        this.playlist_id = playlist_id;
         this.duration = duration;
         this.path = path;
         this.title = title;
@@ -83,6 +89,7 @@ public class Objects.Track : GLib.Object {
         this.lyrics = lyrics;
         this.genre = genre;
         this.album_artist = album_artist;
+        this.playlist_title = playlist_title;
         this.date_added = date_added;
     }
 }

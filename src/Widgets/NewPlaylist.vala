@@ -29,7 +29,7 @@ public class Widgets.NewPlaylist : Gtk.EventBox {
         title_entry.valign = Gtk.Align.CENTER;
         title_entry.hexpand = true;
         title_entry.get_style_context ().add_class ("add-playlist-entry");
-        title_entry.placeholder_text = _("Project name");
+        title_entry.placeholder_text = _("Playlist name");
 
         var playlist_grid = new Gtk.Grid ();
         playlist_grid.add (image_cover);

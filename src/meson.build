@@ -13,6 +13,7 @@ sources  = files(
     'Services/Notification.vala',
     'Services/RadioBrowser.vala',
     'Services/Lastfm.vala',
+    'Services/NavController.vala',
 
     'Widgets/Welcome.vala',
     'Widgets/HeaderBar.vala',
@@ -35,7 +36,9 @@ sources  = files(
     'Widgets/AlertView.vala',
     'Widgets/AlbumArtistChild.vala',
     'Widgets/SearchEntry.vala',
-    
+    'Widgets/FolderRow.vala',
+    'Widgets/Files.vala',
+
     'Widgets/Popovers/Sort.vala',
     'Widgets/Popovers/NewPlaylist.vala',
 
@@ -55,6 +58,7 @@ sources  = files(
     'Objects/Artist.vala',
     'Objects/Radio.vala',
     'Objects/Playlist.vala',
+    'Objects/RadioTrack.vala',
 
     'Dialogs/TrackEditor.vala',
     'Dialogs/Settings.vala',

@@ -1,4 +1,5 @@
 public class Views.Playlist : Gtk.EventBox {
+    public Objects.Playlist playlist { get; construct; }
     public Gtk.Entry title_entry;
     private Gtk.TextView note_text;
     private Gtk.Label note_placeholder;
@@ -14,75 +15,24 @@ public class Views.Playlist : Gtk.EventBox {
     private string cover_path;
     private Widgets.Cover image_cover;
 
-    public signal void go_back (string page);
-    public string back_page { set; get; }
-
     private Gee.ArrayList<Objects.Track?> all_tracks;
 
-    public Objects.Playlist _playlist { get; set; }
-    public Objects.Playlist playlist {
-        get {
-            return _playlist;
-        }
-        set {
-            if (value != null) {
-                _playlist = value;
-
-                title_label.label = playlist.title;
-                title_entry.text = playlist.title;
-
-                note_label.label = playlist.note;
-                note_text.buffer.text = playlist.note;
-
-                if (playlist.note != "") {
-                    note_placeholder.visible = false;
-                }
-
-                update_relative_label.label = Byte.utils.get_relative_datetime (playlist.date_updated);
-
-                if (playlist.note == "") {
-                    note_label.visible = false;
-                }
-
-                try {
-                    cover_path = GLib.Path.build_filename (Byte.utils.COVER_FOLDER, ("playlist-%i.jpg").printf (playlist.id));
-                    var pixbuf = new Gdk.Pixbuf.from_file_at_size (cover_path, 128, 128);
-                    image_cover.pixbuf = pixbuf;
-                } catch (Error e) {
-                    var pixbuf = new Gdk.Pixbuf.from_file_at_size ("/usr/share/com.github.alainm23.byte/album-default-cover.svg", 128, 128);
-                    image_cover.pixbuf = pixbuf;
-                }
-
-                listbox.foreach ((widget) => {
-                    widget.destroy ();
-                });
-
-                if (Byte.scan_service.is_sync == false) {
-                    all_tracks = new Gee.ArrayList<Objects.Track?> ();
-                    all_tracks = Byte.database.get_all_tracks_by_playlist (
-                        playlist.id,
-                        Byte.settings.get_enum ("playlist-sort"),
-                        Byte.settings.get_boolean ("playlist-order-reverse")
-                    );
-
-                    foreach (var item in all_tracks) {
-                        var row = new Widgets.TrackRow (item, 6);
-                        listbox.add (row);
-                    }
-
-                    listbox.show_all ();
-
-                    time_label.label = _("%i songs").printf (all_tracks.size);
-                }
-            }
-        }
+    public Playlist (Objects.Playlist playlist) {
+        Object (
+            playlist: playlist
+        );
     }
-
-    public Playlist () {}
 
     construct {
         get_style_context ().add_class (Gtk.STYLE_CLASS_VIEW);
         get_style_context ().add_class ("w-round");
+
+        all_tracks = new Gee.ArrayList<Objects.Track?> ();
+        all_tracks = Byte.database.get_all_tracks_by_playlist (
+            playlist,
+            Byte.settings.get_enum ("playlist-sort"),
+            Byte.settings.get_boolean ("playlist-order-reverse")
+        );
 
         var back_button = new Gtk.Button.from_icon_name ("byte-arrow-back-symbolic", Gtk.IconSize.MENU);
         back_button.can_focus = false;
@@ -125,7 +75,16 @@ public class Views.Playlist : Gtk.EventBox {
         image_cover.halign = Gtk.Align.START;
         image_cover.valign = Gtk.Align.START;
 
-        title_label = new Gtk.Label (null);
+        try {
+            cover_path = GLib.Path.build_filename (Byte.utils.COVER_FOLDER, ("playlist-%i.jpg").printf (playlist.id));
+            var pixbuf = new Gdk.Pixbuf.from_file_at_size (cover_path, 128, 128);
+            image_cover.pixbuf = pixbuf;
+        } catch (Error e) {
+            var pixbuf = new Gdk.Pixbuf.from_resource_at_scale ("/com/github/alainm23/byte/playlist-default-cover.svg", 128, 128, true);
+            image_cover.pixbuf = pixbuf;
+        }
+
+        title_label = new Gtk.Label (playlist.title);
         title_label.wrap = true;
         title_label.wrap_mode = Pango.WrapMode.CHAR;
         title_label.justify = Gtk.Justification.FILL;
@@ -133,7 +92,7 @@ public class Views.Playlist : Gtk.EventBox {
         title_label.get_style_context ().add_class ("h2");
         title_label.halign = Gtk.Align.START;
 
-        note_label = new Gtk.Label (null);
+        note_label = new Gtk.Label (playlist.note);
         note_label.wrap = true;
         note_label.margin_bottom = 6;
         note_label.margin_start = 12;
@@ -142,7 +101,8 @@ public class Views.Playlist : Gtk.EventBox {
         note_label.justify = Gtk.Justification.FILL;
         note_label.halign = Gtk.Align.START;
 
-        time_label = new Gtk.Label (null);
+        time_label = new Gtk.Label (_("%i songs").printf (all_tracks.size));
+        //time_label = new Gtk.Label (Granite.DateTime.seconds_to_time (484841515));
         time_label.get_style_context ().add_class ("h3");
         time_label.wrap = true;
         time_label.justify = Gtk.Justification.FILL;
@@ -165,7 +125,7 @@ public class Views.Playlist : Gtk.EventBox {
         /* Items */
         var edit_menuitem = new Widgets.ModelButton (_("Edit Details"), "edit-symbolic", _("Edit Details"));
         var cover_menuitem = new Widgets.ModelButton (_("Set new Cover"), "image-x-generic-symbolic", _("Set new Cover"));
-        var delete_menuitem = new Widgets.ModelButton (_("Delete"), "edit-delete-symbolic", _("Delete"));
+        var delete_menuitem = new Widgets.ModelButton (_("Delete"), "user-trash-symbolic", _("Delete"));
 
         var menu_grid = new Gtk.Grid ();
         menu_grid.margin_top = 6;
@@ -236,6 +196,7 @@ public class Views.Playlist : Gtk.EventBox {
         note_text.height_request = 35;
         note_text.wrap_mode = Gtk.WrapMode.WORD_CHAR;
         note_text.hexpand = true;
+        note_text.buffer.text = playlist.note;
 
         var note_scrolled = new Gtk.ScrolledWindow (null, null);
         note_scrolled.margin_start = 3;
@@ -244,6 +205,16 @@ public class Views.Playlist : Gtk.EventBox {
         note_placeholder = new Gtk.Label (_("Add Description"));
         note_placeholder.opacity = 0.6;
         note_text.add (note_placeholder);
+
+        if (playlist.note != "") {
+            note_placeholder.visible = false;
+        }
+
+        //update_relative_label.label = Byte.utils.get_relative_datetime (playlist.date_updated);
+
+        if (playlist.note == "") {
+            note_label.visible = false;
+        }
 
         var update_button = new Gtk.Button.with_label (_("Save"));
         update_button.halign = Gtk.Align.END;
@@ -301,8 +272,19 @@ public class Views.Playlist : Gtk.EventBox {
 
         add (main_box);
 
+        show_all ();
+
+        if (Byte.scan_service.is_sync == false) {
+            foreach (var item in all_tracks) {
+                var row = new Widgets.TrackRow (item, 6);
+                listbox.add (row);
+            }
+
+            listbox.show_all ();
+        }
+
         back_button.clicked.connect (() => {
-            go_back (back_page);
+            Byte.navCtrl.pop ();
         });
 
         listbox.row_activated.connect ((row) => {
@@ -350,7 +332,7 @@ public class Views.Playlist : Gtk.EventBox {
 
             all_tracks = new Gee.ArrayList<Objects.Track?> ();
             all_tracks = Byte.database.get_all_tracks_by_playlist (
-                playlist.id,
+                playlist,
                 Byte.settings.get_enum ("playlist-sort"),
                 Byte.settings.get_boolean ("playlist-order-reverse")
             );
@@ -372,7 +354,7 @@ public class Views.Playlist : Gtk.EventBox {
 
             all_tracks = new Gee.ArrayList<Objects.Track?> ();
             all_tracks = Byte.database.get_all_tracks_by_playlist (
-                playlist.id,
+                playlist,
                 Byte.settings.get_enum ("playlist-sort"),
                 Byte.settings.get_boolean ("playlist-order-reverse")
             );
@@ -402,9 +384,8 @@ public class Views.Playlist : Gtk.EventBox {
             message_dialog.show_all ();
 
             if (message_dialog.run () == Gtk.ResponseType.ACCEPT) {
-                //Byte.database.remove_from_library (track);
                 if (Byte.database.remove_playlist_from_library (playlist)) {
-                    go_back (back_page);
+                    Byte.navCtrl.pop ();
                 }
             }
 
@@ -482,6 +463,19 @@ public class Views.Playlist : Gtk.EventBox {
         
         title_entry.activate.connect (update);
         update_button.clicked.connect (update);
+
+        Byte.database.playlist_track_added.connect ((p, track) => {
+            if (playlist.id == p.id) {
+                var row = new Widgets.TrackRow (track, 6);
+                
+                listbox.add (row);
+                all_tracks.add (track);
+
+                listbox.show_all ();
+
+                time_label.label = _("%i songs").printf (all_tracks.size);
+            }
+        });
     }
 
     private void update () {

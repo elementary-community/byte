@@ -1,16 +1,7 @@
 public class Views.Home : Gtk.EventBox {
     private Gtk.ListBox listbox;
-    public signal void go_albums_view ();
-    public signal void go_tracks_view ();
-    public signal void go_artists_view ();
-    public signal void go_radios_view ();
-    public signal void go_playlists_view ();
-    public signal void go_favorites_view ();
-
     private Gee.ArrayList<Objects.Track?> all_tracks;
-
-    public Home () {}
-
+    
     construct {
         get_style_context ().add_class (Gtk.STYLE_CLASS_VIEW);
         get_style_context ().add_class ("w-round");
@@ -36,9 +27,7 @@ public class Views.Home : Gtk.EventBox {
         var playlists_button = new Widgets.HomeButton (_("Playlists"), "playlist-symbolic");
         var albums_button = new Widgets.HomeButton (_("Albums"), "byte-album-symbolic");
         var songs_button = new Widgets.HomeButton (_("Songs"), "folder-music-symbolic");
-        
         var artists_button = new Widgets.HomeButton (_("Artists"), "byte-artist-symbolic");
-        
         var radios_button = new Widgets.HomeButton (_("Radios"), "byte-radio-symbolic");
         var favorites_button = new Widgets.HomeButton (_("Favorites"), "byte-favorite-symbolic");
 
@@ -81,27 +70,57 @@ public class Views.Home : Gtk.EventBox {
         add_all_tracks ();
 
         albums_button.clicked.connect (() => {
-            go_albums_view ();
+            if (!Byte.navCtrl.has_key ("albums_view")) {
+                var view = new Views.Albums ();
+                Byte.navCtrl.add_named (view, "albums_view");
+            }
+
+            Byte.navCtrl.push ("albums_view");
         });
 
         songs_button.clicked.connect (() => {
-            go_tracks_view ();
+            if (!Byte.navCtrl.has_key ("tracks_view")) {
+                var view = new Views.Tracks ();
+                Byte.navCtrl.add_named (view, "tracks_view");
+            }
+
+            Byte.navCtrl.push ("tracks_view");
         });
 
         artists_button.clicked.connect (() => {
-            go_artists_view ();
+            if (!Byte.navCtrl.has_key ("artists_view")) {
+                var view = new Views.Artists ();
+                Byte.navCtrl.add_named (view, "artists_view");
+            }
+
+            Byte.navCtrl.push ("artists_view");
         });
 
         radios_button.clicked.connect (() => {
-            go_radios_view ();
+            if (!Byte.navCtrl.has_key ("radios_view")) {
+                var view = new Views.Radios ();
+                Byte.navCtrl.add_named (view, "radios_view");
+            }
+
+            Byte.navCtrl.push ("radios_view");
         });
 
         playlists_button.clicked.connect (() => {
-            go_playlists_view ();
+            if (!Byte.navCtrl.has_key ("playlists_view")) {
+                var view = new Views.Playlists ();
+                Byte.navCtrl.add_named (view, "playlists_view");
+            }
+
+            Byte.navCtrl.push ("playlists_view");
         });
 
         favorites_button.clicked.connect (() => {
-            go_favorites_view ();
+            if (!Byte.navCtrl.has_key ("favorites_view")) {
+                var view = new Views.Favorites ();
+                Byte.navCtrl.add_named (view, "favorites_view");
+            }
+
+            Byte.navCtrl.push ("favorites_view");
         });
 
         listbox.row_activated.connect ((row) => {
@@ -141,6 +160,24 @@ public class Views.Home : Gtk.EventBox {
                     return false;
                 });
             });
+        });
+
+        Byte.scan_service.sync_started.connect (() => {
+            playlists_button.sensitive = false;
+            albums_button.sensitive = false;
+            songs_button.sensitive = false;
+            artists_button.sensitive = false;
+            radios_button.sensitive = false;
+            favorites_button.sensitive = false;
+        });
+
+        Byte.scan_service.sync_finished.connect (() => {
+            playlists_button.sensitive = true;
+            albums_button.sensitive = true;
+            songs_button.sensitive = true;
+            artists_button.sensitive = true;
+            radios_button.sensitive = true;
+            favorites_button.sensitive = true;
         });
     }
 

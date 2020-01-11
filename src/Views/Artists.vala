@@ -30,10 +30,11 @@ public class Views.Artists : Gtk.EventBox {
         back_button.get_style_context ().add_class (Gtk.STYLE_CLASS_FLAT);
         back_button.get_style_context ().add_class ("label-color-primary");
 
-        var title_label = new Gtk.Label ("<b>%s</b>".printf (_("Artists")));
+        var title_label = new Gtk.Label (_("Artists"));
         title_label.use_markup = true;
         title_label.valign = Gtk.Align.CENTER;
         title_label.get_style_context ().add_class ("h3");
+        title_label.get_style_context ().add_class ("label-color-primary");
 
         search_entry = new Widgets.SearchEntry ();
         search_entry.tooltip_text = _("Search by title, artist and album");
@@ -82,7 +83,7 @@ public class Views.Artists : Gtk.EventBox {
         show_all ();
         
         back_button.clicked.connect (() => {
-            go_back ();
+            Byte.navCtrl.pop ();
         });
 
         scrolled.edge_reached.connect((pos)=> {
@@ -122,7 +123,13 @@ public class Views.Artists : Gtk.EventBox {
 
         listbox.row_activated.connect ((row) => {
             var item = row as Widgets.ArtistRow;
-            go_artist (item.artist);
+
+            if (!Byte.navCtrl.has_key ("artist-%i".printf (item.artist.id))) {
+                var view = new Views.Artist (item.artist);
+                Byte.navCtrl.add_named (view, "artist-%i".printf (item.artist.id));
+            }
+
+            Byte.navCtrl.push ("artist-%i".printf (item.artist.id));
         });
 
         Byte.database.added_new_artist.connect ((artist) => {
