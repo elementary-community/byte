@@ -6,8 +6,12 @@ public class Widgets.MediaControl : Gtk.Revealer {
     private Gtk.Image icon_favorite;
     private Gtk.Image icon_no_favorite;
 
+    private Gtk.ToggleButton history_button;
+    private Gtk.ListBox radio_track_listbox;
+
     Gtk.Menu playlists;
-    private Gtk.Menu menu;
+    private Gtk.Menu menu = null;
+    private Gtk.Popover popover = null;
 
     public MediaControl () {
 
@@ -43,17 +47,32 @@ public class Widgets.MediaControl : Gtk.Revealer {
         var options_button = new Gtk.Button.from_icon_name ("view-more-horizontal-symbolic", Gtk.IconSize.MENU);
         options_button.valign = Gtk.Align.CENTER;
         options_button.can_focus = false;
-        options_button.margin_end = 6;
         options_button.tooltip_text = _("Options");
         options_button.get_style_context ().add_class (Gtk.STYLE_CLASS_FLAT);
         options_button.get_style_context ().add_class ("options-button");
         options_button.get_style_context ().add_class ("button-color");
         options_button.get_style_context ().remove_class ("button");
 
-        var favorite_revealer = new Gtk.Revealer ();
-        favorite_revealer.transition_type = Gtk.RevealerTransitionType.SLIDE_LEFT;
-        favorite_revealer.add (options_button);
-        favorite_revealer.reveal_child = false;
+        history_button = new Gtk.ToggleButton ();
+        history_button.add (new Gtk.Image.from_icon_name ("radio-track-played-recent-symbolic", Gtk.IconSize.MENU));
+        history_button.valign = Gtk.Align.CENTER;
+        history_button.can_focus = false;
+        history_button.tooltip_text = _("Recently Played");
+        history_button.get_style_context ().add_class (Gtk.STYLE_CLASS_FLAT);
+        history_button.get_style_context ().add_class ("options-button");
+        history_button.get_style_context ().add_class ("button-color");
+        history_button.get_style_context ().remove_class ("button");
+        
+        var button_stack = new Gtk.Stack ();
+        button_stack.width_request = 40;
+        button_stack.transition_type = Gtk.StackTransitionType.CROSSFADE;
+        button_stack.add_named (options_button, "options_button");
+        button_stack.add_named (history_button, "history_button");
+
+        var button_revealer = new Gtk.Revealer ();
+        button_revealer.transition_type = Gtk.RevealerTransitionType.SLIDE_LEFT;
+        button_revealer.add (button_stack);
+        button_revealer.reveal_child = true;
 
         var metainfo_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 0);
         metainfo_box.margin_start = 6;
@@ -70,7 +89,7 @@ public class Widgets.MediaControl : Gtk.Revealer {
         header_box.margin_end = 3;
         header_box.pack_start (image_cover, false, false, 0);
         header_box.set_center_widget (metainfo_box);
-        header_box.pack_end (favorite_revealer, false, false, 0);
+        header_box.pack_end (button_revealer, false, false, 0);
 
         var main_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 0);
         main_box.pack_start (timeline_revealer, false, false, 0);
@@ -121,11 +140,11 @@ public class Widgets.MediaControl : Gtk.Revealer {
         Byte.player.mode_changed.connect ((mode) => {
             if (mode == "radio") {
                 timeline_revealer.reveal_child = false;
-                favorite_revealer.reveal_child = false;
+                button_stack.visible_child_name = "history_button";
             } else {
                 timeline_revealer.reveal_child = true;
                 if (Byte.scan_service.is_sync == false) {
-                    favorite_revealer.reveal_child = true;
+                    button_stack.visible_child_name = "options_button";
                 }
             }
         });
@@ -158,18 +177,22 @@ public class Widgets.MediaControl : Gtk.Revealer {
         });
 
         Byte.scan_service.sync_started.connect (() => {
-            favorite_revealer.reveal_child = false;
+            button_revealer.reveal_child = false;
         });
 
         Byte.scan_service.sync_finished.connect (() => {
-            favorite_revealer.reveal_child = true;
+            button_revealer.reveal_child = true;
         });
 
         options_button.clicked.connect (() => {
-            print ("Click\n");
-
             if (Byte.player.current_track != null) {
                 activate_menu (Byte.player.current_track);
+            }
+        });
+
+        history_button.toggled.connect (() => {
+            if (history_button.active) {
+                activate_popover ();
             }
         });
     }
@@ -184,21 +207,22 @@ public class Widgets.MediaControl : Gtk.Revealer {
         if (Byte.scan_service.is_sync == false) {
             var all_items = Byte.database.get_all_playlists ();
 
-            var item = new Gtk.MenuItem.with_label (_ ("Create New Playlist"));
+            Widgets.MenuItem item;
+            item = new Widgets.MenuItem (_("Create New Playlist"), "zoom-in-symbolic", _("Create New Playlist"));
             item.get_style_context ().add_class ("track-options");
             item.get_style_context ().add_class ("css-item");
             item.activate.connect (() => {
                 var new_playlist = Byte.database.create_new_playlist ();
-                Byte.database.insert_track_into_playlist (new_playlist, track.id);
+                Byte.database.insert_track_into_playlist (new_playlist, track);
             });
             playlists.add (item);
 
             foreach (var playlist in all_items) {
-                item = new Gtk.MenuItem.with_label (playlist.title);
+                item = new Widgets.MenuItem (playlist.title, "playlist-symbolic", playlist.title);
                 item.get_style_context ().add_class ("track-options");
                 item.get_style_context ().add_class ("css-item");
                 item.activate.connect (() => {
-                    Byte.database.insert_track_into_playlist (playlist, track.id);
+                    Byte.database.insert_track_into_playlist (playlist, track);
                 });
                 playlists.add (item);
             }
@@ -230,7 +254,7 @@ public class Widgets.MediaControl : Gtk.Revealer {
         try {
             image_cover.pixbuf = new Gdk.Pixbuf.from_file_at_size (cover_path, 38, 38);
         } catch (Error e) {
-            image_cover.pixbuf = new Gdk.Pixbuf.from_file_at_size ("/usr/share/com.github.alainm23.byte/track-default-cover.svg", 38, 38);
+            image_cover.pixbuf = new Gdk.Pixbuf.from_resource_at_scale ("/com/github/alainm23/byte/track-default-cover.svg", 38, 38, true);
         }
 
         var track_grid = new Gtk.Grid ();
@@ -253,6 +277,18 @@ public class Widgets.MediaControl : Gtk.Revealer {
         var play_next_menu = new Widgets.MenuItem (_("Play Next"), "byte-play-next-symbolic", _("Play Next"));
         var play_last_menu = new Widgets.MenuItem (_("Play Later"), "byte-play-later-symbolic", _("Play Later"));
 
+        var view_menu = new Widgets.MenuItem (_("Go to"), "go-jump-symbolic", _("View"));
+        var views_menu = new Gtk.Menu ();
+        views_menu.get_style_context ().add_class ("view");
+        view_menu.set_submenu (views_menu);
+
+        var artist_menu = new Widgets.MenuItem (track.artist_name, "avatar-default-symbolic", _("Artist"));
+        var album_menu = new Widgets.MenuItem (track.album_title, "media-optical-symbolic", _("Album"));
+        var playlist_menu = new Widgets.MenuItem (track.playlist_title, "playlist-symbolic", _("Playlist"));
+
+        views_menu.add (artist_menu);
+        views_menu.add (album_menu);
+
         var add_playlist_menu = new Widgets.MenuItem (_("Add to Playlist"), "zoom-in-symbolic", _("Add to Playlist"));
         playlists = new Gtk.Menu ();
         playlists.get_style_context ().add_class ("view");
@@ -273,19 +309,23 @@ public class Widgets.MediaControl : Gtk.Revealer {
         menu.add (play_next_menu);
         menu.add (play_last_menu);
         menu.add (new Gtk.SeparatorMenuItem ());
+        menu.add (view_menu);
+        menu.add (new Gtk.SeparatorMenuItem ());
         menu.add (add_playlist_menu);
         //menu.add (edit_menu);
         menu.add (favorite_menu);
         menu.add (no_favorite_menu);
         menu.add (new Gtk.SeparatorMenuItem ());
 
-        if (track.playlist != 0) {
+        if (track.playlist_id != 0) {
             menu.add (remove_playlist_menu);
+            views_menu.add (playlist_menu);
         }
 
         menu.add (remove_db_menu);
 
         menu.show_all ();
+        views_menu.show_all ();
 
         track_menu.activate.connect (() => {
             this.activate ();
@@ -315,8 +355,37 @@ public class Widgets.MediaControl : Gtk.Revealer {
             }
         });
 
-        add_playlist_menu.activate.connect (() => {
+        artist_menu.activate.connect (() => {
+            var artist = Byte.database.get_artist_by_id (track.artist_id);
 
+            if (!Byte.navCtrl.has_key ("artist-%i".printf (artist.id))) {
+                var view = new Views.Artist (artist);
+                Byte.navCtrl.add_named (view, "artist-%i".printf (artist.id));
+            }
+    
+            Byte.navCtrl.push ("artist-%i".printf (artist.id));
+        });
+
+        album_menu.activate.connect (() => {
+            var album = Byte.database.get_album_by_id (track.album_id);
+
+            if (!Byte.navCtrl.has_key ("album-%i".printf (album.id))) {
+                var album_view = new Views.Album (album);
+                Byte.navCtrl.add_named (album_view, "album-%i".printf (album.id));
+            }
+
+            Byte.navCtrl.push ("album-%i".printf (album.id));
+        });
+
+        playlist_menu.activate.connect (() => {
+            var playlist = Byte.database.get_playlist_by_id (track.playlist_id);
+
+            if (!Byte.navCtrl.has_key ("playlist-%i".printf (playlist.id))) {
+                var album_view = new Views.Playlist (playlist);
+                Byte.navCtrl.add_named (album_view, "playlist-%i".printf (playlist.id));
+            }
+
+            Byte.navCtrl.push ("playlist-%i".printf (playlist.id));
         });
 
         edit_menu.activate.connect (() => {
@@ -355,5 +424,108 @@ public class Widgets.MediaControl : Gtk.Revealer {
                 destroy ();
             }
         });
+    }
+
+    private void activate_popover () {
+        if (popover == null) {
+            build_history_popover ();
+        }
+
+        foreach (var child in radio_track_listbox.get_children ()) {
+            child.destroy ();
+        }
+
+        foreach (var r in Byte.database.get_radio_track_history (Byte.player.current_radio.id)) {
+            var row = new Widgets.RadioTrackRow (r.radio_id, r.title, r.date_added);
+
+            radio_track_listbox.add (row);
+            radio_track_listbox.show_all ();
+        }
+
+        popover.popup ();
+    }
+
+    private void build_history_popover () {
+        popover = new Gtk.Popover (history_button);
+        popover.position = Gtk.PositionType.BOTTOM;
+
+        radio_track_listbox = new Gtk.ListBox ();
+        radio_track_listbox.selection_mode = Gtk.SelectionMode.NONE;
+        radio_track_listbox.expand = true;
+
+        var listbox_scrolled = new Gtk.ScrolledWindow (null, null);
+        listbox_scrolled.expand = true;
+        listbox_scrolled.add (radio_track_listbox);
+
+        var header_label = new Granite.HeaderLabel (_("Radio tracks history"));
+        header_label.halign = Gtk.Align.CENTER;
+
+        var popover_grid = new Gtk.Grid ();
+        popover_grid.width_request = 255;
+        popover_grid.height_request = 250;
+        popover_grid.orientation = Gtk.Orientation.VERTICAL;
+        popover_grid.add (header_label);
+        popover_grid.add (listbox_scrolled);
+        popover_grid.show_all ();
+
+        popover.add (popover_grid);
+
+        Byte.database.radio_track_added.connect ((radio_id, title, date_added) => {
+            var row = new Widgets.RadioTrackRow (radio_id, title, date_added);
+
+            radio_track_listbox.insert (row, 0);
+            radio_track_listbox.show_all ();
+        });
+
+        popover.closed.connect (() => {
+            history_button.active = false;
+        });
+    }
+}
+
+public class Widgets.RadioTrackRow : Gtk.ListBoxRow {
+    public int radio_id { get; construct; }
+    public string title { get; construct; }
+    public string date_added { get; construct; }
+
+    public GLib.DateTime _date;
+    public GLib.DateTime date {
+        get {
+            _date = new GLib.DateTime.from_iso8601 (date_added, new GLib.TimeZone.local ());
+            return _date;
+        }
+    }
+
+    public RadioTrackRow (int radio_id, string title, string date_added) {
+        Object (
+            radio_id: radio_id,
+            title: title,
+            date_added: date_added
+        );
+    }
+
+    construct {
+        var icon = new Gtk.Image ();
+        icon.gicon = new ThemedIcon ("folder-music-symbolic");
+        icon.pixel_size = 16;
+
+        var title_label = new Gtk.Label (title);
+        title_label.get_style_context ().add_class ("font-bold-600");
+        title_label.ellipsize = Pango.EllipsizeMode.END;
+        title_label.selectable = true;
+        title_label.valign = Gtk.Align.CENTER;
+
+        var date_label = new Gtk.Label (date.format (Granite.DateTime.get_default_time_format (true, false)));
+        date_label.halign = Gtk.Align.START;
+        date_label.valign = Gtk.Align.CENTER;
+        
+        var box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 6);
+        box.margin = 6;
+        box.margin_top = 0;
+        box.pack_start (icon, false, false, 0);
+        box.pack_start (title_label, false, false, 0);
+        //box.pack_end (date_label, false, false, 0);
+
+        add (box);
     }
 }

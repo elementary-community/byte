@@ -9,6 +9,11 @@ public class Utils : GLib.Object {
 
     public signal void radio_image_downloaded (int id);
 
+    public signal void quick_find_toggled ();
+    public signal void hide_quick_find ();
+
+    public signal void nav_to (string title, string uri);
+
     public string MAIN_FOLDER;
     public string COVER_FOLDER;
 
@@ -149,34 +154,38 @@ public class Utils : GLib.Object {
     }
 
     public void set_next_track (Objects.Track track) {
-        if (track.id != Byte.player.current_track.id) {
-            bool track_exists = track_exists (track.id, queue_playlist);
-            if (track_exists) {
-                int remove_index = get_track_index_by_id (track.id, queue_playlist);
-                queue_playlist.remove_at (remove_index);
+        if (queue_playlist.size > 0) {
+            if (track.id != Byte.player.current_track.id) {
+                bool track_exists = track_exists (track.id, queue_playlist);
+                if (track_exists) {
+                    int remove_index = get_track_index_by_id (track.id, queue_playlist);
+                    queue_playlist.remove_at (remove_index);
+                }
+    
+                int index = get_track_index_by_id (Byte.player.current_track.id, queue_playlist) + 1;
+    
+                track.track_order = index;
+                queue_playlist.insert (index, track);
+    
+                add_next_track (queue_playlist);
             }
-
-            int index = get_track_index_by_id (Byte.player.current_track.id, queue_playlist) + 1;
-
-            track.track_order = index;
-            queue_playlist.insert (index, track);
-
-            add_next_track (queue_playlist);
         }
     }
 
     public void set_last_track (Objects.Track track) {
-        if (track.id != Byte.player.current_track.id) {
-            bool track_exists = track_exists (track.id, queue_playlist);
-
-            if (track_exists) {
-                int remove_index = get_track_index_by_id (track.id, queue_playlist);
-                queue_playlist.remove_at (remove_index);
+        if (queue_playlist.size > 0) {
+            if (track.id != Byte.player.current_track.id) {
+                bool track_exists = track_exists (track.id, queue_playlist);
+    
+                if (track_exists) {
+                    int remove_index = get_track_index_by_id (track.id, queue_playlist);
+                    queue_playlist.remove_at (remove_index);
+                }
+    
+                track.track_order = queue_playlist.size + 1;
+                queue_playlist.add (track);
+                add_last_track (queue_playlist);
             }
-
-            track.track_order = queue_playlist.size + 1;
-            queue_playlist.add (track);
-            add_last_track (queue_playlist);
         }
     }
 
@@ -244,11 +253,12 @@ public class Utils : GLib.Object {
     
     public string get_cover_file (int track_id) {
         var cover_path = GLib.Path.build_filename (Byte.utils.COVER_FOLDER, ("track-%i.jpg").printf (track_id));
-        if (File.new_for_path (cover_path).query_exists ()) {
-            return "file://" + cover_path;
-        }
+        return "file://" + cover_path;
+    }
 
-        return "file:///usr/share/com.github.alainm23.byte/track-default-cover.svg";
+    public bool cover_file_exists (int track_id) {
+        var cover_path = GLib.Path.build_filename (Byte.utils.COVER_FOLDER, ("track-%i.jpg").printf (track_id));
+        return File.new_for_path (cover_path).query_exists ();
     }
 
     public string get_cover_radio_file (int radio_id) {

@@ -123,24 +123,28 @@ public class Services.CoverImport : GLib.Object {
     }
 
     private void save_cover_pixbuf (Gdk.Pixbuf p, Objects.Track track) {
-        Gdk.Pixbuf ? pixbuf = Byte.utils.align_and_scale_pixbuf (p, 256);
+        Idle.add (() => {
+            Gdk.Pixbuf ? pixbuf = Byte.utils.align_and_scale_pixbuf (p, 256);
 
-        try {
-            string album_path = GLib.Path.build_filename (Byte.utils.COVER_FOLDER, 
-                ("album-%i.jpg").printf (track.album_id));
+            try {
+                string album_path = GLib.Path.build_filename (Byte.utils.COVER_FOLDER, 
+                    ("album-%i.jpg").printf (track.album_id));
 
-            string track_path = GLib.Path.build_filename (Byte.utils.COVER_FOLDER, 
-                ("track-%i.jpg").printf (track.id));
+                string track_path = GLib.Path.build_filename (Byte.utils.COVER_FOLDER, 
+                    ("track-%i.jpg").printf (track.id));
 
-            if (pixbuf.save (album_path, "jpeg", "quality", "100")) {
-                Byte.database.updated_album_cover (track.album_id);
+                if (pixbuf.save (album_path, "jpeg", "quality", "100")) {
+                    Byte.database.updated_album_cover (track.album_id);
+                }
+
+                if (pixbuf.save (track_path, "jpeg", "quality", "100")) {
+                    Byte.database.updated_track_cover (track.id);
+                }
+            } catch (Error err) {
+                warning (err.message);
             }
 
-            if (pixbuf.save (track_path, "jpeg", "quality", "100")) {
-                Byte.database.updated_track_cover (track.id);
-            }
-        } catch (Error err) {
-            warning (err.message);
-        }
+            return false;
+        });
     }
 }

@@ -1,71 +1,19 @@
 public class Views.Artist : Gtk.EventBox {
+    public Objects.Artist artist { get; construct; }
+
     private Gtk.Label name_label;
     private Widgets.Cover image_cover;
     private Gtk.ListBox listbox;
     private Gtk.FlowBox flowbox;
 
-    public signal void go_back (string page);
-    public string back_page { set; get; }
-
     private Gee.ArrayList<Objects.Track?> all_tracks;
     private Gee.ArrayList<Objects.Album?> all_albums;
 
-    public Objects.Artist? _artist;
-    public Objects.Artist artist {
-        set {
-            _artist = value;
-            name_label.label = _artist.name;
-
-            int item_max = 5;
-
-            listbox.foreach ((widget) => {
-                widget.destroy (); 
-            });
-
-            flowbox.foreach ((widget) => {
-                widget.destroy (); 
-            });
-            
-            if (Byte.scan_service.is_sync == false) {
-                all_tracks = new Gee.ArrayList<Objects.Track?> ();
-                all_tracks = Byte.database.get_all_tracks_by_artist (_artist.id);
-
-                if (item_max > all_tracks.size) {
-                    item_max = all_tracks.size;
-                }
-        
-                for (int i = 0; i < item_max; i++) {
-                    var row = new Widgets.TrackRow (all_tracks [i]);
-        
-                    listbox.add (row);
-                    listbox.show_all ();
-                }
-
-                all_albums = new Gee.ArrayList<Objects.Album?> ();
-                all_albums = Byte.database.get_all_albums_by_artist (_artist.id);
-
-                foreach (var item in all_albums) {
-                    var row = new Widgets.AlbumArtistChild (item);
-                    flowbox.add (row);
-                    flowbox.show_all ();
-                }
-            }
-
-            try {
-                var cover_path = GLib.Path.build_filename (Byte.utils.COVER_FOLDER, ("artist-%i.jpg").printf (_artist.id));
-                var pixbuf = new Gdk.Pixbuf.from_file_at_size (cover_path, 64, 64);
-                image_cover.pixbuf = pixbuf;
-            } catch (Error e) {
-                image_cover.set_with_default_icon (64, "artist");
-            }
-        }
-
-        get {
-            return _artist;
-        }
-    } 
-
-    public Artist () {}
+    public Artist (Objects.Artist artist) {
+        Object (
+            artist: artist
+        );
+    }
 
     construct {
         get_style_context ().add_class (Gtk.STYLE_CLASS_VIEW);
@@ -90,11 +38,19 @@ public class Views.Artist : Gtk.EventBox {
         header_box.pack_start (back_button, false, false, 0);
         header_box.set_center_widget (center_label);
 
-        image_cover = new Widgets.Cover.with_default_icon (128, "artist");
+        image_cover = new Widgets.Cover.with_default_icon (64, "artist");
         image_cover.halign = Gtk.Align.CENTER;
         image_cover.valign = Gtk.Align.CENTER;
 
-        name_label = new Gtk.Label (null);
+        try {
+            var cover_path = GLib.Path.build_filename (Byte.utils.COVER_FOLDER, ("artist-%i.jpg").printf (_artist.id));
+            var pixbuf = new Gdk.Pixbuf.from_file_at_size (cover_path, 64, 64);
+            image_cover.pixbuf = pixbuf;
+        } catch (Error e) {
+            image_cover.set_with_default_icon (64, "artist");
+        }
+
+        name_label = new Gtk.Label (artist.name);
         name_label.halign = Gtk.Align.CENTER;
         name_label.valign = Gtk.Align.CENTER;
         name_label.wrap = true;
@@ -121,6 +77,7 @@ public class Views.Artist : Gtk.EventBox {
         albums_label.use_markup = true;
 
         flowbox = new Gtk.FlowBox ();
+        flowbox.homogeneous = true;
         flowbox.min_children_per_line = 2;
         flowbox.max_children_per_line = 2;
 
@@ -149,10 +106,32 @@ public class Views.Artist : Gtk.EventBox {
 
         add (main_box);
 
+        if (Byte.scan_service.is_sync == false) {
+            int item_max = 5;
+            all_tracks = Byte.database.get_all_tracks_by_artist (artist.id);
+            if (item_max > all_tracks.size) {
+                item_max = all_tracks.size;
+            }
+    
+            for (int i = 0; i < item_max; i++) {
+                var row = new Widgets.TrackRow (all_tracks [i]);
+    
+                listbox.add (row);
+                listbox.show_all ();
+            }
+
+            all_albums = Byte.database.get_all_albums_by_artist (artist.id);
+            foreach (var item in all_albums) {
+                var row = new Widgets.AlbumArtistChild (item);
+                flowbox.add (row);
+                flowbox.show_all ();
+            }
+        }
+
         show_all ();
         
         back_button.clicked.connect (() => {
-            go_back (back_page);
+            Byte.navCtrl.pop ();
         });
 
         listbox.row_activated.connect ((row) => {
@@ -163,6 +142,17 @@ public class Views.Artist : Gtk.EventBox {
                 Byte.settings.get_boolean ("shuffle-mode"),
                 item.track
             );
+        });
+
+        flowbox.child_activated.connect ((child) => {
+            var item = child as Widgets.AlbumArtistChild;
+
+            if (!Byte.navCtrl.has_key ("album-%i".printf (item.album.id))) {
+                var album_view = new Views.Album (item.album);
+                Byte.navCtrl.add_named (album_view, "album-%i".printf (item.album.id));
+            }
+
+            Byte.navCtrl.push ("album-%i".printf (item.album.id));
         });
     }
 }

@@ -1,4 +1,6 @@
 public class Views.Album : Gtk.EventBox {
+    public Objects.Album album { get; construct; }
+
     private Gtk.Label title_label;
     private Gtk.Label artist_label;
     private Gtk.Label genre_label;
@@ -9,54 +11,13 @@ public class Views.Album : Gtk.EventBox {
     private string cover_path;
     private Widgets.Cover image_cover;
     
-    public signal void go_back (string page);
-    public string back_page { set; get; }
-
     private Gee.ArrayList<Objects.Track?> all_tracks;
 
-    public Objects.Album? _album;
-    public Objects.Album album {
-        set {
-            _album = value;
-
-            print ("Title: %s\n".printf (_album.title));
-
-            title_label.label = _album.title;
-            artist_label.label = _album.artist_name;
-            genre_label.label = _album.genre;
-            year_label.label = "%i".printf (_album.year);
-
-            try {
-                cover_path = GLib.Path.build_filename (Byte.utils.COVER_FOLDER, ("album-%i.jpg").printf (_album.id));
-                var pixbuf = new Gdk.Pixbuf.from_file_at_size (cover_path, 128, 128);
-                image_cover.pixbuf = pixbuf;
-            } catch (Error e) {
-                var pixbuf = new Gdk.Pixbuf.from_file_at_size ("/usr/share/com.github.alainm23.byte/album-default-cover.svg", 128, 128);
-                image_cover.pixbuf = pixbuf;
-            }
-
-            listbox.foreach ((widget) => {
-                widget.destroy (); 
-            });
-
-            if (Byte.scan_service.is_sync == false) {
-                all_tracks = new Gee.ArrayList<Objects.Track?> ();
-                all_tracks = Byte.database.get_all_tracks_by_album (_album.id);
-        
-                foreach (var item in all_tracks) {
-                    var row = new Widgets.TrackAlbumRow (item);
-                    listbox.add (row);
-                }
-        
-                listbox.show_all ();
-            }
-        }
-        get {
-            return _album;
-        }
+    public Album (Objects.Album album) {
+        Object (
+            album: album
+        );
     }
-
-    public Album () {}
 
     construct {
         get_style_context ().add_class (Gtk.STYLE_CLASS_VIEW);
@@ -81,16 +42,18 @@ public class Views.Album : Gtk.EventBox {
         header_box.pack_start (back_button, false, false, 0);
         header_box.set_center_widget (center_label);
 
-        //cover_path = GLib.Path.build_filename (Byte.utils.COVER_FOLDER, ("album-%i.jpg").printf (album.id));
-        image_cover = new Widgets.Cover.from_file (
-            "/usr/share/com.github.alainm23.byte/album-default-cover.svg", 
-            128, 
-            "album"
-        );
+        image_cover = new Widgets.Cover ();
         image_cover.halign = Gtk.Align.START;
         image_cover.valign = Gtk.Align.START;
- 
-        title_label = new Gtk.Label (null);
+        
+        try {
+            cover_path = GLib.Path.build_filename (Byte.utils.COVER_FOLDER, ("album-%i.jpg").printf (album.id));
+            image_cover.pixbuf = new Gdk.Pixbuf.from_file_at_size (cover_path, 128, 128);
+        } catch (Error e) {
+            image_cover.pixbuf = new Gdk.Pixbuf.from_resource_at_scale ("/com/github/alainm23/byte/track-default-cover.svg", 128, 128, true);
+        }
+
+        title_label = new Gtk.Label (album.title);
         title_label.wrap = true;
         title_label.wrap_mode = Pango.WrapMode.CHAR; 
         title_label.justify = Gtk.Justification.FILL;
@@ -98,7 +61,7 @@ public class Views.Album : Gtk.EventBox {
         title_label.halign = Gtk.Align.START;
         title_label.selectable = true;
         
-        artist_label = new Gtk.Label (null);
+        artist_label = new Gtk.Label (album.artist_name);
         artist_label.get_style_context ().add_class ("font-album-artist");
         artist_label.wrap = true;
         artist_label.justify = Gtk.Justification.FILL;
@@ -106,7 +69,7 @@ public class Views.Album : Gtk.EventBox {
         artist_label.halign = Gtk.Align.START;
         artist_label.selectable = true;
 
-        genre_label = new Gtk.Label (null);
+        genre_label = new Gtk.Label (album.genre);
         genre_label.wrap = true;
         genre_label.wrap_mode = Pango.WrapMode.CHAR; 
         genre_label.justify = Gtk.Justification.FILL;
@@ -115,7 +78,7 @@ public class Views.Album : Gtk.EventBox {
         genre_label.get_style_context ().add_class (Gtk.STYLE_CLASS_DIM_LABEL);
         genre_label.selectable = true;
 
-        year_label = new Gtk.Label (null);
+        year_label = new Gtk.Label ("%i".printf (album.year));
         year_label.halign = Gtk.Align.START;
         year_label.ellipsize = Pango.EllipsizeMode.END;
         year_label.get_style_context ().add_class (Gtk.STYLE_CLASS_DIM_LABEL);
@@ -183,8 +146,22 @@ public class Views.Album : Gtk.EventBox {
 
         add (main_box);
 
+        if (Byte.scan_service.is_sync == false) {
+            all_tracks = new Gee.ArrayList<Objects.Track?> ();
+            all_tracks = Byte.database.get_all_tracks_by_album (album.id);
+    
+            foreach (var item in all_tracks) {
+                var row = new Widgets.TrackAlbumRow (item);
+                listbox.add (row);
+            }
+    
+            listbox.show_all ();
+        }
+        
+        show_all ();
+
         back_button.clicked.connect (() => {
-            go_back (back_page);
+            Byte.navCtrl.pop ();
         });
 
         listbox.row_activated.connect ((row) => {

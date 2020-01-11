@@ -303,6 +303,7 @@ public class Services.Player : GLib.Object {
                 current_radio_title = title;
 
                 if (current_radio_title != null && mode == "radio") {
+                    Byte.database.insert_radio_track_history (current_radio.id, title);
                     current_radio_title_changed (current_radio_title);
                 }
                 

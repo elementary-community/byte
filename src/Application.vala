@@ -11,6 +11,7 @@ public class Byte : Gtk.Application {
     public static Services.Scan scan_service;
     public static Services.RadioBrowser radio_browser;
     public static Services.Lastfm lastfm_service;
+    public static Services.NavController navCtrl;
     public static Utils utils;
 
     public string[] argsv;
@@ -27,10 +28,14 @@ public class Byte : Gtk.Application {
         }
     }
 
+    [CCode (array_length = false, array_null_terminated = true)]
+    string[] ? arg_files = null;
+
     public Byte () {
         Object (
             application_id: "com.github.alainm23.byte",
-            flags: ApplicationFlags.HANDLES_OPEN
+            flags: ApplicationFlags.HANDLES_OPEN,
+            flags: ApplicationFlags.HANDLES_COMMAND_LINE
         );
 
         // Dir to Database
@@ -47,6 +52,7 @@ public class Byte : Gtk.Application {
         scan_service = new Services.Scan ();
         radio_browser = new Services.RadioBrowser ();
         lastfm_service = new Services.Lastfm ();
+        navCtrl = new Services.NavController ();
     }
 
     protected override void activate () {
@@ -121,6 +127,72 @@ public class Byte : Gtk.Application {
 
         Gtk.Settings.get_default().set_property("gtk-icon-theme-name", "elementary");
         Gtk.Settings.get_default().set_property("gtk-theme-name", "elementary");
+    }
+
+    public override void open (File[] files, string hint) {
+        activate ();
+        if (files [0].query_exists ()) {
+            //mainwindow.open_file (files [0]);
+        }
+    }
+
+    public override int command_line (ApplicationCommandLine cmd) {
+        command_line_interpreter (cmd);
+        return 0;
+    }
+
+    private void command_line_interpreter (ApplicationCommandLine cmd) {
+        string[] args_cmd = cmd.get_arguments ();
+        unowned string[] args = args_cmd;
+
+        bool next = false;
+        bool prev = false;
+        bool play = false;
+
+        GLib.OptionEntry [] options = new OptionEntry [5];
+        options [0] = { "next", 0, 0, OptionArg.NONE, ref next, "Play next track", null };
+        options [1] = { "prev", 0, 0, OptionArg.NONE, ref prev, "Play previous track", null };
+        options [2] = { "play", 0, 0, OptionArg.NONE, ref play, "Toggle playing", null };
+        options [3] = { "", 0, 0, OptionArg.STRING_ARRAY, ref arg_files, null, "[URI…]" };
+        options [4] = { null };
+
+        var opt_context = new OptionContext ("actions");
+        opt_context.add_main_entries (options, null);
+        try {
+            opt_context.parse (ref args);
+        } catch (Error err) {
+            warning (err.message);
+            return;
+        }
+
+        if (next || prev || play) {
+            if (next && main_window != null) {
+                Byte.player.next ();
+            } else if (prev && main_window != null) {
+                Byte.player.prev ();
+            } else if (play) {
+                if (main_window == null) {
+                    activate ();
+                }
+                Byte.player.toggle_playing ();
+            }
+
+            return;
+        }
+
+        File[] files = null;
+        foreach (string arg_file in arg_files) {
+            if (GLib.FileUtils.test (arg_file, GLib.FileTest.EXISTS)) {
+                files += (File.new_for_path (arg_file));
+            }
+        }
+
+        if (files != null && files.length > 0) {
+            open (files, "");
+            return;
+        }
+
+        activate ();
     }
 
     public void toggle_playing_action_enabled (bool b) {

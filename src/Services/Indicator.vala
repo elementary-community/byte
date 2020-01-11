@@ -65,7 +65,7 @@ public class SoundIndicatorPlayer : GLib.Object {
         app = Byte.instance;
         connection = conn;
         
-        Byte.player.current_track_changed.connect_after ((track) => {
+        Byte.player.current_track_changed.connect ((track) => {
             Variant property;
             if (Byte.player.player_state == Gst.State.PLAYING) {
                 property = "Playing";
