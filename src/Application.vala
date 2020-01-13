@@ -14,7 +14,6 @@ public class Byte : Gtk.Application {
     public static Services.NavController navCtrl;
     public static Utils utils;
 
-    public string[] argsv;
     public bool has_entry_focus = false;
     public SimpleAction toggle_playing_action;
 
@@ -32,12 +31,6 @@ public class Byte : Gtk.Application {
     string[] ? arg_files = null;
 
     public Byte () {
-        Object (
-            application_id: "com.github.alainm23.byte",
-            flags: ApplicationFlags.HANDLES_OPEN,
-            flags: ApplicationFlags.HANDLES_COMMAND_LINE
-        );
-
         // Dir to Database
         utils = new Utils ();
         utils.create_dir_with_parents ("/.local/share/com.github.alainm23.byte");
@@ -53,6 +46,12 @@ public class Byte : Gtk.Application {
         radio_browser = new Services.RadioBrowser ();
         lastfm_service = new Services.Lastfm ();
         navCtrl = new Services.NavController ();
+    }
+
+    construct {
+        this.flags |= ApplicationFlags.HANDLES_OPEN;
+        this.flags |= ApplicationFlags.HANDLES_COMMAND_LINE;
+        this.application_id = "com.github.alainm23.byte";
     }
 
     protected override void activate () {
@@ -132,7 +131,7 @@ public class Byte : Gtk.Application {
     public override void open (File[] files, string hint) {
         activate ();
         if (files [0].query_exists ()) {
-            //mainwindow.open_file (files [0]);
+            main_window.open_file (files [0]);
         }
     }
 
@@ -202,10 +201,10 @@ public class Byte : Gtk.Application {
             set_accels_for_action ("app.toggle_playing_action", {null});
         }
     }
+}
 
-    public static int main (string[] args) {
-        Gst.init (ref args);
-        var app = Byte.instance;
-        return app.run (args);
-    }
+public static int main (string[] args) {
+    Gst.init (ref args);
+    var app = Byte.instance;
+    return app.run (args);
 }
