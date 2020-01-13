@@ -168,9 +168,13 @@ msgstr ""
 
 #: src/Widgets/TrackRow.vala:350 src/Widgets/MediaControl.vala:280
 #: src/Widgets/TrackAlbumRow.vala:227
-#, fuzzy
 msgid "View"
 msgstr "Tout voir"
+
+#: src/Widgets/TrackRow.vala:350 src/Widgets/MediaControl.vala:280
+#: src/Widgets/TrackAlbumRow.vala:227
+msgid "View"
+msgstr "Vue"
 
 #: src/Widgets/TrackRow.vala:355 src/Widgets/MediaControl.vala:285
 #: src/Widgets/TrackAlbumRow.vala:232 src/Views/Albums.vala:77
@@ -243,9 +247,8 @@ msgid "Remove"
 msgstr "Retirer"
 
 #: src/Widgets/MediaControl.vala:60
-#, fuzzy
 msgid "Recently Played"
-msgstr "Récemment ajouté"
+msgstr "Écouté récemment"
 
 #: src/Widgets/MediaControl.vala:287 src/Views/Playlist.vala:45
 msgid "Playlist"
@@ -253,7 +256,7 @@ msgstr "Playlist"
 
 #: src/Widgets/MediaControl.vala:460
 msgid "Radio tracks history"
-msgstr ""
+msgstr "Historique des titres radio"
 
 #. search_entry.get_style_context ().add_class ("search-entry");
 #: src/Widgets/QuickFind.vala:30
@@ -319,14 +322,26 @@ msgid "Add Favorite"
 msgstr "Ajouté comme favoris"
 
 #: src/Widgets/NewPlaylist.vala:32
-#, fuzzy
 msgid "Playlist name"
-msgstr "Playlist"
+msgstr "Nom de la playlist"
 
 #: src/Widgets/PlaylistRow.vala:24 src/Widgets/PlaylistRow.vala:49
-#, fuzzy, c-format
+#, c-format
 msgid "Updated %s"
-msgstr "Mis à jour"
+msgstr "%s mis à jour"
+
+#: src/Widgets/Popovers/Sort.vala:144
+msgid "Navigate:"
+msgstr "Naviguer :"
+
+#: src/Widgets/Popovers/Sort.vala:150 src/Views/Home.vala:29
+#: src/Views/Tracks.vala:34 src/Views/Tracks.vala:142 src/Views/Tracks.vala:301
+msgid "Songs"
+msgstr "Titres"
+
+#: src/Widgets/Popovers/Sort.vala:151
+msgid "Folders"
+msgstr "Dossiers"
 
 #: src/Widgets/Popovers/Sort.vala:144
 msgid "Navigate:"
@@ -426,7 +441,7 @@ msgstr "Nombre de lectures"
 
 #: src/Views/Tracks.vala:150 src/Views/Tracks.vala:309
 msgid "Files"
-msgstr ""
+msgstr "Fichiers"
 
 #: src/Views/Radios.vala:36
 msgid "Search internet radios"
@@ -559,18 +574,3 @@ msgstr "Réinitialiser la bibliothèque ?"
 #: src/Dialogs/Settings.vala:361
 msgid "Are you sure you want to reset all your library?"
 msgstr "Êtes-vous sûr de vouloir réinitialiser toute votre bibliothèque ?"
-
-#~ msgid "No Results"
-#~ msgstr "Aucun résultat"
-
-#~ msgid "No results for '%s' in Tracks. Try again."
-#~ msgstr "Aucun résultat pour « %s » parmi les titres. Veuillez réessayer."
-
-#~ msgid "No Songs"
-#~ msgstr "Aucun titre"
-
-#~ msgid "Add some tracks to your selected music folder."
-#~ msgstr "Ajoutez des titres à votre dossier de musique sélectionné."
-
-#~ msgid "Project name"
-#~ msgstr "Nom du projet"
