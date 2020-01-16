@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: com.github.alainm23.byte\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-01-11 19:46+0400\n"
+"POT-Creation-Date: 2020-01-15 22:19-0500\n"
 "PO-Revision-Date: 2019-08-10 12:12+0200\n"
 "Last-Translator: Nathan Bonnemains (@NathanBnm)\n"
 "Language-Team: none\n"
@@ -165,11 +165,6 @@ msgstr "Lire plus tard"
 #: src/Widgets/TrackAlbumRow.vala:227
 msgid "Go to"
 msgstr ""
-
-#: src/Widgets/TrackRow.vala:350 src/Widgets/MediaControl.vala:280
-#: src/Widgets/TrackAlbumRow.vala:227
-msgid "View"
-msgstr "Tout voir"
 
 #: src/Widgets/TrackRow.vala:350 src/Widgets/MediaControl.vala:280
 #: src/Widgets/TrackAlbumRow.vala:227
@@ -332,7 +327,7 @@ msgstr "%s mis à jour"
 
 #: src/Widgets/Popovers/Sort.vala:144
 msgid "Navigate:"
-msgstr "Naviguer :"
+msgstr "Naviguer:"
 
 #: src/Widgets/Popovers/Sort.vala:150 src/Views/Home.vala:29
 #: src/Views/Tracks.vala:34 src/Views/Tracks.vala:142 src/Views/Tracks.vala:301
@@ -342,20 +337,6 @@ msgstr "Titres"
 #: src/Widgets/Popovers/Sort.vala:151
 msgid "Folders"
 msgstr "Dossiers"
-
-#: src/Widgets/Popovers/Sort.vala:144
-msgid "Navigate:"
-msgstr ""
-
-#: src/Widgets/Popovers/Sort.vala:150 src/Views/Home.vala:29
-#: src/Views/Tracks.vala:34 src/Views/Tracks.vala:142 src/Views/Tracks.vala:301
-msgid "Songs"
-msgstr "Titres"
-
-#: src/Widgets/Popovers/Sort.vala:151
-#, fuzzy
-msgid "Folders"
-msgstr "Dossier"
 
 #: src/Widgets/Popovers/Sort.vala:154
 #, fuzzy

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: extra\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-01-11 18:03+0100\n"
+"POT-Creation-Date: 2020-01-15 22:19-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -28,12 +28,12 @@ msgstr ""
 msgid "Rediscover your music"
 msgstr ""
 
-#: data/com.github.alainm23.byte.desktop.in:8
-msgid "com.github.alainm23.byte"
+#: data/com.github.alainm23.byte.desktop.in:6
+msgid "music;radio;playlist;mp3;player;"
 msgstr ""
 
-#: data/com.github.alainm23.byte.desktop.in:11
-msgid "music;radio;playlist;mp3;player;"
+#: data/com.github.alainm23.byte.desktop.in:8
+msgid "com.github.alainm23.byte"
 msgstr ""
 
 #: data/com.github.alainm23.byte.desktop.in:18
