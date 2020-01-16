@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: com.github.alainm23.byte\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-12-07 02:05-0500\n"
-"PO-Revision-Date: 2020-01-10 14:12+0100\n"
+"POT-Creation-Date: 2020-01-11 19:46+0400\n"
+"PO-Revision-Date: 2019-10-28 21:13+0100\n"
 "Last-Translator: Heimen Stoffels <vistausss@outlook.com>\n"
 "Language-Team: \n"
 "Language: nl\n"
@@ -18,25 +18,25 @@ msgstr ""
 "X-Generator: Poedit 2.2.4\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: src/Utils.vala:266
+#: src/Utils.vala:276
 msgid "Choose an image…"
 msgstr "Kies een afbeelding…"
 
-#: src/Utils.vala:268 src/Services/Scan.vala:90 src/Widgets/QuickFind.vala:29
+#: src/Utils.vala:278 src/Services/Scan.vala:93 src/Widgets/QuickFind.vala:32
 msgid "Cancel"
 msgstr "Annuleren"
 
-#: src/Utils.vala:269 src/Services/Scan.vala:91
+#: src/Utils.vala:279 src/Services/Scan.vala:94
 msgid "Open"
 msgstr "Openen"
 
-#: src/Utils.vala:272
+#: src/Utils.vala:282
 msgid "Images"
 msgstr "Afbeeldingen"
 
 #. Add
-#: src/Services/Database.vala:1633 src/Widgets/NewPlaylist.vala:10
-#: src/Widgets/Popovers/NewPlaylist.vala:19 src/Views/Playlist.vala:231
+#: src/Services/Database.vala:1766 src/Widgets/NewPlaylist.vala:10
+#: src/Widgets/Popovers/NewPlaylist.vala:19 src/Views/Playlist.vala:191
 msgid "New Playlist"
 msgstr "Nieuwe afspeellijst"
 
@@ -44,11 +44,11 @@ msgstr "Nieuwe afspeellijst"
 msgid "Unknown"
 msgstr "Onbekend"
 
-#: src/Services/Scan.vala:89
+#: src/Services/Scan.vala:92
 msgid "Select a folder."
 msgstr "Kies een map."
 
-#: src/Services/Scan.vala:94
+#: src/Services/Scan.vala:97
 msgid "Folder"
 msgstr "Map"
 
@@ -80,10 +80,10 @@ msgstr "Muziek laden uit map"
 msgid "Previous"
 msgstr "Vorige"
 
-#: src/Widgets/HeaderBar.vala:79 src/Widgets/TrackRow.vala:345
-#: src/Widgets/MediaControl.vala:278 src/Widgets/TrackAlbumRow.vala:222
-#: src/Views/Album.vala:126 src/Views/Tracks.vala:98
-#: src/Views/Favorites.vala:64 src/Views/Playlist.vala:202
+#: src/Widgets/HeaderBar.vala:79 src/Widgets/TrackRow.vala:346
+#: src/Widgets/MediaControl.vala:276 src/Widgets/TrackAlbumRow.vala:223
+#: src/Views/Album.vala:89 src/Views/Tracks.vala:85 src/Views/Favorites.vala:64
+#: src/Views/Playlist.vala:162
 msgid "Play"
 msgstr "Afspelen"
 
@@ -142,75 +142,100 @@ msgstr "Toegevoegd"
 msgid "played"
 msgstr "afgespeeld"
 
-#: src/Widgets/TrackRow.vala:98 src/Widgets/MediaControl.vala:51
+#: src/Widgets/TrackRow.vala:98 src/Widgets/MediaControl.vala:50
 #: src/Widgets/TrackAlbumRow.vala:44
 msgid "Options"
 msgstr "Opties"
 
-#: src/Widgets/TrackRow.vala:280 src/Widgets/MediaControl.vala:213
-#: src/Widgets/TrackAlbumRow.vala:157
+#: src/Widgets/TrackRow.vala:281 src/Widgets/MediaControl.vala:211
+#: src/Widgets/TrackAlbumRow.vala:158
 msgid "Create New Playlist"
 msgstr "Nieuwe afspeellijst maken"
 
-#: src/Widgets/TrackRow.vala:346 src/Widgets/MediaControl.vala:279
-#: src/Widgets/TrackAlbumRow.vala:223
+#: src/Widgets/TrackRow.vala:347 src/Widgets/MediaControl.vala:277
+#: src/Widgets/TrackAlbumRow.vala:224
 msgid "Play Next"
 msgstr "Volgende afspelen"
 
-#: src/Widgets/TrackRow.vala:347 src/Widgets/MediaControl.vala:280
-#: src/Widgets/TrackAlbumRow.vala:224
+#: src/Widgets/TrackRow.vala:348 src/Widgets/MediaControl.vala:278
+#: src/Widgets/TrackAlbumRow.vala:225
 msgid "Play Later"
 msgstr "Later afspelen"
 
-#: src/Widgets/TrackRow.vala:349 src/Widgets/MediaControl.vala:282
-#: src/Widgets/TrackAlbumRow.vala:226
+#: src/Widgets/TrackRow.vala:350 src/Widgets/MediaControl.vala:280
+#: src/Widgets/TrackAlbumRow.vala:227
+msgid "Go to"
+msgstr ""
+
+#: src/Widgets/TrackRow.vala:350 src/Widgets/MediaControl.vala:280
+#: src/Widgets/TrackAlbumRow.vala:227
+#, fuzzy
+msgid "View"
+msgstr "Alles tonen"
+
+#: src/Widgets/TrackRow.vala:355 src/Widgets/MediaControl.vala:285
+#: src/Widgets/TrackAlbumRow.vala:232 src/Views/Albums.vala:77
+#: src/Views/Tracks.vala:78 src/Views/Playlist.vala:69 src/Views/Artist.vala:30
+#: src/Dialogs/TrackEditor.vala:84
+msgid "Artist"
+msgstr "Artiest"
+
+#: src/Widgets/TrackRow.vala:356 src/Widgets/MediaControl.vala:286
+#: src/Widgets/TrackAlbumRow.vala:233 src/Views/Album.vala:34
+#: src/Views/Tracks.vala:79 src/Views/Playlist.vala:70
+#: src/Dialogs/TrackEditor.vala:86
+msgid "Album"
+msgstr "Album"
+
+#: src/Widgets/TrackRow.vala:361 src/Widgets/MediaControl.vala:292
+#: src/Widgets/TrackAlbumRow.vala:239
 msgid "Add to Playlist"
 msgstr "Toevoegen aan afspeellijst"
 
-#: src/Widgets/TrackRow.vala:354 src/Widgets/MediaControl.vala:287
-#: src/Widgets/TrackAlbumRow.vala:231
+#: src/Widgets/TrackRow.vala:366 src/Widgets/MediaControl.vala:297
+#: src/Widgets/TrackAlbumRow.vala:244
 msgid "Edit Song Info…"
 msgstr "Nummerinformatie aanpassen…"
 
-#: src/Widgets/TrackRow.vala:356 src/Widgets/MediaControl.vala:289
-#: src/Widgets/TrackAlbumRow.vala:233
+#: src/Widgets/TrackRow.vala:368 src/Widgets/MediaControl.vala:299
+#: src/Widgets/TrackAlbumRow.vala:246
 msgid "Love"
 msgstr "Vind ik leuk"
 
-#: src/Widgets/TrackRow.vala:357 src/Widgets/MediaControl.vala:290
-#: src/Widgets/TrackAlbumRow.vala:234
+#: src/Widgets/TrackRow.vala:369 src/Widgets/MediaControl.vala:300
+#: src/Widgets/TrackAlbumRow.vala:247
 msgid "Dislike"
 msgstr "Vind ik niet leuk"
 
-#: src/Widgets/TrackRow.vala:359 src/Widgets/MediaControl.vala:292
-#: src/Widgets/TrackAlbumRow.vala:236
+#: src/Widgets/TrackRow.vala:371 src/Widgets/MediaControl.vala:302
+#: src/Widgets/TrackAlbumRow.vala:249
 msgid "Delete from library"
 msgstr "Verwijderen uit verzameling"
 
-#: src/Widgets/TrackRow.vala:360 src/Widgets/MediaControl.vala:293
-#: src/Widgets/TrackAlbumRow.vala:237
+#: src/Widgets/TrackRow.vala:372 src/Widgets/MediaControl.vala:303
+#: src/Widgets/TrackAlbumRow.vala:250
 msgid "Delete from file"
 msgstr "Bestand verwijderen"
 
-#: src/Widgets/TrackRow.vala:361 src/Widgets/MediaControl.vala:294
-#: src/Widgets/TrackAlbumRow.vala:238
+#: src/Widgets/TrackRow.vala:373 src/Widgets/MediaControl.vala:304
+#: src/Widgets/TrackAlbumRow.vala:251
 msgid "Remove from playlist"
 msgstr "Verwijderen uit afspeellijst"
 
-#: src/Widgets/TrackRow.vala:423 src/Widgets/MediaControl.vala:356
-#: src/Widgets/RadioRow.vala:106 src/Views/Playlist.vala:392
+#: src/Widgets/TrackRow.vala:455 src/Widgets/MediaControl.vala:399
+#: src/Widgets/RadioRow.vala:106 src/Views/Playlist.vala:374
 msgid "Delete from library?"
 msgstr "Verwijderen uit je verzameling?"
 
-#: src/Widgets/TrackRow.vala:424 src/Widgets/MediaControl.vala:357
-#: src/Widgets/RadioRow.vala:107 src/Views/Playlist.vala:393
+#: src/Widgets/TrackRow.vala:456 src/Widgets/MediaControl.vala:400
+#: src/Widgets/RadioRow.vala:107 src/Views/Playlist.vala:375
 #, c-format
 msgid "Are you sure you want to delete <b>%s</b> from your library?"
 msgstr "Weet je zeker dat je <b>%s</b> wilt verwijderen uit je verzameling?"
 
-#: src/Widgets/TrackRow.vala:429 src/Widgets/MediaControl.vala:362
-#: src/Widgets/RadioRow.vala:112 src/Views/Playlist.vala:168
-#: src/Views/Playlist.vala:398
+#: src/Widgets/TrackRow.vala:461 src/Widgets/MediaControl.vala:405
+#: src/Widgets/RadioRow.vala:112 src/Views/Playlist.vala:128
+#: src/Views/Playlist.vala:380
 msgid "Delete"
 msgstr "Verwijderen"
 
@@ -218,41 +243,50 @@ msgstr "Verwijderen"
 msgid "Remove"
 msgstr "Verwijderen"
 
-#: src/Widgets/MediaControl.vala:62 src/Widgets/MediaControl.vala:417
+#: src/Widgets/MediaControl.vala:60
+#, fuzzy
+msgid "Recently Played"
+msgstr "Recent toegevoegd"
+
+#: src/Widgets/MediaControl.vala:287 src/Views/Playlist.vala:45
+msgid "Playlist"
+msgstr "Afspeellijst"
+
+#: src/Widgets/MediaControl.vala:460
 msgid "Radio tracks history"
 msgstr "Radiogeschiedenis"
 
 #. search_entry.get_style_context ().add_class ("search-entry");
-#: src/Widgets/QuickFind.vala:27
+#: src/Widgets/QuickFind.vala:30
 msgid "Quick find"
 msgstr "Snel zoeken"
 
 #. general_grid.add (settings_09_box);
 #. general_grid.add (new Gtk.Separator (Gtk.Orientation.HORIZONTAL));
-#: src/Widgets/QuickFind.vala:45 src/Views/Home.vala:20
+#: src/Widgets/QuickFind.vala:48 src/Views/Home.vala:11
 #: src/Dialogs/Settings.vala:153
 msgid "Library"
 msgstr "Verzameling"
 
-#: src/Widgets/QuickFind.vala:46 src/Views/Home.vala:40
+#: src/Widgets/QuickFind.vala:49 src/Views/Home.vala:31
 #: src/Views/Radios.vala:28
 msgid "Radios"
 msgstr "Radiostations"
 
 #. Toast
-#: src/Widgets/QuickFind.vala:101 src/Widgets/QuickFind.vala:174
+#: src/Widgets/QuickFind.vala:104 src/Widgets/QuickFind.vala:177
 msgid "The radio station was added correctly"
 msgstr "Het radiostation is toegevoegd"
 
-#: src/Widgets/QuickFind.vala:116
+#: src/Widgets/QuickFind.vala:119
 msgid "Discover…"
 msgstr "Ontdekken…"
 
-#: src/Widgets/QuickFind.vala:117
+#: src/Widgets/QuickFind.vala:120
 msgid "Search your favorite radios"
 msgstr "Zoek naar je favoriete radiostations"
 
-#: src/Widgets/QuickFind.vala:143
+#: src/Widgets/QuickFind.vala:146
 msgid "The radio station is already added"
 msgstr "Dit radiostation is al toegevoegd"
 
@@ -294,15 +328,30 @@ msgstr "Naam van afspeellijst"
 msgid "Updated %s"
 msgstr "Bijgewerkt op %s"
 
-#: src/Widgets/Popovers/Sort.vala:130
-msgid "Sort by"
+#: src/Widgets/Popovers/Sort.vala:144
+msgid "Navigate:"
+msgstr ""
+
+#: src/Widgets/Popovers/Sort.vala:150 src/Views/Home.vala:29
+#: src/Views/Tracks.vala:34 src/Views/Tracks.vala:142 src/Views/Tracks.vala:301
+msgid "Songs"
+msgstr "Nummers"
+
+#: src/Widgets/Popovers/Sort.vala:151
+#, fuzzy
+msgid "Folders"
+msgstr "Map"
+
+#: src/Widgets/Popovers/Sort.vala:154
+#, fuzzy
+msgid "Sort by:"
 msgstr "Sorteren op"
 
-#: src/Widgets/Popovers/Sort.vala:159
+#: src/Widgets/Popovers/Sort.vala:183
 msgid "Reversed order"
 msgstr "Omgekeerde volgorde"
 
-#: src/Widgets/Popovers/NewPlaylist.vala:31 src/Views/Playlist.vala:244
+#: src/Widgets/Popovers/NewPlaylist.vala:31 src/Views/Playlist.vala:205
 msgid "Add Description"
 msgstr "Omschrijving toevoegen"
 
@@ -310,32 +359,28 @@ msgstr "Omschrijving toevoegen"
 msgid "Add"
 msgstr "Toevoegen"
 
-#: src/Views/Home.vala:29
+#: src/Views/Home.vala:20
 msgid "Recently added"
 msgstr "Recent toegevoegd"
 
-#: src/Views/Home.vala:29
+#: src/Views/Home.vala:20
 msgid "(last 100)"
 msgstr "(100 nieuwste)"
 
-#: src/Views/Home.vala:36 src/Views/Playlists.vala:30
+#: src/Views/Home.vala:27 src/Views/Playlists.vala:30
 msgid "Playlists"
 msgstr "Afspeellijsten"
 
 #. listbox.hexpand = true;
-#: src/Views/Home.vala:37 src/Views/Albums.vala:34 src/Views/Artist.vala:116
+#: src/Views/Home.vala:28 src/Views/Albums.vala:34 src/Views/Artist.vala:72
 msgid "Albums"
 msgstr "Albums"
 
-#: src/Views/Home.vala:38 src/Views/Tracks.vala:45
-msgid "Songs"
-msgstr "Nummers"
-
-#: src/Views/Home.vala:39 src/Views/Artists.vala:33
+#: src/Views/Home.vala:30 src/Views/Artists.vala:33
 msgid "Artists"
 msgstr "Artiesten"
 
-#: src/Views/Home.vala:41 src/Views/Favorites.vala:28
+#: src/Views/Home.vala:32 src/Views/Favorites.vala:28
 msgid "Favorites"
 msgstr "Favorieten"
 
@@ -343,21 +388,13 @@ msgstr "Favorieten"
 msgid "Search by title, artist, genre and year"
 msgstr "Zoek op titel, artiest, genre of jaar"
 
-#: src/Views/Albums.vala:63 src/Views/Tracks.vala:74
-#: src/Views/Playlist.vala:105
+#: src/Views/Albums.vala:63 src/Views/Tracks.vala:63 src/Views/Playlist.vala:55
 msgid "Sort"
 msgstr "Sorteren"
 
-#: src/Views/Albums.vala:76 src/Views/Tracks.vala:87
-#: src/Views/Playlist.vala:118
+#: src/Views/Albums.vala:76 src/Views/Tracks.vala:77 src/Views/Playlist.vala:68
 msgid "Name"
 msgstr "Naam"
-
-#: src/Views/Albums.vala:77 src/Views/Tracks.vala:88
-#: src/Views/Playlist.vala:119 src/Views/Artist.vala:82
-#: src/Dialogs/TrackEditor.vala:84
-msgid "Artist"
-msgstr "Artiest"
 
 #: src/Views/Albums.vala:78 src/Dialogs/TrackEditor.vala:90
 msgid "Year"
@@ -367,49 +404,31 @@ msgstr "Jaar"
 msgid "Genre"
 msgstr "Genre"
 
-#: src/Views/Album.vala:73 src/Views/Tracks.vala:89 src/Views/Playlist.vala:120
-#: src/Dialogs/TrackEditor.vala:86
-msgid "Album"
-msgstr "Album"
-
-#: src/Views/Album.vala:133 src/Views/Tracks.vala:107
-#: src/Views/Favorites.vala:73 src/Views/Playlist.vala:209
+#: src/Views/Album.vala:96 src/Views/Tracks.vala:94 src/Views/Favorites.vala:73
+#: src/Views/Playlist.vala:169
 msgid "Shuffle"
 msgstr "Willekeurig"
 
-#: src/Views/Tracks.vala:31
-msgid "No Results"
-msgstr "Geen resultaten"
-
-#: src/Views/Tracks.vala:54 src/Views/Tracks.vala:57 src/Views/Tracks.vala:58
-#: src/Views/Artists.vala:39 src/Views/Artists.vala:40
+#: src/Views/Tracks.vala:43 src/Views/Tracks.vala:46 src/Views/Tracks.vala:47
+#: src/Views/Artists.vala:40 src/Views/Artists.vala:41
 #: src/Views/Favorites.vala:37 src/Views/Favorites.vala:41
 #: src/Views/Favorites.vala:42
 msgid "Search by title, artist and album"
 msgstr "Zoek op titel, artiest of album"
 
-#: src/Views/Tracks.vala:90 src/Views/Playlist.vala:121
+#: src/Views/Tracks.vala:80 src/Views/Playlist.vala:71
 msgid "Date Added"
 msgstr "Toegevoegd op"
 
-#: src/Views/Tracks.vala:91 src/Views/Playlist.vala:122
+#: src/Views/Tracks.vala:81 src/Views/Playlist.vala:72
 msgid "Play Count"
 msgstr "Aantal keer afgespeeld"
 
-#: src/Views/Tracks.vala:324
-#, c-format
-msgid "No results for '%s' in Tracks. Try again."
-msgstr "Geen resultaten gevonden voor '%s'. Probeer het opnieuw."
+#: src/Views/Tracks.vala:150 src/Views/Tracks.vala:309
+msgid "Files"
+msgstr ""
 
-#: src/Views/Tracks.vala:355
-msgid "No Songs"
-msgstr "Geen nummers"
-
-#: src/Views/Tracks.vala:356
-msgid "Add some tracks to your selected music folder."
-msgstr "Voeg nummers toe aan de door jou gekozen muziekmap."
-
-#: src/Views/Radios.vala:35
+#: src/Views/Radios.vala:36
 msgid "Search internet radios"
 msgstr "Zoeken naar radiostations"
 
@@ -417,37 +436,33 @@ msgstr "Zoeken naar radiostations"
 msgid "Add New Playlist"
 msgstr "Nieuwe afspeellijst toevoegen"
 
-#: src/Views/Playlist.vala:75
+#: src/Views/Playlist.vala:104 src/Views/Playlist.vala:476
 #, c-format
 msgid "%i songs"
 msgstr "%i nummers"
 
-#: src/Views/Playlist.vala:95
-msgid "Playlist"
-msgstr "Afspeellijst"
-
-#: src/Views/Playlist.vala:159
+#: src/Views/Playlist.vala:119
 msgid "Edit Name and Appearance"
 msgstr "Naam en uiterlijk aanpassen"
 
 #. Items
-#: src/Views/Playlist.vala:166
+#: src/Views/Playlist.vala:126
 msgid "Edit Details"
 msgstr "Informatie aanpassen"
 
-#: src/Views/Playlist.vala:167
+#: src/Views/Playlist.vala:127
 msgid "Set new Cover"
 msgstr "Nieuwe hoes instellen"
 
-#: src/Views/Playlist.vala:191
+#: src/Views/Playlist.vala:151
 msgid "Updated"
 msgstr "Bijgewerkt"
 
-#: src/Views/Playlist.vala:248 src/Dialogs/TrackEditor.vala:136
+#: src/Views/Playlist.vala:219 src/Dialogs/TrackEditor.vala:136
 msgid "Save"
 msgstr "Opslaan"
 
-#: src/Views/Artist.vala:106
+#: src/Views/Artist.vala:62
 msgid "Most Played"
 msgstr "Meest afgespeeld"
 
@@ -544,6 +559,18 @@ msgstr "Standaardwaarden herstellen?"
 #: src/Dialogs/Settings.vala:361
 msgid "Are you sure you want to reset all your library?"
 msgstr "Weet je zeker dat je alle standaardwaarden wilt herstellen?"
+
+#~ msgid "No Results"
+#~ msgstr "Geen resultaten"
+
+#~ msgid "No results for '%s' in Tracks. Try again."
+#~ msgstr "Geen resultaten gevonden voor '%s'. Probeer het opnieuw."
+
+#~ msgid "No Songs"
+#~ msgstr "Geen nummers"
+
+#~ msgid "Add some tracks to your selected music folder."
+#~ msgstr "Voeg nummers toe aan de door jou gekozen muziekmap."
 
 #~ msgid "Project name"
 #~ msgstr "Projectnaam"
