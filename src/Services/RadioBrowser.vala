@@ -8,7 +8,7 @@ public class Services.RadioBrowser : GLib.Object {
     public signal void finished ();
     public signal void item_loaded (Objects.Radio radio);
 
-    private string API_URL = "http://www.radio-browser.info/webservice/json/stations/byname/";
+    private string API_URL = "http://all.api.radio-browser.info/json/stations/byname/";
 
     public RadioBrowser () {
         session = new Soup.Session ();
