@@ -3,7 +3,7 @@
 language: node_js
 
 node_js:
-  - 10/*
+  - 10.17.0
 
 sudo: required
 
@@ -22,6 +22,7 @@ install:
 
 script:
   - houston ci
-
+  
 notifications:
   slack: ele:1X5dUSiN3YGr69a5rAZVn5Ra
+    

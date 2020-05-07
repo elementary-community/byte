@@ -39,7 +39,7 @@ public class Services.RadioBrowser : GLib.Object {
         cancel ();
         cancellable = new Cancellable ();
 
-        string url = API_URL + name + "?order=votes&reverse=true&limit=100";
+        string url = API_URL + name + "?order=votes&reverse=true&limit=100&hidebroken=true";
         var message = new Soup.Message ("GET", url);
         try {
             var stream = yield session.send_async (message, cancellable);

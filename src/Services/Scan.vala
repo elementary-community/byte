@@ -113,10 +113,10 @@ public class Services.Scan : GLib.Object {
                 sync_started ();
                 is_sync = true;
             }
-            
+
             counter++;
             counter_max++;
-            
+
             album.artist_id = Byte.database.insert_artist_if_not_exists (artist);
             album.artist_name = artist.name;
 

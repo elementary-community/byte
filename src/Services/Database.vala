@@ -1248,7 +1248,7 @@ public class Services.Database : GLib.Object {
 
         res = stmt.bind_text (1, radio.name);
         assert (res == Sqlite.OK);
-        
+
         res = stmt.bind_text (2, radio.url);
         assert (res == Sqlite.OK);
 

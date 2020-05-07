@@ -137,7 +137,7 @@ public class Widgets.HeaderBar : Gtk.HeaderBar {
         main_box.pack_start (play_button, false, false, 0);
         main_box.pack_start (next_button, false, false, 0);
         main_box.pack_start (shuffle_button, false, false, 24);
-        
+
         custom_title = main_box;
         pack_end (app_menu);
 
