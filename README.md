@@ -31,6 +31,7 @@ You'll need the following dependencies:
 * libtagc0-dev
 * libsqlite3-dev
 * libsoup2.4-dev
+* libjson-glib-dev
 * libgranite-dev (>=0.5)
 * meson
 * valac >= 0.40.3
