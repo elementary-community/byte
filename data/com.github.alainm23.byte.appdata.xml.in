@@ -23,6 +23,25 @@
     <binary>com.github.alainm23.byte</binary>
   </provides> 
   ​<releases>
+    <release version="0.3.1" date="2020-05-26">
+      <description>
+        <p>New translations and performance improvement</p>
+        <ul>
+          <li>Added Italian translation thanks to Maurizio Martinetti</li>
+          <li>Added German translation thanks to Christoph Raitzig</li>
+          <li>Added Portuguese translation thanks to @gleissonjoaquim3</li>
+          <li>Updated deprecated Radio Browser API thanks to Antonio Luis Román (@usersaurus)</li>
+        </ul>
+        <p>Special thanks to 'Eddie Vassallo' for becoming our new Gold Tier Patrons and supporting the development of Byte.</p>
+        <p>🌟️ Thank you to our silver members for supporting the development of Byte. 🌟️</p>
+        <li>Cal</li>
+        <li>I Sutter</li>
+        <li>The Linux Experiment</li>
+        <li>Wout</li>
+        <p></p>
+      </description>
+    </release>
+
     <release version="0.3" date="2020-01-09">
       <description>
         <p>Hello 2020 🎉️: New icon and a very requested feature arrives.</p>
