@@ -246,7 +246,7 @@ public class Widgets.Queue : Gtk.Revealer {
             if (next_track != null) {
                 reveal_child = true;
 
-                next_track_name.label = "%s <b>by</b> %s".printf (next_track.title, next_track.artist_name);
+                next_track_name.label = _("%s <b>by</b> %s").printf (next_track.title, next_track.artist_name);
                 next_track_grid.tooltip_text = "%s - %s".printf (next_track.artist_name, next_track.title);
 
                 try {
@@ -275,7 +275,7 @@ public class Widgets.Queue : Gtk.Revealer {
             var next_track = Byte.utils.get_next_track (Byte.player.current_track);
 
             if (next_track != null) {
-                next_track_name.label = _("%s <b>by</b> %s".printf (next_track.title, next_track.artist_name));
+                next_track_name.label = _("%s <b>by</b> %s").printf (next_track.title, next_track.artist_name);
                 next_track_grid.tooltip_text = "%s - %s".printf (next_track.artist_name, next_track.title);
 
                 try {
