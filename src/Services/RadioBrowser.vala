@@ -15,17 +15,17 @@ public class Services.RadioBrowser : GLib.Object {
         session.timeout = 10;
 
         parser = new Json.Parser ();
-        parser.array_start.connect(() => {
+        parser.array_start.connect (() => {
             started ();
         });
 
-        parser.array_element.connect((parse, array, index) => {
+        parser.array_element.connect ((parse, array, index) => {
             item_loaded (
                 Json.gobject_deserialize (typeof (Objects.Radio), array.get_element (index)) as Objects.Radio
             );
         });
 
-        parser.array_end.connect(() => {
+        parser.array_end.connect (() => {
             finished ();
         });
     }
