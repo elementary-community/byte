@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: com.github.alainm23.byte\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-01-15 22:19-0500\n"
+"POT-Creation-Date: 2020-05-26 07:28-0500\n"
 "PO-Revision-Date: 2019-08-10 12:12+0200\n"
 "Last-Translator: Nathan Bonnemains (@NathanBnm)\n"
 "Language-Team: none\n"
@@ -307,7 +307,7 @@ msgstr "Masquer"
 msgid "Up Next"
 msgstr "À suivre"
 
-#: src/Widgets/Queue.vala:278
+#: src/Widgets/Queue.vala:249 src/Widgets/Queue.vala:278
 #, c-format
 msgid "%s <b>by</b> %s"
 msgstr "%s <b>par</b> %s"

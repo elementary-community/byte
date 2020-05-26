@@ -7,16 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: com.github.alainm23.byte\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-01-15 22:19-0500\n"
+"POT-Creation-Date: 2020-05-26 07:28-0500\n"
 "PO-Revision-Date: 2020-02-02 01:02-0300\n"
+"Last-Translator: Gleisson J.J. Cardoso <gleissoncg2@gmail.com>\n"
 "Language-Team: \n"
+"Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 2.0.6\n"
-"Last-Translator: Gleisson J.J. Cardoso <gleissoncg2@gmail.com>\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"Language: pt_BR\n"
 
 #: src/Utils.vala:276
 msgid "Choose an image…"
@@ -308,7 +308,7 @@ msgstr "Ocultar"
 msgid "Up Next"
 msgstr "Próximas"
 
-#: src/Widgets/Queue.vala:278
+#: src/Widgets/Queue.vala:249 src/Widgets/Queue.vala:278
 #, c-format
 msgid "%s <b>by</b> %s"
 msgstr "%s <b>by</b> %s"
