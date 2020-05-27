@@ -1,6 +1,6 @@
 project('com.github.alainm23.byte',
         'vala', 'c',
-        version: '0.4.1')
+        version: '0.4.2')
 
 gnome = import('gnome')
 i18n = import('i18n')
