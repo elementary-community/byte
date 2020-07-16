@@ -31,6 +31,13 @@ public class Byte : Gtk.Application {
     string[] ? arg_files = null;
 
     public Byte () {
+        // Init internationalization support
+        Intl.setlocale (LocaleCategory.ALL, "");
+        string langpack_dir = Path.build_filename (Constants.INSTALL_PREFIX, "share", "locale");
+        Intl.bindtextdomain (Constants.GETTEXT_PACKAGE, langpack_dir);
+        Intl.bind_textdomain_codeset (Constants.GETTEXT_PACKAGE, "UTF-8");
+        Intl.textdomain (Constants.GETTEXT_PACKAGE);
+        
         // Dir to Database
         utils = new Utils ();
         utils.create_dir_with_parents ("/.local/share/com.github.alainm23.byte");

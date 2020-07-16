@@ -5,16 +5,19 @@ project('com.github.alainm23.byte',
 gnome = import('gnome')
 i18n = import('i18n')
 
-conf = configuration_data()
-conf.set_quoted('GETTEXT_PACKAGE', meson.project_name())
-configure_file(output: 'config.h', configuration: conf)
-config_h_dir = include_directories('.')
-
-c_args = [
-  '-include', 'config.h'
-]
-
 add_project_arguments('-DGETTEXT_PACKAGE="@0@"'.format(meson.project_name()), language: 'c')
+
+conf_data = configuration_data()
+conf_data.set_quoted('PROJECT_NAME', meson.project_name())
+conf_data.set_quoted('GETTEXT_PACKAGE', meson.project_name())
+conf_data.set_quoted('VERSION', meson.project_version())
+conf_data.set_quoted('PREFIX', get_option('prefix'))
+conf_data.set_quoted('DATADIR', join_paths (get_option('prefix'), get_option('datadir')))
+config_header = configure_file(
+    input : 'config.vala.in',
+    output : 'config.vala',
+    configuration : conf_data
+)
 
 as_resources = gnome.compile_resources (
     'as-resources', 'data/' + meson.project_name() + '.gresource.xml',
@@ -28,6 +31,7 @@ executable(
     meson.project_name(),
     as_resources,
     sources,
+    config_header,
     dependencies: [
         dependency('gee-0.8'),
         dependency('gobject-2.0'),
