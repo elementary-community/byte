@@ -2,7 +2,7 @@ public class Views.Artist : Gtk.EventBox {
     public Objects.Artist artist { get; construct; }
 
     private Gtk.Label name_label;
-    private Widgets.Cover image_cover;
+    private Gtk.Image image_cover;
     private Gtk.ListBox listbox;
     private Gtk.FlowBox flowbox;
 
@@ -38,17 +38,8 @@ public class Views.Artist : Gtk.EventBox {
         header_box.pack_start (back_button, false, false, 0);
         header_box.set_center_widget (center_label);
 
-        image_cover = new Widgets.Cover.with_default_icon (64, "artist");
-        image_cover.halign = Gtk.Align.CENTER;
-        image_cover.valign = Gtk.Align.CENTER;
-
-        try {
-            var cover_path = GLib.Path.build_filename (Byte.utils.COVER_FOLDER, ("artist-%i.jpg").printf (_artist.id));
-            var pixbuf = new Gdk.Pixbuf.from_file_at_size (cover_path, 64, 64);
-            image_cover.pixbuf = pixbuf;
-        } catch (Error e) {
-            image_cover.set_with_default_icon (64, "artist");
-        }
+        image_cover = new Gtk.Image ();
+        image_cover.expand = true;
 
         name_label = new Gtk.Label (artist.name);
         name_label.halign = Gtk.Align.CENTER;
@@ -105,6 +96,28 @@ public class Views.Artist : Gtk.EventBox {
         main_box.pack_start (main_scrolled, true, true, 0);
 
         add (main_box);
+        
+        show_all ();
+
+        Timeout.add (250, () => {
+            int width = main_box.get_allocated_width ();
+            int height = main_box.get_allocated_height ();
+
+            print ("width: %i\n".printf (width));
+            print ("height: %i\n".printf (height));
+
+            var pixbuf = new Gdk.Pixbuf.from_file (
+                GLib.Path.build_filename (Byte.utils.COVER_FOLDER, ("artist-%i.jpg").printf (artist.id))
+            );
+
+            if (height < width) {
+                var pix = pixbuf.scale_simple (width, width, Gdk.InterpType.BILINEAR);
+                image_cover.pixbuf = new Gdk.Pixbuf.subpixbuf (pix, 0, (int)(pix.height - height) / 2, width, height);
+            } else {
+                var pix = pixbuf.scale_simple (height, height, Gdk.InterpType.BILINEAR);
+                image_cover.pixbuf = new Gdk.Pixbuf.subpixbuf (pix, (int)(pix.width - width) / 2, 0, width, height);
+            }
+        });
 
         if (Byte.scan_service.is_sync == false) {
             int item_max = 5;
@@ -127,8 +140,6 @@ public class Views.Artist : Gtk.EventBox {
                 flowbox.show_all ();
             }
         }
-
-        show_all ();
         
         back_button.clicked.connect (() => {
             Byte.navCtrl.pop ();
