@@ -34,10 +34,12 @@
         </ul>
         <p>Special thanks to 'Eddie Vassallo' for becoming our new Gold Tier Patrons and supporting the development of Byte.</p>
         <p>🌟️ Thank you to our silver members for supporting the development of Byte. 🌟️</p>
-        <li>Cal</li>
-        <li>I Sutter</li>
-        <li>The Linux Experiment</li>
-        <li>Wout</li>
+        <ul>
+          <li>Cal</li>
+          <li>I Sutter</li>
+          <li>The Linux Experiment</li>
+          <li>Wout</li>
+        </ul>
       </description>
     </release>
 
