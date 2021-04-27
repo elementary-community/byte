@@ -4,11 +4,11 @@ runtime-version: 'daily' #change this to release version (currently 0.1.0) once 
 sdk: io.elementary.Sdk
 command: com.github.alainm23.byte
 finish-args:
-  - '--filesystem=host'
+  - '--filesystem=xdg-music'
 
   - '--socket=fallback-x11'
   - '--socket=wayland'
-  - '--filesystem=xdg-run/dconf'
+  - '--socket=pulseaudio'
   - '--talk-name=org.gnome.SettingsDaemon'
   - '--talk-name=ca.desrt.dconf'
   - '--env=DCONF_USER_CONFIG_DIR=.config/dconf'
