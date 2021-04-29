@@ -1,8 +1,8 @@
-@define-color colorPrimary #fe2851;
+@define-color color_primary #fe2851;
 @define-color textColorPrimary #ffffff;
 @define-color bg_color shade (@base_color, 0.98);
 
-@define-color colorAccent #fe2851;
+@define-color color_accent #fe2851;
 
 entry {
     caret-color: @colorAccent;

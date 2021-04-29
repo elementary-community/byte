@@ -130,9 +130,6 @@ public class Byte : Gtk.Application {
         Gtk.StyleContext.add_provider_for_screen (Gdk.Screen.get_default (), provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
 
         utils.apply_theme (Byte.settings.get_enum ("theme"));
-
-        Gtk.Settings.get_default().set_property("gtk-icon-theme-name", "elementary");
-        Gtk.Settings.get_default().set_property("gtk-theme-name", "elementary");
     }
 
     public override void open (File[] files, string hint) {
