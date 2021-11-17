@@ -1,280 +1,116 @@
-public class Widgets.HeaderBar : Gtk.HeaderBar {
-    private Gtk.Button shuffle_button;
-    private Gtk.Button repeat_button;
-    public Gtk.Button play_button;
-    private Gtk.Button next_button;
-    private Gtk.Button previous_button;
-    private Gtk.Button search_button;
-    private Gtk.MenuButton app_menu;  
-
-    public Gtk.Image icon_play;
-    public Gtk.Image icon_pause;
-    public Gtk.Image icon_stop;
- 
-    private Gtk.Image icon_shuffle_on;
-    private Gtk.Image icon_shuffle_off;
-
-    private Gtk.Image icon_repeat_one;
-    private Gtk.Image icon_repeat_all;
-    private Gtk.Image icon_repeat_off;
-    
-    private Gtk.Box main_box;
-
-    public signal void show_quick_find ();
-    public bool visible_ui {
-        set {
-            main_box.visible = value;
-            search_button.visible = value;
-            app_menu.visible = value;
-
-            if (value) {
-                custom_title = main_box;
-            } else {
-                custom_title = null;
-            }
-        }
-    }
+public class Widgets.HeaderBar : Hdy.HeaderBar {
+    private Gtk.ProgressBar progress_bar;
 
     public HeaderBar () {
         Object (
-            show_close_button: true
+            decoration_layout: "close:"
         );
     }
 
     construct {
-        icon_play = new Gtk.Image.from_icon_name ("media-playback-start-symbolic", Gtk.IconSize.LARGE_TOOLBAR);
-        icon_pause = new Gtk.Image.from_icon_name ("media-playback-pause-symbolic", Gtk.IconSize.LARGE_TOOLBAR);
-        icon_stop = new Gtk.Image.from_icon_name ("media-playback-stop-symbolic", Gtk.IconSize.LARGE_TOOLBAR);
+        var search_icon = new Gtk.Image ();
+        search_icon.gicon = new ThemedIcon ("system-search-symbolic");
+        search_icon.pixel_size = 16;
 
-        icon_shuffle_on = new Gtk.Image.from_icon_name ("media-playlist-shuffle-symbolic", Gtk.IconSize.BUTTON);
-        icon_shuffle_off = new Gtk.Image.from_icon_name ("media-playlist-no-shuffle-symbolic", Gtk.IconSize.BUTTON);
-
-        icon_repeat_one = new Gtk.Image.from_icon_name ("media-playlist-repeat-one-symbolic", Gtk.IconSize.BUTTON);
-        icon_repeat_all = new Gtk.Image.from_icon_name ("media-playlist-repeat-symbolic", Gtk.IconSize.BUTTON);
-        icon_repeat_off = new Gtk.Image.from_icon_name ("media-playlist-no-repeat-symbolic", Gtk.IconSize.BUTTON);
-
-        //get_style_context ().add_class ("default-decoration");
-        decoration_layout = "close:menu";
-
-        // Shuffle Button
-        shuffle_button = new Gtk.Button ();
-        shuffle_button.get_style_context ().add_class ("repeat-button");
-        shuffle_button.get_style_context ().remove_class ("button");
-        shuffle_button.get_style_context ().add_class (Gtk.STYLE_CLASS_FLAT);
-        shuffle_button.valign = Gtk.Align.CENTER;
-        shuffle_button.can_focus = false;
-
-        // Previous Button
-        previous_button = new Gtk.Button.from_icon_name ("media-skip-backward-symbolic", Gtk.IconSize.LARGE_TOOLBAR);
-        previous_button.valign = Gtk.Align.CENTER;
-        previous_button.get_style_context ().add_class (Gtk.STYLE_CLASS_FLAT);
-        previous_button.can_focus = false;
-        previous_button.tooltip_text = _ ("Previous");
-
-        play_button = new Gtk.Button ();
-        play_button.get_style_context ().add_class (Gtk.STYLE_CLASS_FLAT);
-        play_button.can_focus = false;
-        play_button.valign = Gtk.Align.CENTER;
-        play_button.image = icon_play;
-        play_button.tooltip_text = _ ("Play");
-
-        // Next Button
-        next_button = new Gtk.Button.from_icon_name ("media-skip-forward-symbolic", Gtk.IconSize.LARGE_TOOLBAR);
-        next_button.valign = Gtk.Align.CENTER;
-        next_button.get_style_context ().add_class (Gtk.STYLE_CLASS_FLAT);
-        next_button.can_focus = false;
-        next_button.tooltip_text = _ ("Next");
-
-        // Repeat Button
-        repeat_button = new Gtk.Button ();
-        repeat_button.valign = Gtk.Align.CENTER;
-        repeat_button.get_style_context ().add_class (Gtk.STYLE_CLASS_FLAT);
-        repeat_button.can_focus = false;
-
-        search_button = new Gtk.Button.from_icon_name ("preferences-system-symbolic", Gtk.IconSize.MENU);
-        search_button.valign = Gtk.Align.CENTER;
-        search_button.can_focus = false;
+        var search_button = new Gtk.Button () {
+            halign = Gtk.Align.END,
+            image = search_icon,
+            valign = Gtk.Align.CENTER,
+            can_focus = false
+        };
         search_button.get_style_context ().add_class (Gtk.STYLE_CLASS_FLAT);
+        search_button.get_style_context ().add_class ("font-bold");
 
-        /*
-            Menu
-        */
+        var cancel_button = new Gtk.Button.with_label (_("Cancel"));
+        cancel_button.get_style_context ().add_class (Gtk.STYLE_CLASS_FLAT);
+        cancel_button.get_style_context ().add_class ("font-bold");
 
-        var search_menuitem = new Widgets.ModelButton (_("Search"), "edit-find-symbolic", _("Search"));
-        var import_menuitem = new Widgets.ModelButton (_("Import Music"), "document-import-symbolic", _("Import Music"));
-        var resync_menuitem = new Widgets.ModelButton (_("Resync Libray"), "emblem-synchronizing-symbolic", _("Resync Libray"));        
-        var preferences_menuitem = new Widgets.ModelButton (_("Preferences"), "preferences-system-symbolic", _("Preferences"));
+        var search_cancel_stack = new Gtk.Stack () {
+            transition_type = Gtk.StackTransitionType.CROSSFADE,
+            halign = Gtk.Align.CENTER,
+            valign = Gtk.Align.CENTER
+        };
+        search_cancel_stack.add_named (search_button, "search");
+        search_cancel_stack.add_named (cancel_button, "cancel");
 
-        var menu_grid = new Gtk.Grid ();
-        menu_grid.margin_top = 6;
-        menu_grid.margin_bottom = 6;
-        menu_grid.orientation = Gtk.Orientation.VERTICAL;
-        menu_grid.width_request = 165;
-        menu_grid.add (search_menuitem);
-        menu_grid.add (import_menuitem);
-        menu_grid.add (resync_menuitem);
-        menu_grid.add (preferences_menuitem);
-        menu_grid.show_all ();
+        var action_label = new Gtk.Label (null) {
+            hexpand = true,
+            justify = Gtk.Justification.CENTER,
+            ellipsize = Pango.EllipsizeMode.END,
+        };
 
-        var menu_popover = new Gtk.Popover (null);
-        menu_popover.add (menu_grid);
+        progress_bar = new Gtk.ProgressBar ();
+        progress_bar.fraction = 1;
 
-        app_menu = new Gtk.MenuButton ();
-        app_menu.valign = Gtk.Align.CENTER;
-        app_menu.tooltip_text = _("Menu");
-        app_menu.popover = menu_popover;
+        var action_grid = new Gtk.Grid ();
+        action_grid.column_spacing = 6;
+        action_grid.row_spacing = 6;
+        action_grid.margin_start = 12;
+        action_grid.margin_end = 12;
+        action_grid.attach (action_label, 0, 0, 1, 1);
+        action_grid.attach (progress_bar, 0, 1, 1, 1);
 
-        var menu_icon = new Gtk.Image ();
-        menu_icon.gicon = new ThemedIcon ("open-menu-symbolic");
-        menu_icon.pixel_size = 16;
+        var title_label = new Gtk.Label (_("Byte"));
+        title_label.get_style_context ().add_class ("font-bold");
+        title_label.get_style_context ().add_class ("image-button");
 
-        app_menu.image = menu_icon;
+        var empty_grid = new Gtk.Grid () {
+            halign = Gtk.Align.CENTER,
+            valign = Gtk.Align.CENTER
+        };
+        empty_grid.add (title_label);
 
-        main_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 6);
-        main_box.halign = Gtk.Align.CENTER;
-        main_box.pack_start (repeat_button, false, false, 24);
-        main_box.pack_start (previous_button, false, false, 0);
-        main_box.pack_start (play_button, false, false, 0);
-        main_box.pack_start (next_button, false, false, 0);
-        main_box.pack_start (shuffle_button, false, false, 24);
+        var search_entry = new Gtk.SearchEntry () {
+            hexpand = true
+        };
+        search_entry.get_style_context ().add_class ("border-radius");
 
-        custom_title = main_box;
-        pack_end (app_menu);
+        var search_grid = new Gtk.Grid () {
+            hexpand = true,
+            column_spacing = 6
+        };
+        search_grid.add (search_entry);
 
-        check_shuffle_button ();
-        check_repeat_button ();
-
-        play_button.clicked.connect (() => {
-            Byte.player.toggle_playing ();
-        });
-
-        Byte.player.toggle_playing.connect (toggle_playing);
-
-        Byte.player.state_changed.connect ((state) => {
-            if (state == Gst.State.PLAYING) {
-                if (Byte.player.mode == "radio") {
-                    play_button.image = icon_stop;
-                } else {
-                    play_button.image = icon_pause;
-                }
-            } else {
-                play_button.image = icon_play;
-            }
-        });
-
-        shuffle_button.clicked.connect (() => {
-            Byte.settings.set_boolean ("shuffle-mode", !Byte.settings.get_boolean ("shuffle-mode"));
-            Byte.utils.shuffle_changed (Byte.settings.get_boolean ("shuffle-mode"));
-        });
-
-        repeat_button.clicked.connect (() => {
-            var enum = Byte.settings.get_enum ("repeat-mode");
-
-            if (enum == 1) {
-                Byte.settings.set_enum ("repeat-mode", 2);
-            } else if (enum == 2) {
-                Byte.settings.set_enum ("repeat-mode", 0);
-            } else {
-                Byte.settings.set_enum ("repeat-mode", 1);
-            }
-        });
-
-        previous_button.clicked.connect (() => {
-            Byte.player.prev ();
-        });
-
-        next_button.clicked.connect (() => {
-            Byte.player.next ();
-        });
-
-        Byte.settings.changed.connect ((key) => {
-            if (key == "shuffle-mode") {
-                check_shuffle_button ();
-            } else if (key == "repeat-mode") {
-                check_repeat_button ();
-            }   
-        });
+        var stack = new Gtk.Stack ();
+        stack.transition_type = Gtk.StackTransitionType.CROSSFADE;
+        stack.halign = Gtk.Align.CENTER;
+        stack.add_named (empty_grid, "empty");
+        stack.add_named (action_grid, "action");
+        stack.add_named (search_grid, "search");
         
-        Byte.player.mode_changed.connect ((mode) => {
-            if (mode == "radio") {
-                shuffle_button.sensitive = false;
-                repeat_button.sensitive = false;
-                next_button.sensitive = false;
-                previous_button.sensitive = false;
-            } else {
-                shuffle_button.sensitive = true;
-                repeat_button.sensitive = true;
-                next_button.sensitive = true;
-                previous_button.sensitive = true;
-            }
+        set_custom_title (stack);
+        pack_end (search_cancel_stack);
+        show_all ();
+
+        Byte.library_manager.sync_started.connect (() => {
+            stack.visible_child_name = "action";
         });
 
-        search_menuitem.clicked.connect (() => {
-            show_quick_find ();
+        Byte.library_manager.sync_finished.connect (() => {
+            stack.visible_child_name = "empty";
         });
 
-        preferences_menuitem.clicked.connect (() => {
-            menu_popover.popdown ();
-
-            var editor_dialog = new Dialogs.Settings ();
-            editor_dialog.show_all ();
+        Byte.library_manager.sync_progress.connect ((fraction) => {
+            progress_bar.fraction = fraction;
         });
 
-        import_menuitem.clicked.connect (() => {
-            menu_popover.popdown ();
-            
-            string folder = Byte.scan_service.choose_folder (Byte.instance.main_window);
-
-            if (folder != null) {                
-                Byte.scan_service.scan_local_files (folder);
-            }
+        search_button.clicked.connect (() => {
+            search_cancel_stack.visible_child_name = "cancel";
+            stack.visible_child_name = "search";
+            search_entry.grab_focus ();
         });
 
-        resync_menuitem.clicked.connect (() => {
-            menu_popover.popdown ();
-            
-            Byte.scan_service.scan_local_files (Byte.settings.get_string ("library-location"));
+        cancel_button.clicked.connect (() => {
+            search_cancel_stack.visible_child_name = "search";
+            stack.visible_child_name = "empty";
+            search_entry.text = "";
         });
-    }
-    
-    public void toggle_playing () {
-        if (play_button.image == icon_play) {
-            play_button.image = icon_pause;
-            Byte.player.state_changed (Gst.State.PLAYING);
-        } else if (play_button.image == icon_pause) {
-            play_button.image = icon_play;
-            Byte.player.state_changed (Gst.State.PAUSED);
-        } else {
-            Byte.player.current_radio = null;
-            play_button.image = icon_play;
-            Byte.player.state_changed (Gst.State.READY);
-        }
-    }
 
-    private void check_shuffle_button () {
-        if (Byte.settings.get_boolean ("shuffle-mode")) {
-            shuffle_button.image = icon_shuffle_on;
-            shuffle_button.tooltip_text = _ ("Shuffle On");
-        } else {
-            shuffle_button.image = icon_shuffle_off;
-            shuffle_button.tooltip_text = _ ("Shuffle Off");
-        }
-    }
-
-    private void check_repeat_button () {
-        var repeat_mode = Byte.settings.get_enum ("repeat-mode");
-
-        if (repeat_mode == 0) {
-            repeat_button.image = icon_repeat_off;
-            repeat_button.tooltip_text = _ ("Repeat Off");
-        } else if (repeat_mode == 1) {
-            repeat_button.image = icon_repeat_all;
-            repeat_button.tooltip_text = _ ("Repeat All");
-        } else {
-            repeat_button.image = icon_repeat_one;
-            repeat_button.tooltip_text = _ ("Repeat One");
-        }
-
-        repeat_button.show_all ();
+        search_entry.focus_out_event.connect (() => {
+            search_cancel_stack.visible_child_name = "search";
+            stack.visible_child_name = "empty";
+            search_entry.text = "";
+            return false;
+        });
     }
 }

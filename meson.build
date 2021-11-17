@@ -25,31 +25,8 @@ as_resources = gnome.compile_resources (
     c_name: 'as'
 )
 
-subdir('src')
-
-executable(
-    meson.project_name(),
-    as_resources,
-    sources,
-    config_header,
-    dependencies: [
-        dependency('gee-0.8'),
-        dependency('gobject-2.0'),
-        dependency('glib-2.0'),
-        dependency('granite'),
-        dependency('gtk+-3.0'),
-        dependency('sqlite3'),
-        dependency('libsoup-2.4'),
-        dependency('json-glib-1.0'),
-        dependency('gstreamer-pbutils-1.0'),
-        dependency('gstreamer-tag-1.0'),
-        dependency('taglib_c'),
-        meson.get_compiler('c').find_library('m', required : false)
-    ],
-    install: true
-)
-
 subdir('data')
-subdir('po')
+# subdir('po')
+subdir('src')
 
 meson.add_install_script('meson/post_install.py')

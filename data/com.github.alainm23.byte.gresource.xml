@@ -2,6 +2,9 @@
 <gresources>
   <gresource prefix="/com/github/alainm23/byte">
     <file alias="stylesheet.css" compressed="true">stylesheet.css</file>
+    <file alias="com.github.alainm23.byte.svg" compressed="true">resources/com.github.alainm23.byte.svg</file>
+
+    <file alias="image-mask.svg">resources/image-mask.svg</file>
 
     <file alias="byte-drag-music.svg">resources/byte-drag-music.svg</file>
     <file alias="byte-folder-open.svg">resources/byte-folder-open.svg</file>
